@@ -1,0 +1,1783 @@
+/* 基础变量 */
+:root {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #404040;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #808080;
+  --border-color: #404040;
+  --accent-color: #007acc;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --radius: 6px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 基础重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* WebSocket面板容器 */
+.websocket-panel {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 面板头部 */
+.panel-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.panel-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.panel-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  font-weight: 500;
+}
+
+.status.active {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.status.inactive {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.status.paused {
+  background-color: var(--warning-color);
+  color: black;
+}
+
+/* 控制面板 */
+.control-panel {
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 16px;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.control-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-section {
+  margin-bottom: 8px;
+}
+
+.control-section.compact {
+  margin-bottom: 4px;
+}
+
+.control-section:last-child {
+  margin-bottom: 0;
+}
+
+.control-section h3 {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.status-section {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-tertiary);
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.status-section .status-paused {
+  color: var(--warning-color);
+  font-weight: 500;
+}
+
+.status-section .status-active {
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.control-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.toggle-label input[type="checkbox"] {
+  margin: 0;
+  transform: scale(0.9);
+}
+
+.toggle-text {
+  color: var(--text-secondary);
+}
+
+.control-description {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* 按钮样式 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 12px;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.btn:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-color);
+}
+
+.btn.btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.btn.btn-primary:hover {
+  background-color: #005a9e;
+  border-color: #005a9e;
+}
+
+.btn.btn-secondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.btn.btn-success {
+  background-color: var(--success-color);
+  color: white;
+  border-color: var(--success-color);
+}
+
+.btn.btn-warning {
+  background-color: var(--warning-color);
+  color: black;
+  border-color: var(--warning-color);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 主要内容区域 */
+.panel-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+}
+
+.panel-left {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-right {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* WebSocket连接列表 */
+.websocket-list {
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.websocket-list-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 16px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header-info h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.connection-stats {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.clear-connections-btn {
+  font-size: 11px;
+  padding: 6px 10px;
+  background-color: var(--danger-color);
+  color: white;
+  border: 1px solid var(--danger-color);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clear-connections-btn:hover {
+  background-color: #c82333;
+  border-color: #c82333;
+}
+
+/* 连接容器 */
+.connections-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 16px;
+}
+
+.connection-item {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.connection-item:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--accent-color);
+}
+
+.connection-item.selected {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+}
+
+.connection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-indicator {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.status-text {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.connection-id {
+  font-size: 10px;
+  background-color: var(--bg-tertiary);
+  padding: 2px 6px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-family: "Courier New", monospace;
+}
+
+.connection-item.selected .connection-id {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.connection-url {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  word-break: break-all;
+  line-height: 1.3;
+}
+
+.connection-item.selected .connection-url {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.connection-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.info-item {
+  display: flex;
+  gap: 4px;
+}
+
+.info-label {
+  color: var(--text-muted);
+}
+
+.info-value {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.connection-item.selected .info-label,
+.connection-item.selected .info-value {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 空状态 */
+.websocket-list-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.empty-description {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  max-width: 300px;
+}
+
+/* 消息详情 */
+.message-details {
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.details-header {
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 16px;
+  flex-shrink: 0;
+}
+
+.details-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.connection-details {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* margin-bottom: 16px; */
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.view-controls,
+.filter-controls,
+.search-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.view-controls label,
+.filter-controls label,
+.search-controls label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.view-controls select,
+.filter-controls select,
+.filter-controls input {
+  padding: 4px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+  min-width: 120px;
+}
+
+.filter-controls input {
+  min-width: 180px;
+  padding-right: 80px; /* Make room for both buttons */
+}
+
+.view-controls select:focus,
+.filter-controls select:focus,
+.filter-controls input:focus {
+  border-color: var(--accent-color);
+}
+
+/* 搜索控制区域 */
+.search-controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-invert {
+  padding: 4px 8px;
+  font-size: 11px;
+  min-width: auto;
+  height: 24px;
+}
+
+.btn-invert.active {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.btn-invert.active:hover {
+  background-color: #005a9e;
+  border-color: #005a9e;
+}
+
+.clear-filter-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 2px 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 10px;
+  transition: all 0.2s;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-filter-btn:hover {
+  color: var(--danger-color);
+}
+
+/* 操作控制区域 */
+.action-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.clear-messages-btn {
+  padding: 3px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 10px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.clear-messages-btn:hover:not(:disabled) {
+  background-color: var(--danger-color);
+  color: white;
+  border-color: var(--danger-color);
+}
+
+.clear-messages-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 消息容器 */
+.messages-container {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.message-item {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  padding: 12px;
+}
+
+.message-item.outgoing {
+  border-left: 3px solid var(--success-color);
+}
+
+.message-item.incoming {
+  border-left: 3px solid var(--danger-color);
+}
+
+.message-item.system {
+  border-left: 3px solid var(--accent-color);
+}
+
+.message-item.blocked {
+  border-left: 3px solid var(--danger-color);
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.message-header {
+  font-size: 12px;
+}
+
+.message-header:not(.clickable) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.direction-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.direction-badge.outgoing {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: var(--success-color);
+}
+
+.direction-badge.incoming {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: var(--danger-color);
+}
+
+.direction-badge.system {
+  background-color: rgba(0, 122, 204, 0.2);
+  color: var(--accent-color);
+}
+
+.direction-badge.blocked {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: var(--danger-color);
+}
+
+.timestamp {
+  color: var(--text-muted);
+  font-family: "Courier New", monospace;
+}
+
+.message-type {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.message-content {
+  margin-top: 8px;
+}
+
+.message-content pre {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 8px;
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message-content-wrapper {
+  position: relative;
+  margin-top: 8px;
+}
+
+.message-actions-top {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 11px;
+  font-family: inherit;
+  opacity: 0.7;
+}
+
+.copy-btn:hover {
+  opacity: 1;
+  background-color: var(--bg-primary);
+  border-color: var(--accent-color);
+  color: var(--text-primary);
+}
+
+.copy-btn.copied {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+  color: white;
+  opacity: 1;
+}
+
+.copy-btn.copied:hover {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.message-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.action-btn {
+  padding: 4px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 10px;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-color);
+}
+
+.action-btn.edit {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.action-btn.allow {
+  border-color: var(--success-color);
+  color: var(--success-color);
+}
+
+.action-btn.block {
+  border-color: var(--danger-color);
+  color: var(--danger-color);
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-color);
+}
+
+/* 选中消息的通用样式(适用于system等其他类型) */
+.message-item.selected:not(.outgoing):not(.incoming) {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 122, 204, 0.25) 0%,
+    rgba(0, 122, 204, 0.15) 50%,
+    rgba(0, 122, 204, 0.08) 100%
+  );
+  border-left: 4px solid var(--accent-color);
+  border-right: 2px solid rgba(0, 122, 204, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(0, 122, 204, 0.2);
+  transform: translateX(2px);
+  position: relative;
+}
+
+.message-item.selected:not(.outgoing):not(.incoming)::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #007acc 0%, #005a9e 100%);
+  border-radius: 0 2px 2px 0;
+}
+
+/* 模拟消息的特殊样式 */
+.message-item.simulated {
+  border-left: 3px solid #ffc107;
+  background-color: rgba(255, 193, 7, 0.05);
+}
+
+.message-item.simulated.selected {
+  background-color: rgba(255, 193, 7, 0.15);
+  border-left: 3px solid #ffc107;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.message-item.simulated .message-header {
+  position: relative;
+}
+
+.message-item.simulated .message-header::after {
+  content: "🎭 SIMULATED";
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 9px;
+  background-color: #ffc107;
+  color: #212529;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+/* 通用点击样式 */
+.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.clickable:hover {
+  background-color: var(--bg-tertiary);
+}
+
+/* 消息折叠样式 */
+.message-item.collapsed {
+  padding: 8px 12px;
+}
+
+.message-item.expanded {
+  padding: 12px;
+}
+
+.message-header.clickable {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+  border-radius: var(--radius);
+  transition: background-color 0.2s;
+  min-height: 32px;
+  max-height: 32px;
+}
+
+.message-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.message-header-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.expand-indicator {
+  font-size: 10px;
+  color: var(--text-muted);
+  width: 12px;
+  text-align: center;
+}
+
+.message-preview {
+  margin-top: 4px;
+  padding: 4px 0;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 内联消息预览样式 */
+.message-preview-inline {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 12px;
+  flex: 1;
+  min-width: 0;
+  opacity: 0.8;
+  padding: 2px 8px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border-radius: 3px;
+  border-left: 2px solid var(--text-muted);
+}
+
+/* 连接分组样式 */
+.connection-group {
+  margin-bottom: 16px;
+}
+
+.connection-group:last-child {
+  margin-bottom: 0;
+}
+
+.connection-group-header {
+  background-color: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 8px 12px;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.connection-group-header.clickable {
+  transition: background-color 0.2s;
+}
+
+.connection-group-header.clickable:hover {
+  background-color: var(--bg-secondary);
+}
+
+.connection-group-header h4 {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.connection-group-content {
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 4px;
+}
+
+.connection-group-content .connection-item {
+  margin-bottom: 4px;
+}
+
+.connection-group-content .connection-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 改进等宽字体 */
+.message-content pre,
+.connection-id,
+.connection-info,
+.timestamp {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+
+/* 紧凑的消息样式 */
+.message-item.collapsed .message-header {
+  margin-bottom: 0;
+}
+
+.message-item.collapsed {
+  border-radius: var(--radius);
+  transition: all 0.2s;
+  padding: 2px 6px;
+  margin-bottom: 2px;
+}
+
+.message-item.collapsed:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message-item.expanded {
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.message-item {
+  transition: all 0.2s;
+}
+
+/* React Resizable Panels 样式 */
+/* PanelGroup 容器 */
+[data-panel-group] {
+  height: 100%;
+}
+
+/* Panel 基础样式 */
+[data-panel] {
+  overflow: hidden;
+}
+
+/* 分割线样式 */
+.panel-resize-handle {
+  background-color: var(--border-color);
+  width: 6px;
+  cursor: col-resize;
+  position: relative;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.panel-resize-handle:hover {
+  background-color: var(--accent-color);
+}
+
+.panel-resize-handle:active {
+  background-color: var(--accent-color);
+}
+
+/* 分割线中间的抓手样式 */
+.panel-resize-handle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 40px;
+  background-color: var(--text-muted);
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  border-radius: 1px;
+}
+
+.panel-resize-handle:hover::after {
+  opacity: 0.8;
+  background-color: white;
+}
+
+/* 分割线拖拽时的视觉反馈 */
+.panel-resize-handle[data-resize-handle-state="drag"] {
+  background-color: var(--accent-color);
+}
+
+/* 面板容器样式 */
+.panel-left-section,
+.panel-right-section {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.control-panel-container,
+.websocket-list-container,
+.message-details-container,
+.simulate-panel-container {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-color);
+}
+
+/* 分割线方向样式 */
+.panel-resize-handle.horizontal {
+  height: 6px;
+  width: 100%;
+  cursor: row-resize;
+  background-color: var(--border-color);
+  position: relative;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.panel-resize-handle.vertical {
+  width: 6px;
+  height: 100%;
+  cursor: col-resize;
+  background-color: var(--border-color);
+  position: relative;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.panel-resize-handle.horizontal:hover,
+.panel-resize-handle.vertical:hover {
+  background-color: var(--accent-color);
+}
+
+/* 水平分割线的抓手 */
+.panel-resize-handle.horizontal::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 2px;
+  background-color: var(--text-muted);
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  border-radius: 1px;
+}
+
+.panel-resize-handle.horizontal:hover::after {
+  opacity: 0.8;
+  background-color: white;
+}
+
+/* 垂直分割线的抓手 */
+.panel-resize-handle.vertical::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 40px;
+  background-color: var(--text-muted);
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  border-radius: 1px;
+}
+
+.panel-resize-handle.vertical:hover::after {
+  opacity: 0.8;
+  background-color: white;
+}
+
+.no-connection-hint {
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 40px 0;
+}
+
+.simulate-panel-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.simulate-panel-empty p {
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ControlPanel 响应式布局增强 */
+.control-panel-container {
+  container-type: size;
+}
+
+.control-panel {
+  padding: 12px;
+  background-color: var(--bg-primary);
+  height: 100%;
+  overflow-y: auto;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  height: 100%;
+}
+
+.control-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-section {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.control-section.compact {
+  padding: 8px;
+}
+
+.control-section h3 {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.control-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status-section {
+  padding: 8px;
+  border-radius: var(--radius);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.status-active {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: var(--success-color);
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.status-paused {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: var(--warning-color);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.toggle-text {
+  user-select: none;
+}
+
+/* 在较小空间时调整ControlPanel布局 */
+@container (max-height: 200px) {
+  .control-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .control-section {
+    padding: 6px;
+  }
+
+  .control-section h3 {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .control-buttons {
+    gap: 4px;
+  }
+
+  .control-toggles {
+    gap: 4px;
+  }
+
+  .toggle-label {
+    font-size: 10px;
+  }
+
+  .status-section {
+    padding: 6px;
+    font-size: 10px;
+  }
+}
+
+/* 在很小空间时进一步压缩 */
+@container (max-height: 120px) {
+  .control-panel {
+    padding: 8px;
+  }
+
+  .control-grid {
+    gap: 4px;
+  }
+
+  .control-section {
+    padding: 4px;
+  }
+
+  .control-section h3 {
+    font-size: 9px;
+    margin-bottom: 2px;
+  }
+
+  .control-buttons .btn {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
+
+/* 确保面板在折叠时隐藏内容 */
+[data-panel][data-panel-size="0.0"] {
+  overflow: hidden;
+}
+
+[data-panel][data-panel-size="0.0"] .simulate-panel-content {
+  display: none;
+}
+
+/* 新的 Simulate Panel 样式 */
+.simulate-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  overflow: hidden;
+}
+
+.simulate-panel-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.simulate-panel-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.simulate-panel-header .connection-info {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.simulate-panel-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.simulate-controls {
+  flex-shrink: 0;
+}
+
+.direction-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.direction-control label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 60px;
+}
+
+.direction-control select {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+.direction-control select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+}
+
+.simulate-input-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.simulate-textarea {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: "Courier New", monospace;
+  resize: none;
+  min-height: 100px;
+  outline: none;
+}
+
+.simulate-textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+}
+
+.simulate-actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.simulate-buttons {
+  margin-left: auto;
+}
+
+.simulate-btn {
+  flex: 1;
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--accent-color);
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.simulate-btn:hover:not(:disabled) {
+  background-color: #005a9e;
+  border-color: #005a9e;
+}
+
+.simulate-btn:disabled {
+  background-color: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  border-color: var(--border-color);
+}
+
+.simulate-btn.incoming {
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+.simulate-btn.incoming:hover:not(:disabled) {
+  background-color: #bd2130;
+  border-color: #bd2130;
+}
+
+.simulate-btn.outgoing {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.simulate-btn.outgoing:hover:not(:disabled) {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
+}
+
+.clear-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clear-btn:hover:not(:disabled) {
+  background-color: var(--bg-tertiary);
+  border-color: var(--accent-color);
+}
+
+.clear-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.simulate-hint {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 6px;
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+/* 模拟消息面板适配 */
+.simulate-section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.simulate-section.expanded {
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  height: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.simulate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.simulate-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 12px;
+}
+
+.simulate-header h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.simulate-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.direction-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.direction-control label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.direction-control select {
+  font-size: 12px;
+  padding: 4px 8px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.direction-control select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.simulate-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+}
+
+.simulate-input textarea {
+  width: 100%;
+  flex: 1;
+  min-height: 80px;
+  padding: 12px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+  resize: none;
+  line-height: 1.4;
+}
+
+.simulate-input textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.simulate-input textarea::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.simulate-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.simulate-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.connection-info {
+  font-size: 11px;
+  color: var(--text-muted);
+  background-color: var(--bg-tertiary);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-family: "Courier New", monospace;
+}
+
+.simulate-btn {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.simulate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.simulate-btn.incoming {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.simulate-btn.incoming:hover:not(:disabled) {
+  background-color: #1e7e34;
+}
+
+.simulate-btn.outgoing {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.simulate-btn.outgoing:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* Panel 包装器样式 */
+.panel-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  overflow: hidden;
+}
+
+.panel-title {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 16px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-title h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.panel-title-btn {
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--danger-color);
+  border-radius: var(--radius);
+  background-color: var(--danger-color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.panel-title-btn:hover {
+  background-color: #bd2130;
+  border-color: #bd2130;
+  color: white;
+}
+
+.panel-title-btn:active {
+  transform: scale(0.98);
+}
+
+.panel-body {
+  flex: 1;
+  background-color: var(--bg-primary);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}

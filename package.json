@@ -1,0 +1,33 @@
+{
+  "name": "websocket-proxy-extension",
+  "version": "1.0.0",
+  "description": "WebSocket proxy tool for monitoring, intercepting, and modifying WebSocket messages",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "vite build",
+    "build:dev": "vite build --mode development",
+    "preview": "vite preview",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "websocket",
+    "proxy",
+    "chrome-extension",
+    "debugging"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.5.2",
+  "dependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-resizable-panels": "^3.0.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.6.0",
+    "vite": "7.0.0",
+    "vite-plugin-web-extension": "4.4.4"
+  }
+}

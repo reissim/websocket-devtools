@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Test Page</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #1a1a1a;
+          color: white;
+      }
+      .container {
+          background-color: #2d2d2d;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 20px;
+      }
+      button {
+          background-color: #007acc;
+          color: white;
+          border: none;
+          padding: 10px 15px;
+          border-radius: 4px;
+          cursor: pointer;
+          margin: 5px;
+      }
+      button:hover {
+          background-color: #005a9e;
+      }
+      button:disabled {
+          background-color: #555;
+          cursor: not-allowed;
+      }
+      input, textarea {
+          background-color: #404040;
+          color: white;
+          border: 1px solid #666;
+          padding: 8px;
+          border-radius: 4px;
+          width: 100%;
+          margin: 5px 0;
+      }
+      .log {
+          background-color: #000;
+          padding: 10px;
+          border-radius: 4px;
+          height: 300px;
+          overflow-y: auto;
+          font-family: monospace;
+          font-size: 12px;
+          white-space: pre-wrap;
+      }
+      .status {
+          padding: 5px 10px;
+          border-radius: 4px;
+          margin: 5px 0;
+      }
+      .status.connected {
+          background-color: #28a745;
+      }
+      .status.disconnected {
+          background-color: #dc3545;
+      }
+      .status.connecting {
+          background-color: #ffc107;
+          color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>WebSocket Test Page</h1>
+    <p>Use this page to test the WebSocket Proxy extension</p>
+
+    <div class="container">
+      <h3>Connection</h3>
+      <input
+        type="text"
+        id="wsUrl"
+        value="wss://echo.websocket.org"
+        placeholder="WebSocket URL"
+      />
+      <div>
+        <button id="connectBtn" onclick="connect()">Connect</button>
+        <button id="disconnectBtn" onclick="disconnect()" disabled>
+          Disconnect
+        </button>
+      </div>
+      <div id="status" class="status disconnected">Disconnected</div>
+    </div>
+
+    <div class="container">
+      <h3>Send Message</h3>
+      <textarea
+        id="messageInput"
+        placeholder="Enter message to send..."
+        rows="3"
+      >
+{"type": "hello", "message": "Hello WebSocket!"}</textarea
+      >
+      <button id="sendBtn" onclick="sendMessage()" disabled>
+        Send Message
+      </button>
+    </div>
+
+    <div class="container">
+      <h3>Auto Send</h3>
+      <button id="autoSendBtn" onclick="toggleAutoSend()">
+        Start Auto Send
+      </button>
+      <span>Sends a message every 3 seconds</span>
+    </div>
+
+    <div class="container">
+      <h3>Message Log</h3>
+      <button onclick="clearLog()">Clear Log</button>
+      <div id="log" class="log"></div>
+    </div>
+
+    <script>
+      let ws = null;
+      let autoSendInterval = null;
+      let messageCounter = 0;
+
+      function log(message) {
+          const logDiv = document.getElementById('log');
+          const timestamp = new Date().toLocaleTimeString();
+          logDiv.textContent += `[${timestamp}] ${message}\n`;
+          logDiv.scrollTop = logDiv.scrollHeight;
+          console.log(message);
+      }
+
+      function updateUI() {
+          const connectBtn = document.getElementById('connectBtn');
+          const disconnectBtn = document.getElementById('disconnectBtn');
+          const sendBtn = document.getElementById('sendBtn');
+          const status = document.getElementById('status');
+
+          if (!ws) {
+              connectBtn.disabled = false;
+              disconnectBtn.disabled = true;
+              sendBtn.disabled = true;
+              status.textContent = 'Disconnected';
+              status.className = 'status disconnected';
+          } else if (ws.readyState === WebSocket.CONNECTING) {
+              connectBtn.disabled = true;
+              disconnectBtn.disabled = false;
+              sendBtn.disabled = true;
+              status.textContent = 'Connecting...';
+              status.className = 'status connecting';
+          } else if (ws.readyState === WebSocket.OPEN) {
+              connectBtn.disabled = true;
+              disconnectBtn.disabled = false;
+              sendBtn.disabled = false;
+              status.textContent = 'Connected';
+              status.className = 'status connected';
+          } else {
+              connectBtn.disabled = false;
+              disconnectBtn.disabled = true;
+              sendBtn.disabled = true;
+              status.textContent = 'Disconnected';
+              status.className = 'status disconnected';
+          }
+      }
+
+      function connect() {
+          const url = document.getElementById('wsUrl').value;
+          if (!url) {
+              alert('Please enter a WebSocket URL');
+              return;
+          }
+
+          try {
+              log(`🔗 Connecting to: ${url}`);
+              ws = new WebSocket(url);
+
+              ws.onopen = function(event) {
+                  log('✅ WebSocket connected');
+                  updateUI();
+              };
+
+              ws.onmessage = function(event) {
+                  log(`📨 Received: ${event.data}`);
+              };
+
+              ws.onclose = function(event) {
+                  log(`❌ WebSocket closed: ${event.code} ${event.reason}`);
+                  ws = null;
+                  updateUI();
+              };
+
+              ws.onerror = function(error) {
+                  log(`💥 WebSocket error: ${error}`);
+                  updateUI();
+              };
+
+              updateUI();
+          } catch (error) {
+              log(`💥 Connection failed: ${error.message}`);
+              updateUI();
+          }
+      }
+
+      function disconnect() {
+          if (ws) {
+              log('🔌 Disconnecting...');
+              ws.close();
+          }
+      }
+
+      function sendMessage() {
+          if (ws && ws.readyState === WebSocket.OPEN) {
+              const message = document.getElementById('messageInput').value;
+              if (message) {
+                  log(`📤 Sending: ${message}`);
+                  ws.send(message);
+              }
+          }
+      }
+
+      function toggleAutoSend() {
+          const btn = document.getElementById('autoSendBtn');
+
+          if (autoSendInterval) {
+              clearInterval(autoSendInterval);
+              autoSendInterval = null;
+              btn.textContent = 'Start Auto Send';
+              log('⏹️ Auto send stopped');
+          } else {
+              autoSendInterval = setInterval(() => {
+                  if (ws && ws.readyState === WebSocket.OPEN) {
+                      messageCounter++;
+                      const autoMessage = JSON.stringify({
+                          type: 'auto',
+                          counter: messageCounter,
+                          timestamp: new Date().toISOString()
+                      });
+                      log(`📤 Auto sending: ${autoMessage}`);
+                      ws.send(autoMessage);
+                  }
+              }, 3000);
+              btn.textContent = 'Stop Auto Send';
+              log('▶️ Auto send started (every 3 seconds)');
+          }
+      }
+
+      function clearLog() {
+          document.getElementById('log').textContent = '';
+      }
+
+      // Initialize UI
+      updateUI();
+      log('🚀 WebSocket test page loaded');
+    </script>
+  </body>
+</html>
