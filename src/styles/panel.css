@@ -1291,7 +1291,7 @@ body {
 }
 
 /* 在较小空间时调整ControlPanel布局 */
-@container (max-height: 200px) {
+@container (max-width: 290px) {
   .control-grid {
     grid-template-columns: 1fr;
     gap: 6px;
