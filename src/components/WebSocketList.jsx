@@ -98,9 +98,16 @@ const WebSocketList = ({
       uniqueConnections.push({
         ...baseConnection,
         status: getConnectionStatus(conn.id),
-        messageCount: connections.filter(
-          (c) => c.id === conn.id && c.type === "message"
-        ).length,
+        messageCount: connections
+          .filter((c) => c.id === conn.id && c.type === "message")
+          .filter((msg, index, arr) =>
+            arr.findIndex(
+              (m) =>
+                m.timestamp === msg.timestamp &&
+                m.data === msg.data &&
+                m.direction === msg.direction
+            ) === index
+          ).length,
         lastActivity: Math.max(
           ...connections.filter((c) => c.id === conn.id).map((c) => c.timestamp)
         ),

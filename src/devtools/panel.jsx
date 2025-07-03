@@ -125,9 +125,8 @@ const WebSocketPanel = () => {
         // 如果不是目标连接，保留
         if (conn.id !== connectionId) return true;
 
-        // 如果是目标连接，只保留非消息事件（连接事件、状态事件等）
-        // 保留的事件类型：connection, open, close, error 等系统事件
-        return conn.type !== "message";
+        // 这里不再过滤消息类型，保留所有消息
+        return true; // 保留所有消息
       });
     });
   };
@@ -166,8 +165,9 @@ const WebSocketPanel = () => {
   const getSelectedConnectionData = () => {
     if (!selectedConnectionId) return null;
 
+    // 包含所有类型的事件
     const connectionMessages = connections.filter(
-      (conn) => conn.id === selectedConnectionId && conn.type === "message"
+      (conn) => conn.id === selectedConnectionId
     );
 
     // 获取连接基本信息

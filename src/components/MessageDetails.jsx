@@ -14,6 +14,7 @@ const MessageDetails = ({
   const [expandedMessages, setExpandedMessages] = useState(new Set()); // 展开的消息索引
   const [selectedMessageKey, setSelectedMessageKey] = useState(null); // 选中的消息
   const [copiedMessageKey, setCopiedMessageKey] = useState(null); // 已拷贝的消息key
+  const [typeFilter, setTypeFilter] = useState("all"); // 'all' | 'message' | 'event'
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -37,15 +38,20 @@ const MessageDetails = ({
     );
   }
 
-  const filteredMessages = filterMessages(connection.messages, {
+  // 先用原有的 filterMessages 过滤方向/文本，再按类型过滤
+  let filteredMessages = filterMessages(connection.messages, {
     direction: filterDirection,
     text: filterText,
     invert: filterInvert,
   });
+  if (typeFilter === "message") {
+    filteredMessages = filteredMessages.filter((msg) => msg.type === "message");
+  } else if (typeFilter === "event") {
+    filteredMessages = filteredMessages.filter((msg) => msg.type !== "message");
+  }
 
   const formatMessage = (data) => {
     if (viewMode === "raw") return data;
-
     try {
       return JSON.stringify(JSON.parse(data), null, 2);
     } catch {
@@ -137,6 +143,18 @@ const MessageDetails = ({
               >
                 <option value="formatted">Formatted</option>
                 <option value="raw">Raw</option>
+              </select>
+            </div>
+
+            <div className="filter-controls">
+              <label>Type:</label>
+              <select
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value)}
+              >
+                <option value="all">全部</option>
+                <option value="message">仅消息</option>
+                <option value="event">仅事件</option>
               </select>
             </div>
 
@@ -245,7 +263,7 @@ const MessageDetails = ({
                       )}
                     </div>
                     <div className="message-header-right">
-                      {/* <span className="message-type">{message.type}</span> */}
+                      <span className="message-type">{message.type}</span>
                     </div>
                   </div>
 
