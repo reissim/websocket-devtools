@@ -13,8 +13,12 @@ const WebSocketPanel = () => {
   const [websocketEvents, setWebsocketEvents] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
   
+  // 分离连接管理和消息管理
+  const [connectionsMap, setConnectionsMap] = useState(new Map()); // 所有连接的基础信息（包括active和inactive）
+  
   // 消息去重机制
   const processedMessageIds = useRef(new Set());
+  
   useEffect(() => {
     // 监听来自 background script 的消息
     const messageListener = (message, sender, sendResponse) => {
@@ -38,6 +42,45 @@ const WebSocketPanel = () => {
         }
         
         console.log("📊 Processing WebSocket event:", eventData);
+
+        // 更新连接信息
+        setConnectionsMap((prevConnections) => {
+          const newConnections = new Map(prevConnections);
+          
+          if (eventData.type === "connection" || eventData.type === "open") {
+            // 创建或更新连接为active状态
+            newConnections.set(eventData.id, {
+              id: eventData.id,
+              url: eventData.url,
+              status: eventData.type === "connection" ? "connecting" : "open",
+              timestamp: eventData.timestamp,
+              lastActivity: eventData.timestamp,
+            });
+            console.log("📊 Created/Updated connection:", eventData.id, "Status:", eventData.type);
+          } else if (eventData.type === "close" || eventData.type === "error") {
+            // 更新连接为inactive状态，如果连接不存在则创建它
+            const existing = newConnections.get(eventData.id);
+            newConnections.set(eventData.id, {
+              id: eventData.id,
+              url: existing?.url || eventData.url || "Unknown URL",
+              status: eventData.type, // "close" 或 "error"
+              timestamp: existing?.timestamp || eventData.timestamp,
+              lastActivity: eventData.timestamp,
+            });
+            console.log("📊 Updated connection to inactive:", eventData.id, "Status:", eventData.type);
+          } else if (eventData.type === "message") {
+            // 更新最后活动时间（对于消息事件）
+            const existing = newConnections.get(eventData.id);
+            if (existing) {
+              newConnections.set(eventData.id, {
+                ...existing,
+                lastActivity: eventData.timestamp,
+              });
+            }
+          }
+          
+          return newConnections;
+        });
 
         setWebsocketEvents((prevEvents) => {
           const newEvents = [...prevEvents, eventData];
@@ -129,23 +172,19 @@ const WebSocketPanel = () => {
   };
 
   const handleClearConnections = () => {
-    console.log("🗑️ Clearing all WebSocket events...");
+    console.log("🗑️ Clearing all WebSocket connections and events...");
     setWebsocketEvents([]);
+    setConnectionsMap(new Map());
     setSelectedConnectionId(null);
   };
 
   const handleClearMessages = (connectionId) => {
-    console.log("🗑️ Clearing messages for connection:", connectionId);
+    console.log("🗑️ Clearing all messages and events for connection:", connectionId);
     setWebsocketEvents((prevEvents) => {
-      // 移除该连接的所有消息事件，但保留连接事件和其他系统事件
-      return prevEvents.filter((event) => {
-        // 如果不是目标连接，保留
-        if (event.id !== connectionId) return true;
-
-        // 这里不再过滤消息类型，保留所有消息
-        return true; // 保留所有消息
-      });
+      // 移除目标连接的所有事件（消息和系统事件都清除）
+      return prevEvents.filter((event) => event.id !== connectionId);
     });
+    // 连接基础信息保留在connections Map中，所以连接仍会显示在列表中
   };
 
   const handleSelectConnection = (connectionId) => {
@@ -182,22 +221,18 @@ const WebSocketPanel = () => {
   const getSelectedConnectionData = () => {
     if (!selectedConnectionId) return null;
 
-    // 包含所有类型的事件
+    // 从connectionsMap获取连接基本信息
+    const connectionInfo = connectionsMap.get(selectedConnectionId);
+    if (!connectionInfo) return null;
+
+    // 获取该连接的所有事件/消息
     const connectionMessages = websocketEvents.filter(
       (event) => event.id === selectedConnectionId
     );
 
-    // 获取连接基本信息
-    const firstConnection = websocketEvents.find(
-      (event) => event.id === selectedConnectionId
-    );
-
-    // 即使没有消息也要返回连接对象，保持UI状态
-    if (!firstConnection) return null;
-
     return {
       id: selectedConnectionId,
-      url: firstConnection.url,
+      url: connectionInfo.url,
       messages: connectionMessages,
     };
   };
@@ -261,11 +296,11 @@ const WebSocketPanel = () => {
               <div className="panel-wrapper">
                 <div className="panel-title">
                   <h3>🔗 Websocket Connections</h3>
-                  {websocketEvents.length > 0 && (
+                  {connectionsMap.size > 0 && (
                     <button
                       className="panel-title-btn"
                       onClick={handleClearConnections}
-                      title="Clear all WebSocket events"
+                      title="Clear all WebSocket connections and events"
                     >
                       🗑️ Clear All
                     </button>
@@ -274,6 +309,7 @@ const WebSocketPanel = () => {
                 <div className="panel-body">
                   <WebSocketList
                     websocketEvents={websocketEvents}
+                    connectionsMap={connectionsMap}
                     selectedConnectionId={selectedConnectionId}
                     onSelectConnection={handleSelectConnection}
                     onClearConnections={handleClearConnections}
