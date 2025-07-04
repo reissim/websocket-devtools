@@ -89,8 +89,13 @@
           simulated: true, // 标记为模拟消息
         });
 
-        // 不实际调用 ws.send()，只记录事件
-        console.log("✅ Simulated outgoing message recorded");
+        // 实际调用 ws.send() 真实发送消息
+        try {
+          console.log("🚀 Actually sending simulated message via WebSocket");
+          connectionInfo.originalSend(message);
+          console.log("✅ Simulated outgoing message sent successfully");
+        } catch {
+        }
       } else if (direction === "incoming") {
         // 模拟接收消息
         console.log("📥 Simulating incoming message");
@@ -110,28 +115,25 @@
         // 创建模拟的 MessageEvent
         const simulatedEvent = new MessageEvent("message", {
           data: message,
-          origin: ws.url,
+          origin: connectionInfo.url,
           lastEventId: "",
-          source: null,
+          source: window,
           ports: [],
+          bubbles: false,
+          cancelable: false,
         });
+        
+        // 添加模拟标记，便于调试
+        simulatedEvent._isSimulated = true;
 
-        // 触发 onmessage 处理器
-        if (ws.onmessage && typeof ws.onmessage === "function") {
-          try {
-            console.log("🎯 Triggering onmessage handler");
-            ws.onmessage.call(ws, simulatedEvent);
-          } catch (error) {
-            console.error("❌ Error in onmessage handler:", error);
-          }
-        }
-
-        // 触发所有 message 事件监听器
+        // 触发模拟消息事件
         try {
-          console.log("🎯 Dispatching message event");
+          // 只通过 dispatchEvent 触发即可，现在onmessage也通过addEventListener包装了
+          console.log("🎯 Dispatching simulated message event");
           ws.dispatchEvent(simulatedEvent);
+          console.log("✅ Simulated message dispatched successfully");
         } catch (error) {
-          console.error("❌ Error dispatching message event:", error);
+          console.error("❌ Error in simulated message processing:", error);
         }
 
         console.log("✅ Simulated incoming message processed");
@@ -163,6 +165,11 @@
       ws: ws,
       status: "connecting",
       originalSend: ws.send.bind(ws),
+      originalClose: ws.close.bind(ws),
+      originalOnMessage: null, // 将在onmessage setter中更新
+      originalAddEventListener: ws.addEventListener.bind(ws),
+      originalOnOpen: ws.onopen,
+      originalOnClose: ws.onclose,
       messageQueue: [], // 暂停期间的消息队列
       blockedMessages: [], // 被阻止的消息
     };
@@ -237,13 +244,6 @@
     ws.addEventListener = function (type, listener, options) {
       if (type === "message" && listener) {
         const wrappedListener = function (event) {
-          console.log(
-            "📨 WebSocket message received:",
-            connectionId,
-            event.data
-          );
-
-          // 检查是否应该阻止接收
           if (proxyState.isPaused || proxyState.blockIncoming) {
             console.log("🚫 Message receiving BLOCKED by proxy:", connectionId);
 
@@ -285,7 +285,8 @@
           });
 
           try {
-            return listener.call(this, event);
+            const result = listener.call(this, event);
+            return result;
           } catch (error) {
             console.error("❌ Message listener failed:", error);
           }
@@ -299,6 +300,8 @@
 
     // 拦截 onmessage 属性 - 添加控制逻辑
     let originalOnMessage = null;
+    let currentOnMessageHandler = null;
+    
     Object.defineProperty(ws, "onmessage", {
       get: function () {
         return originalOnMessage;
@@ -306,16 +309,37 @@
       set: function (handler) {
         console.log("🎯 Setting onmessage handler for:", connectionId);
         originalOnMessage = handler;
-
+        
+        // 存储到connectionInfo中，供模拟消息使用
+        connectionInfo.originalOnMessage = handler;
+        
+        // 移除之前的处理器（如果有）
+        if (currentOnMessageHandler) {
+          try {
+            ws.removeEventListener("message", currentOnMessageHandler);
+          } catch (e) {
+            console.warn("⚠️ Failed to remove previous onmessage handler:", e);
+          }
+        }
+        
         if (handler) {
-          const wrappedHandler = function (event) {
+          // 创建包装的处理器来拦截真实消息
+          const wrappedOnMessageHandler = function (event) {
             console.log(
               "📨 WebSocket message via onmessage:",
               connectionId,
-              event.data
+              event.data,
+              event._isSimulated ? "(SIMULATED)" : "(REAL)"
             );
 
-            // 检查是否应该阻止接收
+            // 检查是否应该阻止接收真实消息
+            console.log("🔍 Checking proxy state (onmessage):", {
+              isPaused: proxyState.isPaused,
+              blockIncoming: proxyState.blockIncoming,
+              willBlock: proxyState.isPaused || proxyState.blockIncoming,
+              connectionId: connectionId
+            });
+            
             if (proxyState.isPaused || proxyState.blockIncoming) {
               console.log("🚫 onmessage BLOCKED by proxy:", connectionId);
 
@@ -345,7 +369,7 @@
               return;
             }
 
-            // 正常处理消息
+            // 正常处理真实消息
             sendEvent({
               id: connectionId,
               url: url,
@@ -357,13 +381,28 @@
             });
 
             try {
-              return handler.call(this, event);
+              console.log("🎯 Calling original onmessage handler:", {
+                isSimulated: event._isSimulated,
+                data: event.data,
+                handlerExists: typeof handler === 'function'
+              });
+              
+              const result = handler.call(this, event);
+              
+              console.log("✅ Original onmessage handler completed successfully");
+              return result;
             } catch (error) {
               console.error("❌ onmessage handler failed:", error);
             }
           };
-
-          originalAddEventListener("message", wrappedHandler);
+          
+          // 保存当前处理器引用
+          currentOnMessageHandler = wrappedOnMessageHandler;
+          
+          // 通过addEventListener设置包装的处理器
+          originalAddEventListener("message", wrappedOnMessageHandler);
+        } else {
+          currentOnMessageHandler = null;
         }
       },
     });
@@ -478,6 +517,7 @@
         case "pause-connections":
           console.log("⏸️ Pausing WebSocket connections...");
           proxyState.isPaused = true;
+          console.log("🔍 Proxy state after pause:", proxyState);
           sendEvent({
             type: "proxy-state-change",
             state: proxyState,
@@ -488,6 +528,7 @@
         case "resume-connections":
           console.log("▶️ Resuming WebSocket connections...");
           proxyState.isPaused = false;
+          console.log("🔍 Proxy state after resume:", proxyState);
           sendEvent({
             type: "proxy-state-change",
             state: proxyState,

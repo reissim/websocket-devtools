@@ -238,7 +238,7 @@ const MessageDetails = ({
                   key={messageKey}
                   className={`message-item ${message.direction} ${
                     message.simulated ? "simulated" : ""
-                  } ${isExpanded ? "expanded" : "collapsed"} ${
+                  } ${message.blocked ? "blocked" : ""} ${isExpanded ? "expanded" : "collapsed"} ${
                     isSelected ? "selected" : ""
                   }`}
                 >
@@ -263,6 +263,11 @@ const MessageDetails = ({
                       )}
                     </div>
                     <div className="message-header-right">
+                      {message.blocked && (
+                        <span className="blocked-indicator" title={message.reason || "Message was blocked"}>
+                          🚫 BLOCKED
+                        </span>
+                      )}
                       <span className="message-type">{message.type}</span>
                     </div>
                   </div>
