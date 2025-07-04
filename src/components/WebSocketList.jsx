@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { filterConnections } from "../utils/filterUtils";
 
 const WebSocketList = ({
-  connections,
+  websocketEvents, // 注意：这里实际上是所有WebSocket事件的数组，包括连接、消息、状态变化等
   selectedConnectionId,
   onSelectConnection,
   onClearConnections,
@@ -11,7 +11,7 @@ const WebSocketList = ({
   const [inactiveCollapsed, setInactiveCollapsed] = useState(true); // 非活跃连接折叠状态
   const [filterText, setFilterText] = useState(""); // 连接过滤文本
   const [filterInvert, setFilterInvert] = useState(false); // 反向过滤
-  if (!connections || connections.length === 0) {
+  if (!websocketEvents || websocketEvents.length === 0) {
     return (
       <div className="websocket-list-empty">
         <div className="empty-state">
@@ -54,12 +54,12 @@ const WebSocketList = ({
   };
 
   const getConnectionById = (connectionId) => {
-    return connections.find((conn) => conn.id === connectionId);
+    return websocketEvents.find((conn) => conn.id === connectionId);
   };
 
   // 获取每个连接的最新状态
   const getConnectionStatus = (connectionId) => {
-    const messages = connections
+    const messages = websocketEvents
       .filter((conn) => conn.id === connectionId)
       .sort((a, b) => b.timestamp - a.timestamp);
 
@@ -83,12 +83,12 @@ const WebSocketList = ({
   const uniqueConnections = [];
   const connectionIds = new Set();
 
-  connections.forEach((conn) => {
+  websocketEvents.forEach((conn) => {
     if (!connectionIds.has(conn.id)) {
       connectionIds.add(conn.id);
 
       // 优先查找该连接的"connection"类型事件作为代表
-      const connectionEvent = connections.find(
+      const connectionEvent = websocketEvents.find(
         (c) => c.id === conn.id && c.type === "connection"
       );
 
@@ -98,7 +98,7 @@ const WebSocketList = ({
       uniqueConnections.push({
         ...baseConnection,
         status: getConnectionStatus(conn.id),
-        messageCount: connections
+        messageCount: websocketEvents
           .filter((c) => c.id === conn.id && c.type === "message")
           .filter((msg, index, arr) =>
             arr.findIndex(
@@ -109,7 +109,7 @@ const WebSocketList = ({
             ) === index
           ).length,
         lastActivity: Math.max(
-          ...connections.filter((c) => c.id === conn.id).map((c) => c.timestamp)
+          ...websocketEvents.filter((c) => c.id === conn.id).map((c) => c.timestamp)
         ),
       });
     }

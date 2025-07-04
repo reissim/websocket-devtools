@@ -10,9 +10,9 @@ import "../styles/panel.css";
 const WebSocketPanel = () => {
   const [isMonitoring, setIsMonitoring] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  const [connections, setConnections] = useState([]);
+  const [websocketEvents, setWebsocketEvents] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
-
+  
   useEffect(() => {
     // 监听来自 background script 的消息
     const messageListener = (message, sender, sendResponse) => {
@@ -22,10 +22,10 @@ const WebSocketPanel = () => {
         const eventData = message.data;
         console.log("📊 Processing WebSocket event:", eventData);
 
-        setConnections((prevConnections) => {
-          const newConnections = [...prevConnections, eventData];
-          console.log("📈 Total connections/events:", newConnections.length);
-          return newConnections;
+        setWebsocketEvents((prevEvents) => {
+          const newEvents = [...prevEvents, eventData];
+          console.log("📈 Total WebSocket events:", newEvents.length);
+          return newEvents;
         });
       } else if (message.type === "proxy-state-change") {
         console.log("🎛️ Proxy state changed:", message.data);
@@ -112,18 +112,18 @@ const WebSocketPanel = () => {
   };
 
   const handleClearConnections = () => {
-    console.log("🗑️ Clearing all connections...");
-    setConnections([]);
+    console.log("🗑️ Clearing all WebSocket events...");
+    setWebsocketEvents([]);
     setSelectedConnectionId(null);
   };
 
   const handleClearMessages = (connectionId) => {
     console.log("🗑️ Clearing messages for connection:", connectionId);
-    setConnections((prevConnections) => {
+    setWebsocketEvents((prevEvents) => {
       // 移除该连接的所有消息事件，但保留连接事件和其他系统事件
-      return prevConnections.filter((conn) => {
+      return prevEvents.filter((event) => {
         // 如果不是目标连接，保留
-        if (conn.id !== connectionId) return true;
+        if (event.id !== connectionId) return true;
 
         // 这里不再过滤消息类型，保留所有消息
         return true; // 保留所有消息
@@ -166,13 +166,13 @@ const WebSocketPanel = () => {
     if (!selectedConnectionId) return null;
 
     // 包含所有类型的事件
-    const connectionMessages = connections.filter(
-      (conn) => conn.id === selectedConnectionId
+    const connectionMessages = websocketEvents.filter(
+      (event) => event.id === selectedConnectionId
     );
 
     // 获取连接基本信息
-    const firstConnection = connections.find(
-      (conn) => conn.id === selectedConnectionId
+    const firstConnection = websocketEvents.find(
+      (event) => event.id === selectedConnectionId
     );
 
     // 即使没有消息也要返回连接对象，保持UI状态
@@ -244,11 +244,11 @@ const WebSocketPanel = () => {
               <div className="panel-wrapper">
                 <div className="panel-title">
                   <h3>🔗 Websocket Connections</h3>
-                  {connections.length > 0 && (
+                  {websocketEvents.length > 0 && (
                     <button
                       className="panel-title-btn"
                       onClick={handleClearConnections}
-                      title="Clear all connection history"
+                      title="Clear all WebSocket events"
                     >
                       🗑️ Clear All
                     </button>
@@ -256,7 +256,7 @@ const WebSocketPanel = () => {
                 </div>
                 <div className="panel-body">
                   <WebSocketList
-                    connections={connections}
+                    websocketEvents={websocketEvents}
                     selectedConnectionId={selectedConnectionId}
                     onSelectConnection={handleSelectConnection}
                     onClearConnections={handleClearConnections}
