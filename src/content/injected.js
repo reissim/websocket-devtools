@@ -244,7 +244,8 @@
     ws.addEventListener = function (type, listener, options) {
       if (type === "message" && listener) {
         const wrappedListener = function (event) {
-          if (proxyState.isPaused || proxyState.blockIncoming) {
+          // 模拟消息不受pause和block影响
+          if (!event._isSimulated && (proxyState.isPaused || proxyState.blockIncoming)) {
             console.log("🚫 Message receiving BLOCKED by proxy:", connectionId);
 
             // 存储被阻止的消息
@@ -336,11 +337,13 @@
             console.log("🔍 Checking proxy state (onmessage):", {
               isPaused: proxyState.isPaused,
               blockIncoming: proxyState.blockIncoming,
-              willBlock: proxyState.isPaused || proxyState.blockIncoming,
-              connectionId: connectionId
+              willBlock: !event._isSimulated && (proxyState.isPaused || proxyState.blockIncoming),
+              connectionId: connectionId,
+              isSimulated: event._isSimulated
             });
             
-            if (proxyState.isPaused || proxyState.blockIncoming) {
+            // 模拟消息不受pause和block影响
+            if (!event._isSimulated && (proxyState.isPaused || proxyState.blockIncoming)) {
               console.log("🚫 onmessage BLOCKED by proxy:", connectionId);
 
               // 存储被阻止的消息
