@@ -13,13 +13,30 @@ const WebSocketPanel = () => {
   const [websocketEvents, setWebsocketEvents] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
   
+  // 消息去重机制
+  const processedMessageIds = useRef(new Set());
   useEffect(() => {
     // 监听来自 background script 的消息
     const messageListener = (message, sender, sendResponse) => {
-      console.log("🎯 Panel received message:", message);
+      console.log("🎯 Panel received message:", message, "MessageID:", message.messageId, Date.now());
 
       if (message.type === "websocket-event") {
         const eventData = message.data;
+        const messageId = message.messageId;
+        
+        // 基于messageId的去重机制
+        if (messageId && processedMessageIds.current.has(messageId)) {
+          console.log("🚫 Duplicate message detected by ID, skipping:", messageId);
+          sendResponse({ received: true, duplicate: true, messageId });
+          return;
+        }
+        
+        // 添加到已处理集合
+        if (messageId) {
+          processedMessageIds.current.add(messageId);
+          console.log("✅ Message ID added to processed set:", messageId);
+        }
+        
         console.log("📊 Processing WebSocket event:", eventData);
 
         setWebsocketEvents((prevEvents) => {
@@ -32,7 +49,7 @@ const WebSocketPanel = () => {
         setIsPaused(message.data.state.isPaused);
       }
 
-      sendResponse({ received: true });
+      sendResponse({ received: true, messageId: message.messageId });
     };
 
     chrome.runtime.onMessage.addListener(messageListener);

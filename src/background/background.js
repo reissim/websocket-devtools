@@ -64,7 +64,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break;
 
     case "websocket-event":
-      console.log("📊 WebSocket event received:", message.data);
+      console.log("📊 WebSocket event received:", message.data, "MessageID:", message.messageId);
 
       // 存储连接数据
       websocketData.connections.push(message.data);
