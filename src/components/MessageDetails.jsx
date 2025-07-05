@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { filterMessages } from "../utils/filterUtils";
+import JsonViewer from "./JsonViewer";
 
 // SVG图标组件
 const Icons = {
@@ -89,14 +90,7 @@ const MessageDetails = ({
       : a.timestamp - b.timestamp;
   });
 
-  const formatMessage = (data) => {
-    if (viewMode === "raw") return data;
-    try {
-      return JSON.stringify(JSON.parse(data), null, 2);
-    } catch {
-      return data;
-    }
-  };
+  // formatMessage 函数已移动到 JsonViewer 组件内部处理
 
   const handleMessageClick = (messageKey) => {
     setSelectedMessageKey(selectedMessageKey === messageKey ? null : messageKey);
@@ -106,7 +100,7 @@ const MessageDetails = ({
     setSortOrder(sortOrder === "desc" ? "asc" : "desc");
   };
 
-  const truncateMessage = (message, maxLength = 80) => {
+  const truncateMessage = (message, maxLength = 120) => {
     if (typeof message !== "string") {
       message = String(message);
     }
@@ -123,7 +117,8 @@ const MessageDetails = ({
   // 拷贝消息内容到剪贴板
   const handleCopyMessage = async (messageData, messageKey) => {
     try {
-      const textToCopy = formatMessage(messageData);
+      // messageData 现在已经是格式化后的字符串（来自 JsonViewer）
+      const textToCopy = messageData;
       await navigator.clipboard.writeText(textToCopy);
       setCopiedMessageKey(messageKey);
       setTimeout(() => {
@@ -133,7 +128,7 @@ const MessageDetails = ({
       console.error("Failed to copy message:", error);
       try {
         const textArea = document.createElement("textarea");
-        textArea.value = formatMessage(messageData);
+        textArea.value = messageData;
         document.body.appendChild(textArea);
         textArea.select();
         document.execCommand("copy");
@@ -161,8 +156,8 @@ const MessageDetails = ({
 
   const getSelectedMessage = () => {
     if (!selectedMessageKey) return null;
-    return sortedMessages.find((msg, index) => {
-      const messageKey = `${msg.timestamp}-${msg.direction}-${index}`;
+    return sortedMessages.find((msg) => {
+      const messageKey = `${msg.timestamp}-${msg.direction}`;
       return messageKey === selectedMessageKey;
     });
   };
@@ -309,11 +304,11 @@ const MessageDetails = ({
                   </thead>
                   <tbody>
                     {sortedMessages.map((message, index) => {
-                      const messageKey = `${message.timestamp}-${message.direction}-${index}`;
+                      const messageKey = `${message.timestamp}-${message.direction}`;
                       const isSelected = selectedMessageKey === messageKey;
                       return (
                         <tr
-                          key={messageKey}
+                          key={`${messageKey}-${index}`} // 保持React key的唯一性
                           className={`message-row ${message.direction} ${
                             message.simulated ? "simulated" : ""
                           } ${message.blocked ? "blocked" : ""} ${
@@ -353,21 +348,21 @@ const MessageDetails = ({
                           <div className="detail-body">
                             <div className="detail-actions">
                               <button
-                                className={`copy-btn ${copiedMessageKey === messageKey ? "copied" : ""}`}
-                                onClick={() => handleCopyMessage(selectedMessage.data, messageKey)}
-                              >
-                                {copiedMessageKey === messageKey ? "✓ Copied" : "📋 Copy"}
-                              </button>
-                              <button
                                 className="close-btn"
                                 onClick={() => setSelectedMessageKey(null)}
                               >
                                 ✕
                               </button>
                             </div>
-                            <pre className="detail-text">
-{formatMessage(selectedMessage.data)}
-                            </pre>
+                            <JsonViewer
+                              data={selectedMessage.data}
+                              className="compact"
+                              showControls={true}
+                              onCopy={(data) => handleCopyMessage(data, messageKey)}
+                              copyButtonText="📋 Copy"
+                              copiedText="✓ Copied"
+                              isCopied={copiedMessageKey === messageKey}
+                            />
                             {isIntercepting && (
                               <div className="intercept-actions">
                                 <button className="action-btn edit">Edit</button>

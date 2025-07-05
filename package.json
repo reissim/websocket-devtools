@@ -21,6 +21,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.5.2",
   "dependencies": {
+    "@uiw/react-json-view": "2.0.0-alpha.32",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-resizable-panels": "^3.0.3"
