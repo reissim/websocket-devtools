@@ -95,6 +95,7 @@
   overflow: hidden;
   background-color: var(--bg-primary);
   position: relative;
+  min-height: 0;
 }
 
 .json-viewer-codemirror {
@@ -113,6 +114,7 @@
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--border-color) transparent;
+  max-height: 100%;
 }
 
 .json-viewer-codemirror .cm-scroller::-webkit-scrollbar {
@@ -197,6 +199,35 @@
 /* 在没有足够空间时强制显示滚动条 */
 .json-viewer-codemirror .cm-scroller {
   min-height: 100%;
+}
+
+/* Simulate 编辑器专用样式 */
+.json-viewer.simulate-editor {
+  height: 100%;
+  min-height: 200px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.json-viewer.simulate-editor .json-viewer-container {
+  flex: 1;
+  min-height: 0;
+}
+
+.json-viewer.simulate-editor .json-viewer-codemirror {
+  height: 100%;
+}
+
+.json-viewer.simulate-editor .json-viewer-codemirror .cm-editor {
+  height: 100%;
+  min-height: 150px;
+}
+
+.json-viewer.simulate-editor .json-viewer-codemirror .cm-scroller {
+  height: 100%;
+  min-height: 150px;
+  overflow-y: auto;
 }
 
 /* 为嵌套解析的 JSON 内容添加特殊样式 */

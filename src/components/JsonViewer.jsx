@@ -12,18 +12,23 @@ const JsonViewer = ({
   onCopy = null,
   copyButtonText = '📋 Copy',
   copiedText = '✓ Copied',
-  isCopied = false
+  isCopied = false,
+  readOnly = true,
+  onChange = null,
+  enableWrap = true,
+  enableCompact = true,
+  enableNestedParse = true,
 }) => {
   const [textWrap, setTextWrap] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [nestedParse, setNestedParse] = useState(false);
 
-  // 递归解析嵌套的 JSON 字符串
+  // Recursively parse nested JSON strings
   const parseNestedJson = useCallback((obj) => {
     if (typeof obj === 'string') {
       try {
         const parsed = JSON.parse(obj);
-        // 递归解析嵌套的 JSON
+        // Recursively parse nested JSON
         return parseNestedJson(parsed);
       } catch {
         return obj;
@@ -40,7 +45,7 @@ const JsonViewer = ({
     return obj;
   }, []);
 
-  // 检测和解析 JSON
+  // Detect and parse JSON
   const { isValidJson, parsedData, displayData, nestedParsedData } = useMemo(() => {
     if (!data || typeof data !== 'string') {
       return {
@@ -70,11 +75,13 @@ const JsonViewer = ({
     }
   }, [data, parseNestedJson]);
 
-  // 获取显示内容
+  // Get display content
   const getDisplayContent = () => {
     if (!isValidJson) {
       return displayData;
     }
+    
+    // Apply formatting and transformations
     const jsonData = nestedParse ? nestedParsedData : parsedData;
     return JSON.stringify(jsonData, null, collapsed ? 0 : 2);
   };
@@ -86,9 +93,40 @@ const JsonViewer = ({
     }
   };
 
+  const handleChange = useCallback((value) => {
+    if (onChange && !readOnly) {
+      onChange(value);
+    }
+  }, [onChange, readOnly]);
+
+  // Handle formatting changes in edit mode
+  const handleFormatChange = useCallback((newCollapsed, newNestedParse) => {
+    if (!readOnly && onChange && isValidJson) {
+      try {
+        const jsonData = newNestedParse ? nestedParsedData : parsedData;
+        const formattedContent = JSON.stringify(jsonData, null, newCollapsed ? 0 : 2);
+        onChange(formattedContent);
+      } catch (error) {
+        console.error('Error formatting JSON:', error);
+      }
+    }
+  }, [readOnly, onChange, isValidJson, nestedParsedData, parsedData]);
+
+  const handleCollapsedChange = useCallback((e) => {
+    const newCollapsed = e.target.checked;
+    setCollapsed(newCollapsed);
+    handleFormatChange(newCollapsed, nestedParse);
+  }, [handleFormatChange, nestedParse]);
+
+  const handleNestedParseChange = useCallback((e) => {
+    const newNestedParse = e.target.checked;
+    setNestedParse(newNestedParse);
+    handleFormatChange(collapsed, newNestedParse);
+  }, [handleFormatChange, collapsed]);
+
   const content = getDisplayContent();
 
-  // CodeMirror 扩展配置
+  // CodeMirror extensions configuration
   const extensions = [
     isValidJson ? json() : [],
     EditorView.theme({
@@ -102,6 +140,7 @@ const JsonViewer = ({
       '.cm-scroller': {
         fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
         lineHeight: '1.3',
+        overflow: 'auto',
       },
       '.cm-focused': {
         outline: 'none',
@@ -121,8 +160,8 @@ const JsonViewer = ({
       }
     }),
     textWrap ? EditorView.lineWrapping : [],
-    EditorView.editable.of(false), // 只读模式
-    EditorState.readOnly.of(true)
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly)
   ].filter(Boolean);
 
   return (
@@ -130,38 +169,51 @@ const JsonViewer = ({
       {showControls && (
         <div className="json-viewer-controls">
           <div className="json-viewer-controls-left">
-            <label className="json-viewer-wrap-control">
-              <input
-                type="checkbox"
-                checked={textWrap}
-                onChange={(e) => setTextWrap(e.target.checked)}
-              />
-              <span className="json-viewer-wrap-text">Wrap</span>
-            </label>
+            {enableWrap && (
+              <label className="json-viewer-wrap-control">
+                <input
+                  type="checkbox"
+                  checked={textWrap}
+                  onChange={(e) => setTextWrap(e.target.checked)}
+                />
+                <span className="json-viewer-wrap-text">Wrap</span>
+              </label>
+            )}
             
             {isValidJson && (
               <>
-                <label className="json-viewer-wrap-control">
-                  <input
-                    type="checkbox"
-                    checked={collapsed}
-                    onChange={(e) => setCollapsed(e.target.checked)}
-                  />
-                  <span className="json-viewer-wrap-text">Compact</span>
-                </label>
+                {enableCompact && (
+                  <label className="json-viewer-wrap-control">
+                    <input
+                      type="checkbox"
+                      checked={collapsed}
+                      onChange={handleCollapsedChange}
+                    />
+                    <span className="json-viewer-wrap-text">Compact</span>
+                  </label>
+                )}
 
-                <label className="json-viewer-wrap-control">
-                  <input
-                    type="checkbox"
-                    checked={nestedParse}
-                    onChange={(e) => setNestedParse(e.target.checked)}
-                  />
-                  <span className="json-viewer-wrap-text">Nested Parse</span>
-                </label>
+                {enableNestedParse && (
+                  <label className="json-viewer-wrap-control">
+                    <input
+                      type="checkbox"
+                      checked={nestedParse}
+                      onChange={handleNestedParseChange}
+                    />
+                    <span className="json-viewer-wrap-text">Nested Parse</span>
+                  </label>
+                )}
               </>
             )}
 
-            {isValidJson && (
+            {/* Show edit mode indicator */}
+            {!readOnly && (
+              <span className="json-viewer-status" title="Edit mode">
+                ✏️ Edit
+              </span>
+            )}
+
+            {readOnly && isValidJson && (
               <span className="json-viewer-status" title="Valid JSON detected">
                 ✓ JSON
               </span>
@@ -185,6 +237,7 @@ const JsonViewer = ({
       <div className="json-viewer-container">
         <CodeMirror
           value={content}
+          onChange={handleChange}
           extensions={extensions}
           theme={oneDark}
           basicSetup={{
@@ -192,10 +245,10 @@ const JsonViewer = ({
             foldGutter: true,
             dropCursor: false,
             allowMultipleSelections: false,
-            indentOnInput: false,
+            indentOnInput: !readOnly,
             bracketMatching: true,
-            closeBrackets: false,
-            autocompletion: false,
+            closeBrackets: !readOnly,
+            autocompletion: !readOnly,
             highlightSelectionMatches: false,
             searchKeymap: true,
           }}
