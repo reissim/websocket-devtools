@@ -84,8 +84,8 @@ body {
 
 .ws-messages-table td {
   padding: 2px 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
   vertical-align: middle;
   height: 24px;
   font-size: 12px;
@@ -101,7 +101,7 @@ body {
   font-weight: 500;
   color: var(--text-secondary);
   border-bottom: 1px solid var(--border-color);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
   background-color: var(--bg-secondary);
   font-size: 11px;
   height: 24px;
