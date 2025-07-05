@@ -335,7 +335,7 @@ const MessageDetails = ({
             
             {selectedMessageKey && (
               <>
-                <PanelResizeHandle className="panel-resize-handle horizontal" />
+                <PanelResizeHandle className="panel-resize-handle horizontal message-detail-resize-handle" />
                 <Panel defaultSize={30} minSize={15} maxSize={70}>
                   <div className="message-detail-simple">
                     <div className="detail-content">
@@ -346,14 +346,14 @@ const MessageDetails = ({
                         const messageKey = selectedMessageKey;
                         return (
                           <div className="detail-body">
-                            <div className="detail-actions">
+                            {/* <div className="detail-actions">
                               <button
                                 className="close-btn"
                                 onClick={() => setSelectedMessageKey(null)}
                               >
                                 ✕
                               </button>
-                            </div>
+                            </div> */}
                             <JsonViewer
                               data={selectedMessage.data}
                               className="compact"
