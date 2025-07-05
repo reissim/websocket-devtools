@@ -1,5 +1,9 @@
-import React, { useState, useMemo } from 'react';
-import JsonView from '@uiw/react-json-view';
+import React, { useState, useMemo, useCallback } from 'react';
+import CodeMirror from '@uiw/react-codemirror';
+import { json } from '@codemirror/lang-json';
+import { oneDark } from '@codemirror/theme-one-dark';
+import { EditorView } from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
 
 const JsonViewer = ({ 
   data, 
@@ -13,78 +17,74 @@ const JsonViewer = ({
   const [viewMode, setViewMode] = useState('auto'); // auto, json, raw, formatted
   const [textWrap, setTextWrap] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [nestedParse, setNestedParse] = useState(false);
+
+  // 递归解析嵌套的 JSON 字符串
+  const parseNestedJson = useCallback((obj) => {
+    if (typeof obj === 'string') {
+      try {
+        const parsed = JSON.parse(obj);
+        // 递归解析嵌套的 JSON
+        return parseNestedJson(parsed);
+      } catch {
+        return obj;
+      }
+    } else if (Array.isArray(obj)) {
+      return obj.map(item => parseNestedJson(item));
+    } else if (obj && typeof obj === 'object') {
+      const result = {};
+      for (const [key, value] of Object.entries(obj)) {
+        result[key] = parseNestedJson(value);
+      }
+      return result;
+    }
+    return obj;
+  }, []);
 
   // 检测和解析 JSON
-  const { isValidJson, parsedData, displayData } = useMemo(() => {
+  const { isValidJson, parsedData, displayData, nestedParsedData } = useMemo(() => {
     if (!data || typeof data !== 'string') {
       return {
         isValidJson: false,
         parsedData: null,
-        displayData: String(data || '')
+        displayData: String(data || ''),
+        nestedParsedData: null
       };
     }
 
     try {
       const parsed = JSON.parse(data);
+      const nestedParsed = parseNestedJson(parsed);
       return {
         isValidJson: true,
         parsedData: parsed,
-        displayData: data
+        displayData: data,
+        nestedParsedData: nestedParsed
       };
     } catch {
       return {
         isValidJson: false,
         parsedData: null,
-        displayData: data
+        displayData: data,
+        nestedParsedData: null
       };
     }
-  }, [data]);
+  }, [data, parseNestedJson]);
 
   // 根据模式获取显示内容
   const getDisplayContent = () => {
     const effectiveMode = viewMode === 'auto' ? (isValidJson ? 'json' : 'raw') : viewMode;
-
+    
     switch (effectiveMode) {
       case 'json':
         if (!isValidJson) return displayData;
-        return (
-          <JsonView
-            value={parsedData}
-            style={{
-              '--w-rjv-font-family': 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-              '--w-rjv-font-size': '11px',
-              '--w-rjv-line-height': '1.3',
-              '--w-rjv-border-radius': '0',
-              '--w-rjv-background-color': 'transparent',
-              '--w-rjv-color': 'var(--text-primary)',
-              '--w-rjv-key-string': 'var(--accent-color)',
-              '--w-rjv-type-string-color': 'var(--success-color)',
-              '--w-rjv-type-number-color': '#ce9178',
-              '--w-rjv-type-boolean-color': '#4fc1ff',
-              '--w-rjv-type-null-color': '#808080',
-              '--w-rjv-brackets-color': 'var(--text-secondary)',
-              '--w-rjv-arrow-color': 'var(--text-secondary)',
-              '--w-rjv-edit-color': 'var(--accent-color)',
-              '--w-rjv-info-color': 'var(--text-muted)',
-              '--w-rjv-ellipsis-color': 'var(--text-muted)',
-              '--w-rjv-curlybraces-color': 'var(--text-secondary)',
-              '--w-rjv-colon-color': 'var(--text-secondary)',
-              '--w-rjv-quotes-color': 'var(--success-color)',
-              '--w-rjv-quotes-string-color': 'var(--success-color)',
-              padding: '0',
-              margin: '0'
-            }}
-            collapsed={collapsed}
-            displayObjectSize={false}
-            displayDataTypes={false}
-            enableClipboard={false}
-            theme="dark"
-          />
-        );
+        const jsonData = nestedParse ? nestedParsedData : parsedData;
+        return JSON.stringify(jsonData, null, collapsed ? 0 : 2);
         
       case 'formatted':
         if (!isValidJson) return displayData;
-        return JSON.stringify(parsedData, null, 2);
+        const formattedData = nestedParse ? nestedParsedData : parsedData;
+        return JSON.stringify(formattedData, null, 2);
         
       case 'raw':
       default:
@@ -94,34 +94,50 @@ const JsonViewer = ({
 
   const handleCopyClick = () => {
     if (onCopy) {
-      const copyData = viewMode === 'json' && isValidJson 
-        ? JSON.stringify(parsedData, null, 2) 
-        : displayData;
+      const copyData = getDisplayContent();
       onCopy(copyData);
     }
   };
 
-  const renderContent = () => {
-    const content = getDisplayContent();
-    const effectiveMode = viewMode === 'auto' ? (isValidJson ? 'json' : 'raw') : viewMode;
+  const effectiveMode = viewMode === 'auto' ? (isValidJson ? 'json' : 'raw') : viewMode;
+  const content = getDisplayContent();
 
-    if (effectiveMode === 'json' && isValidJson) {
-      return <div className="json-viewer-content">{content}</div>;
-    }
-
-    return (
-      <pre 
-        className={`json-viewer-text ${textWrap ? 'text-wrap' : 'text-nowrap'}`}
-        style={{
-          whiteSpace: textWrap ? 'pre-wrap' : 'pre',
-          wordBreak: textWrap ? 'break-word' : 'normal',
-          overflowX: textWrap ? 'visible' : 'auto'
-        }}
-      >
-        {content}
-      </pre>
-    );
-  };
+  // CodeMirror 扩展配置
+  const extensions = [
+    effectiveMode === 'json' || effectiveMode === 'formatted' ? json() : [],
+    EditorView.theme({
+      '&': {
+        fontSize: '11px',
+        height: '100%',
+      },
+      '.cm-editor': {
+        height: '100%',
+      },
+      '.cm-scroller': {
+        fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+        lineHeight: '1.3',
+      },
+      '.cm-focused': {
+        outline: 'none',
+      },
+      '.cm-editor.cm-focused': {
+        outline: 'none',
+      },
+      '.cm-content': {
+        padding: '8px',
+        minHeight: '100%',
+      },
+      '&.cm-editor.cm-focused .cm-selectionBackground': {
+        backgroundColor: 'rgba(0, 122, 204, 0.3)',
+      },
+      '.cm-line': {
+        lineHeight: '1.3',
+      }
+    }),
+    textWrap ? EditorView.lineWrapping : [],
+    EditorView.editable.of(false), // 只读模式
+    EditorState.readOnly.of(true)
+  ].filter(Boolean);
 
   return (
     <div className={`json-viewer ${className}`}>
@@ -135,12 +151,12 @@ const JsonViewer = ({
               title="Display mode"
             >
               <option value="auto">Auto</option>
-              <option value="json">JSON Tree</option>
+              <option value="json">JSON</option>
               <option value="formatted">Formatted</option>
               <option value="raw">Raw</option>
             </select>
 
-            {(viewMode === 'raw' || viewMode === 'formatted' || (viewMode === 'auto' && !isValidJson)) && (
+            {(viewMode === 'raw' || (viewMode === 'auto' && !isValidJson)) && (
               <label className="json-viewer-wrap-control">
                 <input
                   type="checkbox"
@@ -152,13 +168,44 @@ const JsonViewer = ({
             )}
 
             {(viewMode === 'json' || (viewMode === 'auto' && isValidJson)) && (
+              <>
+                <label className="json-viewer-wrap-control">
+                  <input
+                    type="checkbox"
+                    checked={textWrap}
+                    onChange={(e) => setTextWrap(e.target.checked)}
+                  />
+                  <span className="json-viewer-wrap-text">Wrap</span>
+                </label>
+                
+                <label className="json-viewer-wrap-control">
+                  <input
+                    type="checkbox"
+                    checked={collapsed}
+                    onChange={(e) => setCollapsed(e.target.checked)}
+                  />
+                  <span className="json-viewer-wrap-text">Compact</span>
+                </label>
+
+                <label className="json-viewer-wrap-control">
+                  <input
+                    type="checkbox"
+                    checked={nestedParse}
+                    onChange={(e) => setNestedParse(e.target.checked)}
+                  />
+                  <span className="json-viewer-wrap-text">Nested Parse</span>
+                </label>
+              </>
+            )}
+
+            {(viewMode === 'formatted') && (
               <label className="json-viewer-wrap-control">
                 <input
                   type="checkbox"
-                  checked={collapsed}
-                  onChange={(e) => setCollapsed(e.target.checked)}
+                  checked={nestedParse}
+                  onChange={(e) => setNestedParse(e.target.checked)}
                 />
-                <span className="json-viewer-wrap-text">Collapse</span>
+                <span className="json-viewer-wrap-text">Nested Parse</span>
               </label>
             )}
 
@@ -184,7 +231,24 @@ const JsonViewer = ({
       )}
 
       <div className="json-viewer-container">
-        {renderContent()}
+        <CodeMirror
+          value={content}
+          extensions={extensions}
+          theme={oneDark}
+          basicSetup={{
+            lineNumbers: true,
+            foldGutter: true,
+            dropCursor: false,
+            allowMultipleSelections: false,
+            indentOnInput: false,
+            bracketMatching: true,
+            closeBrackets: false,
+            autocompletion: false,
+            highlightSelectionMatches: false,
+            searchKeymap: true,
+          }}
+          className="json-viewer-codemirror"
+        />
       </div>
     </div>
   );

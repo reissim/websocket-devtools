@@ -345,7 +345,8 @@ const MessageDetails = ({
                         
                         const messageKey = selectedMessageKey;
                         return (
-                          <div className="detail-body">
+                          // <div className="detail-body">
+                          <>
                             {/* <div className="detail-actions">
                               <button
                                 className="close-btn"
@@ -370,7 +371,9 @@ const MessageDetails = ({
                                 <button className="action-btn block">Block</button>
                               </div>
                             )}
-                          </div>
+                          {/* </div> */}
+                          </>
+
                         );
                       })()}
                     </div>
