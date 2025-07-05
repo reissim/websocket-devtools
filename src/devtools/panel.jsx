@@ -5,7 +5,7 @@ import ControlPanel from "../components/ControlPanel.jsx";
 import WebSocketList from "../components/WebSocketList.jsx";
 import MessageDetails from "../components/MessageDetails.jsx";
 import FloatingSimulate from "../components/FloatingSimulate.jsx";
-import "../styles/panel.css";
+import "../styles/main.css";
 
 const WebSocketPanel = () => {
   const [isMonitoring, setIsMonitoring] = useState(true);

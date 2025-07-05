@@ -1,0 +1,379 @@
+/* 模拟消息面板样式 */
+.simulate-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  overflow: hidden;
+}
+
+.simulate-panel-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.simulate-panel-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.simulate-panel-header .connection-info {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.simulate-panel-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.simulate-controls {
+  flex-shrink: 0;
+}
+
+.direction-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.direction-control label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 60px;
+}
+
+.direction-control select {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+.direction-control select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+}
+
+.simulate-input-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.simulate-textarea {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: "Courier New", monospace;
+  resize: none;
+  min-height: 100px;
+  outline: none;
+}
+
+.simulate-textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+}
+
+.simulate-actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.simulate-buttons {
+  margin-left: auto;
+}
+
+.simulate-btn {
+  flex: 1;
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--accent-color);
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.simulate-btn:hover:not(:disabled) {
+  background-color: #005a9e;
+  border-color: #005a9e;
+}
+
+.simulate-btn:disabled {
+  background-color: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  border-color: var(--border-color);
+}
+
+.simulate-btn.incoming {
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+.simulate-btn.incoming:hover:not(:disabled) {
+  background-color: #bd2130;
+  border-color: #bd2130;
+}
+
+.simulate-btn.outgoing {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.simulate-btn.outgoing:hover:not(:disabled) {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
+}
+
+.clear-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clear-btn:hover:not(:disabled) {
+  background-color: var(--bg-tertiary);
+  border-color: var(--accent-color);
+}
+
+.clear-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.simulate-hint {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 6px;
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.simulate-panel-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.simulate-panel-empty p {
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+/* 模拟消息面板适配 */
+.simulate-section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.simulate-section.expanded {
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  height: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.simulate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.simulate-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 12px;
+}
+
+.simulate-header h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.simulate-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.direction-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.direction-control label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.direction-control select {
+  font-size: 12px;
+  padding: 4px 8px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.direction-control select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.simulate-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+}
+
+.simulate-input textarea {
+  width: 100%;
+  flex: 1;
+  min-height: 80px;
+  padding: 12px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+  resize: none;
+  line-height: 1.4;
+}
+
+.simulate-input textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.simulate-input textarea::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.simulate-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.simulate-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.connection-info {
+  font-size: 11px;
+  color: var(--text-muted);
+  background-color: var(--bg-tertiary);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-family: "Courier New", monospace;
+}
+
+.simulate-btn {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.simulate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.simulate-btn.incoming {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.simulate-btn.incoming:hover:not(:disabled) {
+  background-color: #1e7e34;
+}
+
+.simulate-btn.outgoing {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.simulate-btn.outgoing:hover:not(:disabled) {
+  background-color: #0056b3;
+} 
