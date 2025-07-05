@@ -76,19 +76,10 @@
         // 模拟发送消息
         console.log("📤 Simulating outgoing message");
 
-        // 创建模拟的发送事件
-        sendEvent({
-          id: connectionId,
-          url: connectionInfo.url,
-          type: "message",
-          data: message,
-          direction: "outgoing",
-          timestamp: Date.now(),
-          status: connectionInfo.status,
-          simulated: true, // 标记为模拟消息
-        });
+        // No longer send sendEvent to Panel, Panel handles display itself
+        // Only responsible for actual simulation execution
 
-        // 实际调用 ws.send() 真实发送消息
+        // Actually call ws.send() to send real message
         try {
           console.log("🚀 Actually sending simulated message via WebSocket");
           connectionInfo.originalSend(message);
@@ -99,19 +90,10 @@
         // 模拟接收消息
         console.log("📥 Simulating incoming message");
 
-        // 创建模拟的接收事件
-        sendEvent({
-          id: connectionId,
-          url: connectionInfo.url,
-          type: "message",
-          data: message,
-          direction: "incoming",
-          timestamp: Date.now(),
-          status: connectionInfo.status,
-          simulated: true, // 标记为模拟消息
-        });
+        // No longer send sendEvent to Panel, Panel handles display itself
+        // Only responsible for actual simulation execution
 
-        // 创建模拟的 MessageEvent
+        // Create simulated MessageEvent
         const simulatedEvent = new MessageEvent("message", {
           data: message,
           origin: connectionInfo.url,
@@ -269,16 +251,19 @@
             return;
           }
 
-          // 正常处理消息
-          sendEvent({
-            id: connectionId,
-            url: url,
-            type: "message",
-            data: event.data,
-            direction: "incoming",
-            timestamp: Date.now(),
-            status: connectionInfo.status,
-          });
+          // For simulated messages, don't call sendEvent again, as Panel handles display directly
+          if (!event._isSimulated) {
+            // Handle real messages normally
+            sendEvent({
+              id: connectionId,
+              url: url,
+              type: "message",
+              data: event.data,
+              direction: "incoming",
+              timestamp: Date.now(),
+              status: connectionInfo.status,
+            });
+          }
 
           try {
             const result = listener.call(this, event);
@@ -364,37 +349,31 @@
               return;
             }
 
-            // 正常处理真实消息
-            sendEvent({
-              id: connectionId,
-              url: url,
-              type: "message",
-              data: event.data,
-              direction: "incoming",
-              timestamp: Date.now(),
-              status: connectionInfo.status,
-            });
+            // For simulated messages, don't call sendEvent again, as Panel handles display directly
+            if (!event._isSimulated) {
+              // Handle real messages normally
+              sendEvent({
+                id: connectionId,
+                url: url,
+                type: "message",
+                data: event.data,
+                direction: "incoming",
+                timestamp: Date.now(),
+                status: connectionInfo.status,
+              });
+            }
 
             try {
-              console.log("🎯 Calling original onmessage handler:", {
-                isSimulated: event._isSimulated,
-                data: event.data,
-                handlerExists: typeof handler === 'function'
-              });
-              
               const result = handler.call(this, event);
-              
-              console.log("✅ Original onmessage handler completed successfully");
+            
               return result;
             } catch (error) {
               console.error("❌ onmessage handler failed:", error);
             }
           };
           
-          // 保存当前处理器引用
           currentOnMessageHandler = wrappedOnMessageHandler;
-          
-          // 通过addEventListener设置包装的处理器
+            
           originalAddEventListener("message", wrappedOnMessageHandler);
         } else {
           currentOnMessageHandler = null;

@@ -161,6 +161,7 @@ const WebSocketPanel = () => {
     console.log("🎭 Simulating message:", { connectionId, message, direction });
 
     try {
+      // 1. Send simulate message to background (for actual simulation execution)
       const response = await chrome.runtime.sendMessage({
         type: "simulate-message",
         data: {
@@ -170,7 +171,26 @@ const WebSocketPanel = () => {
         },
       });
 
-      console.log("✅ Simulate message response:", response);
+      // 2. Handle simulated message display directly within Panel
+      if (response && response.success) {
+        const connectionInfo = connectionsMap.get(connectionId);
+        const simulatedEvent = {
+          id: connectionId,
+          url: connectionInfo?.url || "Unknown",
+          type: "message",
+          data: message,
+          direction: direction,
+          timestamp: Date.now(),
+          status: connectionInfo?.status || "open",
+          simulated: true, // Mark as simulated message
+        };
+
+        // 直接添加到事件列表中
+        setWebsocketEvents((prevEvents) => [simulatedEvent, ...prevEvents]);
+        
+        console.log("✅ Simulated message added to panel locally");
+      }
+
       return response;
     } catch (error) {
       console.error("❌ Failed to simulate message:", error);
