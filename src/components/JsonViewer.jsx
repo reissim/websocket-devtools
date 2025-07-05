@@ -14,7 +14,6 @@ const JsonViewer = ({
   copiedText = '✓ Copied',
   isCopied = false
 }) => {
-  const [viewMode, setViewMode] = useState('auto'); // auto, json, raw, formatted
   const [textWrap, setTextWrap] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [nestedParse, setNestedParse] = useState(false);
@@ -71,25 +70,13 @@ const JsonViewer = ({
     }
   }, [data, parseNestedJson]);
 
-  // 根据模式获取显示内容
+  // 获取显示内容
   const getDisplayContent = () => {
-    const effectiveMode = viewMode === 'auto' ? (isValidJson ? 'json' : 'raw') : viewMode;
-    
-    switch (effectiveMode) {
-      case 'json':
-        if (!isValidJson) return displayData;
-        const jsonData = nestedParse ? nestedParsedData : parsedData;
-        return JSON.stringify(jsonData, null, collapsed ? 0 : 2);
-        
-      case 'formatted':
-        if (!isValidJson) return displayData;
-        const formattedData = nestedParse ? nestedParsedData : parsedData;
-        return JSON.stringify(formattedData, null, 2);
-        
-      case 'raw':
-      default:
-        return displayData;
+    if (!isValidJson) {
+      return displayData;
     }
+    const jsonData = nestedParse ? nestedParsedData : parsedData;
+    return JSON.stringify(jsonData, null, collapsed ? 0 : 2);
   };
 
   const handleCopyClick = () => {
@@ -99,15 +86,14 @@ const JsonViewer = ({
     }
   };
 
-  const effectiveMode = viewMode === 'auto' ? (isValidJson ? 'json' : 'raw') : viewMode;
   const content = getDisplayContent();
 
   // CodeMirror 扩展配置
   const extensions = [
-    effectiveMode === 'json' || effectiveMode === 'formatted' ? json() : [],
+    isValidJson ? json() : [],
     EditorView.theme({
       '&': {
-        fontSize: '11px',
+        fontSize: '12px',
         height: '100%',
       },
       '.cm-editor': {
@@ -144,40 +130,17 @@ const JsonViewer = ({
       {showControls && (
         <div className="json-viewer-controls">
           <div className="json-viewer-controls-left">
-            <select 
-              value={viewMode} 
-              onChange={(e) => setViewMode(e.target.value)}
-              className="json-viewer-mode-select"
-              title="Display mode"
-            >
-              <option value="auto">Auto</option>
-              <option value="json">JSON</option>
-              <option value="formatted">Formatted</option>
-              <option value="raw">Raw</option>
-            </select>
-
-            {(viewMode === 'raw' || (viewMode === 'auto' && !isValidJson)) && (
-              <label className="json-viewer-wrap-control">
-                <input
-                  type="checkbox"
-                  checked={textWrap}
-                  onChange={(e) => setTextWrap(e.target.checked)}
-                />
-                <span className="json-viewer-wrap-text">Wrap</span>
-              </label>
-            )}
-
-            {(viewMode === 'json' || (viewMode === 'auto' && isValidJson)) && (
+            <label className="json-viewer-wrap-control">
+              <input
+                type="checkbox"
+                checked={textWrap}
+                onChange={(e) => setTextWrap(e.target.checked)}
+              />
+              <span className="json-viewer-wrap-text">Wrap</span>
+            </label>
+            
+            {isValidJson && (
               <>
-                <label className="json-viewer-wrap-control">
-                  <input
-                    type="checkbox"
-                    checked={textWrap}
-                    onChange={(e) => setTextWrap(e.target.checked)}
-                  />
-                  <span className="json-viewer-wrap-text">Wrap</span>
-                </label>
-                
                 <label className="json-viewer-wrap-control">
                   <input
                     type="checkbox"
@@ -196,17 +159,6 @@ const JsonViewer = ({
                   <span className="json-viewer-wrap-text">Nested Parse</span>
                 </label>
               </>
-            )}
-
-            {(viewMode === 'formatted') && (
-              <label className="json-viewer-wrap-control">
-                <input
-                  type="checkbox"
-                  checked={nestedParse}
-                  onChange={(e) => setNestedParse(e.target.checked)}
-                />
-                <span className="json-viewer-wrap-text">Nested Parse</span>
-              </label>
             )}
 
             {isValidJson && (
