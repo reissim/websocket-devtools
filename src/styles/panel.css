@@ -95,7 +95,7 @@ body {
 
 .control-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1.5fr;
   gap: 16px;
   align-items: start;
 }
@@ -121,8 +121,11 @@ body {
 .control-section h3 {
   font-size: 12px;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .status-section {
@@ -136,11 +139,6 @@ body {
   margin-bottom: 4px;
 }
 
-.status-section .status-paused {
-  color: var(--warning-color);
-  font-weight: 500;
-}
-
 .status-section .status-active {
   color: var(--success-color);
   font-weight: 500;
@@ -148,32 +146,14 @@ body {
 
 .control-buttons {
   display: flex;
-  gap: 6px;
-  margin-bottom: 6px;
-}
-
-.control-toggles {
-  display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-bottom: 6px;
+  gap: 8px;
 }
 
-.toggle-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  font-size: 11px;
-}
-
-.toggle-label input[type="checkbox"] {
-  margin: 0;
-  transform: scale(0.9);
-}
-
-.toggle-text {
-  color: var(--text-secondary);
+/* 监控按钮样式 */
+.control-buttons .btn:not(.block-btn) {
+  min-width: 100px;
+  font-weight: 600;
 }
 
 .control-description {
@@ -215,15 +195,15 @@ body {
   border-color: #005a9e;
 }
 
-.btn.btn-secondary {
-  background-color: var(--bg-tertiary);
-  color: var(--text-secondary);
-}
-
 .btn.btn-success {
   background-color: var(--success-color);
   color: white;
   border-color: var(--success-color);
+}
+
+.btn.btn-success:hover {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
 }
 
 .btn.btn-warning {
@@ -232,9 +212,106 @@ body {
   border-color: var(--warning-color);
 }
 
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.btn.btn-warning:hover {
+  background-color: #e0a800;
+  border-color: #e0a800;
+}
+
+.btn.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+  border-color: var(--danger-color);
+}
+
+.btn.btn-danger:hover {
+  background-color: #bd2130;
+  border-color: #bd2130;
+}
+
+.btn.btn-secondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.btn.btn-secondary:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-color);
+}
+
+/* 开关样式 */
+.control-switches {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.switch-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.switch-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.switch-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 10px;
+  min-width: 60px;
+  justify-content: center;
+}
+
+.switch-btn:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-color);
+}
+
+.switch-btn.on {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+  color: white;
+}
+
+.switch-btn.on:hover {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
+}
+
+.switch-btn.off {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.switch-btn.off:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-color);
+}
+
+.switch-indicator {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.switch-text {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 /* 主要内容区域 */
@@ -1253,12 +1330,6 @@ body {
   gap: 6px;
 }
 
-.control-toggles {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .status-section {
   padding: 8px;
   border-radius: var(--radius);
@@ -1271,24 +1342,6 @@ body {
   background-color: rgba(40, 167, 69, 0.1);
   color: var(--success-color);
   border: 1px solid rgba(40, 167, 69, 0.3);
-}
-
-.status-paused {
-  background-color: rgba(255, 193, 7, 0.1);
-  color: var(--warning-color);
-  border: 1px solid rgba(255, 193, 7, 0.3);
-}
-
-.toggle-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  cursor: pointer;
-}
-
-.toggle-text {
-  user-select: none;
 }
 
 /* 在较小空间时调整ControlPanel布局 */
@@ -1309,14 +1362,6 @@ body {
 
   .control-buttons {
     gap: 4px;
-  }
-
-  .control-toggles {
-    gap: 4px;
-  }
-
-  .toggle-label {
-    font-size: 10px;
   }
 
   .status-section {

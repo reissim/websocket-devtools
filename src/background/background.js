@@ -5,7 +5,6 @@ console.log("🚀 WebSocket Proxy background script loaded");
 let websocketData = {
   connections: [],
   isMonitoring: false,
-  isPaused: false,
 };
 
 // 监听来自 DevTools Panel 的消息
@@ -22,29 +21,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case "stop-monitoring":
       console.log("⏹️ Stopping WebSocket monitoring");
       websocketData.isMonitoring = false;
-      websocketData.isPaused = false;
 
       // 通知所有 content scripts 停止监控
       notifyAllTabs("stop-monitoring");
       sendResponse({ success: true, monitoring: false });
-      break;
-
-    case "pause-connections":
-      console.log("⏸️ Pausing WebSocket connections");
-      websocketData.isPaused = true;
-
-      // 通知所有 content scripts 暂停连接
-      notifyAllTabs("pause-connections");
-      sendResponse({ success: true, paused: true });
-      break;
-
-    case "resume-connections":
-      console.log("▶️ Resuming WebSocket connections");
-      websocketData.isPaused = false;
-
-      // 通知所有 content scripts 恢复连接
-      notifyAllTabs("resume-connections");
-      sendResponse({ success: true, paused: false });
       break;
 
     case "block-outgoing":
@@ -153,7 +133,6 @@ chrome.runtime.onStartup.addListener(() => {
   websocketData = {
     connections: [],
     isMonitoring: false,
-    isPaused: false,
   };
 });
 
@@ -163,7 +142,6 @@ chrome.runtime.onInstalled.addListener(() => {
   websocketData = {
     connections: [],
     isMonitoring: false,
-    isPaused: false,
   };
 });
 

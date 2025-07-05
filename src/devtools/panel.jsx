@@ -9,7 +9,6 @@ import "../styles/panel.css";
 
 const WebSocketPanel = () => {
   const [isMonitoring, setIsMonitoring] = useState(true);
-  const [isPaused, setIsPaused] = useState(false);
   const [websocketEvents, setWebsocketEvents] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
   
@@ -87,9 +86,6 @@ const WebSocketPanel = () => {
           console.log("📈 Total WebSocket events:", newEvents.length);
           return newEvents;
         });
-      } else if (message.type === "proxy-state-change") {
-        console.log("🎛️ Proxy state changed:", message.data);
-        setIsPaused(message.data.state.isPaused);
       }
 
       sendResponse({ received: true, messageId: message.messageId });
@@ -122,7 +118,6 @@ const WebSocketPanel = () => {
   const handleStopMonitoring = () => {
     console.log("⏹️ Stopping WebSocket monitoring...");
     setIsMonitoring(false);
-    setIsPaused(false);
 
     // 发送停止监控消息到 background script
     chrome.runtime
@@ -134,40 +129,6 @@ const WebSocketPanel = () => {
       })
       .catch((error) => {
         console.error("❌ Failed to stop monitoring:", error);
-      });
-  };
-
-  const handlePauseConnections = () => {
-    console.log("⏸️ Pausing WebSocket connections...");
-    setIsPaused(true);
-
-    // 发送暂停连接消息到 background script
-    chrome.runtime
-      .sendMessage({
-        type: "pause-connections",
-      })
-      .then((response) => {
-        console.log("✅ Pause connections response:", response);
-      })
-      .catch((error) => {
-        console.error("❌ Failed to pause connections:", error);
-      });
-  };
-
-  const handleResumeConnections = () => {
-    console.log("▶️ Resuming WebSocket connections...");
-    setIsPaused(false);
-
-    // 发送恢复连接消息到 background script
-    chrome.runtime
-      .sendMessage({
-        type: "resume-connections",
-      })
-      .then((response) => {
-        console.log("✅ Resume connections response:", response);
-      })
-      .catch((error) => {
-        console.error("❌ Failed to resume connections:", error);
       });
   };
 
@@ -245,13 +206,7 @@ const WebSocketPanel = () => {
         <h1>🔌 WebSocket Monitor</h1>
         <div className="panel-status">
           {isMonitoring ? (
-            isPaused ? (
-              <span className="status paused">
-                ⏸️ Monitoring Active (Paused)
-              </span>
-            ) : (
-              <span className="status active">🟢 Monitoring Active</span>
-            )
+            <span className="status active">🟢 Monitoring Active</span>
           ) : (
             <span className="status inactive">🔴 Monitoring Stopped</span>
           )}
@@ -280,11 +235,8 @@ const WebSocketPanel = () => {
                 <div className="panel-body">
                   <ControlPanel
                     isMonitoring={isMonitoring}
-                    isPaused={isPaused}
                     onStartMonitoring={handleStartMonitoring}
                     onStopMonitoring={handleStopMonitoring}
-                    onPauseConnections={handlePauseConnections}
-                    onResumeConnections={handleResumeConnections}
                   />
                 </div>
               </div>

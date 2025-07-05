@@ -27,7 +27,6 @@
   // 控制状态
   let proxyState = {
     isMonitoring: false,
-    isPaused: false,
     blockOutgoing: false,
     blockIncoming: false,
   };
@@ -205,14 +204,12 @@
       };
 
       // 检查是否应该阻止发送
-      if (proxyState.isPaused || proxyState.blockOutgoing) {
+      if (proxyState.blockOutgoing) {
         console.log("🚫 Message sending BLOCKED by proxy:", connectionId);
 
         // 添加阻止标记
         eventData.blocked = true;
-        eventData.reason = proxyState.isPaused
-          ? "Connection paused"
-          : "Outgoing messages blocked";
+        eventData.reason = "Outgoing messages blocked";
 
         // 存储被阻止的消息
         connectionInfo.blockedMessages.push({
@@ -244,8 +241,8 @@
     ws.addEventListener = function (type, listener, options) {
       if (type === "message" && listener) {
         const wrappedListener = function (event) {
-          // 模拟消息不受pause和block影响
-          if (!event._isSimulated && (proxyState.isPaused || proxyState.blockIncoming)) {
+          // 模拟消息不受block影响
+          if (!event._isSimulated && proxyState.blockIncoming) {
             console.log("🚫 Message receiving BLOCKED by proxy:", connectionId);
 
             // 存储被阻止的消息
@@ -265,9 +262,7 @@
               timestamp: Date.now(),
               status: connectionInfo.status,
               blocked: true,
-              reason: proxyState.isPaused
-                ? "Connection paused"
-                : "Incoming messages blocked",
+              reason: "Incoming messages blocked",
             });
 
             // 不调用原始监听器，阻止应用程序接收消息
@@ -335,15 +330,14 @@
 
             // 检查是否应该阻止接收真实消息
             console.log("🔍 Checking proxy state (onmessage):", {
-              isPaused: proxyState.isPaused,
               blockIncoming: proxyState.blockIncoming,
-              willBlock: !event._isSimulated && (proxyState.isPaused || proxyState.blockIncoming),
+              willBlock: !event._isSimulated && proxyState.blockIncoming,
               connectionId: connectionId,
               isSimulated: event._isSimulated
             });
             
-            // 模拟消息不受pause和block影响
-            if (!event._isSimulated && (proxyState.isPaused || proxyState.blockIncoming)) {
+            // 模拟消息不受block影响
+            if (!event._isSimulated && proxyState.blockIncoming) {
               console.log("🚫 onmessage BLOCKED by proxy:", connectionId);
 
               // 存储被阻止的消息
@@ -363,9 +357,7 @@
                 timestamp: Date.now(),
                 status: connectionInfo.status,
                 blocked: true,
-                reason: proxyState.isPaused
-                  ? "Connection paused"
-                  : "Incoming messages blocked",
+                reason: "Incoming messages blocked",
               });
 
               // 不调用原始处理器
@@ -517,28 +509,6 @@
           }
           break;
 
-        case "pause-connections":
-          console.log("⏸️ Pausing WebSocket connections...");
-          proxyState.isPaused = true;
-          console.log("🔍 Proxy state after pause:", proxyState);
-          sendEvent({
-            type: "proxy-state-change",
-            state: proxyState,
-            timestamp: Date.now(),
-          });
-          break;
-
-        case "resume-connections":
-          console.log("▶️ Resuming WebSocket connections...");
-          proxyState.isPaused = false;
-          console.log("🔍 Proxy state after resume:", proxyState);
-          sendEvent({
-            type: "proxy-state-change",
-            state: proxyState,
-            timestamp: Date.now(),
-          });
-          break;
-
         case "block-outgoing":
           console.log("🚫 Blocking outgoing messages...");
           proxyState.blockOutgoing = event.data.enabled;
@@ -588,12 +558,6 @@
     proxyState: proxyState,
     getConnectionCount: () => connections.size,
     getConnectionIds: () => Array.from(connections.keys()),
-    pauseConnections: () => {
-      proxyState.isPaused = true;
-    },
-    resumeConnections: () => {
-      proxyState.isPaused = false;
-    },
     blockOutgoing: (enabled) => {
       proxyState.blockOutgoing = enabled;
     },

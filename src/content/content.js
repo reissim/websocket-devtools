@@ -93,28 +93,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       );
       break;
 
-    case "pause-connections":
-      console.log("⏸️ Forwarding pause connections to injected script");
-      window.postMessage(
-        {
-          source: "websocket-proxy-content",
-          type: "pause-connections",
-        },
-        "*"
-      );
-      break;
-
-    case "resume-connections":
-      console.log("▶️ Forwarding resume connections to injected script");
-      window.postMessage(
-        {
-          source: "websocket-proxy-content",
-          type: "resume-connections",
-        },
-        "*"
-      );
-      break;
-
     case "block-outgoing":
       console.log(
         "🚫 Forwarding block outgoing to injected script:",
