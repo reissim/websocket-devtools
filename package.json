@@ -30,7 +30,9 @@
     "@uiw/react-codemirror": "^4.23.14",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-resizable-panels": "^3.0.3"
+    "react-resizable-panels": "^3.0.3",
+    "react-rnd": "^10.4.13",
+    "vite-plugin-web-extension": "^4.4.4"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "4.6.0",
