@@ -222,16 +222,7 @@ const MessageDetails = ({
         <h3>Messages for {connection.url}</h3>
         <div className="controls">
           <div className="control-row">
-            <div className="view-controls">
-              <label>View:</label>
-              <select value={viewMode} onChange={(e) => setViewMode(e.target.value)}>
-                <option value="formatted">Formatted</option>
-                <option value="raw">Raw</option>
-              </select>
-            </div>
-
-            <div className="filter-controls">
-              <label>Type:</label>
+            <div className="filter-controls primary-filter">
               <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
                 <option value="all">All</option>
                 <option value="message">Messages</option>
@@ -239,23 +230,14 @@ const MessageDetails = ({
               </select>
             </div>
 
-            <div className="filter-controls">
-              <label>Direction:</label>
-              <select value={filterDirection} onChange={(e) => setFilterDirection(e.target.value)}>
-                <option value="all">All</option>
-                <option value="outgoing">Outgoing</option>
-                <option value="incoming">Incoming</option>
-              </select>
-            </div>
-
-            <div className="filter-controls">
-              <label>Search:</label>
+            <div className="filter-controls search-filter">
               <div className="filter-input-container">
+                <span className="filter-icon">🔍</span>
                 <input
                   type="text"
                   value={filterText}
                   onChange={(e) => setFilterText(e.target.value)}
-                  placeholder="Filter messages..."
+                  placeholder="Filter using regex (example: (web)?socket)"
                 />
                 {filterText && (
                   <button className="clear-filter-btn" onClick={handleClearSearchFilter}>
@@ -265,20 +247,43 @@ const MessageDetails = ({
               </div>
             </div>
 
-            <button
-              className={`btn btn-invert ${filterInvert ? "active" : ""}`}
-              onClick={() => setFilterInvert(!filterInvert)}
-            >
-              Invert
-            </button>
+            <div className="secondary-controls">
+              <div className="filter-controls direction-filter">
+                <label>Direction:</label>
+                <select value={filterDirection} onChange={(e) => setFilterDirection(e.target.value)}>
+                  <option value="all">All</option>
+                  <option value="outgoing">↑</option>
+                  <option value="incoming">↓</option>
+                </select>
+              </div>
 
-            <button
-              className="clear-messages-btn"
-              onClick={handleClearMessagesList}
-              disabled={!connection || !connection.messages || connection.messages.length === 0}
-            >
-              🗑️ Clear
-            </button>
+              <div className="filter-controls view-filter">
+                <label>View:</label>
+                <select value={viewMode} onChange={(e) => setViewMode(e.target.value)}>
+                  <option value="formatted">JSON</option>
+                  <option value="raw">Raw</option>
+                </select>
+              </div>
+
+              <label className="invert-checkbox">
+                <input
+                  type="checkbox"
+                  checked={filterInvert}
+                  onChange={(e) => setFilterInvert(e.target.checked)}
+                />
+                <span className="checkmark"></span>
+                <span className="checkbox-label">Invert</span>
+              </label>
+
+              <button
+                className="clear-messages-btn"
+                onClick={handleClearMessagesList}
+                disabled={!connection || !connection.messages || connection.messages.length === 0}
+                title="Clear all messages"
+              >
+                🗑️
+              </button>
+            </div>
           </div>
         </div>
       </div>

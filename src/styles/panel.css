@@ -88,7 +88,7 @@ body {
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   vertical-align: middle;
   height: 24px;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .ws-messages-table td:last-child {
@@ -167,6 +167,7 @@ body {
   gap: 4px;
   overflow: hidden;
   color: var(--text-primary);
+  height: 100%;
 }
 
 .data-cell.system {
@@ -179,6 +180,10 @@ body {
   width: 12px;
   text-align: center;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .direction-arrow.outgoing {
@@ -193,6 +198,8 @@ body {
   color: var(--accent-color);
   font-size: 12px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
 .system-text {
@@ -860,19 +867,17 @@ body {
 .controls {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .control-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
-.view-controls,
-.filter-controls,
-.search-controls {
+.filter-controls {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -880,63 +885,158 @@ body {
   position: relative;
 }
 
-.view-controls label,
-.filter-controls label,
-.search-controls label {
-  font-size: 11px;
+.filter-controls.primary-filter {
+  margin-right: 8px;
+}
+
+.filter-controls.search-filter {
+  flex: 1;
+  max-width: 400px;
+  margin-right: 12px;
+}
+
+.secondary-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.filter-controls label {
+  font-size: 10px;
   color: var(--text-secondary);
   white-space: nowrap;
   min-width: fit-content;
 }
 
-.view-controls select,
 .filter-controls select,
 .filter-controls input {
   padding: 3px 6px;
   border: 1px solid var(--border-color);
-  border-radius: var(--radius);
+  border-radius: 2px;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-size: 11px;
   outline: none;
+  height: 20px;
+  box-sizing: border-box;
+}
+
+.filter-controls.primary-filter select {
   min-width: 80px;
+  font-weight: 500;
 }
 
-.filter-controls input {
-  min-width: 120px;
-  padding-right: 24px; /* Make room for clear button */
+
+
+.filter-controls.direction-filter select,
+.filter-controls.view-filter select {
+  min-width: 60px;
 }
 
-.view-controls select:focus,
 .filter-controls select:focus,
 .filter-controls input:focus {
   border-color: var(--accent-color);
 }
 
-/* 搜索控制区域 */
-.search-controls {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.btn-invert {
-  padding: 4px 8px;
-  font-size: 11px;
-  min-width: auto;
-  height: 24px;
-}
-
-.btn-invert.active {
-  background-color: var(--accent-color);
-  color: white;
+.filter-controls.search-filter input:focus {
   border-color: var(--accent-color);
 }
 
-.btn-invert.active:hover {
-  background-color: #005a9e;
-  border-color: #005a9e;
+.invert-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--text-secondary);
+  user-select: none;
+  height: 20px;
+}
+
+.invert-checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.invert-checkbox .checkmark {
+  position: relative;
+  height: 12px;
+  width: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  background-color: var(--bg-primary);
+  transition: all 0.2s;
+}
+
+.invert-checkbox:hover .checkmark {
+  border-color: var(--accent-color);
+}
+
+.invert-checkbox input:checked ~ .checkmark {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.invert-checkbox .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 3px;
+  top: 1px;
+  width: 4px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.invert-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.invert-checkbox .checkbox-label {
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.filter-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.filter-icon {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 12px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.filter-controls.search-filter input {
+  width: 100%;
+  padding: 3px 24px 3px 24px !important;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  color: var(--text-primary);
+  font-size: 11px;
+  outline: none;
+  height: 20px;
+  box-sizing: border-box;
+}
+
+.filter-controls.search-filter input::placeholder {
+  color: var(--text-muted);
 }
 
 .clear-filter-btn {
@@ -962,23 +1062,21 @@ body {
   color: var(--danger-color);
 }
 
-/* 操作控制区域 */
-.action-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .clear-messages-btn {
-  padding: 3px 8px;
+  padding: 2px 6px;
   border: 1px solid var(--border-color);
-  border-radius: var(--radius);
+  border-radius: 2px;
   background-color: var(--bg-tertiary);
   color: var(--text-secondary);
   cursor: pointer;
-  font-size: 10px;
+  font-size: 11px;
   transition: all 0.2s;
   white-space: nowrap;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .clear-messages-btn:hover:not(:disabled) {
@@ -2086,7 +2184,7 @@ body {
 .panel-title {
   background-color: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
-  padding: 12px 16px;
+  padding: 6px 12px;
   flex-shrink: 0;
   display: flex;
   justify-content: space-between;
