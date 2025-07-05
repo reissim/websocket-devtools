@@ -82,6 +82,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // 转发控制命令到注入脚本
   switch (message.type) {
+    case "start-monitoring":
+      console.log("🚀 Forwarding start monitoring to injected script");
+      window.postMessage(
+        {
+          source: "websocket-proxy-content",
+          type: "start-monitoring",
+        },
+        "*"
+      );
+      break;
+
     case "stop-monitoring":
       console.log("⏹️ Forwarding stop monitoring to injected script");
       window.postMessage(

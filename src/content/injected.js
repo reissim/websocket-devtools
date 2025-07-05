@@ -498,6 +498,30 @@
       console.log("📥 Received control message:", event.data);
 
       switch (event.data.type) {
+        case "start-monitoring":
+          console.log("🚀 Starting WebSocket monitoring...");
+          try {
+            // 重新设置WebSocket代理
+            Object.defineProperty(window, "WebSocket", {
+              value: ProxiedWebSocket,
+              writable: true,
+              configurable: true,
+            });
+            console.log("✅ WebSocket monitoring restarted");
+            console.log("🔍 Current WebSocket:", window.WebSocket);
+            console.log("🧪 Proxy verification:", window.WebSocket === ProxiedWebSocket);
+          } catch (error) {
+            console.error("❌ Failed to restart monitoring:", error);
+            // 备用方案
+            try {
+              window.WebSocket = ProxiedWebSocket;
+              console.log("🔄 Fallback restart successful");
+            } catch (fallbackError) {
+              console.error("❌ Fallback restart failed:", fallbackError);
+            }
+          }
+          break;
+
         case "stop-monitoring":
           console.log("⏹️ Stopping WebSocket monitoring...");
           try {

@@ -15,6 +15,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case "start-monitoring":
       console.log("🚀 Starting WebSocket monitoring");
       websocketData.isMonitoring = true;
+      
+      // 通知所有 content scripts 开始监控
+      notifyAllTabs("start-monitoring");
       sendResponse({ success: true, monitoring: true });
       break;
 
