@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import JsonViewer from "./JsonViewer";
 
-const SimulateMessagePanel = ({ connection, onSimulateMessage }) => {
+const SimulateMessagePanel = ({ connection, onSimulateMessage, isFloating = false }) => {
   const [simulateDirection, setSimulateDirection] = useState("incoming");
-  const [simulateMessage, setSimulateMessage] = useState("");
+  const [simulateMessage, setSimulateMessage] = useState('{\n  "message": "Hello World",\n  "timestamp": "2025-01-01T00:00:00Z"\n}');
   const [isSending, setIsSending] = useState(false);
 
   const handleSimulateMessage = async () => {
@@ -11,11 +12,6 @@ const SimulateMessagePanel = ({ connection, onSimulateMessage }) => {
     }
 
     setIsSending(true);
-    console.log("🎭 Simulating message:", {
-      direction: simulateDirection,
-      message: simulateMessage,
-      connectionId: connection.id,
-    });
 
     try {
       await onSimulateMessage({
@@ -23,12 +19,15 @@ const SimulateMessagePanel = ({ connection, onSimulateMessage }) => {
         message: simulateMessage,
         direction: simulateDirection,
       });
-      setSimulateMessage("");
     } catch (error) {
       console.error("Failed to simulate message:", error);
     } finally {
       setTimeout(() => setIsSending(false), 1000);
     }
+  };
+
+  const handleMessageChange = (value) => {
+    setSimulateMessage(value);
   };
 
   const handleKeyPress = (e) => {
@@ -38,10 +37,14 @@ const SimulateMessagePanel = ({ connection, onSimulateMessage }) => {
     }
   };
 
+  const clearMessage = () => {
+    setSimulateMessage("");
+  };
+
   if (!connection) {
     return (
-      <div className="simulate-panel-empty">
-        <p>请先选择一个WebSocket连接</p>
+      <div className={`simulate-panel-empty ${isFloating ? 'floating' : ''}`}>
+        <p>{isFloating ? '🔌 请先选择一个WebSocket连接' : '请先选择一个WebSocket连接'}</p>
       </div>
     );
   }
@@ -63,22 +66,30 @@ const SimulateMessagePanel = ({ connection, onSimulateMessage }) => {
           </div>
         </div>
 
-        <div className="simulate-input">
-          <textarea
-            value={simulateMessage}
-            onChange={(e) => setSimulateMessage(e.target.value)}
-            onKeyDown={handleKeyPress}
-            placeholder={`Enter message to simulate ${
-              simulateDirection === "incoming" ? "receiving" : "sending"
-            }...\n\nPress Ctrl+Enter to send`}
-            disabled={isSending}
-          />
+        <div className="simulate-input-container">
+          <div className="simulate-input-header">
+            <span>Message Content (Ctrl+Enter to send):</span>
+            <button 
+              className="clear-btn"
+              onClick={clearMessage}
+              disabled={isSending}
+              title="Clear message"
+            >
+              🗑️ Clear
+            </button>
+          </div>
+          <div className="simulate-input-editor" onKeyDown={handleKeyPress}>
+            <JsonViewer
+              data={simulateMessage}
+              readOnly={false}
+              onChange={handleMessageChange}
+              showControls={true}
+              className="simulate-editor"
+            />
+          </div>
         </div>
 
         <div className="simulate-actions">
-          {/* <div className="simulate-info">
-            <span className="connection-info"></span>
-          </div> */}
           <div className="simulate-buttons">
             <button
               className={`simulate-btn ${simulateDirection}`}

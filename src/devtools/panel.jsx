@@ -4,7 +4,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import ControlPanel from "../components/ControlPanel.jsx";
 import WebSocketList from "../components/WebSocketList.jsx";
 import MessageDetails from "../components/MessageDetails.jsx";
-import SimulateMessagePanel from "../components/SimulateMessagePanel.jsx";
+import FloatingSimulate from "../components/FloatingSimulate.jsx";
 import "../styles/panel.css";
 
 const WebSocketPanel = () => {
@@ -274,51 +274,28 @@ const WebSocketPanel = () => {
 
         <PanelResizeHandle className="panel-resize-handle vertical" />
 
-        {/* 右侧垂直布局：MessageDetails + SimulateMessage */}
+        {/* 右侧：MessageDetails */}
         <Panel className="panel-right-section">
-          <PanelGroup direction="vertical">
-            <Panel
-              defaultSize={70}
-              minSize={40}
-              className="message-details-container"
-            >
-              <div className="panel-wrapper">
-                <div className="panel-title">
-                  <h3>💬 Message Details</h3>
-                </div>
-                <div className="panel-body">
-                  <MessageDetails
-                    connection={selectedConnection}
-                    onSimulateMessage={handleSimulateMessage}
-                    onClearMessages={handleClearMessages}
-                  />
-                </div>
-              </div>
-            </Panel>
-
-            <PanelResizeHandle className="panel-resize-handle horizontal" />
-
-            <Panel
-              defaultSize={30}
-              minSize={7}
-              maxSize={60}
-              className="simulate-panel-container"
-            >
-              <div className="panel-wrapper">
-                <div className="panel-title">
-                  <h3>🎭 Simulate Message</h3>
-                </div>
-                <div className="panel-body">
-                  <SimulateMessagePanel
-                    connection={selectedConnection}
-                    onSimulateMessage={handleSimulateMessage}
-                  />
-                </div>
-              </div>
-            </Panel>
-          </PanelGroup>
+          <div className="panel-wrapper">
+            <div className="panel-title">
+              <h3>💬 Message Details</h3>
+            </div>
+            <div className="panel-body">
+              <MessageDetails
+                connection={selectedConnection}
+                onSimulateMessage={handleSimulateMessage}
+                onClearMessages={handleClearMessages}
+              />
+            </div>
+          </div>
         </Panel>
       </PanelGroup>
+
+      {/* 悬浮模拟消息窗口 */}
+      <FloatingSimulate
+        connection={selectedConnection}
+        onSimulateMessage={handleSimulateMessage}
+      />
     </div>
   );
 };
