@@ -136,8 +136,8 @@ const SimulateMessagePanel = ({ connection, onSimulateMessage }) => {
           position={windowPosition}
           onDragStop={handleDragStop}
           onResizeStop={handleResizeStop}
-          minWidth={350}
-          minHeight={400}
+          minWidth={300}
+          minHeight={350}
           maxWidth={1500}
           maxHeight={1200}
           bounds="parent"
