@@ -25,6 +25,72 @@ const WebSocketPanel = () => {
     setCurrentTabId(tabId);
     console.log("🎯 DevTools Panel attached to tab:", tabId);
 
+    // 请求现有数据
+    const loadExistingData = async () => {
+      try {
+        const response = await chrome.runtime.sendMessage({
+          type: "get-existing-data",
+        });
+        
+        if (response && response.success) {
+          console.log("📊 Loading existing data:", response.data?.length || 0, "events");
+          
+          // 同步监控状态
+          if (response.isMonitoring !== undefined) {
+            setIsMonitoring(response.isMonitoring);
+            console.log("🔄 Synced monitoring state:", response.isMonitoring);
+          }
+          
+          // 加载现有事件数据
+          if (response.data && response.data.length > 0) {
+            // 过滤当前tab的事件
+            const tabEvents = response.data.filter(event => event.tabId === tabId);
+            console.log("📊 Filtered events for current tab:", tabEvents.length);
+            
+            // 更新连接信息
+            const newConnectionsMap = new Map();
+            tabEvents.forEach(eventData => {
+              if (eventData.type === "connection" || eventData.type === "open") {
+                newConnectionsMap.set(eventData.id, {
+                  id: eventData.id,
+                  url: eventData.url,
+                  status: eventData.type === "connection" ? "connecting" : "open",
+                  timestamp: eventData.timestamp,
+                  lastActivity: eventData.timestamp,
+                });
+              } else if (eventData.type === "close" || eventData.type === "error") {
+                const existing = newConnectionsMap.get(eventData.id);
+                newConnectionsMap.set(eventData.id, {
+                  id: eventData.id,
+                  url: existing?.url || eventData.url || "Unknown URL",
+                  status: eventData.type,
+                  timestamp: existing?.timestamp || eventData.timestamp,
+                  lastActivity: eventData.timestamp,
+                });
+              } else if (eventData.type === "message") {
+                const existing = newConnectionsMap.get(eventData.id);
+                if (existing) {
+                  newConnectionsMap.set(eventData.id, {
+                    ...existing,
+                    lastActivity: eventData.timestamp,
+                  });
+                }
+              }
+            });
+            
+            setConnectionsMap(newConnectionsMap);
+            setWebsocketEvents(tabEvents);
+            console.log("✅ Loaded existing data:", tabEvents.length, "events,", newConnectionsMap.size, "connections");
+          }
+        }
+      } catch (error) {
+        console.error("❌ Failed to load existing data:", error);
+      }
+    };
+
+    // 加载现有数据
+    loadExistingData();
+
     // 监听来自 background script 的消息
     const messageListener = (message, sender, sendResponse) => {
       if (message.type === "websocket-event") {

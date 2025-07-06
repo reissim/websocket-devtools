@@ -4,7 +4,7 @@ console.log("🚀 WebSocket Proxy background script loaded");
 // 存储 WebSocket 连接数据
 let websocketData = {
   connections: [],
-  isMonitoring: false,
+  isMonitoring: true, // 默认开启监控
 };
 
 // 监听来自 DevTools Panel 的消息
@@ -28,6 +28,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       // 通知所有 content scripts 停止监控
       notifyAllTabs("stop-monitoring");
       sendResponse({ success: true, monitoring: false });
+      break;
+
+    case "get-existing-data":
+      console.log("📊 Panel requesting existing data, connections:", websocketData.connections.length);
+      
+      // 发送现有数据到 DevTools Panel
+      sendResponse({ 
+        success: true, 
+        data: websocketData.connections,
+        isMonitoring: websocketData.isMonitoring 
+      });
       break;
 
     case "block-outgoing":
@@ -155,8 +166,12 @@ chrome.runtime.onStartup.addListener(() => {
   console.log("🌅 Extension started");
   websocketData = {
     connections: [],
-    isMonitoring: false,
+    isMonitoring: true, // 默认开启监控
   };
+  
+  // 开始监控所有标签页
+  console.log("🚀 Auto-starting WebSocket monitoring on startup");
+  notifyAllTabs("start-monitoring");
 });
 
 // 当扩展安装时
@@ -164,8 +179,12 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log("📦 Extension installed/updated");
   websocketData = {
     connections: [],
-    isMonitoring: false,
+    isMonitoring: true, // 默认开启监控
   };
+  
+  // 开始监控所有标签页
+  console.log("🚀 Auto-starting WebSocket monitoring on install");
+  notifyAllTabs("start-monitoring");
 });
 
 console.log("✅ Background script initialization complete");
