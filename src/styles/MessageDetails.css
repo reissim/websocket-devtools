@@ -382,12 +382,12 @@
 @keyframes newMessageHighlight {
   0% {
     background-color: rgba(76, 175, 80, 0.6);
-    transform: scale(1.02);
+    transform: scale(1);
     box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
   }
   50% {
     background-color: rgba(76, 175, 80, 0.4);
-    transform: scale(1.01);
+    transform: scale(1);
     box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
   }
   100% {
@@ -411,12 +411,12 @@
 @keyframes newMessageHighlightSelected {
   0% {
     background-color: rgba(76, 175, 80, 0.6);
-    transform: scale(1.02);
+    transform: scale(1);
     box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
   }
   50% {
     background-color: rgba(76, 175, 80, 0.4);
-    transform: scale(1.01);
+    transform: scale(1);
     box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
   }
   100% {
@@ -434,12 +434,12 @@
 @keyframes newMessageHighlightSimulated {
   0% {
     background-color: rgba(255, 193, 7, 0.8);
-    transform: scale(1.02);
+    transform: scale(1);
     box-shadow: 0 0 10px rgba(255, 193, 7, 0.6);
   }
   50% {
     background-color: rgba(255, 193, 7, 0.5);
-    transform: scale(1.01);
+    transform: scale(1);
     box-shadow: 0 0 8px rgba(255, 193, 7, 0.4);
   }
   100% {
@@ -457,12 +457,12 @@
 @keyframes newMessageHighlightBlocked {
   0% {
     background-color: rgba(220, 53, 69, 0.8);
-    transform: scale(1.02);
+    transform: scale(1);
     box-shadow: 0 0 10px rgba(220, 53, 69, 0.6);
   }
   50% {
     background-color: rgba(220, 53, 69, 0.5);
-    transform: scale(1.01);
+    transform: scale(1);
     box-shadow: 0 0 8px rgba(220, 53, 69, 0.4);
   }
   100% {

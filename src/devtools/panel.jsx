@@ -11,6 +11,7 @@ const WebSocketPanel = () => {
   const [isMonitoring, setIsMonitoring] = useState(true);
   const [websocketEvents, setWebsocketEvents] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
+  const [currentTabId, setCurrentTabId] = useState(null);
   
   // 分离连接管理和消息管理
   const [connectionsMap, setConnectionsMap] = useState(new Map()); // 所有连接的基础信息（包括active和inactive）
@@ -19,13 +20,22 @@ const WebSocketPanel = () => {
   const processedMessageIds = useRef(new Set());
   
   useEffect(() => {
+    // 获取当前DevTools所附加的tab ID
+    const tabId = chrome.devtools.inspectedWindow.tabId;
+    setCurrentTabId(tabId);
+    console.log("🎯 DevTools Panel attached to tab:", tabId);
+
     // 监听来自 background script 的消息
     const messageListener = (message, sender, sendResponse) => {
-      console.log("🎯 Panel received message:", message, "MessageID:", message.messageId, Date.now());
-
       if (message.type === "websocket-event") {
         const eventData = message.data;
         const messageId = message.messageId;
+        
+        // Filter: only process events from current tab
+        if (eventData.tabId !== tabId) {
+          sendResponse({ received: true, ignored: true, messageId, reason: "different-tab" });
+          return;
+        }
         
         // 基于messageId的去重机制
         if (messageId && processedMessageIds.current.has(messageId)) {
@@ -34,10 +44,9 @@ const WebSocketPanel = () => {
           return;
         }
         
-        // 添加到已处理集合
+        // Add to processed set
         if (messageId) {
           processedMessageIds.current.add(messageId);
-          console.log("✅ Message ID added to processed set:", messageId);
         }
         
         console.log("📊 Processing WebSocket event:", eventData);
@@ -168,6 +177,7 @@ const WebSocketPanel = () => {
           connectionId,
           message,
           direction,
+          tabId: currentTabId, // 包含当前tab ID
         },
       });
 
