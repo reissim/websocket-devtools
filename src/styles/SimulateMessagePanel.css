@@ -89,20 +89,27 @@
 }
 
 .simulate-buttons {
-  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
 }
 
 .simulate-btn {
   flex: 1;
   padding: 8px 16px;
-  border: 1px solid var(--border-color);
+  border: none;
   border-radius: var(--radius);
-  background-color: var(--accent-color);
   color: white;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 120px;
 }
 
 .simulate-btn:hover:not(:disabled) {
