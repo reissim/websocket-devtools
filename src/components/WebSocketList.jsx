@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { CheckCircle, XCircle, Wifi, Trash2 } from "lucide-react";
 import { filterConnections } from "../utils/filterUtils";
+import useConnectionNewMessage from "../hooks/useConnectionNewMessage";
+import "../styles/WebSocketList.css";
 
 const WebSocketList = ({
   websocketEvents, // 所有WebSocket事件的数组
@@ -13,6 +15,13 @@ const WebSocketList = ({
   const [inactiveCollapsed, setInactiveCollapsed] = useState(true); // 非活跃连接折叠状态
   const [filterText, setFilterText] = useState(""); // 连接过滤文本
   const [filterInvert, setFilterInvert] = useState(false); // 反向过滤
+
+  // 使用新消息追踪 hook
+  const { hasNewMessages, getNewMessageTimestamp, clearNewMessage } = useConnectionNewMessage(
+    websocketEvents,
+    connectionsMap,
+    300 // 闪烁持续时间300毫秒
+  );
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -80,10 +89,12 @@ const WebSocketList = ({
   // 渲染连接项的通用函数
   const renderConnection = (connection, isActive) => {
     const isSelected = connection.id === selectedConnectionId;
+    const hasNewMsg = hasNewMessages(connection.id);
 
     return (
       <div
         key={connection.id}
+        className="connection-item"
         style={{
           background: isSelected
             ? "rgba(59, 130, 246, 0.2)" // 选中时使用蓝色背景
@@ -97,7 +108,13 @@ const WebSocketList = ({
           transition: "all 0.2s ease",
           marginBottom: "8px",
         }}
-        onClick={() => onSelectConnection(connection.id)}
+        onClick={() => {
+          onSelectConnection(connection.id);
+          // 清除新消息指示器
+          if (hasNewMsg) {
+            clearNewMessage(connection.id);
+          }
+        }}
         onMouseEnter={(e) => {
           if (!isSelected) {
             e.currentTarget.style.background = "rgba(75, 85, 99, 0.4)";
@@ -141,6 +158,7 @@ const WebSocketList = ({
             </span>
           </div>
           <button
+            className="connection-indicator-button"
             style={{
               padding: "4px",
               background: "none",
@@ -155,15 +173,34 @@ const WebSocketList = ({
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = "transparent";
             }}
+            onClick={(e) => {
+              e.stopPropagation(); // 防止触发连接选择
+              if (hasNewMsg) {
+                clearNewMessage(connection.id);
+              }
+            }}
           >
             <div
+              className={hasNewMsg ? "new-message-indicator" : ""}
               style={{
                 width: "4px",
                 height: "4px",
-                backgroundColor: "#9ca3af",
-                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            />
+            >
+              <div
+                key={hasNewMsg ? getNewMessageTimestamp(connection.id) : "static"} // 使用时间戳作为key强制重新渲染
+                className={hasNewMsg ? "indicator-dot" : ""}
+                style={{
+                  width: "4px",
+                  height: "4px",
+                  backgroundColor: hasNewMsg ? "#10b981" : "#9ca3af",
+                  borderRadius: "50%",
+                }}
+              />
+            </div>
           </button>
         </div>
         <div

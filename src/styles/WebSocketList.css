@@ -1,3 +1,34 @@
+/* WebSocketList Component Styles */
+
+/* New message indicator - simple flash effect */
+.new-message-indicator .indicator-dot {
+  position: relative;
+  z-index: 2;
+  background-color: #10b981 !important;
+  animation: newMessageFlash 0.3s ease-out forwards;
+}
+
+@keyframes newMessageFlash {
+  0% {
+    background-color: #34d399;
+    box-shadow: 0 0 12px rgba(52, 211, 153, 1);
+    transform: scale(1);
+  }
+  100% {
+    background-color: #10b981;
+    box-shadow: 0 0 4px rgba(16, 185, 129, 0.6);
+    transform: scale(1);
+  }
+}
+
+/* Ensure the button container has proper positioning */
+.connection-indicator-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* WebSocket连接列表样式 */
 .websocket-list {
   height: 100%;
