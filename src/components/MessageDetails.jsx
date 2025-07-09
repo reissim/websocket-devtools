@@ -4,7 +4,7 @@ import { filterMessages } from "../utils/filterUtils";
 import JsonViewer from "./JsonViewer";
 import useNewMessageHighlight from "../hooks/useNewMessageHighlight";
 import { addFromMessageList } from "../utils/globalFavorites";
-import { Ban, Search, Settings, X } from "lucide-react";
+import { Ban, Search, Settings, CircleX } from "lucide-react";
 
 // SVG图标组件
 const Icons = {
@@ -304,7 +304,7 @@ const MessageDetails = ({
                     className="clear-filter-btn"
                     onClick={handleClearSearchFilter}
                   >
-                    <X size={12} />
+                    <CircleX size={12} />
                   </button>
                 )}
               </div>
