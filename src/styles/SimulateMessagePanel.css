@@ -212,11 +212,6 @@
 
 .connection-info {
   font-size: 11px;
-  color: var(--text-muted);
-  background-color: var(--bg-tertiary);
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-family: "Courier New", monospace;
 }
 
 .simulate-btn {

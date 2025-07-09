@@ -4,6 +4,7 @@ import { filterMessages } from "../utils/filterUtils";
 import JsonViewer from "./JsonViewer";
 import useNewMessageHighlight from "../hooks/useNewMessageHighlight";
 import { addFromMessageList } from "../utils/globalFavorites";
+import { Ban, Search, Settings, X } from "lucide-react";
 
 // SVG图标组件
 const Icons = {
@@ -18,15 +19,7 @@ const Icons = {
     </svg>
   ),
   Connection: () => (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path
-        d="M10 6C10 8.209 8.209 10 6 10C3.791 10 2 8.209 2 6C2 3.791 3.791 2 6 2C8.209 2 10 3.791 10 6Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      <path d="M6 4V8M4 6H8" stroke="currentColor" strokeWidth="1" />
-    </svg>
+    < Settings size={12} />
   ),
   Simulate: () => (
     <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
@@ -66,13 +59,11 @@ const MessageDetails = ({
   onClearMessages,
   onOpenSimulatePanel,
 }) => {
-  const [viewMode, setViewMode] = useState("formatted"); // 'formatted' | 'raw'
   const [filterDirection, setFilterDirection] = useState("all"); // 'all' | 'outgoing' | 'incoming'
   const [filterText, setFilterText] = useState(""); // 消息内容过滤
   const [filterInvert, setFilterInvert] = useState(false); // 反向过滤
   const [selectedMessageKey, setSelectedMessageKey] = useState(null); // 选中的消息
   const [copiedMessageKey, setCopiedMessageKey] = useState(null); // 已拷贝的消息key
-  const [typeFilter, setTypeFilter] = useState("all"); // 'all' | 'message' | 'event'
   const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc' 时间排序
   const [hoveredMessageKey, setHoveredMessageKey] = useState(null); // 悬停的消息key
 
@@ -104,17 +95,12 @@ const MessageDetails = ({
     );
   }
 
-  // 先用原有的 filterMessages 过滤方向/文本，再按类型过滤
+  // 先用原有的 filterMessages 过滤方向/文本
   let filteredMessages = filterMessages(connection.messages, {
     direction: filterDirection,
     text: filterText,
     invert: filterInvert,
   });
-  if (typeFilter === "message") {
-    filteredMessages = filteredMessages.filter((msg) => msg.type === "message");
-  } else if (typeFilter === "event") {
-    filteredMessages = filteredMessages.filter((msg) => msg.type !== "message");
-  }
 
   // 排序消息
   const sortedMessages = [...filteredMessages].sort((a, b) => {
@@ -287,87 +273,64 @@ const MessageDetails = ({
   return (
     <div className="message-details">
       <div className="details-header">
-        <h3>Messages for {connection.url}</h3>
+        <div className="connection-info">
+          <span className="connection-badge">{connection.url}</span>
+        </div>
         <div className="controls">
           <div className="control-row">
-            <div className="filter-controls primary-filter">
+            <div className="filter-controls direction-filter">
               <select
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
+                value={filterDirection}
+                onChange={(e) => setFilterDirection(e.target.value)}
               >
                 <option value="all">All</option>
-                <option value="message">Messages</option>
-                <option value="event">Events</option>
+                <option value="outgoing">Send</option>
+                <option value="incoming">Receive</option>
               </select>
             </div>
-
             <div className="filter-controls search-filter">
-              <div className="filter-input-container">
-                <span className="filter-icon">🔍</span>
+                <div className="filter-input-container">
+                  <span className="filter-icon">
+                    <Search size={12} />
+                  </span>
                 <input
                   type="text"
                   value={filterText}
                   onChange={(e) => setFilterText(e.target.value)}
-                  placeholder="Filter using regex (example: (web)?socket)"
+                  placeholder="Filter messages by text content"
                 />
                 {filterText && (
                   <button
                     className="clear-filter-btn"
                     onClick={handleClearSearchFilter}
                   >
-                    ✕
+                    <X size={12} />
                   </button>
                 )}
               </div>
+
             </div>
-
-            <div className="secondary-controls">
-              <div className="filter-controls direction-filter">
-                <label>Direction:</label>
-                <select
-                  value={filterDirection}
-                  onChange={(e) => setFilterDirection(e.target.value)}
-                >
-                  <option value="all">All</option>
-                  <option value="outgoing">↑</option>
-                  <option value="incoming">↓</option>
-                </select>
-              </div>
-
-              <div className="filter-controls view-filter">
-                <label>View:</label>
-                <select
-                  value={viewMode}
-                  onChange={(e) => setViewMode(e.target.value)}
-                >
-                  <option value="formatted">JSON</option>
-                  <option value="raw">Raw</option>
-                </select>
-              </div>
-
-              <label className="invert-checkbox">
-                <input
-                  type="checkbox"
-                  checked={filterInvert}
-                  onChange={(e) => setFilterInvert(e.target.checked)}
-                />
-                <span className="checkmark"></span>
-                <span className="checkbox-label">Invert</span>
+            <label className="invert-checkbox">
+              <input
+                type="checkbox"
+                checked={filterInvert}
+                onChange={(e) => setFilterInvert(e.target.checked)}
+              />
+              <span className="checkmark"></span>
+              <span className="checkbox-label">Invert</span>
               </label>
-
-              <button
-                className="clear-messages-btn"
-                onClick={handleClearMessagesList}
-                disabled={
-                  !connection ||
-                  !connection.messages ||
-                  connection.messages.length === 0
-                }
-                title="Clear all messages"
-              >
-                🗑️
-              </button>
-            </div>
+            <button
+              className="clear-messages-btn"
+              onClick={handleClearMessagesList}
+              disabled={
+                !connection ||
+                !connection.messages ||
+                connection.messages.length === 0
+              }
+              title="Clear all messages"
+            >
+              <Ban size={14} />
+            </button>
           </div>
         </div>
       </div>
