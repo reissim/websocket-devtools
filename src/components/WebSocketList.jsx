@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { CheckCircle, XCircle, Wifi, Trash2 } from "lucide-react";
+import { CheckCircle, XCircle, Wifi, Trash2, Plus } from "lucide-react";
+import { Modal, TextInput } from "@mantine/core";
 import { filterConnections } from "../utils/filterUtils";
 import useConnectionNewMessage from "../hooks/useConnectionNewMessage";
 import "../styles/WebSocketList.css";
@@ -10,11 +11,17 @@ const WebSocketList = ({
   selectedConnectionId,
   onSelectConnection,
   onClearConnections,
+  onManualConnect, // 新增：手动连接回调
 }) => {
   const [activeCollapsed, setActiveCollapsed] = useState(false); // 活跃连接折叠状态
   const [inactiveCollapsed, setInactiveCollapsed] = useState(true); // 非活跃连接折叠状态
   const [filterText, setFilterText] = useState(""); // 连接过滤文本
   const [filterInvert, setFilterInvert] = useState(false); // 反向过滤
+  
+  // 手动连接对话框状态
+  const [isManualConnectOpen, setIsManualConnectOpen] = useState(false);
+  const [wsUrl, setWsUrl] = useState("");
+  const [isConnecting, setIsConnecting] = useState(false);
 
   // 使用新消息追踪 hook
   const { hasNewMessages, getNewMessageTimestamp, clearNewMessage } = useConnectionNewMessage(
@@ -22,6 +29,37 @@ const WebSocketList = ({
     connectionsMap,
     300 // 闪烁持续时间300毫秒
   );
+
+  // 处理手动连接
+  const handleManualConnect = async () => {
+    if (!wsUrl.trim()) return;
+    
+    setIsConnecting(true);
+    try {
+      // 调用父组件的连接处理函数
+      await onManualConnect(wsUrl.trim());
+      // 成功时关闭 Modal
+      setWsUrl("");
+      setIsManualConnectOpen(false);
+    } catch (error) {
+      console.error("Failed to create manual WebSocket connection:", error);
+      // 失败时也关闭 Modal，让用户重新尝试
+      setIsManualConnectOpen(false);
+      setWsUrl("");
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  // 验证WebSocket URL
+  const isValidWsUrl = (url) => {
+    try {
+      const urlObj = new URL(url);
+      return urlObj.protocol === 'ws:' || urlObj.protocol === 'wss:';
+    } catch {
+      return false;
+    }
+  };
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -94,20 +132,7 @@ const WebSocketList = ({
     return (
       <div
         key={connection.id}
-        className="connection-item"
-        style={{
-          background: isSelected
-            ? "rgba(59, 130, 246, 0.2)" // 选中时使用蓝色背景
-            : "rgba(75, 85, 99, 0.3)",
-          border: isSelected
-            ? "1px solid rgba(59, 130, 246, 0.8)" // 选中时使用更明显的蓝色边框
-            : "1px solid rgba(107, 114, 128, 0.5)",
-          borderRadius: "8px",
-          padding: "12px",
-          cursor: "pointer",
-          transition: "all 0.2s ease",
-          marginBottom: "8px",
-        }}
+        className={`ws-connection-item ${isSelected ? 'selected' : 'default'}`}
         onClick={() => {
           onSelectConnection(connection.id);
           // 清除新消息指示器
@@ -115,64 +140,20 @@ const WebSocketList = ({
             clearNewMessage(connection.id);
           }
         }}
-        onMouseEnter={(e) => {
-          if (!isSelected) {
-            e.currentTarget.style.background = "rgba(75, 85, 99, 0.4)";
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!isSelected) {
-            e.currentTarget.style.background = "rgba(75, 85, 99, 0.3)";
-          }
-        }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            marginBottom: "8px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
-          >
+        <div className="ws-connection-item-header">
+          <div className="ws-connection-status-group">
             {isActive ? (
               <CheckCircle size={14} color="#10b981" />
             ) : (
               <XCircle size={14} color="#ef4444" />
             )}
-            <span
-              style={{
-                fontSize: "11px",
-                fontWeight: 500,
-                color: isActive ? "#10b981" : "#ef4444",
-                letterSpacing: "0.5px",
-              }}
-            >
+            <span className={`ws-connection-status-text ${isActive ? 'active' : 'inactive'}`}>
               {isActive ? "CONNECTED" : "CLOSED"}
             </span>
           </div>
           <button
-            className="connection-indicator-button"
-            style={{
-              padding: "4px",
-              background: "none",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              transition: "background-color 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "rgba(75, 85, 99, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-            }}
+            className="ws-connection-indicator-btn"
             onClick={(e) => {
               e.stopPropagation(); // 防止触发连接选择
               if (hasNewMsg) {
@@ -180,50 +161,18 @@ const WebSocketList = ({
               }
             }}
           >
-            <div
-              className={hasNewMsg ? "new-message-indicator" : ""}
-              style={{
-                width: "4px",
-                height: "4px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <div className={`ws-connection-indicator-wrapper ${hasNewMsg ? 'new-message-indicator' : ''}`}>
               <div
                 key={hasNewMsg ? getNewMessageTimestamp(connection.id) : "static"} // 使用时间戳作为key强制重新渲染
-                className={hasNewMsg ? "indicator-dot" : ""}
-                style={{
-                  width: "4px",
-                  height: "4px",
-                  backgroundColor: hasNewMsg ? "#10b981" : "#9ca3af",
-                  borderRadius: "50%",
-                }}
+                className="ws-connection-indicator-dot"
               />
             </div>
           </button>
         </div>
-        <div
-          style={{
-            fontSize: "10px",
-            color: "var(--text-secondary)",
-            marginBottom: "8px",
-            fontFamily:
-              'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-            wordBreak: "break-all",
-            lineHeight: 1.3,
-          }}
-        >
+        <div className="ws-connection-url">
           {connection.url}
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "10px",
-            color: "var(--text-muted)",
-          }}
-        >
+        <div className="ws-connection-bottom-info">
           <span>Messages: {connection.messageCount}</span>
           <span>Created: {formatTimestamp(connection.timestamp)}</span>
         </div>
@@ -231,99 +180,27 @@ const WebSocketList = ({
     );
   };
 
-  const ArrowTriangle = ({ collapsed, color }) => (
+  const ArrowTriangle = ({ collapsed, isActive }) => (
     <div
-      style={{
-        width: 0,
-        height: 0,
-        borderLeft: "4px solid transparent",
-        borderRight: "4px solid transparent",
-        borderTop: `6px solid ${color}`,
-        transform: collapsed ? "rotate(-90deg)" : "none",
-        transition: "transform 0.2s ease",
-      }}
+      className={`ws-arrow-triangle ${collapsed ? 'collapsed' : ''} ${isActive ? 'active' : 'inactive'}`}
     />
   );
 
   return (
-    <div
-      style={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
+    <div className="ws-list-container">
       {/* Fixed Header */}
-      <div
-        style={{
-          flexShrink: 0,
-          padding: "20px 16px 4px 16px",
-          backgroundColor: "var(--bg-primary)",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            {/* <div
-              style={{
-                width: 24,
-                height: 24,
-                borderRadius: 8,
-                background: "rgba(34, 197, 94, 0.2)",
-                border: "1px solid rgba(74, 222, 128, 0.3)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Wifi size={12} color="rgb(74, 222, 128)" />
-            </div> */}
-            <span
-              style={{
-                fontSize: "15px",
-                fontWeight: 600,
-                color: "rgb(229, 231, 235)",
-                margin: 0,
-              }}
-            >
+      <div className="ws-list-fixed-header">
+        <div className="ws-list-header-content">
+          <div className="ws-list-header-title-group">
+            <span className="ws-list-title">
               WebSocket Connections
             </span>
           </div>
           {connectionsMap && connectionsMap.size > 0 && (
             <button
-              style={{
-                padding: "3px",
-                background: "transparent",
-                color: "#f87171",
-                border: "0px solid rgba(220, 38, 38, 0.3)",
-                borderRadius: "4px",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+              className="ws-list-clear-button"
               onClick={onClearConnections}
               title="Clear all WebSocket connections and events"
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor =
-                  "rgba(220, 38, 38, 0.3)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-              }}
             >
               <Trash2 size={12} />
             </button>
@@ -332,40 +209,22 @@ const WebSocketList = ({
       </div>
 
       {/* Scrollable Content */}
-      <div
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: "8px 16px 0px 16px",
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+      <div className="ws-list-scrollable-content">
+        <div className="ws-list-connections-wrapper">
           {/* Active Connections */}
           {activeConnections.length > 0 && (
-            <div>
+            <div className="ws-connection-group">
               <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginBottom: "8px",
-                  cursor: "pointer",
-                }}
+                className="ws-connection-group-header"
                 onClick={() => setActiveCollapsed(!activeCollapsed)}
               >
-                <ArrowTriangle collapsed={activeCollapsed} color="#10b981" />
-                <span
-                  style={{
-                    fontSize: "11px",
-                    color: "#10b981",
-                    fontWeight: 500,
-                  }}
-                >
+                <ArrowTriangle collapsed={activeCollapsed} isActive={true} />
+                <span className="ws-connection-group-title active">
                   Active Connections ({activeConnections.length})
                 </span>
               </div>
               {!activeCollapsed && (
-                <div style={{ marginBottom: "16px" }}>
+                <div className="ws-connection-group-content">
                   {activeConnections.map((conn) =>
                     renderConnection(conn, true)
                   )}
@@ -376,30 +235,18 @@ const WebSocketList = ({
 
           {/* Inactive Connections */}
           {inactiveConnections.length > 0 && (
-            <div>
+            <div className="ws-connection-group">
               <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginBottom: "8px",
-                  cursor: "pointer",
-                }}
+                className="ws-connection-group-header"
                 onClick={() => setInactiveCollapsed(!inactiveCollapsed)}
               >
-                <ArrowTriangle collapsed={inactiveCollapsed} color="#ef4444" />
-                <span
-                  style={{
-                    fontSize: "11px",
-                    color: "#ef4444",
-                    fontWeight: 500,
-                  }}
-                >
+                <ArrowTriangle collapsed={inactiveCollapsed} isActive={false} />
+                <span className="ws-connection-group-title inactive">
                   Inactive Connections ({inactiveConnections.length})
                 </span>
               </div>
               {!inactiveCollapsed && (
-                <div>
+                <div className="ws-connection-group-content">
                   {inactiveConnections.map((conn) =>
                     renderConnection(conn, false)
                   )}
@@ -409,6 +256,77 @@ const WebSocketList = ({
           )}
         </div>
       </div>
+
+      {/* Manual Connection Action Bar */}
+      <div className="ws-manual-connection-bar">
+        <button
+          className="ws-add-connection-btn"
+          onClick={() => setIsManualConnectOpen(true)}
+        >
+          <Plus size={12} />
+          Add Connection
+        </button>
+      </div>
+
+      {/* Manual Connection Dialog */}
+      <Modal
+        opened={isManualConnectOpen}
+        onClose={() => {
+          setIsManualConnectOpen(false);
+          setWsUrl("");
+        }}
+        title="Add New WebSocket Connection"
+        size="sm"
+        centered
+        zIndex={1500}
+        classNames={{
+          modal: 'ws-modal',
+          header: 'ws-modal-header',
+          title: 'ws-modal-title',
+          close: 'ws-modal-close',
+          content: 'ws-modal-content',
+          body: 'ws-modal-body',
+          overlay: 'ws-modal-overlay',
+        }}
+      >
+                 <div className="ws-modal-content-wrapper">
+          <TextInput
+             label="WebSocket URL"
+             placeholder="ws://example.com:8080 or wss://example.com:8080"
+             value={wsUrl}
+             onChange={(e) => setWsUrl(e.currentTarget.value)}
+             disabled={isConnecting}
+             error={wsUrl.length > 0 && !isValidWsUrl(wsUrl) ? "Please enter a valid WebSocket URL (ws:// or wss://)" : null}
+             size="sm"
+             classNames={{
+               label: 'ws-text-input-label',
+               input: `ws-text-input-field ${wsUrl.length > 0 && !isValidWsUrl(wsUrl) ? 'ws-text-input-error' : ''}`,
+               error: 'ws-text-input-error-text',
+             }}
+          />
+          
+          <div className="modal-button-group">
+            <button
+              className="modal-button modal-button-cancel"
+              onClick={() => {
+                setIsManualConnectOpen(false);
+                setWsUrl("");
+              }}
+              disabled={isConnecting}
+            >
+              Cancel
+            </button>
+            
+            <button
+              className="modal-button modal-button-connect"
+              onClick={handleManualConnect}
+              disabled={isConnecting || !isValidWsUrl(wsUrl)}
+            >
+              {"Connect"}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -183,6 +183,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       showDevToolsHint();
       break;
 
+    case "create-manual-websocket":
+      console.log("🔗 Creating manual WebSocket connection:", message.url);
+      // 转发到注入脚本来创建WebSocket连接
+      window.postMessage(
+        {
+          source: "websocket-proxy-content",
+          type: "create-manual-websocket",
+          url: message.url,
+        },
+        "*"
+      );
+      break;
+
     default:
       console.log("❓ Unknown control message type:", message.type);
       break;

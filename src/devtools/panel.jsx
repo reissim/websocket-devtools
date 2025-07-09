@@ -356,6 +356,32 @@ const WebSocketPanel = () => {
     }
   };
 
+  // 处理手动WebSocket连接
+  const handleManualConnect = async (wsUrl) => {
+    console.log("🔗 Creating manual WebSocket connection:", wsUrl);
+    
+    try {
+      // 发送消息到background script，让它在当前tab中创建WebSocket连接
+      const response = await chrome.runtime.sendMessage({
+        type: "create-manual-websocket",
+        data: {
+          url: wsUrl,
+          tabId: currentTabId,
+        },
+      });
+
+      if (response && response.success) {
+        console.log("✅ Manual WebSocket connection created successfully");
+        return response;
+      } else {
+        throw new Error(response?.error || "Failed to create manual connection");
+      }
+    } catch (error) {
+      console.error("❌ Failed to create manual WebSocket connection:", error);
+      throw error;
+    }
+  };
+
   const selectedConnection = getSelectedConnectionData();
 
   return (
@@ -396,6 +422,7 @@ const WebSocketPanel = () => {
                     selectedConnectionId={selectedConnectionId}
                     onSelectConnection={handleSelectConnection}
                     onClearConnections={handleClearConnections}
+                    onManualConnect={handleManualConnect}
                   />
                 </div>
               </div>

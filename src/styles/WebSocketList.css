@@ -1,7 +1,7 @@
 /* WebSocketList Component Styles */
 
 /* New message indicator - simple flash effect */
-.new-message-indicator .indicator-dot {
+.ws-connection-indicator-wrapper.new-message-indicator .ws-connection-indicator-dot {
   position: relative;
   z-index: 2;
   background-color: #10b981 !important;
@@ -19,14 +19,6 @@
     box-shadow: 0 0 4px rgba(16, 185, 129, 0.6);
     transform: scale(1);
   }
-}
-
-/* Ensure the button container has proper positioning */
-.connection-indicator-button {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* WebSocket连接列表样式 */
@@ -240,4 +232,437 @@
 
 .connection-group-content .connection-item:last-child {
   margin-bottom: 0;
+}
+
+/* Modal button styles */
+.modal-button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.modal-button {
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 4px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  height: 28px;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-button-cancel {
+  background-color: transparent;
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.modal-button-cancel:hover:not(:disabled) {
+  background-color: var(--bg-tertiary);
+  border-color: var(--text-secondary);
+  transform: translateY(-1px);
+}
+
+.modal-button-cancel:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.modal-button-cancel:disabled {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-muted);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-button-connect {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.modal-button-connect:hover:not(:disabled) {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.modal-button-connect:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.modal-button-connect:disabled {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-muted);
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+} 
+
+/* ===== 新增样式 - 从内联样式提取 ===== */
+
+/* 主容器样式 */
+.ws-list-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 固定头部区域 */
+.ws-list-fixed-header {
+  flex-shrink: 0;
+  padding: 20px 16px 4px 16px;
+  background-color: var(--bg-primary);
+}
+
+.ws-list-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ws-list-header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ws-list-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgb(229, 231, 235);
+  margin: 0;
+}
+
+.ws-list-clear-button {
+  padding: 3px;
+  background: transparent;
+  color: #f87171;
+  border: 0px solid rgba(220, 38, 38, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ws-list-clear-button:hover {
+  background-color: rgba(220, 38, 38, 0.3);
+}
+
+/* 滚动内容区域 */
+.ws-list-scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 16px 0px 16px;
+}
+
+.ws-list-connections-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 连接分组样式 */
+.ws-connection-group {
+  /* 基础样式在上面已定义 */
+}
+
+.ws-connection-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.ws-connection-group-content {
+  margin-bottom: 16px;
+}
+
+.ws-connection-group-title {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.ws-connection-group-title.active {
+  color: #10b981;
+}
+
+.ws-connection-group-title.inactive {
+  color: #ef4444;
+}
+
+/* 箭头三角形 */
+.ws-arrow-triangle {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid;
+  transition: transform 0.2s ease;
+}
+
+.ws-arrow-triangle.collapsed {
+  transform: rotate(-90deg);
+}
+
+.ws-arrow-triangle.active {
+  border-top-color: #10b981;
+}
+
+.ws-arrow-triangle.inactive {
+  border-top-color: #ef4444;
+}
+
+/* 连接项样式 */
+.ws-connection-item {
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
+  border: 1px solid rgba(107, 114, 128, 0.5);
+}
+
+.ws-connection-item.default {
+  background: rgba(75, 85, 99, 0.3);
+}
+
+.ws-connection-item.selected {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.8);
+}
+
+.ws-connection-item:hover.default {
+  background: rgba(75, 85, 99, 0.4);
+}
+
+/* 连接项头部 */
+.ws-connection-item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.ws-connection-status-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ws-connection-status-text {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.ws-connection-status-text.active {
+  color: #10b981;
+}
+
+.ws-connection-status-text.inactive {
+  color: #ef4444;
+}
+
+/* 连接指示器按钮 */
+.ws-connection-indicator-btn {
+  padding: 4px;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ws-connection-indicator-btn:hover {
+  background-color: rgba(75, 85, 99, 0.5);
+}
+
+.ws-connection-indicator-wrapper {
+  width: 4px;
+  height: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ws-connection-indicator-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #9ca3af;
+}
+
+.ws-connection-indicator-wrapper.new-message-indicator .ws-connection-indicator-dot {
+  background-color: #10b981;
+}
+
+/* 连接URL样式 */
+.ws-connection-url {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  word-break: break-all;
+  line-height: 1.3;
+}
+
+/* 连接信息底部 */
+.ws-connection-bottom-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* 手动连接操作栏 */
+.ws-manual-connection-bar {
+  flex-shrink: 0;
+  height: 48px;
+  padding: 8px 16px;
+  background-color: var(--bg-primary);
+  border-top: 1px solid rgba(107, 114, 128, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.ws-add-connection-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background-color: transparent;
+  border: 1px solid rgba(107, 114, 128, 0.3);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ws-add-connection-btn:hover {
+  background-color: rgba(107, 114, 128, 0.2);
+  border-color: rgba(107, 114, 128, 0.5);
+}
+
+/* Modal dialog content wrapper */
+.ws-modal-content-wrapper {
+  padding: 16px 0;
+}
+
+/* ===== Modal 样式 ===== */
+
+/* Modal 整体样式 */
+.ws-modal {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* Modal 头部样式 */
+.ws-modal-header {
+  background-color: var(--bg-secondary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Modal 标题样式 */
+.ws-modal-title {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+/* Modal 关闭按钮样式 */
+.ws-modal-close {
+  color: var(--text-secondary) !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+/* Modal 内容区域样式 */
+.ws-modal-content {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Modal 主体样式 */
+.ws-modal-body {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Modal 遮罩层样式 */
+.ws-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* ===== TextInput 样式 ===== */
+
+/* TextInput 标签样式 */
+.ws-text-input-label {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--text-secondary) !important;
+  margin-bottom: 8px !important;
+}
+
+/* TextInput 输入框样式 */
+.ws-text-input-field {
+  background-color: var(--bg-primary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+  font-size: 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+.ws-text-input-field:focus {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1) !important;
+  transform: translateY(-1px) !important;
+}
+
+.ws-text-input-field:hover:not(:focus) {
+  border-color: var(--text-secondary) !important;
+  transform: translateY(-0.5px) !important;
+}
+
+.ws-text-input-field:disabled {
+  background-color: var(--bg-tertiary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-muted) !important;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+/* TextInput 错误样式 */
+.ws-text-input-error {
+  border-color: #ef4444 !important;
+}
+
+/* TextInput 错误文本样式 */
+.ws-text-input-error-text {
+  font-size: 11px !important;
+  color: #ef4444 !important;
+  margin-top: 4px !important;
 } 

@@ -534,6 +534,32 @@
             event.data.direction
           );
           break;
+
+        case "create-manual-websocket":
+          console.log("🔗 Creating manual WebSocket connection:", event.data.url);
+          try {
+            // 直接在页面上下文中创建WebSocket连接
+            // 这会被我们的代理拦截，就像用户页面创建的连接一样
+            const manualWs = new window.WebSocket(event.data.url);
+            console.log("✅ Manual WebSocket connection created successfully");
+            
+            // 可选：为手动连接添加一些基本的事件监听器
+            manualWs.addEventListener('open', () => {
+              console.log("🔗 Manual WebSocket connection opened");
+            });
+            
+            manualWs.addEventListener('error', (error) => {
+              console.error("❌ Manual WebSocket connection error:", error);
+            });
+            
+            manualWs.addEventListener('close', () => {
+              console.log("🔗 Manual WebSocket connection closed");
+            });
+            
+          } catch (error) {
+            console.error("❌ Failed to create manual WebSocket connection:", error);
+          }
+          break;
       }
     }
   });

@@ -109,6 +109,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ success: true, simulated: true });
       break;
 
+    case "create-manual-websocket":
+      console.log("🔗 Creating manual WebSocket connection:", message.data);
+      
+      // 通知指定tab的content script创建WebSocket连接
+      const tabId = message.data.tabId;
+      if (tabId) {
+        chrome.tabs.sendMessage(tabId, {
+          type: "create-manual-websocket",
+          url: message.data.url,
+        }).then(() => {
+          console.log("✅ Manual WebSocket creation request sent to tab:", tabId);
+          sendResponse({ success: true });
+        }).catch((error) => {
+          console.error("❌ Failed to send manual WebSocket creation request:", error);
+          sendResponse({ success: false, error: error.message });
+        });
+      } else {
+        console.error("❌ No tabId specified for manual WebSocket creation");
+        sendResponse({ success: false, error: "No tabId specified" });
+      }
+      break;
+
     case "toggle-extension":
       console.log("🔄 Toggling extension:", message.enabled);
 
