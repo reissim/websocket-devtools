@@ -178,22 +178,6 @@ const MessageDetails = ({
     }
   };
 
-  // 添加消息到收藏夹
-  const handleAddToFavorites = (message) => {
-    if (!message || !message.data) {
-      console.warn("Cannot add to favorites: message data is empty");
-      return;
-    }
-
-    // 使用全局收藏功能从消息列表添加
-    const newFavorite = addFromMessageList(message.data);
-
-    if (newFavorite) {
-      console.log("Message added to favorites:", newFavorite.name);
-      // 可以在这里显示一个toast通知
-    }
-  };
-
   // 从JsonViewer添加到收藏夹（打开Simulate面板的favorites tab）
   const handleAddToFavoritesFromViewer = (data) => {
     console.log(
@@ -434,18 +418,6 @@ const MessageDetails = ({
                           <td className="col-data">
                             <div className="data-cell-wrapper">
                               {renderDataCell(message)}
-                              {isHovered && message.type === "message" && (
-                                <button
-                                  className="favorite-btn"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleAddToFavorites(message);
-                                  }}
-                                  title="Add to favorites"
-                                >
-                                  <Icons.Star />
-                                </button>
-                              )}
                             </div>
                           </td>
                           <td className="col-length">
