@@ -26,7 +26,7 @@
 
   // 控制状态
   let proxyState = {
-    isMonitoring: false,
+    isMonitoring: true, // 默认开启监控，与background.js保持一致
     blockOutgoing: false,
     blockIncoming: false,
   };
@@ -73,27 +73,30 @@
 
     try {
       if (direction === "outgoing") {
-        // 模拟发送消息
-        console.log("📤 Simulating outgoing message");
+        // 模拟发送消息 - 直接使用原始WebSocket发送，绕过我们的拦截
+        console.log("📤 Simulating outgoing message (bypassing proxy)");
 
-        // No longer send sendEvent to Panel, Panel handles display itself
-        // Only responsible for actual simulation execution
-
-        // Actually call ws.send() to send real message
         try {
-          console.log("🚀 Actually sending simulated message via WebSocket");
-          connectionInfo.originalSend(message);
+          // 使用保存的原始send方法，这样不会触发我们的拦截逻辑
+          console.log("🚀 Sending simulated message via original WebSocket send");
+          
+          // 创建原始WebSocket实例，或者直接使用保存的原始方法
+          // 这里使用原始send方法应该能绕过我们的代理
+          const originalWebSocket = connectionInfo.ws.constructor;
+          
+          // 直接调用保存的原始send方法
+          // 注意：这应该不会触发我们的拦截，因为是在原始WebSocket上调用的
+          connectionInfo.originalSend.call(ws, message);
+          
           console.log("✅ Simulated outgoing message sent successfully");
-        } catch {
+        } catch (error) {
+          console.error("❌ Failed to send simulated message:", error);
         }
       } else if (direction === "incoming") {
-        // 模拟接收消息
-        console.log("📥 Simulating incoming message");
+        // 模拟接收消息 - 不通过WebSocket事件系统，直接调用用户监听器
+        console.log("📥 Simulating incoming message (bypassing proxy)");
 
-        // No longer send sendEvent to Panel, Panel handles display itself
-        // Only responsible for actual simulation execution
-
-        // Create simulated MessageEvent
+        // 创建模拟事件但不通过WebSocket的事件系统
         const simulatedEvent = new MessageEvent("message", {
           data: message,
           origin: connectionInfo.url,
@@ -104,20 +107,35 @@
           cancelable: false,
         });
         
-        // 添加模拟标记，便于调试
+        // 添加模拟标记
         simulatedEvent._isSimulated = true;
 
-        // 触发模拟消息事件
         try {
-          // 只通过 dispatchEvent 触发即可，现在onmessage也通过addEventListener包装了
-          console.log("🎯 Dispatching simulated message event");
-          ws.dispatchEvent(simulatedEvent);
-          console.log("✅ Simulated message dispatched successfully");
+          console.log("🎯 Directly calling user handlers for simulated message");
+          
+          // 直接调用用户的监听器，不通过WebSocket事件系统
+          // 这样就完全绕过了我们的拦截器
+          
+          if (connectionInfo.userOnMessage) {
+            try {
+              connectionInfo.userOnMessage.call(ws, simulatedEvent);
+            } catch (error) {
+              console.error("❌ Error in user onmessage handler:", error);
+            }
+          }
+          
+          connectionInfo.userEventListeners.forEach(listener => {
+            try {
+              listener.call(ws, simulatedEvent);
+            } catch (error) {
+              console.error("❌ Error in user event listener:", error);
+            }
+          });
+          
+          console.log("✅ Simulated incoming message processed successfully");
         } catch (error) {
-          console.error("❌ Error in simulated message processing:", error);
+          console.error("❌ Failed to simulate incoming message:", error);
         }
-
-        console.log("✅ Simulated incoming message processed");
       }
     } catch (error) {
       console.error("❌ Failed to simulate message:", error);
@@ -147,10 +165,10 @@
       status: "connecting",
       originalSend: ws.send.bind(ws),
       originalClose: ws.close.bind(ws),
-      originalOnMessage: null, // 将在onmessage setter中更新
       originalAddEventListener: ws.addEventListener.bind(ws),
-      originalOnOpen: ws.onopen,
-      originalOnClose: ws.onclose,
+      originalRemoveEventListener: ws.removeEventListener.bind(ws),
+      userOnMessage: null, // 用户设置的onmessage处理器
+      userEventListeners: [], // 用户添加的事件监听器
       messageQueue: [], // 暂停期间的消息队列
       blockedMessages: [], // 被阻止的消息
     };
@@ -168,6 +186,103 @@
       timestamp: Date.now(),
       status: "connecting",
     });
+
+    // 🔥 关键修复：立即添加我们的消息监听器，不管用户是否注册
+    // 这确保我们总是能拦截所有消息，实现真正的中间人攻击
+    const ourMessageListener = function(event) {
+      console.log("📨 [INTERCEPTED] WebSocket message:", connectionId, event.data);
+      
+      // 跳过模拟消息的处理（模拟消息由Panel直接管理）
+      if (event._isSimulated) {
+        console.log("🎭 Simulated message, forwarding to user handlers");
+        
+        // 直接转发给用户的监听器，无视任何阻止设置
+        if (connectionInfo.userOnMessage) {
+          try {
+            connectionInfo.userOnMessage.call(ws, event);
+          } catch (error) {
+            console.error("❌ Error in user onmessage handler:", error);
+          }
+        }
+        
+        connectionInfo.userEventListeners.forEach(listener => {
+          try {
+            listener.call(ws, event);
+          } catch (error) {
+            console.error("❌ Error in user event listener:", error);
+          }
+        });
+        
+        return; // 早期返回，不做其他处理
+      }
+
+      // 处理真实消息 - 先检查是否要阻止，再决定如何记录
+      if (proxyState.blockIncoming) {
+        console.log("🚫 Incoming message BLOCKED by proxy:", connectionId);
+
+        // 存储被阻止的消息
+        connectionInfo.blockedMessages.push({
+          data: event.data,
+          timestamp: Date.now(),
+          direction: "incoming",
+        });
+
+        // 只发送一次事件，带blocked标记
+        if (proxyState.isMonitoring) {
+          sendEvent({
+            id: connectionId,
+            url: url,
+            type: "message",
+            data: event.data,
+            direction: "incoming",
+            timestamp: Date.now(),
+            status: connectionInfo.status,
+            blocked: true,
+            reason: "Incoming messages blocked",
+          });
+        }
+
+        // 被阻止的消息不转发给用户监听器
+        return;
+      }
+
+      // 消息未被阻止，正常处理
+      
+      // 记录到扩展（只在监控开启时）
+      if (proxyState.isMonitoring) {
+        sendEvent({
+          id: connectionId,
+          url: url,
+          type: "message",
+          data: event.data,
+          direction: "incoming",
+          timestamp: Date.now(),
+          status: connectionInfo.status,
+          // 不添加blocked标记，因为消息正常通过
+        });
+      }
+
+      // 转发给用户的监听器
+      if (connectionInfo.userOnMessage) {
+        try {
+          connectionInfo.userOnMessage.call(ws, event);
+        } catch (error) {
+          console.error("❌ Error in user onmessage handler:", error);
+        }
+      }
+      
+      connectionInfo.userEventListeners.forEach(listener => {
+        try {
+          listener.call(ws, event);
+        } catch (error) {
+          console.error("❌ Error in user event listener:", error);
+        }
+      });
+    };
+
+    // 使用capture-phase监听，确保我们总是第一个收到事件
+    connectionInfo.originalAddEventListener("message", ourMessageListener, true);
+    console.log("✅ [CRITICAL] Unconditional message interception installed for:", connectionId);
 
     // 拦截 send 方法 - 添加控制逻辑
     const originalSend = ws.send.bind(ws);
@@ -208,7 +323,9 @@
       }
 
       // 正常发送消息
-      sendEvent(eventData);
+      if (proxyState.isMonitoring) {
+        sendEvent(eventData);
+      }
 
       try {
         return originalSend(data);
@@ -218,172 +335,53 @@
       }
     };
 
-    // 拦截 addEventListener - 添加控制逻辑
+    // 拦截 addEventListener - 现在只负责收集用户的监听器
     const originalAddEventListener = ws.addEventListener.bind(ws);
     ws.addEventListener = function (type, listener, options) {
       if (type === "message" && listener) {
-        const wrappedListener = function (event) {
-          // 模拟消息不受block影响
-          if (!event._isSimulated && proxyState.blockIncoming) {
-            console.log("🚫 Message receiving BLOCKED by proxy:", connectionId);
-
-            // 存储被阻止的消息
-            connectionInfo.blockedMessages.push({
-              data: event.data,
-              timestamp: Date.now(),
-              direction: "incoming",
-            });
-
-            // 通知扩展消息被阻止
-            sendEvent({
-              id: connectionId,
-              url: url,
-              type: "message",
-              data: event.data,
-              direction: "incoming",
-              timestamp: Date.now(),
-              status: connectionInfo.status,
-              blocked: true,
-              reason: "Incoming messages blocked",
-            });
-
-            // 不调用原始监听器，阻止应用程序接收消息
-            return;
-          }
-
-          // For simulated messages, don't call sendEvent again, as Panel handles display directly
-          if (!event._isSimulated) {
-            // Handle real messages normally
-            sendEvent({
-              id: connectionId,
-              url: url,
-              type: "message",
-              data: event.data,
-              direction: "incoming",
-              timestamp: Date.now(),
-              status: connectionInfo.status,
-            });
-          }
-
-          try {
-            const result = listener.call(this, event);
-            return result;
-          } catch (error) {
-            console.error("❌ Message listener failed:", error);
-          }
-        };
-
-        return originalAddEventListener(type, wrappedListener, options);
+        console.log("🎯 User registered message listener for:", connectionId);
+        // 存储用户的监听器，但不直接注册到WebSocket
+        connectionInfo.userEventListeners.push(listener);
+        
+        // 返回成功，但实际上我们会通过我们的拦截器转发消息
+        return;
       } else {
+        // 非message事件正常处理
         return originalAddEventListener(type, listener, options);
       }
     };
 
-    // 拦截 onmessage 属性 - 添加控制逻辑
-    let originalOnMessage = null;
-    let currentOnMessageHandler = null;
-    
+    // 拦截 removeEventListener
+    ws.removeEventListener = function (type, listener, options) {
+      if (type === "message" && listener) {
+        console.log("🎯 User removing message listener for:", connectionId);
+        // 从我们的列表中移除
+        const index = connectionInfo.userEventListeners.indexOf(listener);
+        if (index > -1) {
+          connectionInfo.userEventListeners.splice(index, 1);
+        }
+        return;
+      } else {
+        // 非message事件正常处理
+        return connectionInfo.originalRemoveEventListener(type, listener, options);
+      }
+    };
+
+    // 拦截 onmessage 属性 - 现在只负责存储用户的处理器
     Object.defineProperty(ws, "onmessage", {
       get: function () {
-        return originalOnMessage;
+        return connectionInfo.userOnMessage;
       },
       set: function (handler) {
-        console.log("🎯 Setting onmessage handler for:", connectionId);
-        originalOnMessage = handler;
-        
-        // 存储到connectionInfo中，供模拟消息使用
-        connectionInfo.originalOnMessage = handler;
-        
-        // 移除之前的处理器（如果有）
-        if (currentOnMessageHandler) {
-          try {
-            ws.removeEventListener("message", currentOnMessageHandler);
-          } catch (e) {
-            console.warn("⚠️ Failed to remove previous onmessage handler:", e);
-          }
-        }
-        
-        if (handler) {
-          // 创建包装的处理器来拦截真实消息
-          const wrappedOnMessageHandler = function (event) {
-            console.log(
-              "📨 WebSocket message via onmessage:",
-              connectionId,
-              event.data,
-              event._isSimulated ? "(SIMULATED)" : "(REAL)"
-            );
-
-            // 检查是否应该阻止接收真实消息
-            console.log("🔍 Checking proxy state (onmessage):", {
-              blockIncoming: proxyState.blockIncoming,
-              willBlock: !event._isSimulated && proxyState.blockIncoming,
-              connectionId: connectionId,
-              isSimulated: event._isSimulated
-            });
-            
-            // 模拟消息不受block影响
-            if (!event._isSimulated && proxyState.blockIncoming) {
-              console.log("🚫 onmessage BLOCKED by proxy:", connectionId);
-
-              // 存储被阻止的消息
-              connectionInfo.blockedMessages.push({
-                data: event.data,
-                timestamp: Date.now(),
-                direction: "incoming",
-              });
-
-              // 通知扩展消息被阻止
-              sendEvent({
-                id: connectionId,
-                url: url,
-                type: "message",
-                data: event.data,
-                direction: "incoming",
-                timestamp: Date.now(),
-                status: connectionInfo.status,
-                blocked: true,
-                reason: "Incoming messages blocked",
-              });
-
-              // 不调用原始处理器
-              return;
-            }
-
-            // For simulated messages, don't call sendEvent again, as Panel handles display directly
-            if (!event._isSimulated) {
-              // Handle real messages normally
-              sendEvent({
-                id: connectionId,
-                url: url,
-                type: "message",
-                data: event.data,
-                direction: "incoming",
-                timestamp: Date.now(),
-                status: connectionInfo.status,
-              });
-            }
-
-            try {
-              const result = handler.call(this, event);
-            
-              return result;
-            } catch (error) {
-              console.error("❌ onmessage handler failed:", error);
-            }
-          };
-          
-          currentOnMessageHandler = wrappedOnMessageHandler;
-            
-          originalAddEventListener("message", wrappedOnMessageHandler);
-        } else {
-          currentOnMessageHandler = null;
-        }
+        console.log("🎯 User setting onmessage handler for:", connectionId);
+        connectionInfo.userOnMessage = handler;
+        // 不需要在这里做其他事情，我们的拦截器会转发消息
       },
     });
 
     // 监听连接状态变化
     ["open", "close", "error"].forEach((eventType) => {
-      originalAddEventListener(eventType, (event) => {
+      connectionInfo.originalAddEventListener(eventType, (event) => {
         console.log(`🔔 WebSocket ${eventType}:`, connectionId);
 
         // 更新连接状态
@@ -479,41 +477,28 @@
       switch (event.data.type) {
         case "start-monitoring":
           console.log("🚀 Starting WebSocket monitoring...");
-          try {
-            // 重新设置WebSocket代理
-            Object.defineProperty(window, "WebSocket", {
-              value: ProxiedWebSocket,
-              writable: true,
-              configurable: true,
-            });
-            console.log("✅ WebSocket monitoring restarted");
-            console.log("🔍 Current WebSocket:", window.WebSocket);
-            console.log("🧪 Proxy verification:", window.WebSocket === ProxiedWebSocket);
-          } catch (error) {
-            console.error("❌ Failed to restart monitoring:", error);
-            // 备用方案
-            try {
-              window.WebSocket = ProxiedWebSocket;
-              console.log("🔄 Fallback restart successful");
-            } catch (fallbackError) {
-              console.error("❌ Fallback restart failed:", fallbackError);
-            }
-          }
+          proxyState.isMonitoring = true;
+          // 发送状态更新
+          sendEvent({
+            type: "proxy-state-change",
+            state: proxyState,
+            timestamp: Date.now(),
+          });
           break;
 
         case "stop-monitoring":
           console.log("⏹️ Stopping WebSocket monitoring...");
-          try {
-            window.WebSocket = OriginalWebSocket;
-            connections.clear();
-            console.log("✅ WebSocket monitoring stopped");
-          } catch (error) {
-            console.error("❌ Failed to stop monitoring:", error);
-          }
+          proxyState.isMonitoring = false;
+          // 发送状态更新
+          sendEvent({
+            type: "proxy-state-change",
+            state: proxyState,
+            timestamp: Date.now(),
+          });
           break;
 
         case "block-outgoing":
-          console.log("🚫 Blocking outgoing messages...");
+          console.log("🚫 Toggling outgoing messages:", event.data.enabled);
           proxyState.blockOutgoing = event.data.enabled;
           sendEvent({
             type: "proxy-state-change",
@@ -523,7 +508,7 @@
           break;
 
         case "block-incoming":
-          console.log("🚫 Blocking incoming messages...");
+          console.log("🚫 Toggling incoming messages:", event.data.enabled);
           proxyState.blockIncoming = event.data.enabled;
           sendEvent({
             type: "proxy-state-change",
