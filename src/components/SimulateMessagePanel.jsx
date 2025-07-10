@@ -30,6 +30,7 @@ import useAutoResize from "../hooks/useAutoResize";
 import useWindowAnimation from "../hooks/useWindowAnimation";
 import usePanelManager from "../hooks/usePanelManager";
 import FavoritesTab from "./FavoritesTab";
+import SystemEventsTab from "./SystemEventsTab";
 import globalFavorites, { addFromEditor } from "../utils/globalFavorites";
 
 const SimulateMessagePanel = forwardRef(
@@ -257,6 +258,34 @@ const SimulateMessagePanel = forwardRef(
         }
       },
       [simulateMessage]
+    );
+
+    const handleSimulateSystemEvent = useCallback(
+      async (eventData) => {
+        if (!connection || !eventData) {
+          return;
+        }
+
+        setIsSending(true);
+
+        try {
+          // 发送系统事件模拟请求到 background script
+          await chrome.runtime.sendMessage({
+            type: "simulate-system-event",
+            data: {
+              ...eventData,
+              connectionId: connection.id,
+            },
+          });
+
+          console.log("✅ System event simulated:", eventData.eventType);
+        } catch (error) {
+          console.error("❌ Failed to simulate system event:", error);
+        } finally {
+          setTimeout(() => setIsSending(false), 500);
+        }
+      },
+      [connection]
     );
 
     const clearMessage = () => {
@@ -487,27 +516,10 @@ const SimulateMessagePanel = forwardRef(
                     </Tabs.Panel>
 
                     <Tabs.Panel value="system">
-                      <div className="tab-content-placeholder">
-                        <div className="placeholder-icon">
-                          <Settings size={48} />
-                        </div>
-                        <h4>System Events</h4>
-                        <p>Simulate WebSocket system events and states</p>
-                        <div className="feature-list">
-                          <div className="feature-item">
-                            <span className="feature-dot"></span>
-                            <span>Connection open/close events</span>
-                          </div>
-                          <div className="feature-item">
-                            <span className="feature-dot"></span>
-                            <span>Network error simulation</span>
-                          </div>
-                          <div className="feature-item">
-                            <span className="feature-dot"></span>
-                            <span>Timeout and retry events</span>
-                          </div>
-                        </div>
-                      </div>
+                      <SystemEventsTab 
+                        connection={connection}
+                        onSimulateSystemEvent={handleSimulateSystemEvent}
+                      />
                     </Tabs.Panel>
                   </Tabs>
                 )}

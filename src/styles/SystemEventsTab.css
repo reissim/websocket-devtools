@@ -1,0 +1,806 @@
+/* SystemEventsTab.css - 现代化系统事件模拟界面样式 */
+
+/* 基础容器样式 */
+.system-events-tab {
+  padding: 12px;
+  min-height: 100%;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  background: #2a2a2a; /* Lighter black background */
+}
+
+/* 空状态样式 */
+.sys-evt-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 20px;
+  background: #1a1a1a; /* Lighter black background */
+}
+
+.sys-evt-empty-state {
+  text-align: center;
+  opacity: 0.7;
+  color: #b0b0b0; /* Lighter gray text color */
+}
+
+.sys-evt-empty-icon {
+  color: #909090; /* Lighter gray icon color */
+  margin-bottom: 8px;
+  width: 32px;
+  height: 32px;
+}
+
+.sys-evt-empty-state h4 {
+  color: #c0c0c0; /* Lighter gray heading color */
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sys-evt-empty-state p {
+  color: #b0b0b0; /* Lighter gray paragraph color */
+  margin: 0;
+  font-size: 12px;
+}
+
+/* 头部样式 */
+.sys-evt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #404040; /* Lighter gray border color */
+}
+
+.sys-evt-header-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #b0b0b0; /* Lighter gray text color */
+}
+
+.sys-evt-header-icon {
+  color: #909090; /* Lighter gray icon color */
+  width: 18px;
+  height: 18px;
+}
+
+.sys-evt-header-text h2 {
+  color: #c0c0c0; /* Lighter gray heading color */
+  margin: 0 0 2px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sys-evt-header-text p {
+  color: #b0b0b0; /* Lighter gray paragraph color */
+  margin: 0;
+  font-size: 11px;
+}
+
+.sys-evt-connection-info {
+  background: rgba(26, 26, 26, 0.8); /* Lighter black background with opacity */
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #404040; /* Lighter gray border color */
+}
+
+.sys-evt-connection-url {
+  color: #b0b0b0; /* Lighter gray text color */
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+}
+
+/* 标签页样式 */
+.sys-evt-tabs-container {
+  border-radius: 8px;
+  border: 1px solid #374151;
+  overflow: hidden;
+  background: rgba(26, 26, 26, 0.9); /* Lighter black background with opacity */
+}
+
+.sys-evt-tabs-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: rgba(40, 40, 40, 0.8); /* Lighter gray background */
+  border-bottom: 1px solid #404040; /* Lighter gray border color */
+}
+
+.sys-evt-tab-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  color: #b0b0b0; /* Lighter gray text color */
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-right: 1px solid #334155;
+}
+
+.sys-evt-tab-trigger:last-child {
+  border-right: none;
+}
+
+.sys-evt-tab-trigger:hover {
+  background: rgba(70, 70, 70, 0.3); /* Lighter gray hover background */
+  color: #c0c0c0; /* Lighter gray text color on hover */
+}
+
+.sys-evt-tab-trigger.active {
+  background: linear-gradient(135deg, #404040 0%, #303030 100%); /* Lighter gray gradient background */
+  color: #ffffff; /* White text color */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.sys-evt-tab-trigger svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* 标签页内容 */
+.sys-evt-tab-content {
+  padding: 16px;
+  background: rgba(26, 26, 26, 0.6); /* Lighter black background with opacity */
+}
+
+/* 事件网格 */
+.sys-evt-events-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  background: #1a1a1a; /* Lighter black background */
+}
+
+/* 更早切换到单列布局，适应tab环境 */
+@media (max-width: 900px) {
+  .sys-evt-events-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+/* 进一步优化小屏幕 */
+@media (max-width: 600px) {
+  .sys-evt-events-grid {
+    gap: 8px;
+  }
+}
+
+/* 事件卡片 */
+.sys-evt-event-card {
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(20, 20, 20, 0.95) 100%); /* Lighter black gradient background */
+  border: 1px solid #404040; /* Lighter gray border color */
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sys-evt-event-card:hover {
+  border-color: #505050; /* Lighter gray border on hover */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+.sys-evt-card-header {
+  padding: 12px 12px 8px 12px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+  background: rgba(26, 26, 26, 0.7); /* Lighter black background with opacity */
+}
+
+.sys-evt-card-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #c0c0c0; /* Lighter gray text color */
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.sys-evt-card-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.sys-evt-close-icon {
+  color: #f97316;
+}
+
+.sys-evt-error-icon {
+  color: #ef4444;
+}
+
+.sys-evt-card-description {
+  color: #b0b0b0; /* Lighter gray text color */
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.sys-evt-card-content {
+  padding: 12px;
+  background: #1a1a1a; /* Lighter black background */
+}
+
+/* 表单元素 */
+.sys-evt-form-group {
+  margin-bottom: 10px;
+}
+
+.sys-evt-form-label {
+  display: block;
+  color: #c0c0c0; /* Lighter gray text color */
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.sys-evt-form-select,
+.sys-evt-form-input {
+  width: 100%;
+  padding: 6px 8px;
+  background: rgba(20, 20, 20, 0.8); /* Lighter gray background */
+  border: 1px solid #404040; /* Lighter gray border color */
+  border-radius: 4px;
+  color: #c0c0c0; /* Lighter gray text color */
+  font-size: 11px;
+  transition: all 0.2s ease;
+}
+
+.sys-evt-form-select:focus,
+.sys-evt-form-input:focus {
+  outline: none;
+  border-color: #909090; /* Lighter gray border color on focus */
+  box-shadow: 0 0 0 2px rgba(71, 85, 105, 0.2);
+  background: rgba(26, 26, 26, 0.9); /* Lighter black background with opacity on focus */
+}
+
+.sys-evt-form-input::placeholder {
+  color: #909090; /* Lighter gray placeholder color */
+}
+
+/* 按钮样式 */
+.sys-evt-event-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sys-evt-event-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sys-evt-event-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* 关闭按钮样式 */
+.sys-evt-close-button {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  margin-bottom: 6px;
+}
+
+.sys-evt-close-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+}
+
+.sys-evt-close-button:last-child {
+  margin-bottom: 0;
+}
+
+/* 错误按钮样式 */
+.sys-evt-error-button {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  margin-bottom: 6px;
+}
+
+.sys-evt-error-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+.sys-evt-error-button:last-child {
+  margin-bottom: 0;
+}
+
+/* 按钮容器 */
+.sys-evt-error-buttons,
+.sys-evt-server-close-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.sys-evt-server-close-buttons .sys-evt-event-button {
+  margin-bottom: 6px;
+}
+
+.sys-evt-server-close-buttons .sys-evt-event-button:last-child {
+  margin-bottom: 0;
+}
+
+/* 按钮点击效果 */
+.sys-evt-event-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* 加载状态 */
+.sys-evt-event-button:disabled::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 响应式设计 - 基于 system-events-tab 容器 */
+
+/* SystemEvents专用容器查询 - 避免类名冲突 */
+.system-events-tab {
+  /* 使用容器查询的fallback方案 */
+  container-type: inline-size;
+}
+
+/* 中等宽度容器 (适合tab环境) */
+@container (max-width: 500px) {
+  .system-events-tab .sys-evt-events-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .system-events-tab .sys-evt-tab-content {
+    padding: 12px;
+  }
+  
+  .system-events-tab .sys-evt-card-header {
+    padding: 10px 10px 6px 10px;
+  }
+  
+  .system-events-tab .sys-evt-card-content {
+    padding: 10px;
+  }
+}
+
+/* 小宽度容器 */
+@container (max-width: 400px) {
+  .system-events-tab {
+    font-size: 12px;
+  }
+  
+  .system-events-tab .sys-evt-header {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+  
+  .system-events-tab .sys-evt-header-text h2 {
+    font-size: 15px;
+  }
+  
+  .system-events-tab .sys-evt-header-text p {
+    font-size: 10px;
+  }
+  
+  .system-events-tab .sys-evt-tab-trigger {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+  
+  .system-events-tab .sys-evt-tab-trigger svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .system-events-tab .sys-evt-events-grid {
+    gap: 8px;
+  }
+}
+
+/* 很小宽度容器 */
+@container (max-width: 320px) {
+  .system-events-tab {
+    padding: 8px;
+  }
+  
+  .system-events-tab .sys-evt-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .system-events-tab .sys-evt-header-text h2 {
+    font-size: 14px;
+  }
+  
+  .system-events-tab .sys-evt-connection-info {
+    padding: 3px 6px;
+  }
+  
+  .system-events-tab .sys-evt-connection-url {
+    font-size: 9px;
+  }
+  
+  .system-events-tab .sys-evt-tab-content {
+    padding: 8px;
+  }
+  
+  .system-events-tab .sys-evt-card-header {
+    padding: 8px 8px 6px 8px;
+  }
+  
+  .system-events-tab .sys-evt-card-content {
+    padding: 8px;
+  }
+  
+  .system-events-tab .sys-evt-card-title {
+    font-size: 12px;
+    gap: 4px;
+  }
+  
+  .system-events-tab .sys-evt-card-icon {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .system-events-tab .sys-evt-card-description {
+    font-size: 10px;
+  }
+  
+  .system-events-tab .sys-evt-form-group {
+    margin-bottom: 8px;
+  }
+  
+  .system-events-tab .sys-evt-form-label {
+    font-size: 10px;
+  }
+  
+  .system-events-tab .sys-evt-form-select,
+  .system-events-tab .sys-evt-form-input {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+  
+  .system-events-tab .sys-evt-event-button {
+    padding: 6px 8px;
+    font-size: 10px;
+    gap: 4px;
+  }
+  
+  .system-events-tab .sys-evt-event-button svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .system-events-tab .sys-evt-error-button,
+  .system-events-tab .sys-evt-close-button {
+    margin-bottom: 4px;
+  }
+}
+
+/* 极小宽度容器 */
+@container (max-width: 280px) {
+  .system-events-tab {
+    padding: 6px;
+  }
+  
+  .system-events-tab .sys-evt-header {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+  }
+  
+  .system-events-tab .sys-evt-header-content {
+    gap: 6px;
+  }
+  
+  .system-events-tab .sys-evt-header-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .system-events-tab .sys-evt-header-text h2 {
+    font-size: 13px;
+  }
+  
+  .system-events-tab .sys-evt-header-text p {
+    display: none; /* 隐藏描述文字以节省空间 */
+  }
+  
+  .system-events-tab .sys-evt-tab-trigger {
+    padding: 6px 8px;
+    font-size: 10px;
+    gap: 4px;
+  }
+  
+  .system-events-tab .sys-evt-tab-trigger svg {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .system-events-tab .sys-evt-tab-content {
+    padding: 6px;
+  }
+  
+  .system-events-tab .sys-evt-card-title {
+    font-size: 11px;
+  }
+  
+  .system-events-tab .sys-evt-card-description {
+    font-size: 9px;
+  }
+  
+  .system-events-tab .sys-evt-connection-info {
+    padding: 2px 4px;
+  }
+  
+  .system-events-tab .sys-evt-connection-url {
+    font-size: 8px;
+  }
+}
+
+/* Fallback: 传统媒体查询，支持不支持容器查询的浏览器 */
+@supports not (container-type: inline-size) {
+  /* Tab面板环境 */
+  @media (max-width: 900px) {
+    .system-events-tab .sys-evt-events-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    
+    .system-events-tab .sys-evt-tab-content {
+      padding: 12px;
+    }
+    
+    .system-events-tab .sys-evt-card-header {
+      padding: 10px 10px 6px 10px;
+    }
+    
+    .system-events-tab .sys-evt-card-content {
+      padding: 10px;
+    }
+  }
+  
+  /* 小屏幕 */
+  @media (max-width: 600px) {
+    .system-events-tab {
+      padding: 10px;
+      font-size: 12px;
+    }
+    
+    .system-events-tab .sys-evt-header {
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+    }
+    
+    .system-events-tab .sys-evt-header-text h2 {
+      font-size: 15px;
+    }
+    
+    .system-events-tab .sys-evt-header-text p {
+      font-size: 10px;
+    }
+    
+    .system-events-tab .sys-evt-tab-trigger {
+      padding: 8px 10px;
+      font-size: 11px;
+    }
+    
+    .system-events-tab .sys-evt-tab-trigger svg {
+      width: 12px;
+      height: 12px;
+    }
+    
+    .system-events-tab .sys-evt-events-grid {
+      gap: 8px;
+    }
+  }
+  
+  /* 超小屏幕 */
+  @media (max-width: 480px) {
+    .system-events-tab {
+      padding: 8px;
+    }
+    
+    .system-events-tab .sys-evt-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    
+    .system-events-tab .sys-evt-header-text h2 {
+      font-size: 14px;
+    }
+    
+    .system-events-tab .sys-evt-connection-info {
+      padding: 3px 6px;
+    }
+    
+    .system-events-tab .sys-evt-connection-url {
+      font-size: 9px;
+    }
+    
+    .system-events-tab .sys-evt-tab-content {
+      padding: 8px;
+    }
+    
+    .system-events-tab .sys-evt-card-header {
+      padding: 8px 8px 6px 8px;
+    }
+    
+    .system-events-tab .sys-evt-card-content {
+      padding: 8px;
+    }
+    
+    .system-events-tab .sys-evt-card-title {
+      font-size: 12px;
+      gap: 4px;
+    }
+    
+    .system-events-tab .sys-evt-card-icon {
+      width: 14px;
+      height: 14px;
+    }
+    
+    .system-events-tab .sys-evt-card-description {
+      font-size: 10px;
+    }
+    
+    .system-events-tab .sys-evt-form-group {
+      margin-bottom: 8px;
+    }
+    
+    .system-events-tab .sys-evt-form-label {
+      font-size: 10px;
+    }
+    
+    .system-events-tab .sys-evt-form-select,
+    .system-events-tab .sys-evt-form-input {
+      padding: 5px 6px;
+      font-size: 10px;
+    }
+    
+    .system-events-tab .sys-evt-event-button {
+      padding: 6px 8px;
+      font-size: 10px;
+      gap: 4px;
+    }
+    
+    .system-events-tab .sys-evt-event-button svg {
+      width: 12px;
+      height: 12px;
+    }
+    
+    .system-events-tab .sys-evt-error-button,
+    .system-events-tab .sys-evt-close-button {
+      margin-bottom: 4px;
+    }
+  }
+  
+  /* 极小屏幕 */
+  @media (max-width: 350px) {
+    .system-events-tab {
+      padding: 6px;
+    }
+    
+    .system-events-tab .sys-evt-header {
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+    }
+    
+    .system-events-tab .sys-evt-header-content {
+      gap: 6px;
+    }
+    
+    .system-events-tab .sys-evt-header-icon {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .system-events-tab .sys-evt-header-text h2 {
+      font-size: 13px;
+    }
+    
+    .system-events-tab .sys-evt-header-text p {
+      display: none;
+    }
+    
+    .system-events-tab .sys-evt-tab-trigger {
+      padding: 6px 8px;
+      font-size: 10px;
+      gap: 4px;
+    }
+    
+    .system-events-tab .sys-evt-tab-trigger svg {
+      width: 10px;
+      height: 10px;
+    }
+    
+    .system-events-tab .sys-evt-tab-content {
+      padding: 6px;
+    }
+    
+    .system-events-tab .sys-evt-card-title {
+      font-size: 11px;
+    }
+    
+    .system-events-tab .sys-evt-card-description {
+      font-size: 9px;
+    }
+    
+    .system-events-tab .sys-evt-connection-info {
+      padding: 2px 4px;
+    }
+    
+    .system-events-tab .sys-evt-connection-url {
+      font-size: 8px;
+    }
+  }
+}
+
+
+
+/* 焦点可访问性 */
+.sys-evt-tab-trigger:focus,
+.sys-evt-event-button:focus,
+.sys-evt-form-select:focus,
+.sys-evt-form-input:focus {
+  outline: 2px solid #909090; /* Lighter gray outline color */
+  outline-offset: 2px;
+}
+
+/* 深色滚动条 */
+.system-events-tab::-webkit-scrollbar {
+  width: 8px;
+}
+
+.system-events-tab::-webkit-scrollbar-track {
+  background: rgba(20, 20, 20, 0.5); /* Lighter gray scrollbar track */
+}
+
+.system-events-tab::-webkit-scrollbar-thumb {
+  background: rgba(70, 70, 70, 0.8); /* Lighter gray scrollbar thumb */
+  border-radius: 4px;
+}
+
+.system-events-tab::-webkit-scrollbar-thumb:hover {
+  background: rgba(90, 90, 90, 0.9); /* Lighter gray scrollbar thumb on hover */
+} 

@@ -109,6 +109,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ success: true, simulated: true });
       break;
 
+    case "simulate-system-event":
+      console.log("🎭 Simulating system event:", message.data);
+
+      // 获取当前活动的标签页ID（从devtools面板的上下文）
+      const systemEventTabId = message.data.tabId || null;
+      notifyAllTabs("simulate-system-event", message.data, systemEventTabId);
+      sendResponse({ success: true, simulated: true, eventType: message.data.eventType });
+      break;
+
     case "create-manual-websocket":
       console.log("🔗 Creating manual WebSocket connection:", message.data);
       

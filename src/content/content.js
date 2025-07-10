@@ -177,6 +177,26 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       );
       break;
 
+    case "simulate-system-event":
+      console.log(
+        "🎭 Forwarding simulate system event to injected script:",
+        message
+      );
+      window.postMessage(
+        {
+          source: "websocket-proxy-content",
+          type: "simulate-system-event",
+          connectionId: message.connectionId,
+          eventType: message.eventType,
+          code: message.code,
+          reason: message.reason,
+          message: message.message,
+          errorType: message.errorType,
+        },
+        "*"
+      );
+      break;
+
     case "show-devtools-hint":
       console.log("💡 Showing DevTools hint notification");
       // 可以在页面上显示一个临时提示

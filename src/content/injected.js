@@ -142,6 +142,125 @@
     }
   }
 
+  // 处理模拟系统事件
+  function handleSimulateSystemEvent(connectionId, eventData) {
+    console.log(`🎭 Handling simulate system event for ${connectionId}:`, eventData);
+
+    const connectionInfo = connections.get(connectionId);
+    if (!connectionInfo) {
+      console.error("❌ Connection not found:", connectionId);
+      return;
+    }
+
+    const ws = connectionInfo.ws;
+    if (!ws) {
+      console.error("❌ WebSocket instance not found for:", connectionId);
+      return;
+    }
+
+    try {
+      const { eventType } = eventData;
+
+      switch (eventType) {
+        case "client-close":
+        case "server-close":
+          console.log(`🔒 Simulating ${eventType} event`);
+          
+          // 创建模拟的 CloseEvent
+          const closeEvent = new CloseEvent("close", {
+            code: eventData.code || 1000,
+            reason: eventData.reason || "Simulated close",
+            wasClean: eventData.code === 1000,
+            bubbles: false,
+            cancelable: false,
+          });
+
+          // 添加模拟标记
+          closeEvent._isSimulated = true;
+          closeEvent._eventType = eventType;
+
+          // 更新连接状态
+          connectionInfo.status = "closed";
+
+          // 触发close事件
+          if (ws.onclose) {
+            try {
+              ws.onclose.call(ws, closeEvent);
+            } catch (error) {
+              console.error("❌ Error in user onclose handler:", error);
+            }
+          }
+
+          // 发送系统事件到扩展
+          sendEvent({
+            id: connectionId,
+            url: connectionInfo.url,
+            type: "close",
+            data: `${eventType}: ${closeEvent.reason} (Code: ${closeEvent.code})`,
+            direction: "system",
+            timestamp: Date.now(),
+            status: "closed",
+            simulated: true,
+            systemEventType: eventType,
+          });
+
+          break;
+
+        case "client-error":
+        case "server-error":
+          console.log(`⚠️ Simulating ${eventType} event`);
+          
+          // 创建模拟的 ErrorEvent
+          const errorEvent = new ErrorEvent("error", {
+            message: eventData.message || "Simulated error",
+            error: new Error(eventData.message || "Simulated error"),
+            bubbles: false,
+            cancelable: false,
+          });
+
+          // 添加模拟标记和错误信息
+          errorEvent._isSimulated = true;
+          errorEvent._eventType = eventType;
+          errorEvent._errorCode = eventData.code;
+
+          // 更新连接状态
+          connectionInfo.status = "error";
+
+          // 触发error事件
+          if (ws.onerror) {
+            try {
+              ws.onerror.call(ws, errorEvent);
+            } catch (error) {
+              console.error("❌ Error in user onerror handler:", error);
+            }
+          }
+
+          // 发送系统事件到扩展
+          sendEvent({
+            id: connectionId,
+            url: connectionInfo.url,
+            type: "error",
+            data: `${eventType}: ${errorEvent.message}${eventData.code ? ` (Code: ${eventData.code})` : ''}`,
+            direction: "system",
+            timestamp: Date.now(),
+            status: "error",
+            simulated: true,
+            systemEventType: eventType,
+          });
+
+          break;
+
+        default:
+          console.warn("⚠️ Unknown system event type:", eventType);
+          break;
+      }
+
+      console.log("✅ System event simulated successfully:", eventType);
+    } catch (error) {
+      console.error("❌ Failed to simulate system event:", error);
+    }
+  }
+
   // 创建代理的 WebSocket 构造函数
   function ProxiedWebSocket(url, protocols) {
     console.log("🚀 ProxiedWebSocket called with:", url, protocols);
@@ -532,6 +651,14 @@
             event.data.connectionId,
             event.data.message,
             event.data.direction
+          );
+          break;
+
+        case "simulate-system-event":
+          console.log("🎭 Simulating system event:", event.data);
+          handleSimulateSystemEvent(
+            event.data.connectionId,
+            event.data
           );
           break;
 
