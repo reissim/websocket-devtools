@@ -163,13 +163,86 @@
 
       switch (eventType) {
         case "client-close":
+          console.log(`🔒 Simulating client-initiated close event by calling ws.close()`);
+          console.log(`🔍 handleSimulateSystemEvent received code: ${eventData.code}, reason: ${eventData.reason}`);
+          
+          const requestedCode = eventData.code || 1000;
+          const requestedReason = eventData.reason || "Simulated client-initiated close";
+          
+          // WebSocket.close() 只允许 1000 或 3000-4999 范围的关闭码
+          // 1001-2999 是保留给协议使用的，不能手动调用
+          if (requestedCode !== 1000 && (requestedCode < 3000 || requestedCode > 4999)) {
+            console.warn(`⚠️ Close code ${requestedCode} is not allowed for client-initiated close. Using 1000 instead.`);
+            console.warn(`💡 Tip: Client-close only supports 1000 or 3000-4999. Use server-close for other codes.`);
+            
+            // 对于不支持的关闭码，改为使用 server-close 模拟
+            console.log(`🔄 Converting to server-close simulation for code ${requestedCode}`);
+            
+            // 创建模拟的 CloseEvent
+            const closeEvent = new CloseEvent("close", {
+              code: requestedCode,
+              reason: requestedReason,
+              wasClean: requestedCode === 1000,
+              bubbles: false,
+              cancelable: false,
+            });
+
+            // 添加模拟标记
+            closeEvent._isSimulated = true;
+            closeEvent._eventType = "server-close"; // 标记为服务器关闭
+
+            // 更新连接状态
+            connectionInfo.status = "closed";
+
+            // 触发close事件
+            if (ws.onclose) {
+              try {
+                ws.onclose.call(ws, closeEvent);
+              } catch (error) {
+                console.error("❌ Error in user onclose handler:", error);
+              }
+            }
+
+            // 发送系统事件到扩展
+            sendEvent({
+              id: connectionId,
+              url: connectionInfo.url,
+              type: "close",
+              data: `Simulated Client Close (as Server): Code: ${closeEvent.code}, Reason: ${closeEvent.reason}`,
+              direction: "system",
+              timestamp: Date.now(),
+              status: "closed",
+              simulated: true,
+              systemEventType: "client-close", // 保持原始意图
+            });
+
+            // 清理连接
+            connections.delete(connectionId);
+            return;
+          }
+          
+          connectionInfo.isSimulatingClose = true; // 设置标志
+          
+          try {
+            // 调用原始 WebSocket 的 close 方法
+            // 这将触发原生 WebSocket 关闭握手，浏览器将自然地发出 'close' 事件，
+            // 我们的代理的 'close' 事件监听器会捕获到它并进行后续处理。
+            connectionInfo.originalClose.call(ws, requestedCode, requestedReason);
+            console.log(`✅ ws.close() called successfully with code: ${requestedCode}, reason: "${requestedReason}"`);
+          } catch (error) {
+            console.error(`❌ Error calling ws.close():`, error);
+            console.error(`❌ This should not happen for code ${requestedCode}`);
+          }
+
+          break;
+
         case "server-close":
           console.log(`🔒 Simulating ${eventType} event`);
           
           // 创建模拟的 CloseEvent
           const closeEvent = new CloseEvent("close", {
             code: eventData.code || 1000,
-            reason: eventData.reason || "Simulated close",
+            reason: eventData.reason || "Simulated server-initiated close",
             wasClean: eventData.code === 1000,
             bubbles: false,
             cancelable: false,
@@ -191,12 +264,12 @@
             }
           }
 
-          // 发送系统事件到扩展
+          // 发送系统事件到扩展 (保持不变)
           sendEvent({
             id: connectionId,
             url: connectionInfo.url,
             type: "close",
-            data: `${eventType}: ${closeEvent.reason} (Code: ${closeEvent.code})`,
+            data: `Simulated Server Close: Code: ${closeEvent.code}, Reason: ${closeEvent.reason}`,
             direction: "system",
             timestamp: Date.now(),
             status: "closed",
@@ -240,7 +313,7 @@
             id: connectionId,
             url: connectionInfo.url,
             type: "error",
-            data: `${eventType}: ${errorEvent.message}${eventData.code ? ` (Code: ${eventData.code})` : ''}`,
+            data: `Simulated ${eventType}: Code: ${errorEvent._errorCode || 'N/A'}, Message: ${errorEvent.message || 'No message'}`,
             direction: "system",
             timestamp: Date.now(),
             status: "error",
@@ -290,6 +363,7 @@
       userEventListeners: [], // 用户添加的事件监听器
       messageQueue: [], // 暂停期间的消息队列
       blockedMessages: [], // 被阻止的消息
+      isSimulatingClose: false, // 新增：用于标记是否正在模拟客户端关闭
     };
 
     connections.set(connectionId, connectionInfo);
@@ -512,15 +586,47 @@
           connectionInfo.status = "error";
         }
 
-        sendEvent({
+        const payload = {
           id: connectionId,
           url: url,
           type: eventType,
+          // 默认数据，如果事件类型是close或error，下面会更新
           data: event.reason || event.message || `WebSocket ${eventType}`,
           direction: "system",
           timestamp: Date.now(),
           status: connectionInfo.status,
-        });
+        };
+
+        // 对于 close 事件，判断是否是模拟的 client-close
+        if (eventType === "close") {
+          // 优先使用事件自带的code和reason
+          const code = event.code;
+          const reason = event.reason;
+
+          if (connectionInfo.isSimulatingClose) {
+            // 如果是模拟的客户端关闭，则标记为模拟事件
+            payload.simulated = true;
+            payload.systemEventType = "client-close";
+            connectionInfo.isSimulatingClose = false; // 重置标志
+            payload.data = `Simulated Client Close: Code: ${code || 'N/A'}, Reason: ${reason || 'No reason'}`;
+          } else if (event._isSimulated) { // For server-close, which manually creates event and has _isSimulated
+            payload.simulated = true;
+            payload.systemEventType = event._eventType;
+            payload.data = `Simulated ${event._eventType}: Code: ${code || 'N/A'}, Reason: ${reason || 'No reason'}`;
+          } else {
+            // 真实关闭事件
+            payload.data = `Client/Server Close: Code: ${code || 'N/A'}, Reason: ${reason || 'No reason'}`;
+          }
+        } else if (eventType === "error") {
+            // 错误事件，确保包含错误代码和类型
+            payload.data = `Simulated ${eventType}: Code: ${event._errorCode || 'N/A'}, Message: ${event.message || 'No message'}`; // 使用_errorCode和message
+            if (event._isSimulated) {
+                payload.simulated = true;
+                payload.systemEventType = event._eventType;
+            }
+        }
+        
+        sendEvent(payload);
 
         if (eventType === "close") {
           connections.delete(connectionId);
@@ -591,7 +697,7 @@
   // 监听来自content script的控制消息
   window.addEventListener("message", (event) => {
     if (event.data && event.data.source === "websocket-proxy-content") {
-      console.log("📥 Received control message:", event.data);
+      console.log("📥 [injected.js] Received control message from content script:", event.data); // Added debug log
 
       switch (event.data.type) {
         case "start-monitoring":
