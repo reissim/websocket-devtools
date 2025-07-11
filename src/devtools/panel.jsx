@@ -6,6 +6,9 @@ import ControlPanel from "../components/ControlPanel.jsx";
 import WebSocketList from "../components/WebSocketList.jsx";
 import MessageDetails from "../components/MessageDetails.jsx";
 import FloatingSimulate from "../components/FloatingSimulate.jsx";
+import LanguageSelector from "../components/LanguageSelector.jsx";
+import { t, addLanguageChangeListener, getCurrentLanguage } from "../utils/i18n.js";
+import i18n from "../utils/i18n.js";
 import "../styles/main.css";
 
 const WebSocketPanel = () => {
@@ -22,6 +25,56 @@ const WebSocketPanel = () => {
 
   // FloatingSimulate组件的ref
   const floatingSimulateRef = useRef(null);
+
+  // Language state for triggering re-renders when language changes
+  const [currentLanguage, setCurrentLanguage] = useState('en-us');
+  
+  // I18n initialization state
+  const [isI18nReady, setIsI18nReady] = useState(false);
+
+  useEffect(() => {
+    // Wait for i18n to initialize
+    const initI18n = async () => {
+      try {
+        console.log('🌐 Panel: Waiting for i18n initialization...');
+        
+        // Wait for i18n to have a current language (indicating it's initialized)
+        let attempts = 0;
+        const maxAttempts = 50; // 5 seconds max
+        
+        while (!getCurrentLanguage() && attempts < maxAttempts) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          attempts++;
+        }
+        
+        if (getCurrentLanguage()) {
+          console.log('🌐 Panel: I18n initialized successfully, current language:', getCurrentLanguage());
+          setCurrentLanguage(getCurrentLanguage());
+          setIsI18nReady(true);
+        } else {
+          console.error('🌐 Panel: I18n initialization timeout');
+          setIsI18nReady(true); // Still proceed to avoid infinite loading
+        }
+      } catch (error) {
+        console.error('🌐 Panel: I18n initialization error:', error);
+        setIsI18nReady(true); // Still proceed to avoid infinite loading
+      }
+    };
+
+    initI18n();
+  }, []);
+
+  useEffect(() => {
+    // Language change listener for re-rendering when language changes
+    const unsubscribeLanguage = addLanguageChangeListener((newLanguage) => {
+      console.log('🌐 Panel: Language changed to:', newLanguage);
+      setCurrentLanguage(newLanguage);
+    });
+
+    return () => {
+      unsubscribeLanguage();
+    };
+  }, []);
 
   useEffect(() => {
     // 获取当前DevTools所附加的tab ID
@@ -384,17 +437,43 @@ const WebSocketPanel = () => {
 
   const selectedConnection = getSelectedConnectionData();
 
+  // Show loading while i18n initializes
+  if (!isI18nReady) {
+    return (
+      <MantineProvider>
+        <div className="websocket-panel">
+          <div className="panel-header">
+            <h1>🔌 WebSocket Monitor</h1>
+            <div className="panel-status">
+              <span className="status inactive">🔄 Loading...</span>
+            </div>
+          </div>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            height: '200px',
+            color: 'var(--text-secondary)'
+          }}>
+            Initializing language system...
+          </div>
+        </div>
+      </MantineProvider>
+    );
+  }
+
   return (
     <MantineProvider>
       <div className="websocket-panel">
         <div className="panel-header">
-          <h1>🔌 WebSocket Monitor</h1>
+          <h1>🔌 {t('panel.header.title')}</h1>
           <div className="panel-status">
             {isMonitoring ? (
-              <span className="status active">🟢 Monitoring Active</span>
+              <span className="status active">{t('panel.header.status_active')}</span>
             ) : (
-              <span className="status inactive">🔴 Monitoring Stopped</span>
+              <span className="status inactive">{t('panel.header.status_inactive')}</span>
             )}
+            <LanguageSelector />
           </div>
         </div>
 
@@ -435,7 +514,7 @@ const WebSocketPanel = () => {
           <div className="panel-right-section-fixed">
             <div className="panel-wrapper">
               <div className="panel-title">
-                <h3>💬 Message Details</h3>
+                <h3>{t('panel.messageDetails.title')}</h3>
               </div>
               <div className="panel-body">
                 <MessageDetails
