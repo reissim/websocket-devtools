@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import JsonViewer from "./JsonViewer";
 import favoritesService from "../utils/favoritesService";
+import { t } from "../utils/i18n";
 import "../styles/FavoritesTab.css";
 
 // 优化的FavoritesItem组件，使用React.memo避免不必要的重新渲染
@@ -187,7 +188,7 @@ const FavoritesItem = React.memo(
                   <TextInput
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    placeholder="Message name..."
+                    placeholder={t("favorites.placeholders.messageName")}
                     className="edit-title-input"
                     size="sm"
                     onClick={(e) => e.stopPropagation()}
@@ -196,9 +197,9 @@ const FavoritesItem = React.memo(
                 ) : (
                   <h3
                     className="favorite-item-name"
-                    title="Click to expand/collapse"
+                    title={t("favorites.tooltips.toggleExpand")}
                   >
-                    {favorite.name || "未命名"}
+                    {favorite.name || t("favorites.unnamedMessage")}
                   </h3>
                 )}
                 {favorite.tags && favorite.tags.length > 0 && (
@@ -232,7 +233,7 @@ const FavoritesItem = React.memo(
                   size="md"
                   className="action-btn cancel-btn"
                   onClick={handleCancelEditClick}
-                  title="Cancel"
+                  title={t("common.cancel")}
                 >
                   <X size={18} />
                 </ActionIcon>
@@ -242,7 +243,7 @@ const FavoritesItem = React.memo(
                   className="action-btn save-btn"
                   onClick={handleSaveEditClick}
                   disabled={!editName.trim() || !editData.trim()}
-                  title="Save"
+                  title={t("common.save")}
                 >
                   <Check size={18} />
                 </ActionIcon>
@@ -254,7 +255,7 @@ const FavoritesItem = React.memo(
                   size="md"
                   className="action-btn receive-btn"
                   onClick={handleReceive}
-                  title="Simulate Receive"
+                  title={t("favorites.tooltips.simulateReceive")}
                 >
                   <CircleArrowDown size={18} />
                 </ActionIcon>
@@ -263,7 +264,7 @@ const FavoritesItem = React.memo(
                   size="md"
                   className="action-btn send-btn"
                   onClick={handleSend}
-                  title="Simulate Send"
+                  title={t("favorites.tooltips.simulateSend")}
                 >
                   <CircleArrowUp size={18} />
                 </ActionIcon>
@@ -272,7 +273,7 @@ const FavoritesItem = React.memo(
                   size="md"
                   className="action-btn edit-btn"
                   onClick={handleStartEdit}
-                  title="Edit"
+                  title={t("favorites.edit")}
                 >
                   <Edit size={18} />
                 </ActionIcon>
@@ -281,7 +282,7 @@ const FavoritesItem = React.memo(
                   size="md"
                   className="action-btn delete-btn"
                   onClick={handleDelete}
-                  title="Delete"
+                  title={t("favorites.remove")}
                 >
                   <Trash2 size={18} />
                 </ActionIcon>
@@ -500,7 +501,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
       <div className="favorites-controls">
         <div className="search-container">
           <TextInput
-            placeholder="Search favorites..."
+            placeholder={t("favorites.placeholders.search")}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             leftSection={<Search size={16} />}
@@ -519,7 +520,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
           onClick={() => handleAddFavorite()}
           className="add-favorite-btn"
         >
-          Add Favorite
+          {t("favorites.add")}
         </Button>
       </div>
 
@@ -531,18 +532,18 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
               <>
                 <Search size={48} className="empty-icon" />
                 <Text className="empty-text">
-                  No favorites match your search
+                  {t("favorites.noResults")}
                 </Text>
                 <Text className="empty-description">
-                  Try adjusting your search terms
+                  {t("favorites.noResultsHint")}
                 </Text>
               </>
             ) : (
               <>
                 <Star size={48} className="empty-icon" />
-                <Text className="empty-text">No favorites yet</Text>
+                <Text className="empty-text">{t("favorites.empty")}</Text>
                 <Text className="empty-description">
-                  Save your frequently used WebSocket messages for quick access
+                  {t("favorites.emptyHint")}
                 </Text>
               </>
             )}

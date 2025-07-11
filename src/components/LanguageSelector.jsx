@@ -5,7 +5,8 @@ import {
   getSupportedLanguages, 
   getLanguageDisplayName, 
   setLanguage, 
-  addLanguageChangeListener 
+  addLanguageChangeListener,
+  t
 } from '../utils/i18n.js';
 
 const LanguageSelector = () => {
@@ -86,8 +87,8 @@ const LanguageSelector = () => {
       <button 
         className="language-selector-trigger"
         onClick={toggleDropdown}
-        aria-label="Change Language"
-        title="Change Language"
+        aria-label={t("language.selector.change")}
+        title={t("language.selector.change")}
       >
         <Languages size={16} />
         <span className="language-selector-current">

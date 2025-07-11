@@ -4,6 +4,7 @@ import { Modal, TextInput } from "@mantine/core";
 import { filterConnections } from "../utils/filterUtils";
 import useConnectionNewMessage from "../hooks/useConnectionNewMessage";
 import "../styles/WebSocketList.css";
+import { t } from "../utils/i18n";
 
 const WebSocketList = ({
   websocketEvents, // 所有WebSocket事件的数组
@@ -173,8 +174,8 @@ const WebSocketList = ({
           {connection.url}
         </div>
         <div className="ws-connection-bottom-info">
-          <span>Messages: {connection.messageCount}</span>
-          <span>Created: {formatTimestamp(connection.timestamp)}</span>
+          <span>{t("panel.connectionList.messagesCount", { count: connection.messageCount })}</span>
+          <span>{t("panel.connectionList.created", { time: formatTimestamp(connection.timestamp) })}</span>
         </div>
       </div>
     );
@@ -193,14 +194,14 @@ const WebSocketList = ({
         <div className="ws-list-header-content">
           <div className="ws-list-header-title-group">
             <span className="ws-list-title">
-              WebSocket Connections
+              {t("panel.connectionList.title")}
             </span>
           </div>
           {connectionsMap && connectionsMap.size > 0 && (
             <button
               className="ws-list-clear-button"
               onClick={onClearConnections}
-              title="Clear all WebSocket connections and events"
+              title={t("panel.connectionList.tooltips.clearAll")}
             >
               <Trash2 size={12} />
             </button>
@@ -220,7 +221,7 @@ const WebSocketList = ({
               >
                 <ArrowTriangle collapsed={activeCollapsed} isActive={true} />
                 <span className="ws-connection-group-title active">
-                  Active Connections ({activeConnections.length})
+                  {t("panel.connectionList.activeConnections", { count: activeConnections.length })}
                 </span>
               </div>
               {!activeCollapsed && (
@@ -242,7 +243,7 @@ const WebSocketList = ({
               >
                 <ArrowTriangle collapsed={inactiveCollapsed} isActive={false} />
                 <span className="ws-connection-group-title inactive">
-                  Inactive Connections ({inactiveConnections.length})
+                  {t("panel.connectionList.inactiveConnections", { count: inactiveConnections.length })}
                 </span>
               </div>
               {!inactiveCollapsed && (
@@ -264,7 +265,7 @@ const WebSocketList = ({
           onClick={() => setIsManualConnectOpen(true)}
         >
           <Plus size={12} />
-          Add Connection
+          {t("panel.connectionList.addConnection")}
         </button>
       </div>
 
@@ -275,7 +276,7 @@ const WebSocketList = ({
           setIsManualConnectOpen(false);
           setWsUrl("");
         }}
-        title="Add New WebSocket Connection"
+        title={t("panel.connectionList.modal.title")}
         size="sm"
         centered
         zIndex={1500}
@@ -291,12 +292,12 @@ const WebSocketList = ({
       >
                  <div className="ws-modal-content-wrapper">
           <TextInput
-             label="WebSocket URL"
-             placeholder="ws://example.com:8080 or wss://example.com:8080"
+             label={t("panel.connectionList.modal.urlLabel")}
+             placeholder={t("panel.connectionList.modal.urlPlaceholder")}
              value={wsUrl}
              onChange={(e) => setWsUrl(e.currentTarget.value)}
              disabled={isConnecting}
-             error={wsUrl.length > 0 && !isValidWsUrl(wsUrl) ? "Please enter a valid WebSocket URL (ws:// or wss://)" : null}
+             error={wsUrl.length > 0 && !isValidWsUrl(wsUrl) ? t("panel.connectionList.modal.urlError") : null}
              size="sm"
              classNames={{
                label: 'ws-text-input-label',
@@ -314,7 +315,7 @@ const WebSocketList = ({
               }}
               disabled={isConnecting}
             >
-              Cancel
+              {t("common.cancel")}
             </button>
             
             <button
@@ -322,7 +323,7 @@ const WebSocketList = ({
               onClick={handleManualConnect}
               disabled={isConnecting || !isValidWsUrl(wsUrl)}
             >
-              {"Connect"}
+              {t("panel.connectionList.modal.connect")}
             </button>
           </div>
         </div>

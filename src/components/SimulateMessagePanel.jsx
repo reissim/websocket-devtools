@@ -32,11 +32,12 @@ import usePanelManager from "../hooks/usePanelManager";
 import FavoritesTab from "./FavoritesTab";
 import SystemEventsTab from "./SystemEventsTab";
 import globalFavorites, { addFromEditor } from "../utils/globalFavorites";
+import { t } from "../utils/i18n";
 
 const SimulateMessagePanel = forwardRef(
   ({ connection, onSimulateMessage }, ref) => {
     const [simulateMessage, setSimulateMessage] = useState(
-      '{\n  "message": "Hello World",\n  "timestamp": "2025-01-01T00:00:00Z"\n}'
+      t("simulate.content.jsonPlaceholder")
     );
     const [isSending, setIsSending] = useState(false);
     const [isWindowOpen, setIsWindowOpen] = useState(false);
@@ -140,7 +141,7 @@ const SimulateMessagePanel = forwardRef(
           const parsed = JSON.parse(savedState);
           setSimulateMessage(
             parsed.message ||
-              '{\n  "message": "Hello World",\n  "timestamp": "2025-01-01T00:00:00Z"\n}'
+              t("simulate.content.jsonPlaceholder")
           );
           setIsPinned(parsed.isPinned || false);
           setWindowPosition(
@@ -392,7 +393,7 @@ const SimulateMessagePanel = forwardRef(
               {isWindowOpen ? <Minus size={24} /> : <MessageSquare size={24} />}
             </div>
             <div className="simulate-tooltip">
-              {isWindowOpen ? "Minimize Simulate" : "Open Simulate"}
+              {isWindowOpen ? t("simulate.tooltips.minimize") : t("simulate.tooltips.open")}
             </div>
           </div>
         )}
@@ -423,7 +424,7 @@ const SimulateMessagePanel = forwardRef(
               >
                 <div className="simulate-window-title">
                   <MessageSquare size={16} className="simulate-icon-small" />
-                  <span>Simulate Message</span>
+                  <span>{t("simulate.title")}</span>
                   {connection && (
                     <span className="connection-indicator">
                       - {connection.url}
@@ -438,8 +439,8 @@ const SimulateMessagePanel = forwardRef(
                     onClick={togglePin}
                     title={
                       isPinned
-                        ? "Unpin - Click outside to close"
-                        : "Pin - Prevent close on outside click"
+                        ? t("simulate.tooltips.unpin")
+                        : t("simulate.tooltips.pin")
                     }
                   >
                     {isPinned ? <Pin size={12} /> : <PinOff size={12} />}
@@ -447,7 +448,7 @@ const SimulateMessagePanel = forwardRef(
                   <button
                     className="window-control-btn minimize"
                     onClick={minimizeWindow}
-                    title="Minimize"
+                    title={t("simulate.tooltips.minimize")}
                   >
                     <Minus size={12} />
                   </button>
@@ -458,7 +459,7 @@ const SimulateMessagePanel = forwardRef(
               <div className="simulate-window-content">
                 {!connection ? (
                   <div className="simulate-panel-empty floating">
-                    <p><Wifi size={16} style={{display: 'inline', marginRight: '10px'}} />Please select a WebSocket connection first</p>
+                    <p><Wifi size={16} style={{display: 'inline', marginRight: '10px'}} />{t("simulate.status.noConnection")}</p>
                   </div>
                 ) : (
                   <Tabs
@@ -468,9 +469,9 @@ const SimulateMessagePanel = forwardRef(
                     orientation="horizontal"
                   >
                     <Tabs.List>
-                      <Tabs.Tab value="editor" leftSection={<FileText size={14} />}>Editor</Tabs.Tab>
-                      <Tabs.Tab value="favorites" leftSection={<Star size={14} />}>Favorites</Tabs.Tab>
-                      <Tabs.Tab value="system" leftSection={<Settings size={14} />}>System</Tabs.Tab>
+                      <Tabs.Tab value="editor" leftSection={<FileText size={14} />}>{t("simulate.tabs.editor")}</Tabs.Tab>
+                      <Tabs.Tab value="favorites" leftSection={<Star size={14} />}>{t("simulate.tabs.favorites")}</Tabs.Tab>
+                      <Tabs.Tab value="system" leftSection={<Settings size={14} />}>{t("simulate.tabs.system")}</Tabs.Tab>
                     </Tabs.List>
 
                     <Tabs.Panel value="editor">
@@ -497,13 +498,13 @@ const SimulateMessagePanel = forwardRef(
                             <SimulateButton
                               direction="incoming"
                               icon={CircleArrowDown}
-                              label="Simulate Receive"
+                              label={t("simulate.actions.simulateReceive")}
                               className="incoming"
                             />
                             <SimulateButton
                               direction="outgoing"
                               icon={CircleArrowUp}
-                              label="Simulate Send"
+                              label={t("simulate.actions.simulateSend")}
                               className="outgoing"
                             />
                           </div>

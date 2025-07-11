@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Switch, Group, Stack, Text, Card, Box } from "@mantine/core";
 import { Activity, Shield } from "lucide-react";
+import { t } from "../utils/i18n";
 
 const ControlPanel = ({
   isMonitoring,
@@ -53,7 +54,7 @@ const ControlPanel = ({
                   <Activity size={12} color="rgb(96, 165, 250)" />
                 </Box>
                 <Text size="sm" fw={600} c="rgb(229, 231, 235)">
-                  Monitor
+                  {t("panel.controlPanel.monitor")}
                 </Text>
               </Group>
               <Switch
@@ -82,7 +83,9 @@ const ControlPanel = ({
                 }}
               />
               <Text size="xs" c="rgb(156, 163, 175)">
-                {isMonitoring ? "Active" : "Inactive"}
+                {isMonitoring
+                  ? t("panel.controlPanel.status.active")
+                  : t("panel.controlPanel.status.inactive")}
               </Text>
             </Group>
           </Stack>
@@ -118,7 +121,7 @@ const ControlPanel = ({
                 <Shield size={12} color="rgb(251, 146, 60)" />
               </Box>
               <Text size="sm" fw={600} c="rgb(229, 231, 235)">
-                Message Control
+                {t("panel.controlPanel.messageControl")}
               </Text>
             </Group>
 
@@ -142,7 +145,7 @@ const ControlPanel = ({
                     }}
                   />
                   <Text size="xs" c="rgb(209, 213, 219)">
-                    Block Outgoing
+                    {t("panel.controlPanel.blockOutgoing")}
                   </Text>
                 </Group>
                 <Switch
@@ -191,7 +194,7 @@ const ControlPanel = ({
                     }}
                   />
                   <Text size="xs" c="rgb(209, 213, 219)">
-                    Block Incoming
+                    {t("panel.controlPanel.blockIncoming")}
                   </Text>
                 </Group>
                 <Switch
