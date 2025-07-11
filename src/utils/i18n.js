@@ -17,13 +17,28 @@ class I18n {
     
     // Synchronously load preloaded translations
     Object.entries(preloadedTranslations).forEach(([lang, data]) => {
-      this.translations.set(lang, data);
+      this.translations.set(lang, this.flattenTranslations(data));
     });
     
     console.log('🌐 I18n: Synchronously loaded translations for languages:', Object.keys(preloadedTranslations));
     
     // Asynchronously detect and set user preference
     this.initUserPreference();
+  }
+
+  /**
+   * Flatten nested translations object into dot notation
+   */
+  flattenTranslations(obj, prefix = '') {
+    return Object.keys(obj).reduce((acc, key) => {
+      const newKey = prefix ? `${prefix}.${key}` : key;
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        Object.assign(acc, this.flattenTranslations(obj[key], newKey));
+      } else {
+        acc[newKey] = obj[key];
+      }
+      return acc;
+    }, {});
   }
 
   /**
@@ -220,12 +235,12 @@ class I18n {
     const translations = this.translations.get(language) || {};
     
     // Get translation from current language
-    let translation = this.getNestedValue(translations, key);
+    let translation = translations[key];
     
     // Fallback to default language if translation not found
     if (translation === undefined && language !== this.fallbackLanguage) {
       const fallbackTranslations = this.translations.get(this.fallbackLanguage) || {};
-      translation = this.getNestedValue(fallbackTranslations, key);
+      translation = fallbackTranslations[key];
     }
     
     // If still no translation, return the key itself
