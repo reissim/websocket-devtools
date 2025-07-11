@@ -36,6 +36,19 @@
       "title": "WebSocket 连接",
       "noConnections": "未找到连接",
       "waiting": "等待 WebSocket 连接...",
+      "activeConnections": "活跃连接",
+      "inactiveConnections": "非活跃连接",
+      "messagesCount": "{{count}} 条消息",
+      "created": "创建于 {{time}}",
+      "addConnection": "添加连接",
+      "modal": {
+        "title": "添加 WebSocket 连接",
+        "urlLabel": "WebSocket URL",
+        "urlPlaceholder": "wss://example.com/websocket",
+        "urlError": "请输入有效的 WebSocket URL",
+        "cancel": "取消",
+        "connect": "连接"
+      },
       "status": {
         "connected": "已连接",
         "disconnected": "已断开",
@@ -70,7 +83,9 @@
       "send": "发送消息",
       "clear": "清空",
       "addToFavorites": "添加到收藏",
-      "loadFromFavorites": "从收藏加载"
+      "loadFromFavorites": "从收藏加载",
+      "simulateReceive": "模拟接收",
+      "simulateSend": "模拟发送"
     },
     "status": {
       "sending": "发送中...",
@@ -97,7 +112,8 @@
     "empty": "暂无收藏",
     "name": "名称",
     "message": "消息",
-    "actions": "操作"
+    "actions": "操作",
+    "unnamedMessage": "未命名消息"
   },
   "system": {
     "title": "系统事件",
@@ -114,7 +130,12 @@
         "reason": "关闭原因",
         "reasonPlaceholder": "可选的关闭原因",
         "simulate": "模拟客户端关闭",
-        "serverSimulate": "模拟服务器关闭"
+        "serverSimulate": "模拟服务器关闭",
+        "serverTitle": "服务器关闭事件",
+        "serverDescription": "模拟服务器发起的关闭场景",
+        "serverCode": "服务器关闭代码",
+        "serverReason": "服务器关闭原因",
+        "serverReasonPlaceholder": "可选的服务器关闭原因"
       },
       "error": {
         "title": "错误事件",
@@ -126,7 +147,9 @@
         "messageFormatError": "消息格式错误",
         "clientDisconnect": "客户端断开",
         "internalServerError": "内部服务器错误",
-        "resourceExhausted": "资源耗尽"
+        "resourceExhausted": "资源耗尽",
+        "serverTitle": "服务器错误事件",
+        "serverDescription": "模拟服务器端错误情况"
       }
     },
     "closeCode": {
@@ -139,6 +162,9 @@
       "4001": "4001 - 认证失败",
       "custom": "自定义代码..."
     },
+    "closeCodeInfo": {
+      "serverSupport": "服务器支持关闭代码 1000-1015 和 3000-4999"
+    },
     "noConnection": "请选择一个 WebSocket 连接以模拟系统事件"
   },
   "language": {
@@ -149,6 +175,59 @@
     "names": {
       "en-us": "English",
       "zh-cn": "中文"
+    }
+  },
+  "jsonViewer": {
+    "controls": {
+      "wrap": "自动换行",
+      "nestedParse": "嵌套解析",
+      "copy": "复制",
+      "favorite": "收藏"
+    },
+    "status": {
+      "edit": "编辑",
+      "json": "JSON",
+      "nested": "嵌套"
+    },
+    "tooltips": {
+      "wrapText": "文本换行",
+      "nestedParseJson": "嵌套解析 JSON",
+      "noNestedData": "未发现嵌套 JSON 数据",
+      "copy": "复制",
+      "addToFavorites": "添加到收藏"
+    }
+  },
+  "messageDetails": {
+    "emptyState": {
+      "selectConnection": "选择一个 WebSocket 连接以查看消息",
+      "noMessages": "暂无消息"
+    },
+    "connection": {
+      "disconnected": "已从 {{url}} 断开连接",
+      "requestServed": "请求由 {{data}} 处理",
+      "connectionError": "连接错误"
+    },
+    "tags": {
+      "simulate": "模拟",
+      "block": "阻止"
+    },
+    "controls": {
+      "all": "全部",
+      "send": "发送",
+      "receive": "接收",
+      "invert": "反向",
+      "filterPlaceholder": "按文本内容筛选消息",
+      "clearMessages": "清空所有消息"
+    },
+    "table": {
+      "data": "数据",
+      "length": "长度",
+      "time": "时间"
+    },
+    "actions": {
+      "edit": "编辑",
+      "allow": "允许",
+      "block": "阻止"
     }
   },
   "common": {

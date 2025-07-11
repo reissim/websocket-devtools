@@ -5,6 +5,7 @@ import JsonViewer from "./JsonViewer";
 import useNewMessageHighlight from "../hooks/useNewMessageHighlight";
 import { addFromMessageList } from "../utils/globalFavorites";
 import { Ban, Search, Settings, CircleX } from "lucide-react";
+import { t } from "../utils/i18n.js";
 
 // SVG图标组件
 const Icons = {
@@ -89,7 +90,7 @@ const MessageDetails = ({
     return (
       <div className="message-details">
         <div className="empty-state">
-          <p>Select a WebSocket connection to view messages</p>
+          <p>{t("messageDetails.emptyState.selectConnection")}</p>
         </div>
       </div>
     );
@@ -220,7 +221,7 @@ const MessageDetails = ({
           title="Simulated message"
         >
           <Icons.Simulate />
-          <span>Simulate</span>
+          <span>{t("messageDetails.tags.simulate")}</span>
         </span>
       );
     }
@@ -232,7 +233,7 @@ const MessageDetails = ({
           title={message.reason || "Message was blocked"}
         >
           <Icons.Block />
-          <span>Block</span>
+          <span>{t("messageDetails.tags.block")}</span>
         </span>
       );
     }
@@ -244,11 +245,11 @@ const MessageDetails = ({
           {tags.length > 0 && <span className="message-tags">{tags}</span>}
           <span className="system-text">
             {message.type === "open"
-              ? "Request served by " + (message.data || "WebSocket")
+              ? t("messageDetails.connection.requestServed", { data: message.data || "WebSocket" })
               : message.type === "close"
-              ? "Disconnected from " + (message.url || "WebSocket")
+              ? t("messageDetails.connection.disconnected", { url: message.url || "WebSocket" })
               : message.type === "error"
-              ? "Connection error"
+              ? t("messageDetails.connection.connectionError")
               : message.type}
           </span>
         </div>
@@ -283,9 +284,9 @@ const MessageDetails = ({
                 value={filterDirection}
                 onChange={(e) => setFilterDirection(e.target.value)}
               >
-                <option value="all">All</option>
-                <option value="outgoing">Send</option>
-                <option value="incoming">Receive</option>
+                <option value="all">{t("messageDetails.controls.all")}</option>
+                <option value="outgoing">{t("messageDetails.controls.send")}</option>
+                <option value="incoming">{t("messageDetails.controls.receive")}</option>
               </select>
             </div>
             <div className="filter-controls search-filter">
@@ -297,7 +298,7 @@ const MessageDetails = ({
                   type="text"
                   value={filterText}
                   onChange={(e) => setFilterText(e.target.value)}
-                  placeholder="Filter messages by text content"
+                  placeholder={t("messageDetails.controls.filterPlaceholder")}
                 />
                 {filterText && (
                   <button
@@ -317,7 +318,7 @@ const MessageDetails = ({
                 onChange={(e) => setFilterInvert(e.target.checked)}
               />
               <span className="checkmark"></span>
-              <span className="checkbox-label">Invert</span>
+              <span className="checkbox-label">{t("messageDetails.controls.invert")}</span>
               </label>
             <button
               className="clear-messages-btn"
@@ -327,7 +328,7 @@ const MessageDetails = ({
                 !connection.messages ||
                 connection.messages.length === 0
               }
-              title="Clear all messages"
+              title={t("messageDetails.controls.clearMessages")}
             >
               <Ban size={14} />
             </button>
@@ -338,7 +339,7 @@ const MessageDetails = ({
       <div className="messages-container">
         {sortedMessages.length === 0 ? (
           <div className="empty-state">
-            <p>No messages to display</p>
+            <p>{t("messageDetails.emptyState.noMessages")}</p>
           </div>
         ) : (
           <PanelGroup direction="vertical">
@@ -347,14 +348,14 @@ const MessageDetails = ({
                 <table className="ws-messages-table">
                   <thead>
                     <tr>
-                      <th className="col-data">Data</th>
-                      <th className="col-length">Length</th>
+                      <th className="col-data">{t("messageDetails.table.data")}</th>
+                      <th className="col-length">{t("messageDetails.table.length")}</th>
                       <th
                         className="col-time"
                         onClick={handleSortToggle}
                         style={{ cursor: "pointer" }}
                       >
-                        Time {sortOrder === "desc" ? "▼" : "▲"}
+                        {t("messageDetails.table.time")} {sortOrder === "desc" ? "▼" : "▲"}
                       </th>
                     </tr>
                   </thead>
@@ -435,13 +436,13 @@ const MessageDetails = ({
                             {isIntercepting && (
                               <div className="intercept-actions">
                                 <button className="action-btn edit">
-                                  Edit
+                                  {t("messageDetails.actions.edit")}
                                 </button>
                                 <button className="action-btn allow">
-                                  Allow
+                                  {t("messageDetails.actions.allow")}
                                 </button>
                                 <button className="action-btn block">
-                                  Block
+                                  {t("messageDetails.actions.block")}
                                 </button>
                               </div>
                             )}

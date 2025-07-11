@@ -14,6 +14,7 @@ import {
   SquareStack,
   Star,
 } from "lucide-react";
+import { t } from "../utils/i18n.js";
 import "../styles/JsonViewer.css";
 
 const JsonViewer = ({
@@ -339,10 +340,10 @@ const JsonViewer = ({
                     ? "json-viewer-btn-active-green"
                     : "json-viewer-btn-inactive"
                 }`}
-                title="Wrap Text"
+                title={t("jsonViewer.tooltips.wrapText")}
               >
                 <WrapText size={14} />
-                <span>Wrap</span>
+                <span>{t("jsonViewer.controls.wrap")}</span>
               </button>
             )}
 
@@ -359,13 +360,13 @@ const JsonViewer = ({
                 } ${!hasNestedData ? "json-viewer-btn-disabled" : ""}`}
                 title={
                   hasNestedData
-                    ? "Nested Parse JSON"
-                    : "No nested JSON data found"
+                    ? t("jsonViewer.tooltips.nestedParseJson")
+                    : t("jsonViewer.tooltips.noNestedData")
                 }
                 disabled={!hasNestedData}
               >
                 <SquareStack size={14} />
-                <span>Nested Parse</span>
+                <span>{t("jsonViewer.controls.nestedParse")}</span>
               </button>
             )}
           </div>
@@ -386,20 +387,20 @@ const JsonViewer = ({
                     ? "json-viewer-btn-active-blue"
                     : "json-viewer-btn-inactive"
                 }`}
-                title="Copy"
+                title={t("jsonViewer.tooltips.copy")}
               >
                 <Copy size={14} />
-                <span>Copy</span>
+                <span>{t("jsonViewer.controls.copy")}</span>
               </button>
 
               {showFavoritesButton && onAddToFavorites && (
                 <button
                   onClick={handleAddToFavorites}
                   className="json-viewer-btn json-viewer-btn-inactive"
-                  title="Add to Favorites"
+                  title={t("jsonViewer.tooltips.addToFavorites")}
                 >
                   <Star size={14} />
-                  <span>Favorite</span>
+                  <span>{t("jsonViewer.controls.favorite")}</span>
                 </button>
               )}
             </div>
@@ -412,20 +413,20 @@ const JsonViewer = ({
             {!readOnly && (
               <div className="json-viewer-badge json-viewer-badge-yellow">
                 <Edit size={12} />
-                <span>Edit</span>
+                <span>{t("jsonViewer.status.edit")}</span>
               </div>
             )}
             {readOnly && isValidJson && (
               <div className="json-viewer-badge json-viewer-badge-green">
                 <CheckCircle size={12} />
-                <span>JSON</span>
+                <span>{t("jsonViewer.status.json")}</span>
               </div>
             )}
             {/* Debug info */}
             {hasNestedData && (
               <div className="json-viewer-badge json-viewer-badge-blue">
                 <Hash size={12} />
-                <span>Nested</span>
+                <span>{t("jsonViewer.status.nested")}</span>
               </div>
             )}
           </div>
