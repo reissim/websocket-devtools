@@ -1,0 +1,182 @@
+{
+  "app": {
+    "title": "WebSocket 检查器",
+    "description": "监控和调试 WebSocket 连接"
+  },
+  "monitor": {
+    "status": {
+      "active": "监控中",
+      "inactive": "监控已停止",
+      "paused": "监控已暂停"
+    },
+    "actions": {
+      "start": "开始监控",
+      "stop": "停止监控",
+      "pause": "暂停监控",
+      "resume": "恢复监控"
+    }
+  },
+  "panel": {
+    "header": {
+      "title": "WebSocket 检查器",
+      "status_active": "🟢 监控中",
+      "status_inactive": "🔴 监控已停止"
+    },
+    "messageDetails": {
+      "title": "💬 消息详情",
+      "noConnection": "未选择连接",
+      "selectConnection": "请选择一个 WebSocket 连接以查看消息详情",
+      "noMessages": "暂无消息",
+      "waitingForMessages": "等待 WebSocket 消息...",
+      "clear": "清空消息",
+      "simulate": "模拟消息",
+      "addToFavorites": "添加到收藏"
+    },
+    "connectionList": {
+      "title": "WebSocket 连接",
+      "noConnections": "未找到连接",
+      "waiting": "等待 WebSocket 连接...",
+      "status": {
+        "connected": "已连接",
+        "disconnected": "已断开",
+        "connecting": "连接中",
+        "error": "错误"
+      }
+    },
+    "controlPanel": {
+      "title": "控制面板",
+      "monitor": "监控",
+      "messageControl": "消息控制",
+      "blockOutgoing": "阻止出站",
+      "blockIncoming": "阻止入站",
+      "status": {
+        "active": "活跃",
+        "inactive": "未活跃"
+      }
+    }
+  },
+  "simulate": {
+    "title": "模拟消息",
+    "direction": {
+      "label": "方向",
+      "incoming": "入站 (服务器 → 客户端)",
+      "outgoing": "出站 (客户端 → 服务器)"
+    },
+    "content": {
+      "placeholder": "在此输入消息内容...",
+      "jsonPlaceholder": "{\n  \"message\": \"你好世界\",\n  \"timestamp\": \"{{timestamp}}\"\n}"
+    },
+    "actions": {
+      "send": "发送消息",
+      "clear": "清空",
+      "addToFavorites": "添加到收藏",
+      "loadFromFavorites": "从收藏加载"
+    },
+    "status": {
+      "sending": "发送中...",
+      "sent": "消息发送成功",
+      "error": "消息发送失败",
+      "noConnection": "请先选择一个 WebSocket 连接"
+    },
+    "tabs": {
+      "editor": "编辑器",
+      "favorites": "收藏",
+      "system": "系统"
+    }
+  },
+  "favorites": {
+    "title": "收藏",
+    "add": "添加到收藏",
+    "remove": "移除",
+    "load": "加载",
+    "edit": "编辑",
+    "duplicate": "复制",
+    "export": "导出",
+    "import": "导入",
+    "clear": "清空全部",
+    "empty": "暂无收藏",
+    "name": "名称",
+    "message": "消息",
+    "actions": "操作"
+  },
+  "system": {
+    "title": "系统事件",
+    "description": "模拟 WebSocket 系统事件和状态",
+    "tabs": {
+      "client": "客户端事件",
+      "server": "服务器事件"
+    },
+    "events": {
+      "close": {
+        "title": "关闭事件",
+        "description": "模拟连接关闭场景",
+        "code": "关闭代码",
+        "reason": "关闭原因",
+        "reasonPlaceholder": "可选的关闭原因",
+        "simulate": "模拟客户端关闭",
+        "serverSimulate": "模拟服务器关闭"
+      },
+      "error": {
+        "title": "错误事件",
+        "description": "模拟各种错误情况",
+        "connectionFailed": "连接失败",
+        "networkDisconnect": "网络断开",
+        "protocolError": "协议错误",
+        "timeoutError": "超时错误",
+        "messageFormatError": "消息格式错误",
+        "clientDisconnect": "客户端断开",
+        "internalServerError": "内部服务器错误",
+        "resourceExhausted": "资源耗尽"
+      }
+    },
+    "closeCode": {
+      "1000": "1000 - 正常关闭",
+      "1001": "1001 - 离开",
+      "1002": "1002 - 协议错误",
+      "1008": "1008 - 策略违规",
+      "1009": "1009 - 消息过大",
+      "1011": "1011 - 内部服务器错误",
+      "4001": "4001 - 认证失败",
+      "custom": "自定义代码..."
+    },
+    "noConnection": "请选择一个 WebSocket 连接以模拟系统事件"
+  },
+  "language": {
+    "selector": {
+      "title": "语言",
+      "change": "切换语言"
+    },
+    "names": {
+      "en-us": "English",
+      "zh-cn": "中文"
+    }
+  },
+  "common": {
+    "ok": "确定",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "close": "关闭",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "warning": "警告",
+    "info": "信息",
+    "yes": "是",
+    "no": "否",
+    "confirm": "确认",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "refresh": "刷新",
+    "reset": "重置",
+    "search": "搜索",
+    "filter": "筛选",
+    "sort": "排序",
+    "copy": "复制",
+    "paste": "粘贴",
+    "cut": "剪切",
+    "selectAll": "全选"
+  }
+} 

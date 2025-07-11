@@ -1,0 +1,182 @@
+{
+  "app": {
+    "title": "WebSocket Inspector",
+    "description": "Monitor and debug WebSocket connections"
+  },
+  "monitor": {
+    "status": {
+      "active": "Monitoring Active",
+      "inactive": "Monitoring Stopped",
+      "paused": "Monitoring Paused"
+    },
+    "actions": {
+      "start": "Start Monitoring",
+      "stop": "Stop Monitoring",
+      "pause": "Pause Monitoring",
+      "resume": "Resume Monitoring"
+    }
+  },
+  "panel": {
+    "header": {
+      "title": "WebSocket Inspector",
+      "status_active": "🟢 Monitoring Active",
+      "status_inactive": "🔴 Monitoring Stopped"
+    },
+    "messageDetails": {
+      "title": "💬 Message Details",
+      "noConnection": "No connection selected",
+      "selectConnection": "Please select a WebSocket connection to view message details",
+      "noMessages": "No messages yet",
+      "waitingForMessages": "Waiting for WebSocket messages...",
+      "clear": "Clear Messages",
+      "simulate": "Simulate Message",
+      "addToFavorites": "Add to Favorites"
+    },
+    "connectionList": {
+      "title": "WebSocket Connections",
+      "noConnections": "No connections found",
+      "waiting": "Waiting for WebSocket connections...",
+      "status": {
+        "connected": "Connected",
+        "disconnected": "Disconnected",
+        "connecting": "Connecting",
+        "error": "Error"
+      }
+    },
+    "controlPanel": {
+      "title": "Control Panel",
+      "monitor": "Monitor",
+      "messageControl": "Message Control",
+      "blockOutgoing": "Block Outgoing",
+      "blockIncoming": "Block Incoming",
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    }
+  },
+  "simulate": {
+    "title": "Simulate Message",
+    "direction": {
+      "label": "Direction",
+      "incoming": "Incoming (Server → Client)",
+      "outgoing": "Outgoing (Client → Server)"
+    },
+    "content": {
+      "placeholder": "Enter your message content here...",
+      "jsonPlaceholder": "{\n  \"message\": \"Hello World\",\n  \"timestamp\": \"{{timestamp}}\"\n}"
+    },
+    "actions": {
+      "send": "Send Message",
+      "clear": "Clear",
+      "addToFavorites": "Add to Favorites",
+      "loadFromFavorites": "Load from Favorites"
+    },
+    "status": {
+      "sending": "Sending...",
+      "sent": "Message sent successfully",
+      "error": "Failed to send message",
+      "noConnection": "Please select a WebSocket connection first"
+    },
+    "tabs": {
+      "editor": "Editor",
+      "favorites": "Favorites",
+      "system": "System"
+    }
+  },
+  "favorites": {
+    "title": "Favorites",
+    "add": "Add to Favorites",
+    "remove": "Remove",
+    "load": "Load",
+    "edit": "Edit",
+    "duplicate": "Duplicate",
+    "export": "Export",
+    "import": "Import",
+    "clear": "Clear All",
+    "empty": "No favorites saved",
+    "name": "Name",
+    "message": "Message",
+    "actions": "Actions"
+  },
+  "system": {
+    "title": "System Events",
+    "description": "Simulate WebSocket system events and states",
+    "tabs": {
+      "client": "Client Events",
+      "server": "Server Events"
+    },
+    "events": {
+      "close": {
+        "title": "Close Events",
+        "description": "Simulate connection close scenarios",
+        "code": "Close Code",
+        "reason": "Close Reason",
+        "reasonPlaceholder": "Optional close reason",
+        "simulate": "Simulate Client Close",
+        "serverSimulate": "Simulate Server Close"
+      },
+      "error": {
+        "title": "Error Events",
+        "description": "Simulate various error conditions",
+        "connectionFailed": "Connection Failed",
+        "networkDisconnect": "Network Disconnect",
+        "protocolError": "Protocol Error",
+        "timeoutError": "Timeout Error",
+        "messageFormatError": "Message Format Error",
+        "clientDisconnect": "Client Disconnect",
+        "internalServerError": "Internal Server Error",
+        "resourceExhausted": "Resource Exhausted"
+      }
+    },
+    "closeCode": {
+      "1000": "1000 - Normal Closure",
+      "1001": "1001 - Going Away", 
+      "1002": "1002 - Protocol Error",
+      "1008": "1008 - Policy Violation",
+      "1009": "1009 - Message Too Big",
+      "1011": "1011 - Internal Server Error",
+      "4001": "4001 - Authentication Failed",
+      "custom": "Custom Code..."
+    },
+    "noConnection": "Please select a WebSocket connection to simulate system events"
+  },
+  "language": {
+    "selector": {
+      "title": "Language",
+      "change": "Change Language"
+    },
+    "names": {
+      "en-us": "English",
+      "zh-cn": "中文"
+    }
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "refresh": "Refresh",
+    "reset": "Reset",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "copy": "Copy",
+    "paste": "Paste",
+    "cut": "Cut",
+    "selectAll": "Select All"
+  }
+} 

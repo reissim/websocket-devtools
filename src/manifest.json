@@ -24,7 +24,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["src/content/injected.js"],
+      "resources": ["src/content/injected.js", "locales/*.json"],
       "matches": ["http://*/*", "https://*/*"]
     }
   ],
