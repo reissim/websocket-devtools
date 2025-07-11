@@ -241,6 +241,7 @@ const MessageDetails = ({
       return (
         <div className="data-cell system">
           <Icons.Connection className="system-icon" />
+          {tags.length > 0 && <span className="message-tags">{tags}</span>}
           <span className="system-text">
             {message.type === "open"
               ? "Request served by " + (message.data || "WebSocket")
@@ -250,7 +251,6 @@ const MessageDetails = ({
               ? "Connection error"
               : message.type}
           </span>
-          {tags.length > 0 && <span className="message-tags">{tags}</span>}
         </div>
       );
     }
