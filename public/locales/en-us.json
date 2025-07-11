@@ -36,6 +36,19 @@
       "title": "WebSocket Connections",
       "noConnections": "No connections found",
       "waiting": "Waiting for WebSocket connections...",
+      "activeConnections": "Active Connections",
+      "inactiveConnections": "Inactive Connections",
+      "messagesCount": "{{count}} messages",
+      "created": "Created at {{time}}",
+      "addConnection": "Add Connection",
+      "modal": {
+        "title": "Add WebSocket Connection",
+        "urlLabel": "WebSocket URL",
+        "urlPlaceholder": "wss://example.com/websocket",
+        "urlError": "Please enter a valid WebSocket URL",
+        "cancel": "Cancel",
+        "connect": "Connect"
+      },
       "status": {
         "connected": "Connected",
         "disconnected": "Disconnected",
@@ -70,7 +83,9 @@
       "send": "Send Message",
       "clear": "Clear",
       "addToFavorites": "Add to Favorites",
-      "loadFromFavorites": "Load from Favorites"
+      "loadFromFavorites": "Load from Favorites",
+      "simulateReceive": "Simulate Receive",
+      "simulateSend": "Simulate Send"
     },
     "status": {
       "sending": "Sending...",
@@ -97,7 +112,8 @@
     "empty": "No favorites saved",
     "name": "Name",
     "message": "Message",
-    "actions": "Actions"
+    "actions": "Actions",
+    "unnamedMessage": "Unnamed Message"
   },
   "system": {
     "title": "System Events",
@@ -114,7 +130,12 @@
         "reason": "Close Reason",
         "reasonPlaceholder": "Optional close reason",
         "simulate": "Simulate Client Close",
-        "serverSimulate": "Simulate Server Close"
+        "serverSimulate": "Simulate Server Close",
+        "serverTitle": "Server Close Events",
+        "serverDescription": "Simulate server-initiated close scenarios",
+        "serverCode": "Server Close Code",
+        "serverReason": "Server Close Reason",
+        "serverReasonPlaceholder": "Optional server close reason"
       },
       "error": {
         "title": "Error Events",
@@ -126,7 +147,9 @@
         "messageFormatError": "Message Format Error",
         "clientDisconnect": "Client Disconnect",
         "internalServerError": "Internal Server Error",
-        "resourceExhausted": "Resource Exhausted"
+        "resourceExhausted": "Resource Exhausted",
+        "serverTitle": "Server Error Events",
+        "serverDescription": "Simulate server-side error conditions"
       }
     },
     "closeCode": {
@@ -139,6 +162,9 @@
       "4001": "4001 - Authentication Failed",
       "custom": "Custom Code..."
     },
+    "closeCodeInfo": {
+      "serverSupport": "Server supports close codes 1000-1015 and 3000-4999"
+    },
     "noConnection": "Please select a WebSocket connection to simulate system events"
   },
   "language": {
@@ -149,6 +175,59 @@
     "names": {
       "en-us": "English",
       "zh-cn": "中文"
+    }
+  },
+  "jsonViewer": {
+    "controls": {
+      "wrap": "Wrap",
+      "nestedParse": "Nested Parse",
+      "copy": "Copy",
+      "favorite": "Favorite"
+    },
+    "status": {
+      "edit": "Edit",
+      "json": "JSON",
+      "nested": "Nested"
+    },
+    "tooltips": {
+      "wrapText": "Wrap Text",
+      "nestedParseJson": "Nested Parse JSON",
+      "noNestedData": "No nested JSON data found",
+      "copy": "Copy",
+      "addToFavorites": "Add to Favorites"
+    }
+  },
+  "messageDetails": {
+    "emptyState": {
+      "selectConnection": "Select a WebSocket connection to view messages",
+      "noMessages": "No messages to display"
+    },
+    "connection": {
+      "disconnected": "Disconnected from {{url}}",
+      "requestServed": "Request served by {{data}}",
+      "connectionError": "Connection error"
+    },
+    "tags": {
+      "simulate": "Simulate",
+      "block": "Block"
+    },
+    "controls": {
+      "all": "All",
+      "send": "Send",
+      "receive": "Receive",
+      "invert": "Invert",
+      "filterPlaceholder": "Filter messages by text content",
+      "clearMessages": "Clear all messages"
+    },
+    "table": {
+      "data": "Data",
+      "length": "Length",
+      "time": "Time"
+    },
+    "actions": {
+      "edit": "Edit",
+      "allow": "Allow",
+      "block": "Block"
     }
   },
   "common": {

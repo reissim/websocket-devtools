@@ -3,28 +3,57 @@
  * Supports multiple languages with JSON-based translations
  */
 
+// Import preloaded translations for synchronous initialization
+import { translations as preloadedTranslations, supportedLanguages as preloadedSupportedLanguages, languageDisplayNames } from '../locales/index.js';
+
 class I18n {
   constructor() {
-    this.currentLanguage = null;
+    this.currentLanguage = 'en-us'; // Set default immediately
     this.translations = new Map();
     this.fallbackLanguage = 'en-us';
-    this.supportedLanguages = ['en-us', 'zh-cn'];
+    this.supportedLanguages = preloadedSupportedLanguages;
     this.listeners = new Set();
+    this.isInitialized = false;
     
-    // Initialize the system
-    this.init();
+    // Synchronously load preloaded translations
+    Object.entries(preloadedTranslations).forEach(([lang, data]) => {
+      this.translations.set(lang, data);
+    });
+    
+    console.log('🌐 I18n: Synchronously loaded translations for languages:', Object.keys(preloadedTranslations));
+    
+    // Asynchronously detect and set user preference
+    this.initUserPreference();
   }
 
   /**
-   * Initialize the i18n system
+   * Initialize user preference asynchronously (called from constructor)
+   */
+  async initUserPreference() {
+    try {
+      console.log('🌐 I18n: Detecting user language preference...');
+      const preferredLanguage = await this.detectLanguage();
+      console.log('🌐 I18n: Detected preferred language:', preferredLanguage);
+      
+      if (preferredLanguage !== this.currentLanguage) {
+        await this.setLanguage(preferredLanguage);
+      }
+      
+      this.isInitialized = true;
+      console.log('🌐 I18n: User preference initialization complete, current language:', this.currentLanguage);
+    } catch (error) {
+      console.warn('🌐 I18n: Failed to initialize user preference, using default:', error);
+      this.isInitialized = true;
+    }
+  }
+
+  /**
+   * Legacy init method for backward compatibility
    */
   async init() {
-    console.log('🌐 I18n: Starting initialization...');
-    // Detect and set the initial language
-    const language = await this.detectLanguage();
-    console.log('🌐 I18n: Detected language:', language);
-    await this.setLanguage(language);
-    console.log('🌐 I18n: Initialization complete, current language:', this.currentLanguage);
+    // This method is now a no-op since we initialize synchronously
+    // Kept for backward compatibility
+    return Promise.resolve();
   }
 
   /**
@@ -122,50 +151,23 @@ class I18n {
   }
 
   /**
-   * Load translation data for a language
+   * Load translation data for a language (now returns preloaded data)
    */
   async loadTranslations(language) {
     if (this.translations.has(language)) {
-      console.log('🌐 I18n: Using cached translations for', language);
+      console.log('🌐 I18n: Using preloaded translations for', language);
       return this.translations.get(language);
     }
 
-    try {
-      let url;
-      // For Chrome extensions, use chrome.runtime.getURL
-      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) {
-        url = chrome.runtime.getURL(`locales/${language}.json`);
-        console.log('🌐 I18n: Loading translations from extension URL:', url);
-      } else {
-        // Fallback for web context (like the old test page)
-        url = `/public/locales/${language}.json`;
-        console.log('🌐 I18n: Loading translations from web URL:', url);
-      }
-
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Failed to load translations from ${url} (status: ${response.status})`);
-      }
-
-      const translations = await response.json();
-      console.log('🌐 I18n: Successfully loaded translations for', language, '- keys:', Object.keys(translations));
-      this.translations.set(language, translations);
-      return translations;
-    } catch (error) {
-      console.error('🌐 I18n: Failed to load translations for', language, ':', error);
-      
-      // If we can't load the fallback language, return empty object
-      if (language === this.fallbackLanguage) {
-        console.warn('🌐 I18n: Cannot load fallback language, using empty translations');
-        const empty = {};
-        this.translations.set(language, empty);
-        return empty;
-      }
-
-      // Try to load fallback language
-      console.log('🌐 I18n: Trying to load fallback language instead...');
-      return await this.loadTranslations(this.fallbackLanguage);
+    // If language is not preloaded, fall back to the default language
+    if (language !== this.fallbackLanguage) {
+      console.warn(`🌐 I18n: Language '${language}' not preloaded, falling back to '${this.fallbackLanguage}'`);
+      return this.translations.get(this.fallbackLanguage) || {};
     }
+
+    // This should not happen since we preload all supported languages
+    console.error(`🌐 I18n: Fallback language '${this.fallbackLanguage}' not found in preloaded translations`);
+    return {};
   }
 
   /**
@@ -285,12 +287,7 @@ class I18n {
    * Get language display name
    */
   getLanguageDisplayName(language) {
-    const displayNames = {
-      'en-us': 'English',
-      'zh-cn': '中文',
-    };
-    
-    return displayNames[language] || language;
+    return languageDisplayNames[language] || language;
   }
 
   /**
