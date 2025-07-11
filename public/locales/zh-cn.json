@@ -60,8 +60,8 @@
       "title": "控制面板",
       "monitor": "监控",
       "messageControl": "消息控制",
-      "blockOutgoing": "阻止出站",
-      "blockIncoming": "阻止入站",
+      "blockOutgoing": "阻止发送",
+      "blockIncoming": "阻止接收",
       "status": {
         "active": "活跃",
         "inactive": "未活跃"
@@ -72,8 +72,8 @@
     "title": "模拟消息",
     "direction": {
       "label": "方向",
-      "incoming": "入站 (服务器 → 客户端)",
-      "outgoing": "出站 (客户端 → 服务器)"
+      "incoming": "接收 (服务器 → 客户端)",
+      "outgoing": "发送 (客户端 → 服务器)"
     },
     "content": {
       "placeholder": "在此输入消息内容...",
@@ -163,9 +163,29 @@
       "custom": "自定义代码..."
     },
     "closeCodeInfo": {
-      "serverSupport": "服务器支持关闭代码 1000-1015 和 3000-4999"
+      "serverSupport": "服务器支持关闭代码 1000-1015 和 3000-4999",
+      "normal": "正常关闭 - 连接成功完成",
+      "protocol": "协议保留代码 - 谨慎使用",
+      "application": "应用程序专用代码 - 安全使用",
+      "invalid": "无效关闭代码 - 必须在 1000-4999 范围内"
     },
-    "noConnection": "请选择一个 WebSocket 连接以模拟系统事件"
+    "noConnection": "请选择一个 WebSocket 连接以模拟系统事件",
+    "noConnectionTitle": "未选择连接",
+    "tooltips": {
+      "resetToPreset": "重置为预设代码"
+    },
+    "events": {
+      "close": {
+        "codePlaceholder": "输入自定义关闭代码 (1000-4999)",
+        "serverCodePlaceholder": "输入自定义服务器关闭代码 (1000-4999)",
+        "clientInitiated": "客户端发起关闭",
+        "serverInitiated": "服务器发起关闭",
+        "serverNormal": "服务器正常关闭",
+        "policyViolation": "服务器策略违规",
+        "heartbeatTimeout": "服务器心跳超时",
+        "authFailure": "认证失败"
+      }
+    }
   },
   "language": {
     "selector": {

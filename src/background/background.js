@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case "block-outgoing":
       console.log("🚫 Toggling outgoing message blocking:", message.enabled);
 
-      // 通知所有 content scripts 切换出站消息阻止
+      // 通知所有 content scripts 切换发送消息阻止
       notifyAllTabs("block-outgoing", { enabled: message.enabled });
       sendResponse({ success: true, blockOutgoing: message.enabled });
       break;
@@ -64,7 +64,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case "block-incoming":
       console.log("🚫 Toggling incoming message blocking:", message.enabled);
 
-      // 通知所有 content scripts 切换入站消息阻止
+      // 通知所有 content scripts 切换接收消息阻止
       notifyAllTabs("block-incoming", { enabled: message.enabled });
       sendResponse({ success: true, blockIncoming: message.enabled });
       break;

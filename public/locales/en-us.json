@@ -163,9 +163,29 @@
       "custom": "Custom Code..."
     },
     "closeCodeInfo": {
-      "serverSupport": "Server supports close codes 1000-1015 and 3000-4999"
+      "serverSupport": "Server supports close codes 1000-1015 and 3000-4999",
+      "normal": "Normal closure - connection completed successfully",
+      "protocol": "Protocol reserved codes - use with caution",
+      "application": "Application-specific codes - safe to use",
+      "invalid": "Invalid close code - must be 1000-4999"
     },
-    "noConnection": "Please select a WebSocket connection to simulate system events"
+    "noConnection": "Please select a WebSocket connection to simulate system events",
+    "noConnectionTitle": "No Connection Selected",
+    "tooltips": {
+      "resetToPreset": "Reset to preset codes"
+    },
+    "events": {
+      "close": {
+        "codePlaceholder": "Enter custom close code (1000-4999)",
+        "serverCodePlaceholder": "Enter custom server close code (1000-4999)",
+        "clientInitiated": "Client initiated close",
+        "serverInitiated": "Server initiated close",
+        "serverNormal": "Server normal shutdown",
+        "policyViolation": "Server policy violation",
+        "heartbeatTimeout": "Server heartbeat timeout",
+        "authFailure": "Authentication failure"
+      }
+    }
   },
   "language": {
     "selector": {
