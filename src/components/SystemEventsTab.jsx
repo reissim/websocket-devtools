@@ -13,6 +13,7 @@ import {
   WifiOff 
 } from "lucide-react";
 import "../styles/SystemEventsTab.css";
+import { t } from "../utils/i18n";
 
 const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
   const [activeTab, setActiveTab] = useState("client");
@@ -26,26 +27,26 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
 
   // 关闭代码选项
   const closeCodeOptions = [
-    { value: "1000", label: "1000 - Normal Closure" },
-    { value: "1001", label: "1001 - Going Away" },
-    { value: "1002", label: "1002 - Protocol Error" },
-    { value: "1008", label: "1008 - Policy Violation" },
-    { value: "1009", label: "1009 - Message Too Big" },
-    { value: "1011", label: "1011 - Internal Server Error" },
-    { value: "custom", label: "Custom Code..." },
+    { value: "1000", label: t("system.closeCode.1000") },
+    { value: "1001", label: t("system.closeCode.1001") },
+    { value: "1002", label: t("system.closeCode.1002") },
+    { value: "1008", label: t("system.closeCode.1008") },
+    { value: "1009", label: t("system.closeCode.1009") },
+    { value: "1011", label: t("system.closeCode.1011") },
+    { value: "custom", label: t("system.closeCode.custom") },
   ];
 
   // 获取关闭码的说明信息
   const getCloseCodeInfo = (code) => {
     const numCode = parseInt(code);
     if (numCode === 1000) {
-      return { type: "success", message: "✅ 正常关闭 - 支持真实客户端关闭" };
+      return { type: "success", message: t("system.closeCodeInfo.normal") };
     } else if (numCode >= 1001 && numCode <= 2999) {
-      return { type: "warning", message: "⚠️ 协议保留码 - 将模拟为服务器关闭" };
+      return { type: "warning", message: t("system.closeCodeInfo.protocol") };
     } else if (numCode >= 3000 && numCode <= 4999) {
-      return { type: "success", message: "✅ 应用程序码 - 支持真实客户端关闭" };
+      return { type: "success", message: t("system.closeCodeInfo.application") };
     } else {
-      return { type: "error", message: "❌ 无效关闭码 - 请使用 1000 或 3000-4999" };
+      return { type: "error", message: t("system.closeCodeInfo.invalid") };
     }
   };
 
@@ -72,16 +73,16 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
   const handleClientClose = () => {
     handleSimulateEvent("client-close", {
       code: parseInt(closeCode),
-      reason: closeReason || "Client initiated close"
+      reason: closeReason || t("system.events.close.clientInitiated")
     });
   };
 
   const handleClientError = (errorType) => {
     const errorDetails = {
-      "connection-failed": { code: "ECONNREFUSED", message: "Connection failed to establish" },
-      "network-disconnect": { code: "ENETUNREACH", message: "Network became unreachable" },
-      "protocol-error": { code: "EPROTO", message: "WebSocket protocol error" },
-      "timeout-error": { code: "ETIMEDOUT", message: "Connection timeout" }
+      "connection-failed": { code: "ECONNREFUSED", message: t("system.events.error.connectionFailed") },
+      "network-disconnect": { code: "ENETUNREACH", message: t("system.events.error.networkDisconnect") },
+      "protocol-error": { code: "EPROTO", message: t("system.events.error.protocolError") },
+      "timeout-error": { code: "ETIMEDOUT", message: t("system.events.error.timeoutError") }
     };
 
     handleSimulateEvent("client-error", {
@@ -95,14 +96,14 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
     if (closeType === "custom") {
       handleSimulateEvent("server-close", {
         code: parseInt(serverCloseCode),
-        reason: serverCloseReason || "Server initiated close"
+        reason: serverCloseReason || t("system.events.close.serverInitiated")
       });
     } else {
       const closeDetails = {
-        "normal-server-close": { code: 1000, reason: "Server shutting down normally" },
-        "policy-violation": { code: 1008, reason: "Policy violation detected" },
-        "heartbeat-timeout": { code: 1011, reason: "Heartbeat timeout" },
-        "auth-failure": { code: 4001, reason: "Authentication failed" }
+        "normal-server-close": { code: 1000, reason: t("system.events.close.serverNormal") },
+        "policy-violation": { code: 1008, reason: t("system.events.close.policyViolation") },
+        "heartbeat-timeout": { code: 1011, reason: t("system.events.close.heartbeatTimeout") },
+        "auth-failure": { code: 4001, reason: t("system.events.close.authFailure") }
       };
 
       handleSimulateEvent("server-close", closeDetails[closeType]);
@@ -111,10 +112,10 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
 
   const handleServerError = (errorType) => {
     const errorDetails = {
-      "message-format-error": { code: 1003, message: "Invalid message format received" },
-      "client-disconnect": { code: 1006, message: "Client disconnected unexpectedly" },
-      "internal-server-error": { code: 1011, message: "Internal server error occurred" },
-      "resource-exhausted": { code: 1013, message: "Server resources exhausted" }
+      "message-format-error": { code: 1003, message: t("system.events.error.messageFormatError") },
+      "client-disconnect": { code: 1006, message: t("system.events.error.clientDisconnect") },
+      "internal-server-error": { code: 1011, message: t("system.events.error.internalServerError") },
+      "resource-exhausted": { code: 1013, message: t("system.events.error.resourceExhausted") }
     };
 
     handleSimulateEvent("server-error", {
@@ -128,8 +129,8 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
       <div className="sys-evt-empty">
         <div className="sys-evt-empty-state">
           <Wifi size={48} className="sys-evt-empty-icon" />
-          <h4>No Connection Selected</h4>
-          <p>Please select a WebSocket connection to simulate system events</p>
+          <h4>{t("system.noConnectionTitle")}</h4>
+          <p>{t("system.noConnection")}</p>
         </div>
       </div>
     );
@@ -141,8 +142,8 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
         <div className="sys-evt-header-content">
           <Settings className="sys-evt-header-icon" />
           <div className="sys-evt-header-text">
-            <h2>System Events</h2>
-            <p>Simulate WebSocket system events and states</p>
+            <h2>{t("system.title")}</h2>
+            <p>{t("system.description")}</p>
           </div>
         </div>
       </div>
@@ -155,14 +156,14 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
               onClick={() => setActiveTab("client")}
             >
               <Monitor size={16} />
-              Client Events
+              {t("system.tabs.client")}
             </button>
             <button
               className={`sys-evt-tab-trigger ${activeTab === "server" ? "active" : ""}`}
               onClick={() => setActiveTab("server")}
             >
               <Server size={16} />
-              Server Events
+              {t("system.tabs.server")}
             </button>
           </div>
 
@@ -175,15 +176,15 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                     <div className="sys-evt-card-header">
                       <div className="sys-evt-card-title">
                         <X className="sys-evt-card-icon sys-evt-close-icon" />
-                        Close Events
+                        {t("system.events.close.title")}
                       </div>
                       <div className="sys-evt-card-description">
-                        Simulate connection close scenarios
+                        {t("system.events.close.description")}
                       </div>
                     </div>
                     <div className="sys-evt-card-content">
                       <div className="sys-evt-form-group">
-                        <label className="sys-evt-form-label">Close Code</label>
+                        <label className="sys-evt-form-label">{t("system.events.close.code")}</label>
                         {!customCodeMode ? (
                           <select 
                             className="sys-evt-form-select"
@@ -208,7 +209,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                             <input
                               type="number"
                               className="sys-evt-form-input"
-                              placeholder="输入关闭码 (1000, 3000-4999)"
+                              placeholder={t("system.events.close.codePlaceholder")}
                               value={closeCode}
                               onChange={(e) => setCloseCode(e.target.value)}
                               min="1000"
@@ -220,7 +221,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                                 setCustomCodeMode(false);
                                 setCloseCode("1000");
                               }}
-                              title="返回预设选项"
+                              title={t("system.tooltips.resetToPreset")}
                             >
                               ↺
                             </button>
@@ -233,11 +234,11 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                         )}
                       </div>
                       <div className="sys-evt-form-group">
-                        <label className="sys-evt-form-label">Close Reason</label>
+                        <label className="sys-evt-form-label">{t("system.events.close.reason")}</label>
                         <input
                           type="text"
                           className="sys-evt-form-input"
-                          placeholder="Optional close reason"
+                          placeholder={t("system.events.close.reasonPlaceholder")}
                           value={closeReason}
                           onChange={(e) => setCloseReason(e.target.value)}
                         />
@@ -248,7 +249,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                         disabled={isExecuting}
                       >
                         <Play size={16} />
-                        Simulate Client Close
+                        {t("system.events.close.simulate")}
                       </button>
                     </div>
                   </div>
@@ -258,10 +259,10 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                     <div className="sys-evt-card-header">
                       <div className="sys-evt-card-title">
                         <AlertTriangle className="sys-evt-card-icon sys-evt-error-icon" />
-                        Error Events
+                        {t("system.events.error.title")}
                       </div>
                       <div className="sys-evt-card-description">
-                        Simulate various error conditions
+                        {t("system.events.error.description")}
                       </div>
                     </div>
                     <div className="sys-evt-card-content">
@@ -272,7 +273,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           disabled={isExecuting}
                         >
                           <Wifi size={16} />
-                          Connection Failed
+                          {t("system.events.error.connectionFailed")}
                         </button>
                         <button
                           className="sys-evt-event-button sys-evt-error-button"
@@ -280,7 +281,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           disabled={isExecuting}
                         >
                           <WifiOff size={16} />
-                          Network Disconnect
+                          {t("system.events.error.networkDisconnect")}
                         </button>
                         <button
                           className="sys-evt-event-button sys-evt-error-button"
@@ -288,7 +289,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           disabled={isExecuting}
                         >
                           <AlertTriangle size={16} />
-                          Protocol Error
+                          {t("system.events.error.protocolError")}
                         </button>
                         <button
                           className="sys-evt-event-button sys-evt-error-button"
@@ -296,7 +297,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           disabled={isExecuting}
                         >
                           <Clock size={16} />
-                          Timeout Error
+                          {t("system.events.error.timeoutError")}
                         </button>
                       </div>
                     </div>
@@ -313,15 +314,15 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                     <div className="sys-evt-card-header">
                       <div className="sys-evt-card-title">
                         <X className="sys-evt-card-icon sys-evt-close-icon" />
-                        Server Close
+                        {t("system.events.close.serverTitle")}
                       </div>
                       <div className="sys-evt-card-description">
-                        Simulate server-initiated close
+                        {t("system.events.close.serverDescription")}
                       </div>
                     </div>
                     <div className="sys-evt-card-content">
                       <div className="sys-evt-form-group">
-                        <label className="sys-evt-form-label">Server Close Code</label>
+                        <label className="sys-evt-form-label">{t("system.events.close.serverCode")}</label>
                         {!serverCustomCodeMode ? (
                           <select 
                             className="sys-evt-form-select"
@@ -349,7 +350,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                             <input
                               type="number"
                               className="sys-evt-form-input"
-                              placeholder="输入关闭码 (任意有效值)"
+                              placeholder={t("system.events.close.serverCodePlaceholder")}
                               value={serverCloseCode}
                               onChange={(e) => setServerCloseCode(e.target.value)}
                               min="1000"
@@ -361,22 +362,22 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                                 setServerCustomCodeMode(false);
                                 setServerCloseCode("1000");
                               }}
-                              title="返回预设选项"
+                              title={t("system.tooltips.resetToPreset")}
                             >
                               ↺
                             </button>
                           </div>
                         )}
                         <div className="sys-evt-code-info sys-evt-code-info-success">
-                          💡 服务器关闭支持任意关闭码 (模拟服务器发送关闭帧)
+                          {t("system.closeCodeInfo.serverSupport")}
                         </div>
                       </div>
                       <div className="sys-evt-form-group">
-                        <label className="sys-evt-form-label">Server Close Reason</label>
+                        <label className="sys-evt-form-label">{t("system.events.close.serverReason")}</label>
                         <input
                           type="text"
                           className="sys-evt-form-input"
-                          placeholder="Optional server close reason"
+                          placeholder={t("system.events.close.serverReasonPlaceholder")}
                           value={serverCloseReason}
                           onChange={(e) => setServerCloseReason(e.target.value)}
                         />
@@ -387,7 +388,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                         disabled={isExecuting}
                       >
                         <Play size={16} />
-                        Simulate Server Close
+                        {t("system.events.close.serverSimulate")}
                       </button>
                     </div>
                   </div>
@@ -397,10 +398,10 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                     <div className="sys-evt-card-header">
                       <div className="sys-evt-card-title">
                         <AlertTriangle className="sys-evt-card-icon sys-evt-error-icon" />
-                        Server Errors
+                        {t("system.events.error.serverTitle")}
                       </div>
                       <div className="sys-evt-card-description">
-                        Simulate server error conditions
+                        {t("system.events.error.serverDescription")}
                       </div>
                     </div>
                     <div className="sys-evt-card-content">
@@ -411,7 +412,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           disabled={isExecuting}
                         >
                           <AlertTriangle size={16} />
-                          Message Format Error
+                          {t("system.events.error.messageFormatError")}
                         </button>
                         <button
                           className="sys-evt-event-button sys-evt-error-button"
@@ -419,7 +420,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           disabled={isExecuting}
                         >
                           <WifiOff size={16} />
-                          Client Disconnect
+                          {t("system.events.error.clientDisconnect")}
                         </button>
                         <button
                           className="sys-evt-event-button sys-evt-error-button"
@@ -427,7 +428,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           disabled={isExecuting}
                         >
                           <Settings size={16} />
-                          Internal Server Error
+                          {t("system.events.error.internalServerError")}
                         </button>
                         <button
                           className="sys-evt-event-button sys-evt-error-button"
@@ -435,7 +436,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           disabled={isExecuting}
                         >
                           <Server size={16} />
-                          Resource Exhausted
+                          {t("system.events.error.resourceExhausted")}
                         </button>
                       </div>
                     </div>
