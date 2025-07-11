@@ -336,14 +336,12 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                               }
                             }}
                           >
-                            <option value="1000">1000 - Normal Closure</option>
-                            <option value="1001">1001 - Going Away</option>
-                            <option value="1002">1002 - Protocol Error</option>
-                            <option value="1008">1008 - Policy Violation</option>
-                            <option value="1009">1009 - Message Too Big</option>
-                            <option value="1011">1011 - Internal Server Error</option>
-                            <option value="4001">4001 - Authentication Failed</option>
-                            <option value="custom">Custom Code...</option>
+                            {closeCodeOptions.map(option => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                            <option value="4001">{t("system.closeCode.4001")}</option>
                           </select>
                         ) : (
                           <div className="sys-evt-custom-code-container">
