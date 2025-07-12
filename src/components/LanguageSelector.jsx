@@ -10,29 +10,14 @@ import {
 } from '../utils/i18n.js';
 
 const LanguageSelector = () => {
-  const [currentLanguage, setCurrentLanguage] = useState('en-us');
+  // 同步初始化，避免延迟
+  const [currentLanguage, setCurrentLanguage] = useState(() => getCurrentLanguage());
   const [isOpen, setIsOpen] = useState(false);
-  const [supportedLanguages, setSupportedLanguages] = useState([]);
+  const [supportedLanguages, setSupportedLanguages] = useState(() => getSupportedLanguages());
   const dropdownRef = useRef(null);
 
   // Initialize component
   useEffect(() => {
-    const initLanguageSelector = () => {
-      const current = getCurrentLanguage();
-      const supported = getSupportedLanguages();
-      
-      if (current) {
-        setCurrentLanguage(current);
-      }
-      
-      if (supported && supported.length > 0) {
-        setSupportedLanguages(supported);
-      }
-    };
-
-    // Initial setup with a small delay to ensure i18n is initialized
-    const timer = setTimeout(initLanguageSelector, 100);
-
     // Listen for language changes
     const unsubscribe = addLanguageChangeListener((newLanguage) => {
       setCurrentLanguage(newLanguage);
@@ -40,7 +25,6 @@ const LanguageSelector = () => {
 
     // Cleanup
     return () => {
-      clearTimeout(timer);
       unsubscribe();
     };
   }, []);
@@ -82,6 +66,11 @@ const LanguageSelector = () => {
     return null;
   }
 
+  // If only one language supported, don't render selector
+  if (supportedLanguages.length === 1) {
+    return null;
+  }
+
   return (
     <div className="language-selector" ref={dropdownRef}>
       <button 
@@ -90,7 +79,7 @@ const LanguageSelector = () => {
         aria-label={t("language.selector.change")}
         title={t("language.selector.change")}
       >
-        <Languages size={16} />
+        <Languages size={14} />
         <span className="language-selector-current">
           {getLanguageDisplayName(currentLanguage)}
         </span>
