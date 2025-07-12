@@ -36,7 +36,36 @@ const JsonViewer = ({
   showFavoritesButton = false,
   onSimulate = null,
 }) => {
-  const [textWrap, setTextWrap] = useState(false);
+  // 根据内容类型设置wrap初始值：JSON默认不wrap，非JSON默认wrap
+  const [textWrap, setTextWrap] = useState(() => {
+    // 初始渲染时根据data类型判断
+    if (typeof data === 'string') {
+      try {
+        JSON.parse(data);
+        return false; // 是JSON
+      } catch {
+        return true; // 不是JSON
+      }
+    }
+    return true;
+  });
+
+  // 监听data变化，自动切换textWrap初始值（仅当用户未手动切换过）
+  const [userToggledWrap, setUserToggledWrap] = useState(false);
+  useEffect(() => {
+    if (!userToggledWrap) {
+      if (typeof data === 'string') {
+        try {
+          JSON.parse(data);
+          setTextWrap(false);
+        } catch {
+          setTextWrap(true);
+        }
+      } else {
+        setTextWrap(true);
+      }
+    }
+  }, [data, userToggledWrap]);
   const [collapsed, setCollapsed] = useState(false);
   const [nestedParse, setNestedParse] = useState(true);
   const [forceUpdate, setForceUpdate] = useState(0);
@@ -280,14 +309,7 @@ const JsonViewer = ({
   );
 
   // Reset nestedParse when data changes and has no nested data
-  useEffect(() => {
-    if (isValidJson && !hasNestedData && nestedParse) {
-      console.log(
-        "🔄 JsonViewer: Auto-disabling nested parse (no nested data found)"
-      );
-      setNestedParse(false);
-    }
-  }, [isValidJson, hasNestedData, nestedParse]);
+  // 移除useEffect自动设为true的逻辑
 
   const content = getDisplayContent();
 
@@ -342,7 +364,10 @@ const JsonViewer = ({
           <div className="json-viewer-controls-left">
             {enableWrap && (
               <button
-                onClick={() => setTextWrap(!textWrap)}
+                onClick={() => {
+                  setTextWrap(!textWrap);
+                  setUserToggledWrap(true);
+                }}
                 className={`json-viewer-btn btn-wrap ${textWrap ? "json-viewer-btn-active-green" : "json-viewer-btn-inactive"}`}
                 title={t("jsonViewer.tooltips.wrapText")}
               >

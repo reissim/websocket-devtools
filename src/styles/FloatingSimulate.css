@@ -3,8 +3,8 @@
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
   background: linear-gradient(135deg, var(--accent-color), #0088cc);
   border-radius: 50%;
   display: flex;

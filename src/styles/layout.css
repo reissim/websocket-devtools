@@ -192,7 +192,7 @@
 
 /* 分割线方向样式 */
 .panel-resize-handle.horizontal {
-  height: 6px;
+  height: 0px;
   width: 100%;
   cursor: row-resize;
   background-color: var(--border-color);
@@ -224,7 +224,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
   width: 40px;
-  height: 2px;
+  /* height: 2px; */
   background-color: var(--text-muted);
   opacity: 0.3;
   transition: opacity 0.2s;
@@ -339,6 +339,6 @@
   }
 
   .panel-resize-handle.horizontal {
-    height: 4px;
+    /* height: 4px; */
   }
 }

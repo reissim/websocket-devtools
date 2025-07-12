@@ -122,7 +122,7 @@
 
 .filter-controls select,
 .filter-controls input {
-  padding: 3px 6px;
+  /* padding: 3px 6px; */
   border: 1px solid var(--border-color);
   border-radius: 2px;
   background-color: var(--bg-primary);
@@ -155,7 +155,7 @@
 .invert-checkbox {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 3px;
   cursor: pointer;
   font-size: 11px;
   color: var(--text-secondary);
@@ -616,7 +616,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  position: relative;
+  /* position: relative; */
 }
 
 /* 收藏按钮 */
@@ -656,8 +656,8 @@
 
 /* 简洁详情面板 */
 .message-detail-simple {
-  background-color: var(--bg-secondary);
-  border-top: 1px solid var(--border-color);
+  /* background-color: var(--bg-secondary); */
+  background-color: transparent;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -1030,23 +1030,22 @@
 
 /* 消息详情面板特定的分割线样式 */
 .message-detail-resize-handle.panel-resize-handle.horizontal {
-  height: 2px;
+  /* height: 2px; */
   background-color: rgba(255, 255, 255, 0.3);
   transition: background-color 0.2s;
   box-shadow: rgb(0 0 0 / 88%) 0px -8px 13px 1px;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-  padding: 3px 0;
+  /* border-top-left-radius: 3px; */
+  /* border-top-right-radius: 3px; */
+  /* padding: 3px 0; */
   position: relative;
 }
 
-.message-detail-resize-handle.panel-resize-handle.horizontal:hover {
-  background-color: rgba(64, 156, 255, 0.7);
-}
-
 .message-detail-resize-handle.panel-resize-handle.horizontal::after {
+  position: absolute;
+  top: -5px;
   width: 24px;
-  height: 1px;
-  background-color: rgba(255, 255, 255, 0.4);
-  opacity: 0.6;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.838);
+  opacity: 0.9;
+  box-shadow: 0px -2px 20px 14px rgb(57 57 57 / 50%);
 }

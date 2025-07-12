@@ -280,20 +280,17 @@ const MessageDetails = ({
         <div className="controls">
           <div className="control-row">
             <div className="filter-controls direction-filter">
-              <select
-                value={filterDirection}
-                onChange={(e) => setFilterDirection(e.target.value)}
-              >
+              <select value={filterDirection} onChange={(e) => setFilterDirection(e.target.value)}>
                 <option value="all">{t("messageDetails.controls.all")}</option>
                 <option value="outgoing">{t("messageDetails.controls.send")}</option>
                 <option value="incoming">{t("messageDetails.controls.receive")}</option>
               </select>
             </div>
             <div className="filter-controls search-filter">
-                <div className="filter-input-container">
-                  <span className="filter-icon">
-                    <Search size={12} />
-                  </span>
+              <div className="filter-input-container">
+                <span className="filter-icon">
+                  <Search size={12} />
+                </span>
                 <input
                   type="text"
                   value={filterText}
@@ -301,33 +298,21 @@ const MessageDetails = ({
                   placeholder={t("messageDetails.controls.filterPlaceholder")}
                 />
                 {filterText && (
-                  <button
-                    className="clear-filter-btn"
-                    onClick={handleClearSearchFilter}
-                  >
+                  <button className="clear-filter-btn" onClick={handleClearSearchFilter}>
                     <CircleX size={12} />
                   </button>
                 )}
               </div>
-
             </div>
             <label className="invert-checkbox">
-              <input
-                type="checkbox"
-                checked={filterInvert}
-                onChange={(e) => setFilterInvert(e.target.checked)}
-              />
+              <input type="checkbox" checked={filterInvert} onChange={(e) => setFilterInvert(e.target.checked)} />
               <span className="checkmark"></span>
               <span className="checkbox-label">{t("messageDetails.controls.invert")}</span>
-              </label>
+            </label>
             <button
               className="clear-messages-btn"
               onClick={handleClearMessagesList}
-              disabled={
-                !connection ||
-                !connection.messages ||
-                connection.messages.length === 0
-              }
+              disabled={!connection || !connection.messages || connection.messages.length === 0}
               title={t("messageDetails.controls.clearMessages")}
             >
               <Ban size={14} />
@@ -350,11 +335,7 @@ const MessageDetails = ({
                     <tr>
                       <th className="col-data">{t("messageDetails.table.data")}</th>
                       <th className="col-length">{t("messageDetails.table.length")}</th>
-                      <th
-                        className="col-time"
-                        onClick={handleSortToggle}
-                        style={{ cursor: "pointer" }}
-                      >
+                      <th className="col-time" onClick={handleSortToggle} style={{ cursor: "pointer" }}>
                         {t("messageDetails.table.time")} {sortOrder === "desc" ? "▼" : "▲"}
                       </th>
                     </tr>
@@ -368,11 +349,9 @@ const MessageDetails = ({
                       return (
                         <tr
                           key={`${messageKey}-${index}`} // 保持React key的唯一性
-                          className={`message-row ${message.direction} ${
-                            message.simulated ? "simulated" : ""
-                          } ${message.blocked ? "blocked" : ""} ${
-                            isSelected ? "selected" : ""
-                          } ${isNewMsg ? "new-message" : ""} ${
+                          className={`message-row ${message.direction} ${message.simulated ? "simulated" : ""} ${
+                            message.blocked ? "blocked" : ""
+                          } ${isSelected ? "selected" : ""} ${isNewMsg ? "new-message" : ""} ${
                             isHovered ? "hovered" : ""
                           }`}
                           onClick={() => handleMessageClick(messageKey)}
@@ -380,16 +359,10 @@ const MessageDetails = ({
                           onMouseLeave={() => setHoveredMessageKey(null)}
                         >
                           <td className="col-data">
-                            <div className="data-cell-wrapper">
-                              {renderDataCell(message)}
-                            </div>
+                            <div className="data-cell-wrapper">{renderDataCell(message)}</div>
                           </td>
-                          <td className="col-length">
-                            {getMessageLength(message)}
-                          </td>
-                          <td className="col-time">
-                            {formatTimestamp(message.timestamp)}
-                          </td>
+                          <td className="col-length">{getMessageLength(message)}</td>
+                          <td className="col-time">{formatTimestamp(message.timestamp)}</td>
                         </tr>
                       );
                     })}
@@ -401,7 +374,16 @@ const MessageDetails = ({
             {selectedMessageKey && (
               <>
                 <PanelResizeHandle className="panel-resize-handle horizontal message-detail-resize-handle" />
-                <Panel defaultSize={30} minSize={15} maxSize={70}>
+                <Panel
+                  defaultSize={30}
+                  minSize={15}
+                  maxSize={70}
+                  style={{
+                    boxShadow: "rgb(21 21 21 / 81%) 0px -5px 15px 5px",
+                    borderTopLeftRadius: "20px",
+                    borderTopRightRadius: "20px",
+                  }}
+                >
                   <div className="message-detail-simple">
                     <div className="detail-content">
                       {(() => {
@@ -424,9 +406,7 @@ const MessageDetails = ({
                               data={selectedMessage.data}
                               className="compact"
                               showControls={true}
-                              onCopy={(data) =>
-                                handleCopyMessage(data, messageKey)
-                              }
+                              onCopy={(data) => handleCopyMessage(data, messageKey)}
                               copyButtonText="📋 Copy"
                               copiedText="✓ Copied"
                               isCopied={copiedMessageKey === messageKey}
@@ -443,15 +423,9 @@ const MessageDetails = ({
                             />
                             {isIntercepting && (
                               <div className="intercept-actions">
-                                <button className="action-btn edit">
-                                  {t("messageDetails.actions.edit")}
-                                </button>
-                                <button className="action-btn allow">
-                                  {t("messageDetails.actions.allow")}
-                                </button>
-                                <button className="action-btn block">
-                                  {t("messageDetails.actions.block")}
-                                </button>
+                                <button className="action-btn edit">{t("messageDetails.actions.edit")}</button>
+                                <button className="action-btn allow">{t("messageDetails.actions.allow")}</button>
+                                <button className="action-btn block">{t("messageDetails.actions.block")}</button>
                               </div>
                             )}
                             {/* </div> */}
