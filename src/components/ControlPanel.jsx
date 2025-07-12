@@ -37,7 +37,7 @@ const ControlPanel = ({
             borderRadius: "8px",
           }}
         >
-          <Stack gap="6px">
+          <Stack gap="10px">
             {/* Header */}
             <Group justify="space-between" align="center">
               <Group align="center" gap="8px">

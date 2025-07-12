@@ -497,9 +497,6 @@ const WebSocketPanel = () => {
           {/* 右侧：MessageDetails */}
           <div className="panel-right-section-fixed">
             <div className="panel-wrapper">
-              <div className="panel-title">
-                <h3>{t("panel.messageDetails.title")}</h3>
-              </div>
               <div className="panel-body">
                 <MessageDetails
                   connection={selectedConnection}
