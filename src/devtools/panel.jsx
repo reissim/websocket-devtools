@@ -248,6 +248,7 @@ const WebSocketPanel = () => {
     chrome.runtime
       .sendMessage({
         type: "start-monitoring",
+        tabId: currentTabId,
       })
       .then((response) => {
         console.log("✅ Start monitoring response:", response);
@@ -265,6 +266,7 @@ const WebSocketPanel = () => {
     chrome.runtime
       .sendMessage({
         type: "stop-monitoring",
+        tabId: currentTabId,
       })
       .then((response) => {
         console.log("✅ Stop monitoring response:", response);
@@ -462,6 +464,7 @@ const WebSocketPanel = () => {
                     onStartMonitoring={handleStartMonitoring}
                     onStopMonitoring={handleStopMonitoring}
                     onBlockChange={handleBlockChange}
+                    currentTabId={currentTabId}
                   />
                 </div>
               </div>

@@ -19,27 +19,28 @@ async function isExtensionEnabled() {
 // 监听来自 DevTools Panel 的消息
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log("📨 Background received message:", message, "from:", sender);
+  const tabId = message.tabId || sender.tab?.id;
 
   switch (message.type) {
-    case "start-monitoring":
-      console.log("🚀 Starting WebSocket monitoring");
-      websocketData.isMonitoring = true;
-
-      // 通知所有 content scripts 开始监控
-      notifyAllTabs("start-monitoring");
+    case "start-monitoring": {
+      if (tabId) {
+        notifyAllTabs("start-monitoring", {}, tabId);
+      }
+      // websocketData.isMonitoring = true;
       sendResponse({ success: true, monitoring: true });
       break;
+    }
 
-    case "stop-monitoring":
-      console.log("⏹️ Stopping WebSocket monitoring");
-      websocketData.isMonitoring = false;
-
-      // 通知所有 content scripts 停止监控
-      notifyAllTabs("stop-monitoring");
+    case "stop-monitoring": {
+      if (tabId) {
+        notifyAllTabs("stop-monitoring", {}, tabId);
+      }
+      // websocketData.isMonitoring = false;
       sendResponse({ success: true, monitoring: false });
       break;
+    }
 
-    case "get-existing-data":
+    case "get-existing-data": {
       console.log(
         "📊 Panel requesting existing data, connections:",
         websocketData.connections.length
@@ -52,24 +53,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         isMonitoring: websocketData.isMonitoring,
       });
       break;
+    }
 
-    case "block-outgoing":
-      console.log("🚫 Toggling outgoing message blocking:", message.enabled);
-
-      // 通知所有 content scripts 切换发送消息阻止
-      notifyAllTabs("block-outgoing", { enabled: message.enabled });
+    case "block-outgoing": {
+      if (tabId) {
+        notifyAllTabs("block-outgoing", { enabled: message.enabled }, tabId);
+      }
       sendResponse({ success: true, blockOutgoing: message.enabled });
       break;
+    }
 
-    case "block-incoming":
-      console.log("🚫 Toggling incoming message blocking:", message.enabled);
-
-      // 通知所有 content scripts 切换接收消息阻止
-      notifyAllTabs("block-incoming", { enabled: message.enabled });
+    case "block-incoming": {
+      if (tabId) {
+        notifyAllTabs("block-incoming", { enabled: message.enabled }, tabId);
+      }
       sendResponse({ success: true, blockIncoming: message.enabled });
       break;
+    }
 
-    case "websocket-event":
+    case "websocket-event": {
       // Ensure tabId is present
       if (!sender.tab?.id) {
         console.warn(
@@ -91,16 +93,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       forwardToDevTools(message);
       sendResponse({ received: true });
       break;
+    }
 
-    case "proxy-state-change":
+    case "proxy-state-change": {
       console.log("🎛️ Proxy state change:", message.data);
 
       // 转发状态变化到 DevTools Panel
       forwardToDevTools(message);
       sendResponse({ received: true });
       break;
+    }
 
-    case "simulate-message":
+    case "simulate-message": {
       console.log("🎭 Simulating message:", message.data);
 
       // 如果有指定的 tabId，只通知那个标签页；否则通知所有标签页
@@ -108,8 +112,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       notifyAllTabs("simulate-message", message.data, targetTabId);
       sendResponse({ success: true, simulated: true });
       break;
+    }
 
-    case "simulate-system-event":
+    case "simulate-system-event": {
       console.log("🎭 Simulating system event:", message.data);
 
       // 获取当前活动的标签页ID（从devtools面板的上下文）
@@ -117,10 +122,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       notifyAllTabs("simulate-system-event", message.data, systemEventTabId);
       sendResponse({ success: true, simulated: true, eventType: message.data.eventType });
       break;
+    }
 
-    case "create-manual-websocket":
+    case "create-manual-websocket": {
       console.log("🔗 Creating manual WebSocket connection:", message.data);
-      
       // 通知指定tab的content script创建WebSocket连接
       const tabId = message.data.tabId;
       if (tabId) {
@@ -139,8 +144,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse({ success: false, error: "No tabId specified" });
       }
       break;
+    }
 
-    case "toggle-extension":
+    case "toggle-extension": {
       console.log("🔄 Toggling extension:", message.enabled);
 
       // 保存状态
@@ -150,17 +156,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
       sendResponse({ success: true, enabled: message.enabled });
       break;
+    }
 
-    case "show-devtools-hint":
+    case "show-devtools-hint": {
       console.log("💡 Showing DevTools hint");
       // 这个消息由popup发送，不需要特别处理
       sendResponse({ success: true });
       break;
+    }
 
-    default:
+    default: {
       console.log("❓ Unknown message type:", message.type);
       sendResponse({ error: "Unknown message type" });
       break;
+    }
   }
 
   return true; // 保持消息通道开放以支持异步响应

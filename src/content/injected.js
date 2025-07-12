@@ -38,8 +38,10 @@
 
   // 发送事件到 content script
   function sendEvent(eventData) {
+    if(!proxyState.isMonitoring){
+      return;
+    }
     try {
-      console.log("📤 Sending event to content script:", eventData);
       window.postMessage(
         {
           source: "websocket-proxy-injected",
@@ -379,7 +381,7 @@
       timestamp: Date.now(),
       status: "connecting",
     });
-
+    
     // 🔥 关键修复：立即添加我们的消息监听器，不管用户是否注册
     // 这确保我们总是能拦截所有消息，实现真正的中间人攻击
     const ourMessageListener = function(event) {
@@ -410,7 +412,7 @@
       }
 
       // 处理真实消息 - 先检查是否要阻止，再决定如何记录
-      if (proxyState.blockIncoming) {
+      if (proxyState.blockIncoming && proxyState.isMonitoring) {
         console.log("🚫 Incoming message BLOCKED by proxy:", connectionId);
 
         // 存储被阻止的消息
@@ -494,7 +496,7 @@
       };
 
       // 检查是否应该阻止发送
-      if (proxyState.blockOutgoing) {
+      if (proxyState.blockOutgoing && proxyState.isMonitoring) {
         console.log("🚫 Message sending BLOCKED by proxy:", connectionId);
 
         // 添加阻止标记
@@ -508,7 +510,7 @@
           direction: "outgoing",
         });
 
-        // 通知扩展消息被阻止
+        // 总是通知扩展消息被阻止，即使监控关闭
         sendEvent(eventData);
 
         // 不调用原始send方法，直接返回
@@ -714,22 +716,22 @@
         case "stop-monitoring":
           console.log("⏹️ Stopping WebSocket monitoring...");
           proxyState.isMonitoring = false;
-          // 发送状态更新
-          sendEvent({
-            type: "proxy-state-change",
-            state: proxyState,
-            timestamp: Date.now(),
-          });
+          // // 发送状态更新
+          // sendEvent({
+          //   type: "proxy-state-change",
+          //   state: proxyState,
+          //   timestamp: Date.now(),
+          // });
           break;
 
         case "block-outgoing":
           console.log("🚫 Toggling outgoing messages:", event.data.enabled);
           proxyState.blockOutgoing = event.data.enabled;
-          sendEvent({
-            type: "proxy-state-change",
-            state: proxyState,
-            timestamp: Date.now(),
-          });
+          // sendEvent({
+          //   type: "proxy-state-change",
+          //   state: proxyState,
+          //   timestamp: Date.now(),
+          // });
           break;
 
         case "block-incoming":

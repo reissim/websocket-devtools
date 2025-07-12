@@ -8,6 +8,7 @@ const ControlPanel = ({
   onStartMonitoring,
   onStopMonitoring,
   onBlockChange,
+  currentTabId,
 }) => {
   const [blockOutgoing, setBlockOutgoing] = useState(false);
   const [blockIncoming, setBlockIncoming] = useState(false);
@@ -31,7 +32,7 @@ const ControlPanel = ({
             background:
               "linear-gradient(135deg, rgba(55, 58, 64, 0.4) 0%, rgba(55, 58, 64, 0.2) 100%)",
             borderColor: "rgba(55, 58, 64, 0.5)",
-            padding: "8px 10px",
+            padding: "12px",
             backdropFilter: "blur(8px)",
             borderRadius: "8px",
           }}
@@ -99,7 +100,7 @@ const ControlPanel = ({
             background:
               "linear-gradient(135deg, rgba(55, 58, 64, 0.4) 0%, rgba(55, 58, 64, 0.2) 100%)",
             borderColor: "rgba(55, 58, 64, 0.5)",
-            padding: "8px 10px",
+            padding: "12px",
             backdropFilter: "blur(8px)",
             borderRadius: "8px",
           }}
@@ -155,11 +156,11 @@ const ControlPanel = ({
                     const newState = event.currentTarget.checked;
                     setBlockOutgoing(newState);
                     onBlockChange("send", newState);
-
                     chrome.runtime
                       .sendMessage({
                         type: "block-outgoing",
                         enabled: newState,
+                        tabId: currentTabId,
                       })
                       .catch((error) => {
                         console.error(
@@ -205,11 +206,11 @@ const ControlPanel = ({
                     const newState = event.currentTarget.checked;
                     setBlockIncoming(newState);
                     onBlockChange("receive", newState);
-                    
                     chrome.runtime
                       .sendMessage({
                         type: "block-incoming",
                         enabled: newState,
+                        tabId: currentTabId,
                       })
                       .catch((error) => {
                         console.error(
