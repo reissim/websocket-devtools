@@ -379,7 +379,7 @@ const MessageDetails = ({
                   minSize={15}
                   maxSize={70}
                   style={{
-                    boxShadow: "rgb(21 21 21 / 81%) 0px -5px 15px 5px",
+                    boxShadow: "rgba(21, 21, 21, 0.81) 0px -5px 20px 20px",
                     borderTopLeftRadius: "20px",
                     borderTopRightRadius: "20px",
                   }}

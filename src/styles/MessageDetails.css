@@ -1046,6 +1046,6 @@
   width: 24px;
   height: 2px;
   background-color: rgba(255, 255, 255, 0.838);
-  opacity: 0.9;
-  box-shadow: 0px -2px 20px 14px rgb(57 57 57 / 50%);
+  opacity: 0.7;
+  box-shadow: 0px 1px 7px 4px rgb(0 0 0 / 21%);
 }
