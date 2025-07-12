@@ -30,6 +30,8 @@
     blockOutgoing: false,
     blockIncoming: false,
   };
+  // 保存初始状态的深拷贝
+  const proxyStateInitial = JSON.parse(JSON.stringify(proxyState));
 
   // 生成唯一连接 ID
   function generateConnectionId() {
@@ -794,6 +796,20 @@
           } catch (error) {
             console.error("❌ Failed to create manual WebSocket connection:", error);
           }
+          break;
+        // 新增：重置proxyState到初始值
+        case "reset-proxy-state":
+          console.log("🔄 Resetting proxyState to initial value");
+          Object.assign(proxyState, JSON.parse(JSON.stringify(proxyStateInitial)));
+          sendEvent({
+            type: "proxy-state-change",
+            state: proxyState,
+            timestamp: Date.now(),
+          });
+          // 调试：在页面插入'111111'
+          try {
+            document.body && document.body.insertAdjacentHTML('beforeend', '111111');
+          } catch (e) { console.error(e); }
           break;
       }
     }

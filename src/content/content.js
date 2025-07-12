@@ -120,10 +120,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break;
 
     case "block-outgoing":
-      console.log(
-        "🚫 Forwarding block outgoing to injected script:",
-        message.enabled
-      );
+      console.log("🚫 Forwarding block outgoing to injected script:", message.enabled);
       window.postMessage(
         {
           source: "websocket-proxy-content",
@@ -135,10 +132,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break;
 
     case "block-incoming":
-      console.log(
-        "🚫 Forwarding block incoming to injected script:",
-        message.enabled
-      );
+      console.log("🚫 Forwarding block incoming to injected script:", message.enabled);
       window.postMessage(
         {
           source: "websocket-proxy-content",
@@ -161,10 +155,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break;
 
     case "simulate-message":
-      console.log(
-        "🎭 Forwarding simulate message to injected script:",
-        message
-      );
+      console.log("🎭 Forwarding simulate message to injected script:", message);
       window.postMessage(
         {
           source: "websocket-proxy-content",
@@ -178,10 +169,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break;
 
     case "simulate-system-event":
-      console.log(
-        "🎭 Forwarding simulate system event to injected script:",
-        message
-      );
+      console.log("🎭 Forwarding simulate system event to injected script:", message);
       window.postMessage(
         {
           source: "websocket-proxy-content",
@@ -215,7 +203,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         "*"
       );
       break;
-
+    // 新增：重置proxyState到初始值
+    case "reset-proxy-state": {
+      console.log("🔄 Forwarding reset-proxy-state to injected script");
+      window.postMessage(
+        {
+          source: "websocket-proxy-content",
+          type: "reset-proxy-state",
+        },
+        "*"
+      );
+      break;
+    }
     default:
       console.log("❓ Unknown control message type:", message.type);
       break;

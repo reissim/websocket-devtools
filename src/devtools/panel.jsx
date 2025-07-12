@@ -52,6 +52,12 @@ const WebSocketPanel = () => {
     setCurrentTabId(tabId);
     console.log("🎯 DevTools Panel attached to tab:", tabId);
 
+    // === 新增：建立与 background 的持久连接并发送 tabId ===
+    const port = chrome.runtime.connect({ name: "devtools" });
+    port.postMessage({ type: "init", tabId });
+    window._wsInspectorPort = port; // 保持全局引用，防止被 GC
+    // === 新增结束 ===
+
     // 请求现有数据
     const loadExistingData = async () => {
       try {

@@ -7,6 +7,9 @@ let websocketData = {
   isMonitoring: true, // 默认开启监控
 };
 
+// 新增：维护 DevTools port <-> tabId 映射
+const devtoolsPorts = new Map(); // port -> tabId
+
 // 检查扩展是否启用
 async function isExtensionEnabled() {
   return new Promise((resolve) => {
@@ -260,6 +263,30 @@ chrome.runtime.onInstalled.addListener(() => {
   // 开始监控所有标签页
   console.log("🚀 Auto-starting WebSocket monitoring on install");
   notifyAllTabs("start-monitoring");
+});
+
+// 监听 DevTools Panel 连接和断开
+chrome.runtime.onConnect.addListener(function(port) {
+  console.log("🔌 DevTools connected:", port);
+
+  // 监听 port 消息，获取 tabId
+  port.onMessage.addListener(function(msg) {
+    if (msg.type === "init" && msg.tabId) {
+      devtoolsPorts.set(port, msg.tabId);
+      console.log("🆔 Registered DevTools port for tab:", msg.tabId);
+    }
+  });
+
+  port.onDisconnect.addListener(function() {
+    const tabId = devtoolsPorts.get(port);
+    devtoolsPorts.delete(port);
+    if (tabId) {
+      console.log("❌ DevTools disconnected, triggering proxy reset for tab:", tabId);
+      notifyAllTabs("reset-proxy-state", {}, tabId);
+    } else {
+      console.log("❌ DevTools disconnected, but no tabId found");
+    }
+  });
 });
 
 console.log("✅ Background script initialization complete");
