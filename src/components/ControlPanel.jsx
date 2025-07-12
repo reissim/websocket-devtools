@@ -31,7 +31,7 @@ const ControlPanel = ({
             background:
               "linear-gradient(135deg, rgba(55, 58, 64, 0.4) 0%, rgba(55, 58, 64, 0.2) 100%)",
             borderColor: "rgba(55, 58, 64, 0.5)",
-            padding: "12px",
+            padding: "8px 10px",
             backdropFilter: "blur(8px)",
             borderRadius: "8px",
           }}
@@ -99,7 +99,7 @@ const ControlPanel = ({
             background:
               "linear-gradient(135deg, rgba(55, 58, 64, 0.4) 0%, rgba(55, 58, 64, 0.2) 100%)",
             borderColor: "rgba(55, 58, 64, 0.5)",
-            padding: "12px",
+            padding: "8px 10px",
             backdropFilter: "blur(8px)",
             borderRadius: "8px",
           }}
