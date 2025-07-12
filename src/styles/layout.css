@@ -148,7 +148,8 @@
 
 /* 固定宽度的左侧面板 */
 .panel-left-section-fixed {
-  width: 260px;
+  min-width: 240px;
+  max-width: 240px;
   /* min-width: 280px;
   max-width: 280px; */
   overflow: hidden;
