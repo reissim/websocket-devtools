@@ -432,6 +432,14 @@ const MessageDetails = ({
                               isCopied={copiedMessageKey === messageKey}
                               showFavoritesButton={true}
                               onAddToFavorites={handleAddToFavoritesFromViewer}
+                              onSimulate={(data) => {
+                                if (onOpenSimulatePanel) {
+                                  onOpenSimulatePanel({
+                                    tab: "editor",
+                                    data: data,
+                                  });
+                                }
+                              }}
                             />
                             {isIntercepting && (
                               <div className="intercept-actions">

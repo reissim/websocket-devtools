@@ -306,9 +306,13 @@ const SimulateMessagePanel = forwardRef(
         if (options.tab) {
           setActiveTab(options.tab);
 
+          // 新增：切换到editor时填充内容
+          if (options.tab === "editor" && options.data) {
+            setSimulateMessage(options.data);
+          }
+
           // 如果指定了数据且要切换到favorites tab，延迟添加到收藏夹
           if (options.tab === "favorites" && options.data) {
-            // 使用setTimeout确保tab切换完成后再添加收藏
             setTimeout(() => {
               console.log(
                 "🎭 Adding data to favorites:",

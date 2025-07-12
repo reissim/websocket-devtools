@@ -13,9 +13,17 @@ import {
   CheckCircle,
   SquareStack,
   Star,
+  CloudUpload,
 } from "lucide-react";
 import { t } from "../utils/i18n.js";
 import "../styles/JsonViewer.css";
+
+// 在文件顶部添加Simulate图标到Icons对象
+const Icons = {
+  Simulate: () => (
+    <CloudUpload />
+  ),
+};
 
 const JsonViewer = ({
   data,
@@ -31,6 +39,7 @@ const JsonViewer = ({
   enableNestedParse = true,
   onAddToFavorites = null,
   showFavoritesButton = false,
+  onSimulate = null,
 }) => {
   const [textWrap, setTextWrap] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
@@ -392,6 +401,18 @@ const JsonViewer = ({
                 <Copy size={14} />
                 <span>{t("jsonViewer.controls.copy")}</span>
               </button>
+
+              {/* Simulate 按钮 */}
+              {onSimulate && (
+                <button
+                  onClick={() => onSimulate(getDisplayContent())}
+                  className="json-viewer-btn json-viewer-btn-inactive"
+                  title={t("jsonViewer.tooltips.simulate") || "Simulate this message"}
+                >
+                  <Icons.Simulate />
+                  <span>{t("jsonViewer.controls.simulate") || "Simulate"}</span>
+                </button>
+              )}
 
               {showFavoritesButton && onAddToFavorites && (
                 <button

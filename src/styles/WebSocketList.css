@@ -324,7 +324,7 @@
 /* 固定头部区域 */
 .ws-list-fixed-header {
   flex-shrink: 0;
-  padding: 20px 16px 4px 16px;
+  padding: 12px 16px 4px 16px;
   background-color: var(--bg-primary);
 }
 
