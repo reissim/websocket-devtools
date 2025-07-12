@@ -23,6 +23,7 @@ import {
   PinOff,
   CircleArrowDown,
   CircleArrowUp,
+  Send
 } from "lucide-react";
 import JsonViewer from "./JsonViewer";
 import useWindowConstraints from "../hooks/useWindowConstraints";
@@ -394,7 +395,7 @@ const SimulateMessagePanel = forwardRef(
             onClick={toggleWindow}
           >
             <div className="simulate-icon">
-              {isWindowOpen ? <Minus size={24} /> : <MessageSquare size={24} />}
+              {isWindowOpen ? <Minus size={24} /> : <Send size={24} />}
             </div>
             <div className="simulate-tooltip">
               {isWindowOpen ? t("simulate.tooltips.minimize") : t("simulate.tooltips.open")}

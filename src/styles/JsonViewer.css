@@ -40,6 +40,65 @@
   gap: 3px;
 }
 
+.json-viewer-action-buttons .json-viewer-btn {
+  transition: background 0.2s, color 0.2s;
+}
+
+.json-viewer-action-buttons .json-viewer-btn:hover {
+  background: #23272e;
+  color: #b5e3c8;
+}
+
+.json-viewer-action-buttons .json-viewer-btn:hover svg {
+  color: #b5e3c8;
+  stroke: #b5e3c8;
+}
+
+.json-viewer-action-buttons .json-viewer-btn.btn-copy:hover {
+  background: #193c2b;
+  color: #4ade80;
+}
+.json-viewer-action-buttons .json-viewer-btn.btn-copy:hover svg {
+  color: #4ade80;
+  stroke: #4ade80;
+}
+
+.json-viewer-action-buttons .json-viewer-btn.btn-simulate:hover {
+  background: #172a3a;
+  color: #60a5fa;
+}
+.json-viewer-action-buttons .json-viewer-btn.btn-simulate:hover svg {
+  color: #60a5fa;
+  stroke: #60a5fa;
+}
+
+.json-viewer-action-buttons .json-viewer-btn.btn-favorite:hover {
+  background: #3a2e17;
+  color: #fde68a;
+}
+.json-viewer-action-buttons .json-viewer-btn.btn-favorite:hover svg {
+  color: #fde68a;
+  stroke: #fde68a;
+}
+
+.json-viewer-action-buttons .json-viewer-btn.btn-nested:hover {
+  background: #2e1a3a;
+  color: #c4b5fd;
+}
+.json-viewer-action-buttons .json-viewer-btn.btn-nested:hover svg {
+  color: #c4b5fd;
+  stroke: #c4b5fd;
+}
+
+.json-viewer-action-buttons .json-viewer-btn.btn-wrap:hover {
+  background: #23272e;
+  color: #d1d5db;
+}
+.json-viewer-action-buttons .json-viewer-btn.btn-wrap:hover svg {
+  color: #d1d5db;
+  stroke: #d1d5db;
+}
+
 /* 按钮样式 */
 .json-viewer-btn {
   display: flex;
@@ -257,7 +316,7 @@
 
 /* 紧凑的 JSON 查看器（用于详情面板）*/
 .json-viewer.compact .json-viewer-controls {
-  padding: 6px 8px;
+  padding: 6px 12px;
 }
 
 .json-viewer.compact .json-viewer-wrap-control {

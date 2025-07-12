@@ -13,8 +13,8 @@ import {
   CheckCircle,
   SquareStack,
   Star,
-  CloudUpload,
-  Layers2,
+  Send,
+  Layers2
 } from "lucide-react";
 import { t } from "../utils/i18n.js";
 import "../styles/JsonViewer.css";
@@ -176,12 +176,16 @@ const JsonViewer = ({
 
     try {
       const successful = document.execCommand("copy");
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
       if (successful) {
         console.log("📋 Text copied to clipboard via execCommand");
       } else {
         console.error("Failed to copy text via execCommand");
       }
     } catch (err) {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
       console.error("Failed to copy text:", err);
     }
 
@@ -339,10 +343,10 @@ const JsonViewer = ({
             {enableWrap && (
               <button
                 onClick={() => setTextWrap(!textWrap)}
-                className={`json-viewer-btn ${textWrap ? "json-viewer-btn-active-green" : "json-viewer-btn-inactive"}`}
+                className={`json-viewer-btn btn-wrap ${textWrap ? "json-viewer-btn-active-green" : "json-viewer-btn-inactive"}`}
                 title={t("jsonViewer.tooltips.wrapText")}
               >
-                <WrapText size={14} />
+                <WrapText size={14} color="currentColor" />
                 <span>{t("jsonViewer.controls.wrap")}</span>
               </button>
             )}
@@ -353,7 +357,7 @@ const JsonViewer = ({
                   const newNestedParse = !nestedParse;
                   handleNestedParseChange(newNestedParse);
                 }}
-                className={`json-viewer-btn ${
+                className={`json-viewer-btn btn-nested ${
                   nestedParse ? "json-viewer-btn-active-purple" : "json-viewer-btn-inactive"
                 } ${!hasNestedData ? "json-viewer-btn-disabled" : ""}`}
                 title={hasNestedData ? t("jsonViewer.tooltips.nestedParseJson") : t("jsonViewer.tooltips.noNestedData")}
@@ -373,17 +377,16 @@ const JsonViewer = ({
               {onSimulate && (
                 <button
                   onClick={() => onSimulate(getDisplayContent())}
-                  className="json-viewer-btn json-viewer-btn-inactive"
+                  className="json-viewer-btn btn-simulate json-viewer-btn-inactive"
                   title={t("jsonViewer.tooltips.simulate") || "Simulate this message"}
                 >
-                  <CloudUpload size={14} />
-                  <span>{t("jsonViewer.controls.simulate") || "Simulate"}</span>
+                  <Send size={14} />
                 </button>
               )}
 
               <button
                 onClick={handleCopyClick}
-                className={`json-viewer-btn ${
+                className={`json-viewer-btn btn-copy ${
                   isCopied
                     ? "json-viewer-btn-active-green"
                     : "json-viewer-btn-inactive"
@@ -396,7 +399,7 @@ const JsonViewer = ({
               {showFavoritesButton && onAddToFavorites && (
                 <button
                   onClick={handleAddToFavorites}
-                  className="json-viewer-btn json-viewer-btn-inactive"
+                  className="json-viewer-btn btn-favorite json-viewer-btn-inactive"
                   title={t("jsonViewer.tooltips.addToFavorites")}
                 >
                   <Star size={14} />
