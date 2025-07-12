@@ -14,25 +14,20 @@ import {
   SquareStack,
   Star,
   CloudUpload,
+  Layers2,
 } from "lucide-react";
 import { t } from "../utils/i18n.js";
 import "../styles/JsonViewer.css";
 
-// 在文件顶部添加Simulate图标到Icons对象
-const Icons = {
-  Simulate: () => (
-    <CloudUpload />
-  ),
-};
 
 const JsonViewer = ({
   data,
   className = "",
   showControls = true,
   onCopy = null,
-  copyButtonText = "📋 Copy",
-  copiedText = "✓ Copied",
-  isCopied = false,
+  copyButtonText = t("jsonViewer.controls.copy"),
+  copiedText = t("jsonViewer.controls.copied"),
+  isCopied: isCopiedProp = false,
   readOnly = true,
   onChange = null,
   enableWrap = true,
@@ -45,6 +40,7 @@ const JsonViewer = ({
   const [collapsed, setCollapsed] = useState(false);
   const [nestedParse, setNestedParse] = useState(true);
   const [forceUpdate, setForceUpdate] = useState(0);
+  const [isCopied, setIsCopied] = useState(false);
 
   // 添加调试信息
   console.log("🔍 JsonViewer render:", {
@@ -144,25 +140,24 @@ const JsonViewer = ({
   };
 
   const handleCopyClick = () => {
+    const copyData = getDisplayContent();
     if (onCopy) {
-      const copyData = getDisplayContent();
       onCopy(copyData);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
     } else {
       // 默认的copy实现
-      const copyData = getDisplayContent();
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard
           .writeText(copyData)
           .then(() => {
-            console.log("📋 Text copied to clipboard via Clipboard API");
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
           })
           .catch((err) => {
-            console.error("Failed to copy via Clipboard API:", err);
-            // 降级到传统方法
             fallbackCopyTextToClipboard(copyData);
           });
       } else {
-        // 降级到传统方法
         fallbackCopyTextToClipboard(copyData);
       }
     }
@@ -344,11 +339,7 @@ const JsonViewer = ({
             {enableWrap && (
               <button
                 onClick={() => setTextWrap(!textWrap)}
-                className={`json-viewer-btn ${
-                  textWrap
-                    ? "json-viewer-btn-active-green"
-                    : "json-viewer-btn-inactive"
-                }`}
+                className={`json-viewer-btn ${textWrap ? "json-viewer-btn-active-green" : "json-viewer-btn-inactive"}`}
                 title={t("jsonViewer.tooltips.wrapText")}
               >
                 <WrapText size={14} />
@@ -363,18 +354,12 @@ const JsonViewer = ({
                   handleNestedParseChange(newNestedParse);
                 }}
                 className={`json-viewer-btn ${
-                  nestedParse
-                    ? "json-viewer-btn-active-purple"
-                    : "json-viewer-btn-inactive"
+                  nestedParse ? "json-viewer-btn-active-purple" : "json-viewer-btn-inactive"
                 } ${!hasNestedData ? "json-viewer-btn-disabled" : ""}`}
-                title={
-                  hasNestedData
-                    ? t("jsonViewer.tooltips.nestedParseJson")
-                    : t("jsonViewer.tooltips.noNestedData")
-                }
+                title={hasNestedData ? t("jsonViewer.tooltips.nestedParseJson") : t("jsonViewer.tooltips.noNestedData")}
                 disabled={!hasNestedData}
               >
-                <SquareStack size={14} />
+                <Layers2 size={14} />
                 <span>{t("jsonViewer.controls.nestedParse")}</span>
               </button>
             )}
@@ -383,24 +368,6 @@ const JsonViewer = ({
           <div className="json-viewer-controls-right">
             {/* Action buttons */}
             <div className="json-viewer-action-buttons">
-              {console.log(
-                "🔍 Rendering action buttons, onCopy:",
-                !!onCopy,
-                "showFavoritesButton:",
-                showFavoritesButton
-              )}
-              <button
-                onClick={handleCopyClick}
-                className={`json-viewer-btn ${
-                  isCopied
-                    ? "json-viewer-btn-active-blue"
-                    : "json-viewer-btn-inactive"
-                }`}
-                title={t("jsonViewer.tooltips.copy")}
-              >
-                <Copy size={14} />
-                <span>{t("jsonViewer.controls.copy")}</span>
-              </button>
 
               {/* Simulate 按钮 */}
               {onSimulate && (
@@ -409,10 +376,22 @@ const JsonViewer = ({
                   className="json-viewer-btn json-viewer-btn-inactive"
                   title={t("jsonViewer.tooltips.simulate") || "Simulate this message"}
                 >
-                  <Icons.Simulate />
+                  <CloudUpload size={14} />
                   <span>{t("jsonViewer.controls.simulate") || "Simulate"}</span>
                 </button>
               )}
+
+              <button
+                onClick={handleCopyClick}
+                className={`json-viewer-btn ${
+                  isCopied
+                    ? "json-viewer-btn-active-green"
+                    : "json-viewer-btn-inactive"
+                }`}
+                title={isCopied ? (t("jsonViewer.tooltips.copied") || t("jsonViewer.controls.copied")) : (t("jsonViewer.tooltips.copy") || t("jsonViewer.controls.copy"))}
+              >
+                {isCopied ? <CheckCircle size={14} /> : <Copy size={14} />}
+              </button>
 
               {showFavoritesButton && onAddToFavorites && (
                 <button
@@ -421,15 +400,12 @@ const JsonViewer = ({
                   title={t("jsonViewer.tooltips.addToFavorites")}
                 >
                   <Star size={14} />
-                  <span>{t("jsonViewer.controls.favorite")}</span>
                 </button>
               )}
             </div>
 
             {/* Divider if we have action buttons and status badges */}
-            {(!readOnly || (readOnly && isValidJson) || hasNestedData) && (
-              <div className="json-viewer-divider" />
-            )}
+            {(!readOnly || (readOnly && isValidJson) || hasNestedData) && <div className="json-viewer-divider" />}
             {/* Status badges */}
             {!readOnly && (
               <div className="json-viewer-badge json-viewer-badge-yellow">
