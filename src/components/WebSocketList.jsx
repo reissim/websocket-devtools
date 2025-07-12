@@ -247,7 +247,7 @@ const WebSocketList = ({
               >
                 <ArrowTriangle collapsed={activeCollapsed} isActive={true} />
                 <span className="ws-connection-group-title active">
-                  {t("panel.connectionList.activeConnections", { count: activeConnections.length })}
+                  {t("panel.connectionList.activeConnections", { count: activeConnections.length })} ({activeConnections.length})
                 </span>
               </div>
               {!activeCollapsed && (
@@ -269,7 +269,7 @@ const WebSocketList = ({
               >
                 <ArrowTriangle collapsed={inactiveCollapsed} isActive={false} />
                 <span className="ws-connection-group-title inactive">
-                  {t("panel.connectionList.inactiveConnections", { count: inactiveConnections.length })}
+                  {t("panel.connectionList.inactiveConnections", { count: inactiveConnections.length })} ({inactiveConnections.length})
                 </span>
               </div>
               {!inactiveCollapsed && (

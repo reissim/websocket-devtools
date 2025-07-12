@@ -23,7 +23,7 @@ const ControlPanel = ({
 
   return (
     <div style={{ height: "100%", overflow: "hidden", padding: "16px" }}>
-      <Stack gap="md">
+      <Stack gap="sm">
         {/* Monitor Card */}
         <Card
           radius="xl"
@@ -105,7 +105,7 @@ const ControlPanel = ({
             borderRadius: "8px",
           }}
         >
-          <Stack gap="12px">
+          <Stack gap="8px">
             {/* Header */}
             <Group align="center" gap="8px">
               <Box
@@ -128,7 +128,7 @@ const ControlPanel = ({
             </Group>
 
             {/* Block Options */}
-            <Stack gap="8px">
+            <Stack gap="2px">
               {/* Block Outgoing */}
               <Group
                 justify="space-between"
