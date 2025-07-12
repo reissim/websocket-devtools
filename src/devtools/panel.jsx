@@ -14,6 +14,10 @@ import { Ban } from "lucide-react";
 
 const WebSocketPanel = () => {
   const [isMonitoring, setIsMonitoring] = useState(true);
+  const [blockStatus, setBlockStatus] = useState({
+    send: false,
+    receive: false
+  });
   const [websocketEvents, setWebsocketEvents] = useState([]);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
   const [currentTabId, setCurrentTabId] = useState(null);
@@ -401,6 +405,24 @@ const WebSocketPanel = () => {
     }
   };
 
+  // 获取阻止状态显示文本
+  const getBlockStatusText = () => {
+    const { send, receive } = blockStatus;
+    if (!send && !receive) return null;
+    if (send && receive) return t("panel.header.block_all");
+    if (send) return t("panel.header.block_send");
+    if (receive) return t("panel.header.block_receive");
+  };
+
+  // 处理拦截状态变化
+  const handleBlockChange = (type, enabled) => {
+    console.log(`🚫 Intercept ${type} ${enabled ? 'enabled' : 'disabled'}`);
+    setBlockStatus(prev => ({
+      ...prev,
+      [type]: enabled
+    }));
+  };
+
   const selectedConnection = getSelectedConnectionData();
 
   // Show loading while i18n initializes
@@ -417,10 +439,12 @@ const WebSocketPanel = () => {
               <span className="status inactive">{t("panel.header.status_inactive")}</span>
             )}
 
-            <div className="json-viewer-badge json-viewer-badge-red">
-              <Ban size={12} />
-              <span>{t("jsonViewer.status.ban")}</span>
-            </div>
+            {isMonitoring && getBlockStatusText() && (
+              <span className="websocket-panel-block-status-label">
+                <Ban size={12} />
+                <span>{getBlockStatusText()}</span>
+              </span>
+            )}
           </div>
           <div className="panel-status">
             <LanguageSelector />
@@ -437,6 +461,7 @@ const WebSocketPanel = () => {
                     isMonitoring={isMonitoring}
                     onStartMonitoring={handleStartMonitoring}
                     onStopMonitoring={handleStopMonitoring}
+                    onBlockChange={handleBlockChange}
                   />
                 </div>
               </div>

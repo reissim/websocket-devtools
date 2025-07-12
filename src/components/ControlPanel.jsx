@@ -7,6 +7,7 @@ const ControlPanel = ({
   isMonitoring,
   onStartMonitoring,
   onStopMonitoring,
+  onBlockChange,
 }) => {
   const [blockOutgoing, setBlockOutgoing] = useState(false);
   const [blockIncoming, setBlockIncoming] = useState(false);
@@ -153,6 +154,7 @@ const ControlPanel = ({
                   onChange={(event) => {
                     const newState = event.currentTarget.checked;
                     setBlockOutgoing(newState);
+                    onBlockChange("send", newState);
 
                     chrome.runtime
                       .sendMessage({
@@ -202,7 +204,8 @@ const ControlPanel = ({
                   onChange={(event) => {
                     const newState = event.currentTarget.checked;
                     setBlockIncoming(newState);
-
+                    onBlockChange("receive", newState);
+                    
                     chrome.runtime
                       .sendMessage({
                         type: "block-incoming",

@@ -281,9 +281,10 @@
 /* 状态指示器样式 */
 .status {
   font-size: 12px;
-  padding: 4px 8px;
+  padding: 2px 6px;
   border-radius: var(--radius);
   font-weight: 500;
+  filter: brightness(0.98)
 }
 
 .status.active {
@@ -294,6 +295,40 @@
 .status.inactive {
   background-color: var(--danger-color);
   color: white;
+}
+
+.status.intercept {
+  background-color: #333333;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status.intercept svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* WebSocket Panel Block Status Label - 模仿 json-viewer-badge 样式，暗红色 */
+.websocket-panel-block-status-label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(185, 28, 28, 0.4);
+  background-color: #7d00000e;
+  color: #f36c6c;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.websocket-panel-block-status-label svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }
 
 .status.paused {
@@ -331,4 +366,4 @@
 .action-btn.block {
   border-color: var(--danger-color);
   color: var(--danger-color);
-} 
+}
