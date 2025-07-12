@@ -797,19 +797,9 @@
             console.error("❌ Failed to create manual WebSocket connection:", error);
           }
           break;
-        // 新增：重置proxyState到初始值
         case "reset-proxy-state":
-          console.log("🔄 Resetting proxyState to initial value");
           Object.assign(proxyState, JSON.parse(JSON.stringify(proxyStateInitial)));
-          sendEvent({
-            type: "proxy-state-change",
-            state: proxyState,
-            timestamp: Date.now(),
-          });
-          // 调试：在页面插入'111111'
-          try {
-            document.body && document.body.insertAdjacentHTML('beforeend', '111111');
-          } catch (e) { console.error(e); }
+
           break;
       }
     }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CheckCircle, XCircle, Wifi, Trash2, Plus } from "lucide-react";
+import { CheckCircle, XCircle, Trash2, Plus } from "lucide-react";
 import { Modal, TextInput } from "@mantine/core";
 import { filterConnections } from "../utils/filterUtils";
 import useConnectionNewMessage from "../hooks/useConnectionNewMessage";
@@ -130,17 +130,31 @@ const WebSocketList = ({
     const isSelected = connection.id === selectedConnectionId;
     const hasNewMsg = hasNewMessages(connection.id);
 
+    // 关闭连接
+    const handleCloseConnection = (e) => {
+      e.stopPropagation();
+      chrome.runtime.sendMessage({
+        type: 'simulate-system-event',
+        data: {
+          eventType: 'client-close',
+          connectionId: connection.id,
+          code: 1000,
+          reason: 'Closed by user',
+        },
+      });
+    };
+
     return (
       <div
         key={connection.id}
-        className={`ws-connection-item ${isSelected ? 'selected' : 'default'}`}
+        className={`ws-connection-item ${isSelected ? 'selected' : 'default'}${isActive ? ' active' : ''}`}
         onClick={() => {
           onSelectConnection(connection.id);
-          // 清除新消息指示器
           if (hasNewMsg) {
             clearNewMessage(connection.id);
           }
         }}
+        style={{ position: 'relative' }}
       >
         <div className="ws-connection-item-header">
           <div className="ws-connection-status-group">
@@ -156,7 +170,7 @@ const WebSocketList = ({
           <button
             className="ws-connection-indicator-btn"
             onClick={(e) => {
-              e.stopPropagation(); // 防止触发连接选择
+              e.stopPropagation();
               if (hasNewMsg) {
                 clearNewMessage(connection.id);
               }
@@ -164,11 +178,23 @@ const WebSocketList = ({
           >
             <div className={`ws-connection-indicator-wrapper ${hasNewMsg ? 'new-message-indicator' : ''}`}>
               <div
-                key={hasNewMsg ? getNewMessageTimestamp(connection.id) : "static"} // 使用时间戳作为key强制重新渲染
+                key={hasNewMsg ? getNewMessageTimestamp(connection.id) : "static"}
                 className="ws-connection-indicator-dot"
               />
             </div>
           </button>
+          {/* 右上角关闭按钮，仅在active时渲染，hover时显示 */}
+          {isActive && (
+            <button
+              className="ws-connection-close-btn"
+              onClick={handleCloseConnection}
+              title={t('panel.connectionList.tooltips.closeConnection')}
+              tabIndex={-1}
+              aria-label={t('panel.connectionList.tooltips.closeConnection')}
+            >
+              <XCircle size={14} color="#888" />
+            </button>
+          )}
         </div>
         <div className="ws-connection-url">
           {connection.url}

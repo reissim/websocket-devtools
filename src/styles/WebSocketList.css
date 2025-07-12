@@ -449,8 +449,78 @@
   border-color: rgba(59, 130, 246, 0.8);
 }
 
+.ws-connection-item:hover {
+  filter: brightness(1.25);
+}
+
 .ws-connection-item:hover.default {
   background: rgba(75, 85, 99, 0.4);
+}
+
+
+/* 延迟indicator按钮在hover结束后显示 */
+.ws-connection-item .ws-connection-indicator-btn {
+  transition: opacity 0.2s, visibility 0.2s;
+  opacity: 1;
+  visibility: visible;
+}
+.ws-connection-item:not(:hover) .ws-connection-indicator-btn {
+  transition-delay: 0.3s;
+}
+
+/* 只让active（connected）状态的卡片hover时indicator按钮消失 */
+.ws-connection-item.active:hover .ws-connection-indicator-btn {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s, visibility 0.22s;
+}
+.ws-connection-item.active:not(:hover) .ws-connection-indicator-btn {
+  transition-delay: 0.15s;
+}
+
+/* 关闭按钮样式 */
+.ws-connection-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.15s ease-in-out;
+  /* border-radius: 50%; */
+  color: #f87171;
+  border-radius: 4px;
+  padding: 3px;
+}
+
+.ws-connection-item:hover .ws-connection-close-btn {
+  opacity: 0.85;
+  pointer-events: auto;
+}
+.ws-connection-close-btn:hover {
+  opacity: 1;
+  background-color: rgba(220, 38, 38, 0.3);
+}
+.ws-connection-close-btn svg {
+  color: #888;
+  stroke: #888;
+  transition: all 0.15s ease-in-out;
+}
+.ws-connection-close-btn:hover svg {
+  stroke: #f87171;
+  color: #f87171;
+}
+
+/* 保证ws-connection-item有相对定位 */
+.ws-connection-item {
+  position: relative;
 }
 
 /* 连接项头部 */
@@ -488,7 +558,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .ws-connection-indicator-btn:hover {
