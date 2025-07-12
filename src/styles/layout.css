@@ -17,6 +17,12 @@
   flex-shrink: 0;
 }
 
+.panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .panel-header h1 {
   font-size: 18px;
   font-weight: 600;

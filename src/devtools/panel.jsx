@@ -10,6 +10,7 @@ import LanguageSelector from "../components/LanguageSelector.jsx";
 import { t, addLanguageChangeListener, getCurrentLanguage } from "../utils/i18n.js";
 import i18n from "../utils/i18n.js";
 import "../styles/main.css";
+import { Ban } from "lucide-react";
 
 const WebSocketPanel = () => {
   const [isMonitoring, setIsMonitoring] = useState(true);
@@ -409,13 +410,19 @@ const WebSocketPanel = () => {
     <MantineProvider>
       <div className="websocket-panel">
         <div className="panel-header">
-          <h1>🔌 {t('panel.header.title')}</h1>
-          <div className="panel-status">
+          <div className="panel-header-left">
             {isMonitoring ? (
-              <span className="status active">{t('panel.header.status_active')}</span>
+              <span className="status active">{t("panel.header.status_active")}</span>
             ) : (
-              <span className="status inactive">{t('panel.header.status_inactive')}</span>
+              <span className="status inactive">{t("panel.header.status_inactive")}</span>
             )}
+
+            <div className="json-viewer-badge json-viewer-badge-red">
+              <Ban size={12} />
+              <span>{t("jsonViewer.status.ban")}</span>
+            </div>
+          </div>
+          <div className="panel-status">
             <LanguageSelector />
           </div>
         </div>
@@ -457,7 +464,7 @@ const WebSocketPanel = () => {
           <div className="panel-right-section-fixed">
             <div className="panel-wrapper">
               <div className="panel-title">
-                <h3>{t('panel.messageDetails.title')}</h3>
+                <h3>{t("panel.messageDetails.title")}</h3>
               </div>
               <div className="panel-body">
                 <MessageDetails
