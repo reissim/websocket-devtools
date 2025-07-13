@@ -2,12 +2,16 @@
 
 /* 基础容器样式 */
 .system-events-tab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
   padding: 12px;
   min-height: 100%;
   color: #e2e8f0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 13px;
-  background: #2a2a2a; /* Lighter black background */
+  font-size: 16px;
+  background: var(--bg-primary); /* Lighter black background */
 }
 
 /* 空状态样式 */
@@ -97,6 +101,10 @@
 
 /* 标签页样式 */
 .sys-evt-tabs-container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   border-radius: 8px;
   border: none; /* Removed border */
   overflow: hidden;
@@ -150,8 +158,11 @@
 
 /* 标签页内容 */
 .sys-evt-tab-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
   padding: 16px;
-  background: rgba(26, 26, 26, 0.6); /* Lighter black background with opacity */
+  background: rgb(57 57 57); /* Lighter black background with opacity */
 }
 
 /* 事件网格 */
@@ -870,4 +881,11 @@
 
 .system-events-tab::-webkit-scrollbar-thumb:hover {
   background: rgba(90, 90, 90, 0.9); /* Lighter gray scrollbar thumb on hover */
+} 
+
+.sys-evt-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 } 

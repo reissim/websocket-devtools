@@ -689,7 +689,7 @@
 .simulate-window-content .mantine-Tabs-panel {
   flex: 1;
   overflow: auto;
-  background-color: #2a2a2a;
+  background-color: var(--bg-primary);
 }
 
 .simulate-window-content .mantine-Tabs-tab {
