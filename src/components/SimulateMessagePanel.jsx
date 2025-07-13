@@ -34,6 +34,7 @@ import FavoritesTab from "./FavoritesTab";
 import SystemEventsTab from "./SystemEventsTab";
 import globalFavorites, { addFromEditor } from "../utils/globalFavorites";
 import { t } from "../utils/i18n";
+import SimulateEditorTab from "./SimulateEditorTab";
 
 const SimulateMessagePanel = forwardRef(
   ({ connection, onSimulateMessage }, ref) => {
@@ -514,44 +515,15 @@ const SimulateMessagePanel = forwardRef(
                     </Tabs.List>
 
                     <Tabs.Panel value="editor">
-                      <div className="simulate-content">
-                        <div className="simulate-input-container">
-                          <div
-                            className="simulate-input-editor"
-                            onKeyDown={handleKeyPress}
-                          >
-                            <JsonViewer
-                              data={simulateMessage}
-                              readOnly={false}
-                              onChange={handleMessageChange}
-                              showControls={true}
-                              className="simulate-editor"
-                              showFavoritesButton={true}
-                              onAddToFavorites={handleAddToFavorites}
-                              showNestedParseButton={false}
-                              showSimulateNestedParseButton={true}
-                              onSimulateNestedParse={handleSimulateNestedParse}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="simulate-actions">
-                          <div className="simulate-buttons">
-                            <SimulateButton
-                              direction="incoming"
-                              icon={CircleArrowDown}
-                              label={t("simulate.actions.simulateReceive")}
-                              className="incoming"
-                            />
-                            <SimulateButton
-                              direction="outgoing"
-                              icon={CircleArrowUp}
-                              label={t("simulate.actions.simulateSend")}
-                              className="outgoing"
-                            />
-                          </div>
-                        </div>
-                      </div>
+                      <SimulateEditorTab
+                        message={simulateMessage}
+                        isSending={isSending}
+                        onChange={handleMessageChange}
+                        onSimulate={handleSimulateMessage}
+                        onAddToFavorites={handleAddToFavorites}
+                        onKeyPress={handleKeyPress}
+                        onSimulateNestedParse={handleSimulateNestedParse}
+                      />
                     </Tabs.Panel>
 
                     <Tabs.Panel value="favorites">
