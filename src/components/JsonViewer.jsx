@@ -395,7 +395,9 @@ const JsonViewer = ({
                   setTextWrap(!textWrap);
                   setUserToggledWrap(true);
                 }}
-                className={`json-viewer-btn btn-wrap ${textWrap ? "json-viewer-btn-active-green" : "json-viewer-btn-inactive"}`}
+                className={`json-viewer-btn btn-wrap ${
+                  textWrap ? "json-viewer-btn-active-green" : "json-viewer-btn-inactive"
+                }`}
                 title={t("jsonViewer.tooltips.wrapText")}
               >
                 <WrapText size={14} color="currentColor" />
@@ -425,8 +427,14 @@ const JsonViewer = ({
             {enableNestedParse && showSimulateNestedParseButton && (
               <button
                 onClick={handleSimulateNestedParse}
-                className={`json-viewer-btn btn-nested-simulate ${simulateNestedParsed || !hasNestedData ? "json-viewer-btn-disabled" : "json-viewer-btn-inactive"}`}
-                title={hasNestedData ? t("jsonViewer.tooltips.simulateNestedParseJson") || "Simulate Nested Parse" : t("jsonViewer.tooltips.noNestedData")}
+                className={`json-viewer-btn btn-nested-simulate ${
+                  simulateNestedParsed || !hasNestedData ? "json-viewer-btn-disabled" : "json-viewer-btn-inactive"
+                }`}
+                title={
+                  hasNestedData
+                    ? t("jsonViewer.tooltips.simulateNestedParseJson") || "Simulate Nested Parse"
+                    : t("jsonViewer.tooltips.noNestedData")
+                }
                 disabled={simulateNestedParsed || !hasNestedData}
               >
                 <Layers2 size={14} />
@@ -438,7 +446,6 @@ const JsonViewer = ({
           <div className="json-viewer-controls-right">
             {/* Action buttons */}
             <div className="json-viewer-action-buttons">
-
               {/* Simulate 按钮 */}
               {onSimulate && (
                 <button
@@ -453,11 +460,13 @@ const JsonViewer = ({
               <button
                 onClick={handleCopyClick}
                 className={`json-viewer-btn btn-copy ${
-                  isCopied
-                    ? "json-viewer-btn-active-green"
-                    : "json-viewer-btn-inactive"
+                  isCopied ? "json-viewer-btn-active-green" : "json-viewer-btn-inactive"
                 }`}
-                title={isCopied ? (t("jsonViewer.tooltips.copied") || t("jsonViewer.controls.copied")) : (t("jsonViewer.tooltips.copy") || t("jsonViewer.controls.copy"))}
+                title={
+                  isCopied
+                    ? t("jsonViewer.tooltips.copied") || t("jsonViewer.controls.copied")
+                    : t("jsonViewer.tooltips.copy") || t("jsonViewer.controls.copy")
+                }
               >
                 {isCopied ? <CheckCircle size={14} /> : <Copy size={14} />}
               </button>
@@ -475,13 +484,6 @@ const JsonViewer = ({
 
             {/* Divider if we have action buttons and status badges */}
             {(!readOnly || (readOnly && isValidJson) || hasNestedData) && <div className="json-viewer-divider" />}
-            {/* Status badges */}
-            {!readOnly && (
-              <div className="json-viewer-badge json-viewer-badge-yellow">
-                <Edit size={12} />
-                <span>{t("jsonViewer.status.edit")}</span>
-              </div>
-            )}
             {readOnly && isValidJson && (
               <div className="json-viewer-badge json-viewer-badge-green">
                 <CheckCircle size={12} />
@@ -491,8 +493,15 @@ const JsonViewer = ({
             {/* Debug info */}
             {hasNestedData && (
               <div className="json-viewer-badge json-viewer-badge-purple">
-                <Hash size={12} />
+                <Layers2 size={12} />
                 <span>{t("jsonViewer.status.nested")}</span>
+              </div>
+            )}
+            {/* Status badges */}
+            {!readOnly && (
+              <div className="json-viewer-badge json-viewer-badge-yellow">
+                <Edit size={12} />
+                <span>{t("jsonViewer.status.edit")}</span>
               </div>
             )}
           </div>
