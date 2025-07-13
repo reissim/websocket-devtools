@@ -723,3 +723,13 @@
 .favorite-item:not(.editing):hover .favorite-item-actions {
   opacity: 1;
 }
+
+/* 编辑器区域始终是文本光标 */
+.favorite-item-editor,
+.favorite-item-editor * {
+  cursor: text !important;
+}
+.edit-data-editor,
+.edit-data-editor * {
+  cursor: text !important;
+}
