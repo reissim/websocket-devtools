@@ -309,11 +309,15 @@
   align-items: center;
   gap: 2px;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  /* transition: none; 保证无动画 */
   background: var(--bg-secondary);
   padding: 2px;
   border-radius: 4px;
   border: 1px solid var(--border-color);
+}
+
+.favorite-item-actions * {
+  transition: none !important;
 }
 
 .favorite-item-actions.visible {
@@ -375,35 +379,52 @@
 }
 
 .save-btn {
-  background: var(--success-color) !important;
-  color: white !important;
-  border: 1px solid var(--success-color) !important;
-  width: 28px !important;
-  height: 22px !important;
-  min-width: 28px !important;
-  min-height: 22px !important;
+  color: #28a745 !important;
+  background: transparent !important;
+  border: none !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
 }
 
-.save-btn:hover {
-  background: #1e7e34 !important;
-  border-color: #1e7e34 !important;
-  color: white !important;
+.save-btn:hover:not(:disabled) {
+  background: rgba(40, 167, 69, 0.1) !important;
+  color: #218838 !important;
+}
+
+.save-btn svg,
+.cancel-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke-width: 2.5;
+}
+
+.save-btn:disabled {
+  opacity: 0.5 !important;
+  color: #b3b3b3 !important;
+  background: transparent !important;
 }
 
 .cancel-btn {
-  background: var(--error-color) !important;
-  color: white !important;
-  border: 1px solid var(--error-color) !important;
-  width: 28px !important;
-  height: 22px !important;
-  min-width: 28px !important;
-  min-height: 22px !important;
+  color: #dc3545 !important;
+  background: transparent !important;
+  border: none !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
 }
 
-.cancel-btn:hover {
-  background: #bd2130 !important;
-  border-color: #bd2130 !important;
-  color: white !important;
+.cancel-btn:hover:not(:disabled) {
+  background: rgba(220, 53, 69, 0.1) !important;
+  color: #c82333 !important;
+}
+
+.cancel-btn:disabled {
+  opacity: 0.5 !important;
+  color: #b3b3b3 !important;
+  background: transparent !important;
 }
 
 /* 编辑状态下的JSON编辑器 */
