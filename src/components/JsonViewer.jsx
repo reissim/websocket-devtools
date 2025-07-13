@@ -14,7 +14,8 @@ import {
   SquareStack,
   Star,
   Send,
-  Layers2
+  Layers2,
+  Check
 } from "lucide-react";
 import { t } from "../utils/i18n.js";
 import "../styles/JsonViewer.css";
@@ -468,7 +469,7 @@ const JsonViewer = ({
                     : t("jsonViewer.tooltips.copy") || t("jsonViewer.controls.copy")
                 }
               >
-                {isCopied ? <CheckCircle size={14} /> : <Copy size={14} />}
+                {isCopied ? <Check size={14} /> : <Copy size={14} />}
               </button>
 
               {showFavoritesButton && onAddToFavorites && (
