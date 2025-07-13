@@ -627,48 +627,58 @@
 .simulate-window-content .mantine-Tabs-root {
   height: 100%;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
 }
 
 .simulate-window-content .mantine-Tabs-list {
-  padding: 12px 16px 8px 16px;
-  background-color: #3a3a3a;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  gap: 8px;
+  padding: 8px 0px 4px 1px;
+  background-color: #434343;
+  /* background-color: #505050; */
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.1); */
+  /* gap: 8px; */
+  border-right: 0px;
+  gap: 4px;
+}
+.mantine-Tabs-list::before {
+  display: none !important;
+  border: none !important;
+  content: none !important;
 }
 
-.simulate-window-content .mantine-Tabs-tab {
-  font-size: 12px;
-  font-weight: 500;
-  padding: 8px 12px;
-  color: var(--text-secondary);
-  background-color: #2a2a2a;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.mantine-Tabs-tabSection::after:where[data-active] {
+  display: none !important;
+  border: none !important;
+  content: none !important;
 }
+
 
 /* 统一设置所有Mantine组件的leftSection间距为0 */
 .m_a74036a:where([data-position='left']) {
   margin-inline-end: 0 !important;
 }
 
+.simulate-window-content .mantine-Tabs-tab {
+  padding: 8px 12px;
+  transition: all 0.22s ease-in-out;
+}
+
+.simulate-window-content .mantine-Tabs-tab::before {
+  display: none !important;
+  border: none !important;
+  content: none !important;
+}
+
 .simulate-window-content .mantine-Tabs-tab:hover {
   color: var(--text-primary);
   background-color: #353535;
   border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
 }
 
 .simulate-window-content .mantine-Tabs-tab[data-active] {
   color: white;
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  background-color: var(--bg-primary);
+  /* border-color: var(--accent-color); */
+  /* box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); */
 }
 
 .simulate-window-content .mantine-Tabs-panel {
@@ -677,7 +687,23 @@
   background-color: #2a2a2a;
 }
 
-/* Responsive adjustments for smaller windows */
+.simulate-window-content .mantine-Tabs-tab {
+  border: none !important;
+}
+.simulate-window-content .mantine-Tabs-tab[data-active] {
+  border: none !important;
+}
+
+.mantine-Tabs-tabSection[data-active]::after,
+.mantine-Tabs-tab:where([data-active])::after {
+  display: none !important;
+  border: none !important;
+  content: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+/* Responsive adjustments for smaller windows
 @media (max-width: 480px) {
   .simulate-floating-window {
     min-width: 300px;
@@ -701,4 +727,4 @@
   .simulate-icon {
     font-size: 20px;
   }
-}
+} */

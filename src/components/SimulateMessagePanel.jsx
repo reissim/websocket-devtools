@@ -43,7 +43,7 @@ const SimulateMessagePanel = forwardRef(
     const [isSending, setIsSending] = useState(false);
     const [isWindowOpen, setIsWindowOpen] = useState(false);
     const [isPinned, setIsPinned] = useState(false);
-    const [windowPosition, setWindowPosition] = useState({ x: 0, y: 0 });
+    const [windowPosition, setWindowPosition] = useState({ x: 20, y: 20 });
     const [windowSize, setWindowSize] = useState({ width: 400, height: 500 });
     const [activeTab, setActiveTab] = useState("editor");
     const [addFavoriteCallback, setAddFavoriteCallback] = useState(null);
@@ -416,8 +416,8 @@ const SimulateMessagePanel = forwardRef(
             onDragStart={handleDragStart}
             onDragStop={handleDragStop}
             onResizeStop={handleResizeStop}
-            minWidth={400}
-            minHeight={450}
+            minWidth={450}
+            minHeight={500}
             maxWidth={maxSize.width}
             maxHeight={maxSize.height}
             bounds="parent"
@@ -433,7 +433,7 @@ const SimulateMessagePanel = forwardRef(
                 className={`simulate-window-header ${isPinned ? "pinned" : ""}`}
               >
                 <div className="simulate-window-title">
-                  <Send size={16} className="simulate-icon-small" />
+                  {/* <Send size={16} className="simulate-icon-small" /> */}
                   <span>{t("simulate.title")}</span>
                   {connection && (
                     <span className="connection-indicator">
@@ -473,15 +473,17 @@ const SimulateMessagePanel = forwardRef(
                   </div>
                 ) : (
                   <Tabs
-                    variant="pills"
+                    defaultValue="editor"
+                    variant="outline"
                     value={activeTab}
                     onChange={setActiveTab}
-                    orientation="horizontal"
+                    orientation="vertical"
+                    placement="left"
                   >
                     <Tabs.List>
-                      <Tabs.Tab value="editor" leftSection={<FileText size={14} />}>{t("simulate.tabs.editor")}</Tabs.Tab>
-                      <Tabs.Tab value="favorites" leftSection={<Star size={14} />}>{t("simulate.tabs.favorites")}</Tabs.Tab>
-                      <Tabs.Tab value="system" leftSection={<Settings size={14} />}>{t("simulate.tabs.system")}</Tabs.Tab>
+                      <Tabs.Tab value="editor" leftSection={<Send size={18} />}></Tabs.Tab>
+                      <Tabs.Tab value="favorites" leftSection={<Star size={18} />}></Tabs.Tab>
+                      <Tabs.Tab value="system" leftSection={<Settings size={18} />}></Tabs.Tab>
                     </Tabs.List>
 
                     <Tabs.Panel value="editor">
