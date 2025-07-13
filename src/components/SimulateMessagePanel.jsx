@@ -416,8 +416,8 @@ const SimulateMessagePanel = forwardRef(
             onDragStart={handleDragStart}
             onDragStop={handleDragStop}
             onResizeStop={handleResizeStop}
-            minWidth={300}
-            minHeight={350}
+            minWidth={400}
+            minHeight={450}
             maxWidth={maxSize.width}
             maxHeight={maxSize.height}
             bounds="parent"
@@ -433,7 +433,7 @@ const SimulateMessagePanel = forwardRef(
                 className={`simulate-window-header ${isPinned ? "pinned" : ""}`}
               >
                 <div className="simulate-window-title">
-                  <MessageSquare size={16} className="simulate-icon-small" />
+                  <Send size={16} className="simulate-icon-small" />
                   <span>{t("simulate.title")}</span>
                   {connection && (
                     <span className="connection-indicator">
