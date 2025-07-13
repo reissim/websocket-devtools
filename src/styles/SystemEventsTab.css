@@ -205,7 +205,7 @@
 .sys-evt-event-card:hover {
   border-color: #505050; /* Lighter gray border on hover */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  transform: translateY(-1px);
+  /* transform: translateY(-1px); */
 }
 
 .sys-evt-card-header {
@@ -230,11 +230,11 @@
 }
 
 .sys-evt-close-icon {
-  color: #f97316;
+  color: #fb923c;
 }
 
 .sys-evt-error-icon {
-  color: #ef4444;
+  color: #fca5a5;
 }
 
 .sys-evt-card-description {
@@ -379,17 +379,17 @@
 
 /* 关闭按钮样式 */
 .sys-evt-close-button {
-  /* background: var(--bg-input); */
-  color: #ffffff;
-  border: 1px solid var(--border-light);
+  background: #2d16026b;
+  color: #fb923c;
+  border: 1px solid #bb5811;
   margin-bottom: 6px;
 }
 
 .sys-evt-close-button:hover:not(:disabled) {
-  background: var(--bg-card);
-  border-color: #f97316;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+  background: #bb5811;
+  border-color: #bb5811;
+  color: #fff;
+  box-shadow: none;
 }
 
 .sys-evt-close-button:last-child {
@@ -398,17 +398,17 @@
 
 /* 错误按钮样式 */
 .sys-evt-error-button {
-  background: var(--bg-input);
-  color: #ffffff;
-  border: 1px solid var(--border-light);
+  background: #2a090a6c;
+  color: #fca5a5;
+  border: 1px solid #a93030;
   margin-bottom: 6px;
 }
 
 .sys-evt-error-button:hover:not(:disabled) {
-  background: var(--bg-card);
-  border-color: #ef4444;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+  background: #a93030;
+  border-color: #a93030;
+  color: #fff;
+  box-shadow: none;
 }
 
 .sys-evt-error-button:last-child {
@@ -432,7 +432,7 @@
 
 /* 按钮点击效果 */
 .sys-evt-event-button:active:not(:disabled) {
-  transform: translateY(0) scale(0.98);
+  /* transform: translateY(0) scale(0.98); */
 }
 
 /* 加载状态 */

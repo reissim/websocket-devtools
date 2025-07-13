@@ -193,5 +193,6 @@
   "common.copy": "复制",
   "common.paste": "粘贴",
   "common.cut": "剪切",
-  "common.selectAll": "全选"
+  "common.selectAll": "全选",
+  "system.closeEvent.notice": "仅“客户端关闭”事件（Close Code 为 1000 或 3000-4999）会真实调用 ws.close() 并断开连接，其余所有关闭事件（包括服务端关闭）仅模拟关闭，虽然会触发 ws.onclose 事件，但底层连接未真正断开。"
 } 

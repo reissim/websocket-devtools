@@ -144,6 +144,9 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
           <div className="sys-evt-header-text">
             <h2>{t("system.title")}</h2>
             <p>{t("system.description")}</p>
+            <div className="sys-evt-label sys-evt-label-warning" style={{marginTop: 6, fontSize: 11, color: '#f59e0b', background: 'rgba(245,158,11,0.08)', borderLeft: '3px solid #f59e0b', padding: '6px 10px', borderRadius: 4, fontWeight: 500}}>
+              {t('system.closeEvent.notice')}
+            </div>
           </div>
         </div>
       </div>
