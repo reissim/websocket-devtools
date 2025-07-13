@@ -42,7 +42,8 @@ const JsonViewer = ({
 }) => {
   // 根据内容类型设置wrap初始值：JSON默认不wrap，非JSON默认wrap
   const [textWrap, setTextWrap] = useState(() => {
-    // 初始渲染时根据data类型判断
+    // 只读模式下根据内容类型自动 wrap，可编辑模式下默认不 wrap
+    if (!readOnly) return false;
     if (typeof data === 'string') {
       try {
         JSON.parse(data);
@@ -54,9 +55,10 @@ const JsonViewer = ({
     return true;
   });
 
-  // 监听data变化，自动切换textWrap初始值（仅当用户未手动切换过）
+  // 监听data变化，自动切换textWrap初始值（仅当用户未手动切换过，且只读模式下）
   const [userToggledWrap, setUserToggledWrap] = useState(false);
   useEffect(() => {
+    if (!readOnly) return; // 可编辑模式下不自动切换 wrap
     if (!userToggledWrap) {
       if (typeof data === 'string') {
         try {
@@ -69,7 +71,7 @@ const JsonViewer = ({
         setTextWrap(true);
       }
     }
-  }, [data, userToggledWrap]);
+  }, [data, userToggledWrap, readOnly]);
   const [collapsed, setCollapsed] = useState(false);
   const [nestedParse, setNestedParse] = useState(false); // 默认不嵌套解析
   const [forceUpdate, setForceUpdate] = useState(0);
