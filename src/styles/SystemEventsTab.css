@@ -124,11 +124,11 @@
   justify-content: center;
   gap: 6px;
   padding: 10px 15px;
-  background: var(--bg-tab); /* 非激活tab更浅灰 */
+  background: #3a3a3a; /* 非激活tab更浅灰 */
   border: none;
   color: #b0b0b0;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 400;
   cursor: pointer;
   transition: all 0.2s ease;
   border-right: 0px solid var(--border-light);
@@ -139,16 +139,18 @@
 }
 
 .sys-evt-tab-trigger:hover {
-  background: #5a5a5a; /* hover时更亮的灰色 */
-  color: #e0e0e0;
+  /* background: #5a5a5a; 
+  color: #e0e0e0; */
+  filter: brightness(1.2);
 }
 
 .sys-evt-tab-trigger.active {
-  background: linear-gradient(135deg, #232323 0%, #181818 100%); /* 更深灰渐变 */
+  /* background: linear-gradient(135deg, #232323 0%, #181818 100%); 更深灰渐变 */
   color: #fff;
   border: 0px solid var(--border);
-  border-bottom: 2px solid var(--accent-color); /* 强调底部边框 */
-  font-weight: 800;
+  /* border-bottom: 2px solid var(--accent-color);  */
+  background: #595959; /* 非激活tab更浅灰 */
+  font-weight: 700;
   z-index: 2;
   box-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
