@@ -10,10 +10,12 @@ import {
   X, 
   Clock, 
   Wifi, 
-  WifiOff 
+  WifiOff, 
+  CircleAlert 
 } from "lucide-react";
 import "../styles/SystemEventsTab.css";
 import { t } from "../utils/i18n";
+import { Tooltip } from "@mantine/core";
 
 const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
   const [activeTab, setActiveTab] = useState("client");
@@ -144,11 +146,38 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
         <div className="sys-evt-header-content">
           <Settings className="sys-evt-header-icon" />
           <div className="sys-evt-header-text">
-            <h2>{t("system.title")}</h2>
+            <h2 style={{display: 'inline-flex', alignItems: 'center', gap: 6}}>
+              {t("system.title")}
+              <Tooltip
+                label={<span style={{whiteSpace: 'pre-line'}}>{t("system.closeEvent.notice")}</span>}
+                color="#f59e0b"
+                position="right"
+                withArrow
+                arrowSize={6}
+                arrowOffset={12}
+                style={{
+                  fontSize: 12,
+                  fontWeight: 500,
+                  background: "rgb(65, 43, 6)",
+                  color: "#f59e0b",
+                  borderLeft: "3px solid #f59e0b",
+                  borderRadius: 4,
+                  padding: "10px 14px",
+                  maxWidth: 340,
+                  lineHeight: 1.7,
+                  wordBreak: 'break-word',
+                  whiteSpace: 'pre-line',
+                }}
+                zIndex={1600}
+                hoverable
+                openDelay={100}
+                closeDelay={200}
+                withinPortal={false}
+              >
+                <CircleAlert size={18} style={{ color: "#f59e0b", cursor: "pointer", verticalAlign: 'middle' }} />
+              </Tooltip>
+            </h2>
             <p>{t("system.description")}</p>
-            <div className="sys-evt-label sys-evt-label-warning" style={{marginTop: 6, fontSize: 11, color: '#f59e0b', background: 'rgba(245,158,11,0.08)', borderLeft: '3px solid #f59e0b', padding: '6px 10px', borderRadius: 4, fontWeight: 500}}>
-              {t('system.closeEvent.notice')}
-            </div>
           </div>
         </div>
       </div>
@@ -183,15 +212,13 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                         <X className="sys-evt-card-icon sys-evt-close-icon" />
                         {t("system.events.close.title")}
                       </div>
-                      <div className="sys-evt-card-description">
-                        {t("system.events.close.description")}
-                      </div>
+                      <div className="sys-evt-card-description">{t("system.events.close.description")}</div>
                     </div>
                     <div className="sys-evt-card-content">
                       <div className="sys-evt-form-group">
                         <label className="sys-evt-form-label">{t("system.events.close.code")}</label>
                         {!customCodeMode ? (
-                          <select 
+                          <select
                             className="sys-evt-form-select"
                             value={closeCode}
                             onChange={(e) => {
@@ -203,7 +230,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                               }
                             }}
                           >
-                            {closeCodeOptions.map(option => (
+                            {closeCodeOptions.map((option) => (
                               <option key={option.value} value={option.value}>
                                 {option.label}
                               </option>
@@ -266,9 +293,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                         <AlertTriangle className="sys-evt-card-icon sys-evt-error-icon" />
                         {t("system.events.error.title")}
                       </div>
-                      <div className="sys-evt-card-description">
-                        {t("system.events.error.description")}
-                      </div>
+                      <div className="sys-evt-card-description">{t("system.events.error.description")}</div>
                     </div>
                     <div className="sys-evt-card-content">
                       <div className="sys-evt-error-buttons">
@@ -329,15 +354,13 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                         <X className="sys-evt-card-icon sys-evt-close-icon" />
                         {t("system.events.close.serverTitle")}
                       </div>
-                      <div className="sys-evt-card-description">
-                        {t("system.events.close.serverDescription")}
-                      </div>
+                      <div className="sys-evt-card-description">{t("system.events.close.serverDescription")}</div>
                     </div>
                     <div className="sys-evt-card-content">
                       <div className="sys-evt-form-group">
                         <label className="sys-evt-form-label">{t("system.events.close.serverCode")}</label>
                         {!serverCustomCodeMode ? (
-                          <select 
+                          <select
                             className="sys-evt-form-select"
                             value={serverCloseCode}
                             onChange={(e) => {
@@ -349,7 +372,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                               }
                             }}
                           >
-                            {closeCodeOptions.map(option => (
+                            {closeCodeOptions.map((option) => (
                               <option key={option.value} value={option.value}>
                                 {option.label}
                               </option>
@@ -411,9 +434,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                         <AlertTriangle className="sys-evt-card-icon sys-evt-error-icon" />
                         {t("system.events.error.serverTitle")}
                       </div>
-                      <div className="sys-evt-card-description">
-                        {t("system.events.error.serverDescription")}
-                      </div>
+                      <div className="sys-evt-card-description">{t("system.events.error.serverDescription")}</div>
                     </div>
                     <div className="sys-evt-card-content">
                       <div className="sys-evt-error-buttons">

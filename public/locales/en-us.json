@@ -198,5 +198,5 @@
   "common.paste": "Paste",
   "common.cut": "Cut",
   "common.selectAll": "Select All",
-  "system.closeEvent.notice": "Only 'Client Close' events (with Close Code 1000 or 3000-4999) will actually call ws.close() and close the connection. All other close events (including server-side) are simulated: ws.onclose will be triggered, but the underlying connection is not truly closed."
+  "system.closeEvent.notice": "Only 'Client Close' events (with Close Code 1000 or 3000-4999) will actually call ws.close() and close the connection. All other close events (including server-side) are simulated: ws.onclose.call() will be triggered, but the underlying connection is not truly closed."
 } 
