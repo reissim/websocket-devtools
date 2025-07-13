@@ -670,8 +670,8 @@
 
 .simulate-window-content .mantine-Tabs-tab:hover {
   color: var(--text-primary);
-  background-color: #353535;
-  border-color: rgba(255, 255, 255, 0.25);
+  background-color: #3f3f3f;
+  filter: brightness(1.4);
 }
 
 .simulate-window-content .mantine-Tabs-tab[data-active] {

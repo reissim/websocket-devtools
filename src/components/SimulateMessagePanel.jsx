@@ -481,9 +481,36 @@ const SimulateMessagePanel = forwardRef(
                     placement="left"
                   >
                     <Tabs.List>
-                      <Tabs.Tab value="editor" leftSection={<Send size={18} />}></Tabs.Tab>
-                      <Tabs.Tab value="favorites" leftSection={<Star size={18} />}></Tabs.Tab>
-                      <Tabs.Tab value="system" leftSection={<Settings size={18} />}></Tabs.Tab>
+                      <Tabs.Tab
+                        value="editor"
+                        leftSection={
+                          <Send
+                            size={20}
+                            color={activeTab === "editor" ? "#2196f3" : "#b6b6b6"}
+                            className="tab-icon"
+                          />
+                        }
+                      ></Tabs.Tab>
+                      <Tabs.Tab
+                        value="favorites"
+                        leftSection={
+                          <Star
+                            size={20}
+                            color={activeTab === "favorites" ? "#FFD600" : "#b6b6b6"}
+                            className="tab-icon"
+                          />
+                        }
+                      ></Tabs.Tab>
+                      <Tabs.Tab
+                        value="system"
+                        leftSection={
+                          <Settings
+                            size={20}
+                            color={activeTab === "system" ? "#90caf9" : "#b6b6b6"}
+                            className="tab-icon"
+                          />
+                        }
+                      ></Tabs.Tab>
                     </Tabs.List>
 
                     <Tabs.Panel value="editor">
