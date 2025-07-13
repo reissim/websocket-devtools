@@ -1,6 +1,6 @@
 /* 基础变量 */
 :root {
-  --bg-primary: #1a1a1a;
+  --bg-primary: #181818;   /* 主背景，近黑 */
   --bg-secondary: #2d2d2d;
   --bg-tertiary: #404040;
   --text-primary: #ffffff;
@@ -14,6 +14,13 @@
   --danger-color: #dc3545;
   --radius: 6px;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --bg-main: #111111;
+  --bg-content: #232323;   /* 内容区，明显浅于主背景 */
+  --bg-card: #2e2e2e;      /* 卡片，更浅 */
+  --bg-input: #393939;     /* 输入/按钮，最浅 */
+  --bg-tab: #444444;      /* 小Tab区域，最浅灰 */
+  --border: #505050;       /* 边框，亮灰 */
+  --border-light: #6a6a6a; /* 浅边框，更亮 */
 }
 
 /* 基础重置 */

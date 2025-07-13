@@ -21,7 +21,7 @@
   justify-content: center;
   min-height: 200px;
   padding: 20px;
-  background: #1a1a1a; /* Lighter black background */
+  background: var(--bg-content); /* Lighter black background */
 }
 
 .sys-evt-empty-state {
@@ -57,7 +57,7 @@
   align-items: center;
   margin-bottom: 16px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #404040; /* Lighter gray border color */
+  border-bottom: 1px solid var(--border-light); /* Lighter gray border color */
 }
 
 .sys-evt-header-content {
@@ -87,10 +87,10 @@
 }
 
 .sys-evt-connection-info {
-  background: rgba(26, 26, 26, 0.8); /* Lighter black background with opacity */
+  background: var(--bg-input); /* Lighter black background with opacity */
   padding: 4px 8px;
   border-radius: 4px;
-  border: 1px solid #404040; /* Lighter gray border color */
+  border: 1px solid var(--border-light); /* Lighter gray border color */
 }
 
 .sys-evt-connection-url {
@@ -108,14 +108,14 @@
   border-radius: 8px;
   border: none; /* Removed border */
   overflow: hidden;
-  background: rgba(26, 26, 26, 0.9); /* Lighter black background with opacity */
+  background: var(--bg-content); /* Lighter black background with opacity */
 }
 
 .sys-evt-tabs-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: rgba(30, 30, 30, 0.9); /* Slightly darker background for tab list */
-  border-bottom: 1px solid #404040; /* Lighter gray border color */
+  background: var(--bg-tab); /* 更浅灰色Tab区域 */
+  border-bottom: 0px solid var(--border-light); /* Lighter gray border color */
 }
 
 .sys-evt-tab-trigger {
@@ -123,15 +123,15 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 10px 15px; /* Increased horizontal padding */
-  background: transparent;
+  padding: 10px 15px;
+  background: var(--bg-tab); /* 非激活tab更浅灰 */
   border: none;
-  color: #b0b0b0; /* Lighter gray text color */
-  font-size: 13px; /* Slightly increased font size */
-  font-weight: 600; /* Made font bolder */
+  color: #b0b0b0;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  border-right: 1px solid #404040;
+  border-right: 0px solid var(--border-light);
 }
 
 .sys-evt-tab-trigger:last-child {
@@ -139,16 +139,18 @@
 }
 
 .sys-evt-tab-trigger:hover {
-  background: rgba(50, 50, 50, 0.4); /* Slightly more noticeable hover background */
-  color: #c0c0c0; /* Lighter gray text color on hover */
+  background: #5a5a5a; /* hover时更亮的灰色 */
+  color: #e0e0e0;
 }
 
 .sys-evt-tab-trigger.active {
-  background: linear-gradient(135deg, #505050 0%, #404040 100%); /* Brighter gradient for active tab */
-  color: #ffffff; /* White text color for active tab */
-  border: 1px solid #606060; /* Add border to active tab */
-  border-bottom-color: transparent; /* Remove bottom border for active tab */
-  font-weight: 700; /* Even bolder for active tab */
+  background: linear-gradient(135deg, #232323 0%, #181818 100%); /* 更深灰渐变 */
+  color: #fff;
+  border: 0px solid var(--border);
+  border-bottom: 2px solid var(--accent-color); /* 强调底部边框 */
+  font-weight: 800;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 
 .sys-evt-tab-trigger svg {
@@ -162,7 +164,7 @@
   min-height: 0;
   overflow: auto;
   padding: 16px;
-  background: rgb(57 57 57); /* Lighter black background with opacity */
+  background: var(--bg-content); /* Lighter black background with opacity */
 }
 
 /* 事件网格 */
@@ -170,7 +172,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  background: #1a1a1a; /* Lighter black background */
+  background: var(--bg-content); /* Lighter black background */
 }
 
 /* 更早切换到单列布局，适应tab环境 */
@@ -190,8 +192,8 @@
 
 /* 事件卡片 */
 .sys-evt-event-card {
-  background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(20, 20, 20, 0.95) 100%); /* Lighter black gradient background */
-  border: 1px solid #404040; /* Lighter gray border color */
+  background: var(--bg-card); /* Lighter black gradient background */
+  border: 1px solid var(--border); /* Lighter gray border color */
   border-radius: 8px;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -206,8 +208,8 @@
 
 .sys-evt-card-header {
   padding: 12px 12px 8px 12px;
-  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
-  background: rgba(26, 26, 26, 0.7); /* Lighter black background with opacity */
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-content); /* Lighter black background with opacity */
 }
 
 .sys-evt-card-title {
@@ -241,7 +243,7 @@
 
 .sys-evt-card-content {
   padding: 12px;
-  background: #1a1a1a; /* Lighter black background */
+  background: var(--bg-input); /* Lighter black background */
 }
 
 /* 表单元素 */
@@ -261,8 +263,8 @@
 .sys-evt-form-input {
   width: 100%;
   padding: 6px 8px;
-  background: rgba(20, 20, 20, 0.8); /* Lighter gray background */
-  border: 1px solid #404040; /* Lighter gray border color */
+  background: var(--bg-input); /* Lighter gray background */
+  border: 1px solid var(--border-light); /* Lighter gray border color */
   border-radius: 4px;
   color: #c0c0c0; /* Lighter gray text color */
   font-size: 11px;
@@ -272,7 +274,7 @@
 .sys-evt-form-select:focus,
 .sys-evt-form-input:focus {
   outline: none;
-  background: rgba(26, 26, 26, 0.9); /* Lighter black background with opacity on focus */
+  background: var(--bg-card); /* Lighter black background with opacity on focus */
 }
 
 .sys-evt-form-input::placeholder {
@@ -291,8 +293,8 @@
 }
 
 .sys-evt-reset-button {
-  background: rgba(100, 116, 139, 0.2);
-  border: 1px solid rgba(100, 116, 139, 0.3);
+  background: var(--bg-input);
+  border: 1px solid var(--border-light);
   border-radius: 4px;
   color: #94a3b8;
   font-size: 14px;
@@ -307,8 +309,8 @@
 }
 
 .sys-evt-reset-button:hover {
-  background: rgba(100, 116, 139, 0.3);
-  border-color: rgba(100, 116, 139, 0.5);
+  background: var(--bg-card);
+  border-color: var(--border);
   color: #cbd5e1;
 }
 
@@ -375,14 +377,14 @@
 
 /* 关闭按钮样式 */
 .sys-evt-close-button {
-  background: #1a1a1a;
+  background: var(--bg-input);
   color: #ffffff;
-  border: 1px solid #404040;
+  border: 1px solid var(--border-light);
   margin-bottom: 6px;
 }
 
 .sys-evt-close-button:hover:not(:disabled) {
-  background: rgba(26, 26, 26, 0.9);
+  background: var(--bg-card);
   border-color: #f97316;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
@@ -394,14 +396,14 @@
 
 /* 错误按钮样式 */
 .sys-evt-error-button {
-  background: #1a1a1a;
+  background: var(--bg-input);
   color: #ffffff;
-  border: 1px solid #404040;
+  border: 1px solid var(--border-light);
   margin-bottom: 6px;
 }
 
 .sys-evt-error-button:hover:not(:disabled) {
-  background: rgba(26, 26, 26, 0.9);
+  background: var(--bg-card);
   border-color: #ef4444;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
