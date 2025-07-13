@@ -386,6 +386,11 @@ const SimulateMessagePanel = forwardRef(
       [handleSimulateMessage]
     );
 
+    // 在组件内实现handleSimulateNestedParse
+    const handleSimulateNestedParse = useCallback((nestedContent) => {
+      handleMessageChange(nestedContent);
+    }, [handleMessageChange]);
+
     return (
       <>
         {/* Floating toggle button - 只在panel关闭时显示 */}
@@ -494,6 +499,9 @@ const SimulateMessagePanel = forwardRef(
                               className="simulate-editor"
                               showFavoritesButton={true}
                               onAddToFavorites={handleAddToFavorites}
+                              showNestedParseButton={false}
+                              showSimulateNestedParseButton={true}
+                              onSimulateNestedParse={handleSimulateNestedParse}
                             />
                           </div>
                         </div>

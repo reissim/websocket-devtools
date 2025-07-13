@@ -148,6 +148,7 @@
   "jsonViewer.tooltips.noNestedData": "未发现嵌套 JSON 数据",
   "jsonViewer.tooltips.copy": "复制",
   "jsonViewer.tooltips.addToFavorites": "添加到收藏",
+  "jsonViewer.controls.simulateNestedParse": "嵌套解析并填充",
   "messageDetails.emptyState.selectConnection": "选择一个 WebSocket 连接以查看消息",
   "messageDetails.emptyState.noMessages": "暂无消息",
   "messageDetails.connection.disconnected": "已从 {{url}} 断开连接",

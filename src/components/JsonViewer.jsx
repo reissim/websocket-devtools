@@ -35,6 +35,10 @@ const JsonViewer = ({
   onAddToFavorites = null,
   showFavoritesButton = false,
   onSimulate = null,
+  // 新增props
+  showNestedParseButton = true, // 控制原有嵌套解析按钮
+  showSimulateNestedParseButton = false, // 控制Simulate Message专用按钮
+  onSimulateNestedParse = null, // Simulate Message专用嵌套解析回调
 }) => {
   // 根据内容类型设置wrap初始值：JSON默认不wrap，非JSON默认wrap
   const [textWrap, setTextWrap] = useState(() => {
@@ -67,7 +71,7 @@ const JsonViewer = ({
     }
   }, [data, userToggledWrap]);
   const [collapsed, setCollapsed] = useState(false);
-  const [nestedParse, setNestedParse] = useState(true);
+  const [nestedParse, setNestedParse] = useState(false); // 默认不嵌套解析
   const [forceUpdate, setForceUpdate] = useState(0);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -308,8 +312,29 @@ const JsonViewer = ({
     [handleFormatChange, collapsed, nestedParse, hasNestedData]
   );
 
-  // Reset nestedParse when data changes and has no nested data
-  // 移除useEffect自动设为true的逻辑
+  // 不再因data变化自动切换nestedParse，仅用户操作切换
+
+  // Simulate Message专用嵌套解析按钮的处理函数
+  const [simulateNestedParsed, setSimulateNestedParsed] = useState(false);
+  const handleSimulateNestedParse = useCallback(() => {
+    if (hasNestedData && isValidJson && onSimulateNestedParse && !simulateNestedParsed) {
+      try {
+        // 只做一次嵌套解析
+        const parsed = JSON.parse(data);
+        const nestedParsed = parseNestedJson(parsed);
+        const formattedContent = JSON.stringify(nestedParsed, null, collapsed ? 0 : 2);
+        onSimulateNestedParse(formattedContent);
+        setSimulateNestedParsed(true);
+      } catch {
+        // ignore
+      }
+    }
+  }, [hasNestedData, isValidJson, onSimulateNestedParse, data, parseNestedJson, collapsed, simulateNestedParsed]);
+
+  // Simulate Message面板切换内容时重置按钮状态
+  useEffect(() => {
+    setSimulateNestedParsed(false);
+  }, [data]);
 
   const content = getDisplayContent();
 
@@ -376,7 +401,8 @@ const JsonViewer = ({
               </button>
             )}
 
-            {enableNestedParse && (
+            {/* 原有嵌套解析按钮 */}
+            {enableNestedParse && showNestedParseButton && (
               <button
                 onClick={() => {
                   const newNestedParse = !nestedParse;
@@ -390,6 +416,19 @@ const JsonViewer = ({
               >
                 <Layers2 size={14} />
                 <span>{t("jsonViewer.controls.nestedParse")}</span>
+              </button>
+            )}
+
+            {/* Simulate Message专用嵌套解析按钮 */}
+            {enableNestedParse && showSimulateNestedParseButton && (
+              <button
+                onClick={handleSimulateNestedParse}
+                className={`json-viewer-btn btn-nested-simulate ${simulateNestedParsed || !hasNestedData ? "json-viewer-btn-disabled" : "json-viewer-btn-inactive"}`}
+                title={hasNestedData ? t("jsonViewer.tooltips.simulateNestedParseJson") || "Simulate Nested Parse" : t("jsonViewer.tooltips.noNestedData")}
+                disabled={simulateNestedParsed || !hasNestedData}
+              >
+                <Layers2 size={14} />
+                <span>{t("jsonViewer.controls.simulateNestedParse") || "Simulate嵌套解析"}</span>
               </button>
             )}
           </div>

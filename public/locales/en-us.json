@@ -148,6 +148,7 @@
   "jsonViewer.tooltips.noNestedData": "No nested JSON data found",
   "jsonViewer.tooltips.copy": "Copy",
   "jsonViewer.tooltips.addToFavorites": "Add to Favorites",
+  "jsonViewer.controls.simulateNestedParse": "Nested Parse & Fill",
   "messageDetails.emptyState.selectConnection": "Select a WebSocket connection to view messages",
   "messageDetails.emptyState.noMessages": "No messages to display",
   "messageDetails.connection.disconnected": "Disconnected from {{url}}",
