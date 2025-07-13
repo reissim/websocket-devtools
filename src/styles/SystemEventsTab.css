@@ -379,7 +379,7 @@
 
 /* 关闭按钮样式 */
 .sys-evt-close-button {
-  background: var(--bg-input);
+  /* background: var(--bg-input); */
   color: #ffffff;
   border: 1px solid var(--border-light);
   margin-bottom: 6px;
@@ -467,7 +467,7 @@
 @container (max-width: 500px) {
   .system-events-tab .sys-evt-events-grid {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 16px;
   }
   
   .system-events-tab .sys-evt-tab-content {
