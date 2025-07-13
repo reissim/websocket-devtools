@@ -82,7 +82,8 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
       "connection-failed": { code: "ECONNREFUSED", message: t("system.events.error.connectionFailed") },
       "network-disconnect": { code: "ENETUNREACH", message: t("system.events.error.networkDisconnect") },
       "protocol-error": { code: "EPROTO", message: t("system.events.error.protocolError") },
-      "timeout-error": { code: "ETIMEDOUT", message: t("system.events.error.timeoutError") }
+      "timeout-error": { code: "ETIMEDOUT", message: t("system.events.error.timeoutError") },
+      "unexpected-condition": { code: "EUNEXPECTED", message: t("system.events.error.unexpectedCondition") }
     };
 
     handleSimulateEvent("client-error", {
@@ -115,7 +116,8 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
       "message-format-error": { code: 1003, message: t("system.events.error.messageFormatError") },
       "client-disconnect": { code: 1006, message: t("system.events.error.clientDisconnect") },
       "internal-server-error": { code: 1011, message: t("system.events.error.internalServerError") },
-      "resource-exhausted": { code: 1013, message: t("system.events.error.resourceExhausted") }
+      "resource-exhausted": { code: 1013, message: t("system.events.error.resourceExhausted") },
+      "service-restart": { code: 1012, message: t("system.events.error.serviceRestart") }
     };
 
     handleSimulateEvent("server-error", {
@@ -302,6 +304,14 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           <Clock size={16} />
                           {t("system.events.error.timeoutError")}
                         </button>
+                        <button
+                          className="sys-evt-event-button sys-evt-error-button"
+                          onClick={() => handleClientError("unexpected-condition")}
+                          disabled={isExecuting}
+                        >
+                          <X size={16} />
+                          {t("system.events.error.unexpectedCondition", "意外情况")}
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -438,6 +448,14 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                         >
                           <Server size={16} />
                           {t("system.events.error.resourceExhausted")}
+                        </button>
+                        <button
+                          className="sys-evt-event-button sys-evt-error-button"
+                          onClick={() => handleServerError("service-restart")}
+                          disabled={isExecuting}
+                        >
+                          <X size={16} />
+                          {t("system.events.error.serviceRestart", "服务重启")}
                         </button>
                       </div>
                     </div>
