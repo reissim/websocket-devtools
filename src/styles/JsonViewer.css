@@ -348,6 +348,7 @@
 /* 确保 CodeMirror 在小高度时也能正常滚动 */
 .json-viewer-container {
   min-height: 100px;
+  overflow: auto;
 }
 
 .json-viewer-codemirror .cm-editor.cm-focused {

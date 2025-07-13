@@ -470,7 +470,12 @@
 .edit-json-editor .json-viewer-container {
   min-height: 150px;
   max-height: 260px;
+  overflow: auto;
 }
+
+/* .edit-json-editor .json-viewer-container .cm-scroller {
+  overflow: auto;
+} */
 
 .edit-json-editor .cm-editor {
   background: var(--bg-secondary) !important;
