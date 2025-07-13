@@ -449,7 +449,7 @@ const JsonViewer = ({
             )}
             {/* Debug info */}
             {hasNestedData && (
-              <div className="json-viewer-badge json-viewer-badge-blue">
+              <div className="json-viewer-badge json-viewer-badge-purple">
                 <Hash size={12} />
                 <span>{t("jsonViewer.status.nested")}</span>
               </div>

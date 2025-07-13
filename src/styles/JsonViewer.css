@@ -202,6 +202,11 @@
   color: #3b82f6;
 }
 
+.json-viewer-badge-purple {
+  border-color: rgba(147, 51, 234, 0.4);
+  color: #bb73ff;
+}
+
 .json-viewer-status {
   font-size: 10px;
   color: var(--success-color);
