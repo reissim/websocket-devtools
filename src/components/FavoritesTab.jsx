@@ -89,6 +89,10 @@ const FavoritesItem = React.memo(
       setEditData(value);
     }, []);
 
+    const handleNestedParse = useCallback((nestedContent) => {
+      setEditData(nestedContent);
+    }, []);
+
     const handleMouseEnter = useCallback(() => setIsHovered(true), []);
     const handleMouseLeave = useCallback(() => setIsHovered(false), []);
 
@@ -301,6 +305,9 @@ const FavoritesItem = React.memo(
               showControls={true}
               className="edit-data-editor"
               showFavoritesButton={false}
+              showNestedParseButton={false}
+              showSimulateNestedParseButton={true}
+              onSimulateNestedParse={handleNestedParse}
             />
           </div>
         )}
