@@ -136,7 +136,8 @@
 
 .panel-header .language-selector-trigger:hover {
   background-color: rgba(55, 58, 64, 0.8);
-  border-color: var(--accent-color);
+  /* border-color: var(--accent-color); */
+  filter: brightness(1.1);
 }
 
 /* Responsive adjustments */
