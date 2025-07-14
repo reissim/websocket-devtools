@@ -174,7 +174,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                 closeDelay={200}
                 withinPortal={false}
               >
-                <CircleAlert size={18} style={{ color: "#f59e0b", cursor: "pointer", verticalAlign: 'middle' }} />
+                <CircleAlert size={12} style={{ color: "#f59e0b", cursor: "pointer", verticalAlign: 'middle' }} />
               </Tooltip>
             </h2>
             <p>{t("system.description")}</p>

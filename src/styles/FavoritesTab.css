@@ -17,8 +17,9 @@
   gap: 12px;
   padding: 12px 16px;
   background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 0px solid var(--border-color);
   position: relative;
+  border-radius: 8px;
 }
 
 .search-container {
@@ -43,8 +44,8 @@
 }
 
 .search-input input:focus {
-  border-color: var(--accent-color) !important;
-  box-shadow: 0 0 0 2px var(--accent-transparent-color) !important;
+  border-color: #d8b800 !important;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3) !important;
   background: var(--bg-tertiary) !important;
   outline: none !important;
 }
@@ -66,7 +67,7 @@
 }
 
 .search-input:focus-within .mantine-TextInput-section[data-position="left"] {
-  color: var(--accent-color);
+  color: #d6b600;
 }
 
 .search-input .mantine-TextInput-section[data-position="right"] {
@@ -85,8 +86,8 @@
 }
 
 .search-input .mantine-ActionIcon-root:hover {
-  background: var(--bg-tertiary) !important;
-  color: var(--text-primary) !important;
+  background: rgba(255, 215, 0, 0.1) !important;
+  color: #debd00 !important;
 }
 
 .search-input .mantine-TextInput-section svg {

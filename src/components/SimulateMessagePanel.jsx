@@ -488,6 +488,7 @@ const SimulateMessagePanel = forwardRef(
                           <Send
                             size={20}
                             color={activeTab === "editor" ? "#2196f3" : "#b6b6b6"}
+                            // color={"#2196f3"}
                             className="tab-icon"
                           />
                         }
@@ -498,6 +499,7 @@ const SimulateMessagePanel = forwardRef(
                           <Star
                             size={20}
                             color={activeTab === "favorites" ? "#FFD600" : "#b6b6b6"}
+                            // color={"#FFD600"}
                             className="tab-icon"
                           />
                         }
@@ -507,7 +509,8 @@ const SimulateMessagePanel = forwardRef(
                         leftSection={
                           <Settings
                             size={20}
-                            color={activeTab === "system" ? "#90caf9" : "#b6b6b6"}
+                            color={activeTab === "system" ? "#e01210" : "#b6b6b6"}
+                            // color={"#e01210"}
                             className="tab-icon"
                           />
                         }
