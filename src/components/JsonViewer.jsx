@@ -92,8 +92,14 @@ const JsonViewer = ({
     if (typeof obj === "string") {
       try {
         const parsed = JSON.parse(obj);
-        // Recursively parse nested JSON
-        return parseNestedJson(parsed);
+        // Only parse if the result is an object or array, not primitive values
+        // This prevents converting string numbers like '123' to numbers 123
+        if (typeof parsed === "object" && parsed !== null) {
+          // Recursively parse nested JSON
+          return parseNestedJson(parsed);
+        }
+        // Keep primitive values as strings
+        return obj;
       } catch {
         return obj;
       }
