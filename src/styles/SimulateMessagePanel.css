@@ -237,7 +237,7 @@
 }
 
 .simulate-btn.incoming {
-  background-color: #dc2626;
+  background-color: #b91c1c;
   color: #ffffff;
   border: none;
   display: flex;
@@ -246,12 +246,13 @@
 }
 
 .simulate-btn.incoming:hover:not(:disabled) {
-  background-color: #b91c1c;
+  background-color: #dc2626;
   color: #ffffff;
+  filter: brightness(1.1);
 }
 
 .simulate-btn.outgoing {
-  background-color: #16a34a;
+  background-color: #15803d;
   color: #ffffff;
   border: none;
   display: flex;
@@ -260,8 +261,9 @@
 }
 
 .simulate-btn.outgoing:hover:not(:disabled) {
-  background-color: #15803d;
+  background-color: #16a34a;
   color: #ffffff;
+  filter: brightness(1.1);
 }
 
 /* System Window Styles - Added for react-rnd integration */
@@ -395,7 +397,7 @@
 .simulate-window-header.pinned {
   /* background: linear-gradient(135deg, #28a7460f, #20c99607); */
   /* background: rgba(21, 128, 21, 0.049); */
-  background: rgb(52, 52, 52);
+  background: rgb(43, 43, 43);
   /* filter: brightness(1.2); */
   color: white;
   border-bottom: 2px solid var(--border-color);

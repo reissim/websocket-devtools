@@ -245,7 +245,6 @@ class I18n {
     
     // If still no translation, return the key itself
     if (translation === undefined) {
-      console.warn(`🌐 I18n: Translation missing for key: ${key} (current lang: ${language}, available translations:`, Object.keys(translations), ')');
       return key;
     }
 
