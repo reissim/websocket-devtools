@@ -23,7 +23,8 @@ import {
   PinOff,
   CircleArrowDown,
   CircleArrowUp,
-  Send
+  Send,
+  Move
 } from "lucide-react";
 import JsonViewer from "./JsonViewer";
 import useWindowConstraints from "../hooks/useWindowConstraints";
@@ -423,7 +424,7 @@ const SimulateMessagePanel = forwardRef(
             maxHeight={maxSize.height}
             bounds="parent"
             dragHandleClassName="simulate-window-header"
-            className="simulate-floating-window"
+            className={`simulate-floating-window ${isPinned ? "pinned" : ""}`}
             style={{
               zIndex: 1000,
             }}
@@ -434,7 +435,7 @@ const SimulateMessagePanel = forwardRef(
                 className={`simulate-window-header ${isPinned ? "pinned" : ""}`}
               >
                 <div className="simulate-window-title">
-                  {/* <Send size={16} className="simulate-icon-small" /> */}
+                  <Move size={16} className="simulate-icon-small" />
                   <span>{t("simulate.title")}</span>
                   {connection && (
                     <span className="connection-indicator">
