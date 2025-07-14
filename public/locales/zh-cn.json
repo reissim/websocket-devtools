@@ -198,5 +198,15 @@
   "common.paste": "粘贴",
   "common.cut": "剪切",
   "common.selectAll": "全选",
-  "system.closeEvent.notice": "仅“客户端关闭”事件（Close Code 为 1000 或 3000-4999）会真实调用 ws.close() 并断开连接，其余所有关闭事件（包括服务端关闭）仅模拟关闭，虽然会触发 ws.onclose.call() 事件，但底层连接未真正断开。"
+  "popup.title": "WebSocket 代理",
+  "popup.enableExtension": "启用扩展",
+  "popup.status.enabled": "已启用",
+  "popup.status.disabled": "已禁用",
+  "popup.status.activeOnNewPages": "新页面上处于活跃状态",
+  "popup.status.disabledOnNewPages": "新页面上已禁用",
+  "popup.openDevTools": "📊 打开开发者工具面板",
+  "popup.devToolsHint": "按 F12 → 找到\"WebSocket Monitor\"标签页",
+  "popup.status": "状态",
+  "popup.loading": "加载中...",
+  "system.closeEvent.notice": "仅\"客户端关闭\"事件（Close Code 为 1000 或 3000-4999）会真实调用 ws.close() 并断开连接，其余所有关闭事件（包括服务端关闭）仅模拟关闭，虽然会触发 ws.onclose.call() 事件，但底层连接未真正断开。"
 } 

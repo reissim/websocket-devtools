@@ -198,5 +198,15 @@
   "common.paste": "Paste",
   "common.cut": "Cut",
   "common.selectAll": "Select All",
+  "popup.title": "WebSocket Proxy",
+  "popup.enableExtension": "Enable Extension",
+  "popup.status.enabled": "Enabled",
+  "popup.status.disabled": "Disabled",
+  "popup.status.activeOnNewPages": "Active on new pages",
+  "popup.status.disabledOnNewPages": "Disabled on new pages",
+  "popup.openDevTools": "📊 Open DevTools Panel",
+  "popup.devToolsHint": "Press F12 → Find \"WebSocket Monitor\" tab",
+  "popup.status": "Status",
+  "popup.loading": "Loading...",
   "system.closeEvent.notice": "Only 'Client Close' events (with Close Code 1000 or 3000-4999) will actually call ws.close() and close the connection. All other close events (including server-side) are simulated: ws.onclose.call() will be triggered, but the underlying connection is not truly closed."
 } 

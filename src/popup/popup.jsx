@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
+import { t } from "../utils/i18n.js";
+import { Settings } from "lucide-react";
 
 const Popup = () => {
   const [isEnabled, setIsEnabled] = useState(true);
@@ -45,7 +47,7 @@ const Popup = () => {
   if (isLoading) {
     return (
       <div style={styles.container}>
-        <div style={styles.loading}>Loading...</div>
+        <div style={styles.loading}>{t("popup.loading")}</div>
       </div>
     );
   }
@@ -54,13 +56,13 @@ const Popup = () => {
     <div style={styles.container}>
       {/* 标题 */}
       <div style={styles.header}>
-        <h3 style={styles.title}>WebSocket Proxy</h3>
+        <h3 style={styles.title}>{t("popup.title")}</h3>
       </div>
 
       {/* 开关控制 */}
       <div style={styles.section}>
         <div style={styles.switchContainer}>
-          <span style={styles.switchLabel}>Enable Extension</span>
+          <span style={styles.switchLabel}>{t("popup.enableExtension")}</span>
           <button
             style={{
               ...styles.switchButton,
@@ -77,24 +79,25 @@ const Popup = () => {
           </button>
         </div>
         <div style={styles.switchHint}>
-          {isEnabled ? "Active on new pages" : "Disabled on new pages"}
+          {isEnabled ? t("popup.status.activeOnNewPages") : t("popup.status.disabledOnNewPages")}
         </div>
       </div>
 
       {/* 使用提示 */}
       <div style={styles.section}>
         <button style={styles.instructionButton} onClick={handleOpenDevTools}>
-          📊 Open DevTools Panel
+          <Settings />
+          {t("popup.openDevTools")}
         </button>
-        <div style={styles.hint}>Press F12 → Find "WebSocket Monitor" tab</div>
+        <div style={styles.hint}>{t("popup.devToolsHint")}</div>
       </div>
 
       {/* 状态提示 */}
       <div style={styles.footer}>
         <div style={styles.status}>
-          Status:{" "}
+          {t("popup.status")}:{" "}
           <span style={{ color: isEnabled ? "#38a169" : "#e53e3e" }}>
-            {isEnabled ? "Enabled" : "Disabled"}
+            {isEnabled ? t("popup.status.enabled") : t("popup.status.disabled")}
           </span>
         </div>
       </div>
