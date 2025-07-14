@@ -10,86 +10,148 @@
   color: var(--text-primary);
 }
 
-/* 控制区域 */
+/* 控制区域 - 现代化设计 */
 .favorites-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
+  gap: 12px;
+  padding: 12px 16px;
   background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
 }
 
 .search-container {
   flex: 1;
+  position: relative;
+}
+
+/* 搜索输入框现代化样式 */
+.search-input {
+  position: relative;
 }
 
 .search-input input {
-  background: var(--bg-primary) !important;
+  background: var(--bg-input) !important;
   border: 1px solid var(--border-color) !important;
   color: var(--text-primary) !important;
+  border-radius: var(--radius) !important;
+  height: 32px !important;
+  font-size: 13px !important;
+  padding: 0 12px 0 32px !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .search-input input:focus {
   border-color: var(--accent-color) !important;
   box-shadow: 0 0 0 2px var(--accent-transparent-color) !important;
+  background: var(--bg-tertiary) !important;
+  outline: none !important;
 }
 
-.add-favorite-btn {
-  background: var(--accent-color) !important;
-  color: white !important;
+.search-input input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+.search-input input:focus::placeholder {
+  color: var(--text-secondary) !important;
+}
+
+/* 搜索图标样式 */
+.search-input .mantine-TextInput-section[data-position="left"] {
+  width: 32px !important;
+  padding-left: 10px !important;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.search-input:focus-within .mantine-TextInput-section[data-position="left"] {
+  color: var(--accent-color);
+}
+
+.search-input .mantine-TextInput-section[data-position="right"] {
+  width: 32px !important;
+  padding-right: 10px !important;
+}
+
+.search-input .mantine-ActionIcon-root {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  background: transparent !important;
+  color: var(--text-muted) !important;
   border: none !important;
-  flex-shrink: 0;
+  transition: color 0.2s ease !important;
 }
 
-.add-favorite-btn:hover {
-  background: var(--accent-hover-color) !important;
-}
-
-/* 让搜索栏和按钮更小 */
-.favorites-controls .search-input .mantine-TextInput-input {
-  height: 24px !important;
-  font-size: 11px !important;
-  padding: 2px 6px 2px 22px !important;
-  line-height: 20px !important;
-}
-
-.favorites-controls .add-favorite-btn {
-  height: 24px !important;
-  font-size: 11px !important;
-  padding: 0 8px !important;
+.search-input .mantine-ActionIcon-root:hover {
   background: var(--bg-tertiary) !important;
   color: var(--text-primary) !important;
-  border: 1px solid var(--border-color) !important;
 }
 
-.favorites-controls .add-favorite-btn:hover {
-  background: var(--bg-secondary) !important;
-  border-color: var(--text-secondary) !important;
-}
-
-.favorites-controls .add-favorite-btn .mantine-Button-inner {
-  gap: 3px !important;
-}
-
-.favorites-controls .search-input .mantine-TextInput-section[data-position="left"] {
-  width: 18px !important;
-  padding-left: 4px !important;
-}
-
-.favorites-controls .search-input .mantine-TextInput-section[data-position="right"] {
-  width: 18px !important;
-  padding-right: 4px !important;
-}
-
-.favorites-controls .search-input .mantine-ActionIcon-root {
+.search-input .mantine-TextInput-section svg {
   width: 16px !important;
   height: 16px !important;
-  min-width: 16px !important;
 }
 
-.favorites-controls .search-input .mantine-TextInput-section svg {
-  width: 12px !important;
-  height: 12px !important;
+/* 添加收藏按钮 - 黄色主题 */
+.add-favorite-btn.mantine-Button-root {
+  height: 32px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 0 14px !important;
+  background: linear-gradient(135deg, #ffd700 0%, #ffb800 100%) !important;
+  color: #2d2d2d !important;
+  border: none !important;
+  border-radius: var(--radius) !important;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 6px rgba(255, 215, 0, 0.3);
+  filter: brightness(0.9);
+}
+
+.add-favorite-btn.mantine-Button-root:hover {
+  background: linear-gradient(135deg, #ffed4e 0%, #ffa500 100%) !important;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+  filter: brightness(1);
+}
+
+.add-favorite-btn.mantine-Button-root:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(255, 215, 0, 0.3);
+}
+
+.add-favorite-btn .mantine-Button-inner {
+  gap: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.add-favorite-btn .mantine-Button-inner svg {
+  width: 16px !important;
+  height: 16px !important;
+  color: #2d2d2d !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .favorites-controls {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  
+  .search-input input {
+    height: 28px !important;
+    font-size: 12px !important;
+    padding: 0 10px 0 28px !important;
+  }
+  
+  .add-favorite-btn.mantine-Button-root {
+    height: 28px !important;
+    font-size: 12px !important;
+    padding: 0 10px !important;
+  }
 }
 
 /* 收藏列表区域 */
