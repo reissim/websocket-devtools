@@ -44,10 +44,10 @@ class I18n {
   /**
    * Initialize user preference asynchronously (called from constructor)
    */
-  async initUserPreference() {
+  async initUserPreference(preferBrowserLanguage = false) {
     try {
       console.log('🌐 I18n: Detecting user language preference...');
-      const preferredLanguage = await this.detectLanguage();
+      const preferredLanguage = await this.detectLanguage(preferBrowserLanguage);
       console.log('🌐 I18n: Detected preferred language:', preferredLanguage);
       
       if (preferredLanguage !== this.currentLanguage) {
@@ -73,22 +73,39 @@ class I18n {
 
   /**
    * Detect the user's preferred language
-   * Priority: 1. Saved preference 2. Browser language 3. Fallback
+   * Priority for panel: 1. Saved preference 2. Browser language 3. Fallback
+   * Priority for popup: 1. Browser language 2. Saved preference 3. Fallback
    */
-  async detectLanguage() {
+  async detectLanguage(preferBrowserLanguage = false) {
     try {
-      // Check saved preference first
-      const saved = await this.getSavedLanguage();
-      console.log('🌐 I18n: Saved language:', saved);
-      if (saved && this.supportedLanguages.includes(saved)) {
-        return saved;
-      }
+      if (preferBrowserLanguage) {
+        // For popup: prioritize browser language
+        const browserLang = this.getBrowserLanguage();
+        console.log('🌐 I18n: Browser language:', browserLang);
+        if (browserLang && this.supportedLanguages.includes(browserLang)) {
+          return browserLang;
+        }
 
-      // Check browser language
-      const browserLang = this.getBrowserLanguage();
-      console.log('🌐 I18n: Browser language:', browserLang);
-      if (browserLang && this.supportedLanguages.includes(browserLang)) {
-        return browserLang;
+        // Check saved preference as fallback
+        const saved = await this.getSavedLanguage();
+        console.log('🌐 I18n: Saved language:', saved);
+        if (saved && this.supportedLanguages.includes(saved)) {
+          return saved;
+        }
+      } else {
+        // For panel: prioritize saved preference
+        const saved = await this.getSavedLanguage();
+        console.log('🌐 I18n: Saved language:', saved);
+        if (saved && this.supportedLanguages.includes(saved)) {
+          return saved;
+        }
+
+        // Check browser language as fallback
+        const browserLang = this.getBrowserLanguage();
+        console.log('🌐 I18n: Browser language:', browserLang);
+        if (browserLang && this.supportedLanguages.includes(browserLang)) {
+          return browserLang;
+        }
       }
 
       // Return fallback
@@ -328,6 +345,50 @@ class I18n {
     await this.loadTranslations(language);
     this.notifyLanguageChange(language, language);
   }
+
+  /**
+   * Force browser language detection and set it as current language
+   * Used for popup to always follow browser language
+   */
+  async forceBrowserLanguage() {
+    try {
+      const browserLang = this.getBrowserLanguage();
+      console.log('🌐 I18n: Forcing browser language:', browserLang);
+      
+      if (browserLang && this.supportedLanguages.includes(browserLang)) {
+        if (browserLang !== this.currentLanguage) {
+          console.log('🌐 I18n: Setting browser language:', browserLang);
+          const oldLanguage = this.currentLanguage;
+          this.currentLanguage = browserLang;
+          this.notifyLanguageChange(browserLang, oldLanguage);
+        }
+        return browserLang;
+      }
+      
+      // If browser language not supported, keep current language
+      console.log('🌐 I18n: Browser language not supported, keeping current:', this.currentLanguage);
+      return this.currentLanguage;
+    } catch (error) {
+      console.warn('🌐 I18n: Failed to force browser language:', error);
+      return this.currentLanguage;
+    }
+  }
+
+  /**
+   * Initialize for panel with saved preference priority
+   * This will use saved preference if available, otherwise browser language
+   */
+  async initForPanel() {
+    return this.initUserPreference(false);
+  }
+
+  /**
+   * Initialize for popup with browser language priority
+   * This will use browser language if available, otherwise saved preference
+   */
+  async initForPopup() {
+    return this.initUserPreference(true);
+  }
 }
 
 // Create and export singleton instance
@@ -340,6 +401,9 @@ export const getCurrentLanguage = () => i18n.getCurrentLanguage();
 export const getSupportedLanguages = () => i18n.getSupportedLanguages();
 export const getLanguageDisplayName = (language) => i18n.getLanguageDisplayName(language);
 export const addLanguageChangeListener = (listener) => i18n.addLanguageChangeListener(listener);
+export const forceBrowserLanguage = () => i18n.forceBrowserLanguage();
+export const initForPanel = () => i18n.initForPanel();
+export const initForPopup = () => i18n.initForPopup();
 
 // Export the main instance
 export default i18n; 

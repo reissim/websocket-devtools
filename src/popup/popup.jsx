@@ -1,18 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
-import { t } from "../utils/i18n.js";
+import i18n, { t, initForPopup } from "../utils/i18n.js";
 import { Settings, Zap, Globe, Power, Github } from "lucide-react";
 
 const Popup = () => {
   const [isEnabled, setIsEnabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [, forceUpdate] = useState({});
 
-  // 加载保存的状态
+  // 加载保存的状态并初始化popup语言设置
   useEffect(() => {
-    chrome.storage.local.get(["websocket-proxy-enabled"], (result) => {
-      setIsEnabled(result["websocket-proxy-enabled"] !== false); // 默认启用
-      setIsLoading(false);
+    const initializePopup = async () => {
+      try {
+        // 初始化popup语言设置（优先使用浏览器语言）
+        await initForPopup();
+        
+        // 加载扩展状态
+        chrome.storage.local.get(["websocket-proxy-enabled"], (result) => {
+          setIsEnabled(result["websocket-proxy-enabled"] !== false); // 默认启用
+          setIsLoading(false);
+        });
+      } catch (error) {
+        console.error('Failed to initialize popup:', error);
+        setIsLoading(false);
+      }
+    };
+    
+    initializePopup();
+  }, []);
+
+  // 监听语言变化并强制更新UI
+  useEffect(() => {
+    const unsubscribe = i18n.addLanguageChangeListener(() => {
+      forceUpdate({});
     });
+    return unsubscribe;
   }, []);
 
   // 处理开关切换
@@ -129,6 +151,16 @@ const Popup = () => {
             href="https://github.com/BrianLuo/websocket-proxy-pro" 
             target="_blank" 
             style={styles.githubLink}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "#2563eb";
+              e.target.style.transform = "scale(1.1)";
+              e.target.style.boxShadow = "0 4px 8px rgba(59, 130, 246, 0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "#3b82f6";
+              e.target.style.transform = "scale(1)";
+              e.target.style.boxShadow = "0 2px 4px rgba(59, 130, 246, 0.2)";
+            }}
             onClick={(e) => {
               e.preventDefault();
               chrome.tabs.create({ url: "https://github.com/BrianLuo/websocket-proxy-pro" });
@@ -150,7 +182,7 @@ const styles = {
   container: {
     padding: "20px",
     minHeight: "240px",
-    backgroundColor: "#0f172a",
+    backgroundColor: "#1e293b",
     color: "#f1f5f9",
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)",
@@ -199,9 +231,9 @@ const styles = {
     justifyContent: "space-between",
     marginBottom: "8px",
     padding: "12px",
-    backgroundColor: "#1e293b",
+    backgroundColor: "#334155",
     borderRadius: "12px",
-    border: "1px solid #334155",
+    border: "1px solid #475569",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)",
   },
   switchLabel: {
@@ -272,9 +304,9 @@ const styles = {
     alignItems: "center",
     gap: "12px",
     padding: "16px",
-    backgroundColor: "#1e293b",
+    backgroundColor: "#334155",
     borderRadius: "12px",
-    border: "1px solid #334155",
+    border: "1px solid #475569",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)",
   },
   infoIcon: {
@@ -311,7 +343,8 @@ const styles = {
   versionInfo: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    gap: "12px",
     padding: "0 4px",
   },
   versionText: {
@@ -320,12 +353,18 @@ const styles = {
     fontWeight: "500",
   },
   githubLink: {
-    fontSize: "12px",
-    color: "#3b82f6",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "32px",
+    height: "32px",
+    borderRadius: "50%",
+    backgroundColor: "#3b82f6",
+    color: "#ffffff",
     textDecoration: "none",
-    fontWeight: "500",
     cursor: "pointer",
-    transition: "color 0.2s ease",
+    transition: "all 0.2s ease",
+    boxShadow: "0 2px 4px rgba(59, 130, 246, 0.2)",
   },
   donationSection: {
     marginTop: "8px",

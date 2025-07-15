@@ -7,7 +7,7 @@ import WebSocketList from "../components/WebSocketList.jsx";
 import MessageDetails from "../components/MessageDetails.jsx";
 import FloatingSimulate from "../components/FloatingSimulate.jsx";
 import LanguageSelector from "../components/LanguageSelector.jsx";
-import { t, addLanguageChangeListener, getCurrentLanguage } from "../utils/i18n.js";
+import { t, addLanguageChangeListener, getCurrentLanguage, initForPanel } from "../utils/i18n.js";
 import i18n from "../utils/i18n.js";
 import "../styles/main.css";
 import { Ban } from "lucide-react";
@@ -35,6 +35,9 @@ const WebSocketPanel = () => {
   const [currentLanguage, setCurrentLanguage] = useState(() => getCurrentLanguage());
 
   useEffect(() => {
+    // Initialize panel with saved preference priority
+    initForPanel();
+    
     // Language change listener for re-rendering when language changes
     const unsubscribeLanguage = addLanguageChangeListener((newLanguage) => {
       console.log('🌐 Panel: Language changed to:', newLanguage);
