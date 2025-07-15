@@ -471,7 +471,7 @@ const SimulateMessagePanel = forwardRef(
               <div className="simulate-window-content">
                 {!connection ? (
                   <div className="simulate-panel-empty floating">
-                    <p><Wifi size={16} style={{display: 'inline', marginRight: '10px'}} />{t("simulate.status.noConnection")}</p>
+                    <p>{t("simulate.status.noConnection")}</p>
                   </div>
                 ) : (
                   <Tabs

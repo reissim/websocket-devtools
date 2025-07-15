@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CheckCircle, XCircle, Trash2, Plus } from "lucide-react";
+import { CheckCircle, XCircle, Trash2, Plus, ArrowRightLeft, Globe, Zap } from "lucide-react";
 import { Modal, TextInput } from "@mantine/core";
 import { filterConnections } from "../utils/filterUtils";
 import useConnectionNewMessage from "../hooks/useConnectionNewMessage";
@@ -316,7 +316,29 @@ const WebSocketList = ({
           overlay: 'ws-modal-overlay',
         }}
       >
-                 <div className="ws-modal-content-wrapper">
+        <div className="ws-modal-content-wrapper">
+          {/* Modal header with icon and description */}
+          <div className="ws-modal-header-section">
+            <div className="ws-modal-icon-container">
+              <ArrowRightLeft size={24} className="ws-modal-icon" />
+            </div>
+            <div className="ws-modal-description">
+              <p className="ws-modal-description-text">
+                {t("panel.connectionList.modal.description")}
+              </p>
+              <div className="ws-modal-features">
+                <div className="ws-modal-feature">
+                  <Globe size={14} />
+                  <span>{t("panel.connectionList.modal.feature1")}</span>
+                </div>
+                <div className="ws-modal-feature">
+                  <Zap size={14} />
+                  <span>{t("panel.connectionList.modal.feature2")}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <TextInput
              label={t("panel.connectionList.modal.urlLabel")}
              placeholder={t("panel.connectionList.modal.urlPlaceholder")}
@@ -349,6 +371,7 @@ const WebSocketList = ({
               onClick={handleManualConnect}
               disabled={isConnecting || !isValidWsUrl(wsUrl)}
             >
+              <ArrowRightLeft size={16} />
               {t("panel.connectionList.modal.connect")}
             </button>
           </div>
