@@ -517,6 +517,7 @@ const WebSocketPanel = () => {
           ref={floatingSimulateRef}
           connection={selectedConnection}
           onSimulateMessage={handleSimulateMessage}
+          onManualConnect={handleManualConnect}
         />
       </div>
     </MantineProvider>
