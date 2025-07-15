@@ -204,7 +204,7 @@
   "popup.status.disabled": "已禁用",
   "popup.status.activeOnNewPages": "新页面上处于活跃状态",
   "popup.status.disabledOnNewPages": "新页面上已禁用",
-  "popup.openDevTools": "📊 打开开发者工具面板",
+  "popup.openDevTools": "打开开发者工具面板",
   "popup.devToolsHint": "按 F12 → 找到\"WebSocket Monitor\"标签页",
   "popup.status": "状态",
   "popup.loading": "加载中...",

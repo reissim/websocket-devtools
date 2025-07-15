@@ -231,41 +231,87 @@ function showDevToolsHint() {
       position: fixed;
       top: 20px;
       right: 20px;
-      background: #1a202c;
-      color: #f7fafc;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      background: #0f172a;
+      color: #f1f5f9;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3), 0 4px 10px rgba(0,0,0,0.2);
       z-index: 10000;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 14px;
-      max-width: 300px;
-      border: 1px solid #3182ce;
+      max-width: 320px;
+      border: 1px solid #334155;
+      backdrop-filter: blur(10px);
+      animation: slideIn 0.3s ease-out;
     ">
-      <div style="font-weight: 600; margin-bottom: 8px;">📊 WebSocket Proxy</div>
-      <div style="margin-bottom: 12px;">Press <strong>F12</strong> to open DevTools</div>
-      <div style="margin-bottom: 8px;">Find <strong>"WebSocket Proxy"</strong> tab</div>
-      <button onclick="this.parentElement.parentElement.remove()" style="
-        background: #3182ce;
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 4px;
-        cursor: pointer;
-        float: right;
-        margin-top: 8px;
-      ">Got it</button>
+      <div style="
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: #3b82f6;
+      ">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M16 12l-4-4-4 4"/>
+        </svg>
+        WebSocket Proxy
+      </div>
+      
+      <div style="margin-bottom: 16px; line-height: 1.5;">
+        <div style="margin-bottom: 8px;">Press <strong style="color: #10b981;">F12</strong> to open DevTools</div>
+        <div style="color: #94a3b8; font-size: 13px;">Find <strong>"WebSocket Proxy"</strong> tab to start monitoring</div>
+      </div>
+      
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button onclick="this.parentElement.parentElement.remove()" style="
+          background: #3b82f6;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 13px;
+          font-weight: 500;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+        " onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+          Got it
+        </button>
+      </div>
     </div>
+    
+    <style>
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+    </style>
   `;
 
   document.body.appendChild(hint);
 
-  // 5秒后自动消失
+  // 8秒后自动消失，增加动画效果
   setTimeout(() => {
     if (hint.parentElement) {
-      hint.remove();
+      const hintDiv = hint.querySelector('div');
+      if (hintDiv) {
+        hintDiv.style.animation = 'slideIn 0.3s ease-out reverse';
+        setTimeout(() => {
+          hint.remove();
+        }, 300);
+      } else {
+        hint.remove();
+      }
     }
-  }, 5000);
+  }, 8000);
 }
 
 console.log("✅ Content script initialization complete");

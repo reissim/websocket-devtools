@@ -204,7 +204,7 @@
   "popup.status.disabled": "Disabled",
   "popup.status.activeOnNewPages": "Active on new pages",
   "popup.status.disabledOnNewPages": "Disabled on new pages",
-  "popup.openDevTools": "📊 Open DevTools Panel",
+  "popup.openDevTools": "Open DevTools Panel",
   "popup.devToolsHint": "Press F12 → Find \"WebSocket Monitor\" tab",
   "popup.status": "Status",
   "popup.loading": "Loading...",
