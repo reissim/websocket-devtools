@@ -1,4 +1,4 @@
-/* JsonViewer 组件样式 */
+/* JsonViewer component styles */
 .json-viewer {
   background: var(--bg-primary);
   display: flex;
@@ -108,7 +108,7 @@
   stroke: #d1d5db;
 }
 
-/* 按钮样式 */
+/* Button styles */
 .json-viewer-btn {
   display: flex;
   align-items: center;
@@ -264,7 +264,7 @@
   margin: 0 3px;
 }
 
-/* Badge样式 */
+/* Badge styles */
 .json-viewer-badge {
   display: flex;
   align-items: center;
@@ -423,7 +423,7 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 紧凑的 JSON 查看器（用于详情面板）*/
+/* Compact JSON viewer (for details panel) */
 .json-viewer.compact .json-viewer-controls {
   /* border-top-left-radius: 16px;
   border-top-right-radius: 16px; */
@@ -448,7 +448,7 @@
   font-size: 10px;
 }
 
-/* 确保 CodeMirror 在小高度时也能正常滚动 */
+/* Ensure CodeMirror scrolls properly even at small heights */
 .json-viewer-container {
   min-height: 100px;
   overflow: auto;
@@ -458,12 +458,12 @@
   outline: none;
 }
 
-/* 在没有足够空间时强制显示滚动条 */
+/* Force show scrollbar when there isn't enough space */
 .json-viewer-codemirror .cm-scroller {
   min-height: 100%;
 }
 
-/* Simulate 编辑器专用样式 */
+/* Simulate editor specific styles */
 .json-viewer.simulate-editor {
   height: 100%;
   min-height: 200px;
@@ -492,13 +492,13 @@
   overflow-y: auto;
 }
 
-/* 为嵌套解析的 JSON 内容添加特殊样式 */
+/* Add special styles for nested parsed JSON content */
 .json-viewer-codemirror .cm-content[data-nested="true"] {
   border-left: 3px solid var(--accent-color);
   padding-left: 12px;
 }
 
-/* 确保文本选择样式与主题一致 */
+/* Ensure text selection styles match theme */
 .json-viewer-codemirror .cm-selectionBackground {
   background-color: rgba(0, 122, 204, 0.3) !important;
 }
@@ -507,12 +507,12 @@
   background-color: rgba(0, 122, 204, 0.4) !important;
 }
 
-/* 修复高度计算问题 */
+/* Fix height calculation issues */
 .json-viewer-codemirror .cm-editor.cm-focused .cm-scroller {
   outline: none;
 }
 
-/* 为搜索功能添加样式 */
+/* Add styles for search functionality */
 .json-viewer-codemirror .cm-searchMatch {
   background-color: rgba(255, 193, 7, 0.3);
   border: 1px solid rgba(255, 193, 7, 0.6);

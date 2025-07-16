@@ -1,6 +1,6 @@
-/* SystemEventsTab.css - 现代化系统事件模拟界面样式 */
+/* SystemEventsTab.css - Modern system event simulation interface styles */
 
-/* 基础容器样式 */
+/* Base container styles */
 .system-events-tab {
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
   background: var(--bg-primary); /* Lighter black background */
 }
 
-/* 空状态样式 */
+/* Empty state styles */
 .sys-evt-empty {
   display: flex;
   align-items: center;
@@ -50,7 +50,7 @@
   font-size: 12px;
 }
 
-/* 头部样式 */
+/* Header styles */
 .sys-evt-header {
   display: flex;
   justify-content: space-between;
@@ -99,7 +99,7 @@
   font-family: 'Courier New', monospace;
 }
 
-/* 标签页样式 */
+/* Tab styles */
 .sys-evt-tabs-container {
   flex: 1;
   min-height: 0;
@@ -114,7 +114,7 @@
 .sys-evt-tabs-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: var(--bg-tab); /* 更浅灰色Tab区域 */
+  background: var(--bg-tab); /* Lighter gray tab area */
   border-bottom: 0px solid var(--border-light); /* Lighter gray border color */
 }
 

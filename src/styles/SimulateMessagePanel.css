@@ -216,7 +216,7 @@
   box-shadow: 0 2px 4px rgba(0, 122, 204, 0.3);
 }
 
-/* 模拟消息面板适配 */
+/* Simulate message panel adaptation */
 .simulate-content {
   display: flex;
   flex-direction: column;
@@ -812,7 +812,7 @@
 }
 
 
-/* 统一设置所有Mantine组件的leftSection间距为0 */
+/* Uniformly set all Mantine component leftSection spacing to 0 */
 .m_a74036a:where([data-position='left']) {
   margin-inline-end: 0 !important;
 }
