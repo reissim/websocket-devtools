@@ -8,7 +8,7 @@ import React, {
   useMemo,
 } from "react";
 import { Rnd } from "react-rnd";
-import { Tabs, Modal, TextInput } from "@mantine/core";
+import { Tabs } from "@mantine/core";
 import { 
   FileText, 
   Star, 
@@ -26,9 +26,6 @@ import {
   Send,
   Move,
   Plus,
-  ArrowRightLeft,
-  Globe,
-  Zap,
   Activity
 } from "lucide-react";
 import JsonViewer from "./JsonViewer";
@@ -38,6 +35,7 @@ import useWindowAnimation from "../hooks/useWindowAnimation";
 import usePanelManager from "../hooks/usePanelManager";
 import FavoritesTab from "./FavoritesTab";
 import SystemEventsTab from "./SystemEventsTab";
+import ManualConnectModal from "./ManualConnectModal";
 import globalFavorites, { addFromEditor } from "../utils/globalFavorites";
 import { t } from "../utils/i18n";
 import SimulateEditorTab from "./SimulateEditorTab";
@@ -61,8 +59,6 @@ const SimulateMessagePanel = forwardRef(
     
     // Manual connection state
     const [isManualConnectOpen, setIsManualConnectOpen] = useState(false);
-    const [wsUrl, setWsUrl] = useState("");
-    const [isConnecting, setIsConnecting] = useState(false);
 
     // 使用窗口约束 hook
     const { maxSize, validateAndFixPositionAndSize } = useWindowConstraints();
@@ -302,33 +298,7 @@ const SimulateMessagePanel = forwardRef(
       [connection]
     );
 
-    // Handle manual WebSocket connection
-    const handleManualConnect = useCallback(async () => {
-      if (!wsUrl.trim() || !onManualConnect) return;
-      
-      setIsConnecting(true);
-      try {
-        await onManualConnect(wsUrl.trim());
-        setWsUrl("");
-        setIsManualConnectOpen(false);
-      } catch (error) {
-        console.error("Failed to create manual WebSocket connection:", error);
-        setIsManualConnectOpen(false);
-        setWsUrl("");
-      } finally {
-        setIsConnecting(false);
-      }
-    }, [wsUrl, onManualConnect]);
 
-    // Validate WebSocket URL
-    const isValidWsUrl = useCallback((url) => {
-      try {
-        const urlObj = new URL(url);
-        return urlObj.protocol === 'ws:' || urlObj.protocol === 'wss:';
-      } catch {
-        return false;
-      }
-    }, []);
 
     const clearMessage = () => {
       setSimulateMessage("");
@@ -603,93 +573,12 @@ const SimulateMessagePanel = forwardRef(
         )}
 
         {/* Manual Connection Modal */}
-        <Modal
+        <ManualConnectModal
           opened={isManualConnectOpen}
-          onClose={() => {
-            setIsManualConnectOpen(false);
-            setWsUrl("");
-          }}
-          title={t("panel.connectionList.modal.title")}
-          size="sm"
-          centered
-          zIndex={1500}
-          classNames={{
-            modal: 'ws-modal',
-            header: 'ws-modal-header',
-            title: 'ws-modal-title',
-            close: 'ws-modal-close',
-            content: 'ws-modal-content',
-            body: 'ws-modal-body',
-            overlay: 'ws-modal-overlay',
-          }}
-        >
-          <div className="ws-modal-content-wrapper">
-            {/* Modal header with icon and description */}
-            <div className="ws-modal-header-section">
-              <div className="ws-modal-icon-container">
-                <Activity size={24} className="ws-modal-icon" />
-              </div>
-              <div className="ws-modal-description">
-                <p className="ws-modal-description-text">
-                  {t("panel.connectionList.modal.description")}
-                </p>
-                <div className="ws-modal-features">
-                  <div className="ws-modal-feature">
-                    <Globe size={14} />
-                    <span>{t("panel.connectionList.modal.feature1")}</span>
-                  </div>
-                  <div className="ws-modal-feature">
-                    <Zap size={14} />
-                    <span>{t("panel.connectionList.modal.feature2")}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <TextInput
-               label={t("panel.connectionList.modal.urlLabel")}
-               placeholder={t("panel.connectionList.modal.urlPlaceholder")}
-               value={wsUrl}
-               onChange={(e) => setWsUrl(e.currentTarget.value)}
-               onKeyDown={(e) => {
-                 if (e.key === 'Enter' && !isConnecting && isValidWsUrl(wsUrl)) {
-                   e.preventDefault();
-                   handleManualConnect();
-                 }
-               }}
-               disabled={isConnecting}
-               error={wsUrl.length > 0 && !isValidWsUrl(wsUrl) ? t("panel.connectionList.modal.urlError") : null}
-               size="sm"
-               classNames={{
-                 label: 'ws-text-input-label',
-                 input: `ws-text-input-field ${wsUrl.length > 0 && !isValidWsUrl(wsUrl) ? 'ws-text-input-error' : ''}`,
-                 error: 'ws-text-input-error-text',
-               }}
-            />
-            
-            <div className="modal-button-group">
-              <button
-                className="modal-button modal-button-cancel"
-                onClick={() => {
-                  setIsManualConnectOpen(false);
-                  setWsUrl("");
-                }}
-                disabled={isConnecting}
-              >
-                {t("common.cancel")}
-              </button>
-              
-              <button
-                className="modal-button modal-button-connect"
-                onClick={handleManualConnect}
-                disabled={isConnecting || !isValidWsUrl(wsUrl)}
-              >
-                <ArrowRightLeft size={16} />
-                {t("panel.connectionList.modal.connect")}
-              </button>
-            </div>
-          </div>
-        </Modal>
+          onClose={() => setIsManualConnectOpen(false)}
+          onConnect={onManualConnect}
+          iconComponent={Activity}
+        />
       </>
     );
   }
