@@ -535,7 +535,7 @@ const SimulateMessagePanel = forwardRef(
                         leftSection={
                           <Settings
                             size={20}
-                            color={activeTab === "system" ? "#e01210" : "#b6b6b6"}
+                            color={activeTab === "system" ? "#cd7726" : "#b6b6b6"}
                             // color={"#e01210"}
                             className="tab-icon"
                           />

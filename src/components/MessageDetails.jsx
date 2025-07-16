@@ -249,7 +249,7 @@ const MessageDetails = ({
     if (isSystemMessage) {
       return (
         <div className="data-cell system">
-          <Icons.Connection className="system-icon" />
+          <Icons.Connection className="system-icon" style={{flexShrink: 0}}/>
           {tags.length > 0 && <span className="message-tags">{tags}</span>}
           <span className="system-text">
             {message.type === "open"

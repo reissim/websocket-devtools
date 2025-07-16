@@ -535,6 +535,12 @@
 
 .data-cell.system {
   color: var(--accent-color);
+  flex-wrap: nowrap;
+}
+
+.data-cell.system > :first-child {
+  flex-shrink: 0;
+  min-width: 12px;
 }
 
 .direction-arrow {
@@ -563,6 +569,8 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  width: 12px;
+  min-width: 12px;
 }
 
 .system-text {
