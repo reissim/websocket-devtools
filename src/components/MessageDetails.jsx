@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { filterMessages } from "../utils/filterUtils";
 import JsonViewer from "./JsonViewer";
@@ -55,6 +55,7 @@ const Icons = {
 
 const MessageDetails = ({
   connection,
+  selectedConnectionId,
   isIntercepting,
   onSimulateMessage,
   onClearMessages,
@@ -67,6 +68,11 @@ const MessageDetails = ({
   const [copiedMessageKey, setCopiedMessageKey] = useState(null); // 已拷贝的消息key
   const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc' 时间排序
   const [hoveredMessageKey, setHoveredMessageKey] = useState(null); // 悬停的消息key
+
+  // 当连接切换时重置选中的消息，关闭详情面板
+  useEffect(() => {
+    setSelectedMessageKey(null);
+  }, [selectedConnectionId]);
 
   // Use new message highlight hook
   const { isNewMessage, clearHighlights } = useNewMessageHighlight(
@@ -384,7 +390,7 @@ const MessageDetails = ({
                     borderTopRightRadius: "20px",
                   }}
                 >
-                  <div className="message-detail-simple">
+                  <div className="message-detail-simple" key={selectedConnectionId}>
                     <div className="detail-content">
                       {(() => {
                         const selectedMessage = getSelectedMessage();

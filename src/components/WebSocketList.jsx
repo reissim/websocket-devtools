@@ -30,8 +30,8 @@ const WebSocketList = ({
   );
 
 
-
-  const formatTimestamp = (timestamp) => {
+// 第二个参数保留几位小数点
+  const formatTimestamp = (timestamp, numberOfDecimalPlaces = 3) => {
     const date = new Date(timestamp);
     const timeString = date.toLocaleTimeString(undefined, {
       hour: "2-digit",
@@ -40,7 +40,10 @@ const WebSocketList = ({
       hour12: false,
     });
     const milliseconds = date.getMilliseconds().toString().padStart(3, "0");
-    return `${timeString}.${milliseconds.substring(0, 3)}`;
+    if (numberOfDecimalPlaces > 0) {
+      return `${timeString}.${milliseconds.substring(0, numberOfDecimalPlaces)}`;
+    }
+    return timeString;
   };
 
   // 使用connectionsMap构建连接列表
@@ -170,7 +173,7 @@ const WebSocketList = ({
         </div>
         <div className="ws-connection-bottom-info">
           <span>{t("panel.connectionList.messagesCount", { count: connection.messageCount })}</span>
-          <span>{t("panel.connectionList.created", { time: formatTimestamp(connection.timestamp) })}</span>
+          <span>{t("panel.connectionList.created", { time: formatTimestamp(connection.timestamp, 0) })}</span>
         </div>
       </div>
     );
