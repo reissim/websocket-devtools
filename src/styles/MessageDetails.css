@@ -332,12 +332,12 @@
 }
 
 .ws-messages-table th.col-length {
-  width: 60px;
+  width: 55px;
   text-align: right;
 }
 
 .ws-messages-table th.col-time {
-  width: 110px;
+  width: 95px;
   text-align: right;
   user-select: none;
 }

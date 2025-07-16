@@ -480,13 +480,26 @@
   flex: 1;
   min-width: 0;
   transition: color 0.3s ease;
+  overflow: hidden; /* Ensure content doesn't overflow */
 }
 
-.simulate-window-header.pinned .simulate-window-title::after {
-  content: "●";
+/* Move pinned indicator to appear after title text span */
+.simulate-window-header.pinned .simulate-window-title span:first-of-type::after {
+  content: " ●";
   margin-left: 4px;
   font-size: 12px;
   opacity: 0.8;
+  color: #10b981; /* Green color for better visibility */
+}
+
+/* Ensure title text and icon don't shrink */
+.simulate-window-title .simulate-icon-small {
+  flex-shrink: 0; /* Icon should not shrink */
+}
+
+.simulate-window-title > span:first-of-type {
+  flex-shrink: 0; /* Title text should not shrink */
+  white-space: nowrap; /* Prevent title text wrapping */
 }
 
 .simulate-window-header::before {
@@ -516,10 +529,12 @@
   font-size: 11px;
   opacity: 0.8;
   margin-left: 4px;
+  margin-right: 40px; /* Add 40px right margin */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
+  flex-shrink: 1; /* Allow compression when space is limited */
+  min-width: 0; /* Enable text-overflow ellipsis */
 }
 
 /* Window control buttons */
