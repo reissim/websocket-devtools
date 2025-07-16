@@ -16,11 +16,24 @@ const ManualConnectModal = ({
 
   // Auto-focus input when modal opens
   useEffect(() => {
-    if (opened && inputRef.current) {
+    if (opened) {
       // 使用 setTimeout 确保 Modal 完全打开后再聚焦
       const timer = setTimeout(() => {
-        inputRef.current.focus();
-      }, 100);
+        // 尝试多种方式来聚焦 input
+        if (inputRef.current) {
+          // 如果是 Mantine TextInput，可能需要聚焦内部的 input 元素
+          const inputElement = inputRef.current.querySelector('input') || inputRef.current;
+          if (inputElement && inputElement.focus) {
+            inputElement.focus();
+          }
+        } else {
+          // 备用方案：通过选择器查找 input
+          const modalInput = document.querySelector('.ws-modal input[type="text"]');
+          if (modalInput) {
+            modalInput.focus();
+          }
+        }
+      }, 200); // 增加延迟时间确保 Modal 动画完成
       return () => clearTimeout(timer);
     }
   }, [opened]);
@@ -67,7 +80,7 @@ const ManualConnectModal = ({
       opened={opened}
       onClose={handleClose}
       title={title || t("panel.connectionList.modal.title")}
-      size="sm"
+      size="md"
       centered
       zIndex={1500}
       classNames={{
