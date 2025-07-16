@@ -226,7 +226,7 @@ const MessageDetails = ({
         <span
           key="simulated"
           className="message-tag simulated"
-          title="Simulated message"
+          title={t("messageDetails.tooltips.simulatedMessage")}
         >
           <Icons.Simulate />
           <span>{t("messageDetails.tags.simulate")}</span>
@@ -238,7 +238,7 @@ const MessageDetails = ({
         <span
           key="blocked"
           className="message-tag blocked"
-          title={message.reason || "Message was blocked"}
+          title={message.reason || t("messageDetails.tooltips.messageBlocked")}
         >
           <Icons.Block />
           <span>{t("messageDetails.tags.block")}</span>

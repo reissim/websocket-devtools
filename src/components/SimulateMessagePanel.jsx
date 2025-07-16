@@ -463,7 +463,7 @@ const SimulateMessagePanel = forwardRef(
                         : t("simulate.tooltips.pin")
                     }
                   >
-                    {isPinned ? <Pin size={12} /> : <PinOff size={12} />}
+                    {isPinned ? <Pin size={12} /> : <Pin size={12} />}
                   </button>
                   <button
                     className="window-control-btn minimize"

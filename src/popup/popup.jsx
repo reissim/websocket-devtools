@@ -138,8 +138,8 @@ const Popup = () => {
           <Zap size={16} />
         </div>
         <div style={styles.infoContent}>
-          <div style={styles.infoTitle}>WebSocket Proxy</div>
-          <div style={styles.infoDesc}>Monitor and debug WebSocket connections</div>
+          <div style={styles.infoTitle}>{t("popup.infoCard.title")}</div>
+          <div style={styles.infoDesc}>{t("popup.infoCard.description")}</div>
         </div>
       </div>
 
