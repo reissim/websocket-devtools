@@ -780,6 +780,18 @@
             const manualWs = new window.WebSocket(event.data.url);
             console.log("✅ Manual WebSocket connection created successfully");
             
+            // 获取新创建的连接ID
+            const newConnectionId = manualWs._connectionId;
+            console.log("🆔 New connection ID:", newConnectionId);
+            
+            // 发送成功事件回给content script，包含连接ID
+            sendEvent({
+              type: "manual-connection-created",
+              connectionId: newConnectionId,
+              url: event.data.url,
+              timestamp: Date.now(),
+            });
+            
             // 可选：为手动连接添加一些基本的事件监听器
             manualWs.addEventListener('open', () => {
               console.log("🔗 Manual WebSocket connection opened");
@@ -795,6 +807,13 @@
             
           } catch (error) {
             console.error("❌ Failed to create manual WebSocket connection:", error);
+            // 发送错误事件
+            sendEvent({
+              type: "manual-connection-error",
+              error: error.message,
+              url: event.data.url,
+              timestamp: Date.now(),
+            });
           }
           break;
         case "reset-proxy-state":

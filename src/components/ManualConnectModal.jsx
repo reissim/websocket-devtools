@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Modal, TextInput } from "@mantine/core";
 import { ArrowRightLeft, Globe, Zap, Activity } from "lucide-react";
 import { t } from "../utils/i18n";
@@ -12,6 +12,18 @@ const ManualConnectModal = ({
 }) => {
   const [wsUrl, setWsUrl] = useState("");
   const [isConnecting, setIsConnecting] = useState(false);
+  const inputRef = useRef(null);
+
+  // Auto-focus input when modal opens
+  useEffect(() => {
+    if (opened && inputRef.current) {
+      // 使用 setTimeout 确保 Modal 完全打开后再聚焦
+      const timer = setTimeout(() => {
+        inputRef.current.focus();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [opened]);
 
   // 验证WebSocket URL
   const isValidWsUrl = useCallback((url) => {
@@ -29,9 +41,10 @@ const ManualConnectModal = ({
     
     setIsConnecting(true);
     try {
-      await onConnect(wsUrl.trim());
+      const result = await onConnect(wsUrl.trim());
       setWsUrl("");
       onClose();
+      return result;
     } catch (error) {
       console.error("Failed to create manual WebSocket connection:", error);
       onClose();
@@ -91,6 +104,7 @@ const ManualConnectModal = ({
         </div>
         
         <TextInput
+           ref={inputRef}
            label={t("panel.connectionList.modal.urlLabel")}
            placeholder={t("panel.connectionList.modal.urlPlaceholder")}
            value={wsUrl}

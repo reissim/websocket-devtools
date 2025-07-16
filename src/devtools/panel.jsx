@@ -183,9 +183,19 @@ const WebSocketPanel = () => {
 
         console.log("📊 Processing WebSocket event:", eventData);
 
+        // 处理手动连接创建成功事件
+        if (eventData.type === "manual-connection-created") {
+          console.log("🎯 Manual connection created, auto-selecting:", eventData.connectionId);
+          // 延迟一下确保连接事件已处理
+          setTimeout(() => {
+            setSelectedConnectionId(eventData.connectionId);
+          }, 100);
+        }
+
         // 更新连接信息
         setConnectionsMap((prevConnections) => {
           const newConnections = new Map(prevConnections);
+          const hadConnections = prevConnections.size > 0;
 
           if (eventData.type === "connection" || eventData.type === "open") {
             // 创建或更新连接为active状态
@@ -202,6 +212,14 @@ const WebSocketPanel = () => {
               "Status:",
               eventData.type
             );
+
+            // 自动选择连接：从0个连接变为1个连接时，自动选中该连接
+            if (!hadConnections && newConnections.size === 1) {
+              console.log("🎯 Auto-selecting first connection:", eventData.id);
+              setTimeout(() => {
+                setSelectedConnectionId(eventData.id);
+              }, 100);
+            }
           } else if (eventData.type === "close" || eventData.type === "error") {
             // 更新连接为inactive状态，如果连接不存在则创建它
             const existing = newConnections.get(eventData.id);
@@ -395,6 +413,31 @@ const WebSocketPanel = () => {
     console.log("🔗 Creating manual WebSocket connection:", wsUrl);
     
     try {
+      // 设置一个Promise来等待manual-connection-created事件
+      const connectionCreatedPromise = new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error("Connection creation timeout"));
+        }, 10000); // 10秒超时
+
+        const listener = (message) => {
+          if (message.type === "websocket-event" && 
+              message.data.type === "manual-connection-created" &&
+              message.data.url === wsUrl) {
+            clearTimeout(timeout);
+            chrome.runtime.onMessage.removeListener(listener);
+            resolve(message.data.connectionId);
+          } else if (message.type === "websocket-event" && 
+                     message.data.type === "manual-connection-error" &&
+                     message.data.url === wsUrl) {
+            clearTimeout(timeout);
+            chrome.runtime.onMessage.removeListener(listener);
+            reject(new Error(message.data.error || "Manual connection failed"));
+          }
+        };
+
+        chrome.runtime.onMessage.addListener(listener);
+      });
+
       // 发送消息到background script，让它在当前tab中创建WebSocket连接
       const response = await chrome.runtime.sendMessage({
         type: "create-manual-websocket",
@@ -405,8 +448,11 @@ const WebSocketPanel = () => {
       });
 
       if (response && response.success) {
-        console.log("✅ Manual WebSocket connection created successfully");
-        return response;
+        console.log("✅ Manual WebSocket creation request sent successfully");
+        // 等待实际的连接创建事件
+        const connectionId = await connectionCreatedPromise;
+        console.log("🎯 Manual WebSocket connection created with ID:", connectionId);
+        return { success: true, connectionId };
       } else {
         throw new Error(response?.error || "Failed to create manual connection");
       }
