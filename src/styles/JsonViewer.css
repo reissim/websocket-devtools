@@ -5,6 +5,7 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  container-type: inline-size; /* Enable container queries */
 }
 
 .json-viewer-controls {
@@ -16,18 +17,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-width: 0; /* Allow flex children to shrink */
 }
 
 .json-viewer-controls-left {
   display: flex;
   align-items: center;
   gap: 3px;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow instead of wrapping */
+  min-width: 0; /* Allow shrinking */
+  flex-shrink: 2; /* Allow left side to shrink more than right */
 }
 
 .json-viewer-controls-right {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow instead of wrapping */
+  min-width: 0; /* Allow shrinking */
+  flex-shrink: 0; /* Right side should not shrink too much */
 }
 
 /* Action buttons container */
@@ -35,6 +45,8 @@
   display: flex;
   align-items: center;
   gap: 3px;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow instead of wrapping */
 }
 
 .json-viewer-action-buttons .json-viewer-btn {
@@ -112,6 +124,86 @@
   transition: all 0.2s ease;
   font-family: inherit;
   min-height: 20px;
+  white-space: nowrap; /* Prevent text wrapping */
+  flex-shrink: 1; /* Allow button shrinking but not to zero */
+  min-width: 0; /* Allow for ellipsis */
+  overflow: hidden; /* Hide overflowing text */
+}
+
+.json-viewer-btn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* Hide button text when space is very limited */
+@container (max-width: 450px) {
+  .json-viewer-controls {
+    padding: 6px 8px;
+  }
+  
+  .json-viewer-btn span.json-viewer-controls-left {
+    display: none; /* Hide text, show only icons */
+  }
+  
+  .json-viewer-btn {
+    padding: 3px;
+    min-width: 24px;
+    justify-content: center;
+  }
+  
+  .json-viewer-controls-left {
+    gap: 2px;
+  }
+  
+  .json-viewer-controls-right {
+    gap: 4px;
+  }
+  
+  .json-viewer-action-buttons {
+    gap: 2px;
+  }
+  
+  /* Also hide text in badges when space is limited */
+  .json-viewer-badge span {
+    display: none;
+  }
+  
+  .json-viewer-badge {
+    padding: 3px;
+    min-width: 18px;
+    justify-content: center;
+  }
+}
+
+/* For very small containers, further compress */
+@container (max-width: 250px) {
+  .json-viewer-controls {
+    padding: 4px 6px;
+  }
+  
+  .json-viewer-btn {
+    padding: 2px;
+    min-width: 20px;
+  }
+  
+  .json-viewer-controls-left {
+    gap: 1px;
+  }
+  
+  .json-viewer-controls-right {
+    gap: 2px;
+  }
+  
+  .json-viewer-action-buttons {
+    gap: 1px;
+  }
+  
+  .json-viewer-badge {
+    padding: 2px;
+    min-width: 16px;
+  }
 }
 
 .json-viewer-btn-inactive {
@@ -184,6 +276,17 @@
   font-size: 10px;
   font-weight: 500;
   font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.json-viewer-badge span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .json-viewer-badge-green {
