@@ -1041,11 +1041,15 @@
 }
 
 .message-detail-resize-handle.panel-resize-handle.horizontal::after {
+  content: "";
   position: absolute;
+  left: 50%;
   top: -5px;
+  transform: translateX(-50%);
   width: 24px;
   height: 2px;
   background-color: rgba(255, 255, 255, 0.838);
   opacity: 0.7;
   box-shadow: 0px 1px 7px 4px rgb(0 0 0 / 21%);
+  pointer-events: none;
 }

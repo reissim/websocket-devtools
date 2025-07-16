@@ -69,16 +69,18 @@ const MessageDetails = ({
   const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc' 时间排序
   const [hoveredMessageKey, setHoveredMessageKey] = useState(null); // 悬停的消息key
 
-  // 当连接切换时重置选中的消息，关闭详情面板
-  useEffect(() => {
-    setSelectedMessageKey(null);
-  }, [selectedConnectionId]);
-
+  
   // Use new message highlight hook
   const { isNewMessage, clearHighlights } = useNewMessageHighlight(
     connection,
     500
   );
+  
+  // 当连接切换时重置选中的消息，关闭详情面板，清除新消息高亮
+  useEffect(() => {
+    setSelectedMessageKey(null);
+    clearHighlights();
+  }, [selectedConnectionId, clearHighlights]);
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);

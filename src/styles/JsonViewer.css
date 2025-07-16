@@ -129,9 +129,9 @@
 }
 
 .json-viewer-btn-active-green {
-  background: rgba(5, 150, 105, 0.15);
-  border-color: rgba(5, 150, 105, 0.25);
-  color: #10b981;
+  background: #1ed69d24;
+  border-color: #0cf7ae40;
+  color: #15eca5;
 }
 
 .json-viewer-btn-active-orange {
@@ -141,9 +141,9 @@
 }
 
 .json-viewer-btn-active-purple {
-  background: rgb(65 25 102);
-  border-color: rgb(147 51 234);
-  color: #bb73ff;
+  background: #7033a933;
+  border-color: #aa56f7;
+  color: #d787ff;
 }
 
 .json-viewer-btn-active-blue {
