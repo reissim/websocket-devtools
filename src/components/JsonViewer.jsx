@@ -281,14 +281,14 @@ const JsonViewer = ({
     [handleFormatChange, collapsed, nestedParse, hasNestedData]
   );
 
-  // 不再因data变化自动切换nestedParse，仅用户操作切换
+  // No longer auto-switch nestedParse due to data changes, only user operation switches
 
-  // Simulate Message专用嵌套解析按钮的处理函数
+  // Handler for Simulate Message specific nested parse button
   const [simulateNestedParsed, setSimulateNestedParsed] = useState(false);
   const handleSimulateNestedParse = useCallback(() => {
     if (hasNestedData && isValidJson && onSimulateNestedParse && !simulateNestedParsed) {
       try {
-        // 只做一次嵌套解析
+        // Only do nested parse once
         const parsed = JSON.parse(data);
         const nestedParsed = parseNestedJson(parsed);
         const formattedContent = JSON.stringify(nestedParsed, null, collapsed ? 0 : 2);
@@ -300,7 +300,7 @@ const JsonViewer = ({
     }
   }, [hasNestedData, isValidJson, onSimulateNestedParse, data, parseNestedJson, collapsed, simulateNestedParsed]);
 
-  // Simulate Message面板切换内容时重置按钮状态
+  // Reset button state when Simulate Message panel switches content
   useEffect(() => {
     setSimulateNestedParsed(false);
   }, [data]);
@@ -314,7 +314,7 @@ const JsonViewer = ({
       "&": {
         fontSize: "12px",
         height: "100%",
-        backgroundColor: "#262626", // 编辑器背景色
+        backgroundColor: "#262626", // Editor background color
       },
       ".cm-editor": {
         height: "100%",
@@ -336,7 +336,7 @@ const JsonViewer = ({
         minHeight: "100%",
       },
       ".cm-gutters": {
-        backgroundColor: "#333333", // 行号区域背景色
+        backgroundColor: "#333333", // Line number area background color
         borderRight: "1px solid #404040",
       },
       "&.cm-editor.cm-focused .cm-selectionBackground": {
@@ -372,7 +372,7 @@ const JsonViewer = ({
               </button>
             )}
 
-            {/* 原有嵌套解析按钮 */}
+            {/* Original nested parse button */}
             {enableNestedParse && showNestedParseButton && (
               <button
                 onClick={() => {
@@ -390,7 +390,7 @@ const JsonViewer = ({
               </button>
             )}
 
-            {/* Simulate Message专用嵌套解析按钮 */}
+            {/* Simulate Message specific nested parse button */}
             {enableNestedParse && showSimulateNestedParseButton && (
               <button
                 onClick={handleSimulateNestedParse}
@@ -405,7 +405,7 @@ const JsonViewer = ({
                 disabled={simulateNestedParsed || !hasNestedData}
               >
                 <Layers2 size={14} />
-                <span>{t("jsonViewer.controls.simulateNestedParse") || "Simulate嵌套解析"}</span>
+                                    <span>{t("jsonViewer.controls.simulateNestedParse") || "Simulate Nested Parse"}</span>
               </button>
             )}
           </div>
@@ -413,7 +413,7 @@ const JsonViewer = ({
           <div className="json-viewer-controls-right">
             {/* Action buttons */}
             <div className="json-viewer-action-buttons">
-              {/* Simulate 按钮 */}
+              {/* Simulate button */}
               {onSimulate && (
                 <button
                   onClick={() => onSimulate(getDisplayContent())}

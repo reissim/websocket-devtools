@@ -7,7 +7,7 @@ import { addFromMessageList } from "../utils/globalFavorites";
 import { Ban, Search, Settings, CircleX } from "lucide-react";
 import { t } from "../utils/i18n.js";
 
-// SVG图标组件
+// SVG icon components
 const Icons = {
   ArrowUp: () => (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -62,12 +62,12 @@ const MessageDetails = ({
   onOpenSimulatePanel,
 }) => {
   const [filterDirection, setFilterDirection] = useState("all"); // 'all' | 'outgoing' | 'incoming'
-  const [filterText, setFilterText] = useState(""); // 消息内容过滤
-  const [filterInvert, setFilterInvert] = useState(false); // 反向过滤
-  const [selectedMessageKey, setSelectedMessageKey] = useState(null); // 选中的消息
-  const [copiedMessageKey, setCopiedMessageKey] = useState(null); // 已拷贝的消息key
-  const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc' 时间排序
-  const [hoveredMessageKey, setHoveredMessageKey] = useState(null); // 悬停的消息key
+  const [filterText, setFilterText] = useState(""); // Message content filter
+  const [filterInvert, setFilterInvert] = useState(false); // Invert filter
+  const [selectedMessageKey, setSelectedMessageKey] = useState(null); // Selected message
+  const [copiedMessageKey, setCopiedMessageKey] = useState(null); // Copied message key
+  const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc' time sorting
+  const [hoveredMessageKey, setHoveredMessageKey] = useState(null); // Hovered message key
 
   
   // Use new message highlight hook
@@ -76,7 +76,7 @@ const MessageDetails = ({
     500
   );
   
-  // 当连接切换时重置选中的消息，关闭详情面板，清除新消息高亮
+  // Reset selected message when connection switches, close detail panel, clear new message highlights
   useEffect(() => {
     setSelectedMessageKey(null);
     clearHighlights();
@@ -104,21 +104,21 @@ const MessageDetails = ({
     );
   }
 
-  // 先用原有的 filterMessages 过滤方向/文本
+  // First use the original filterMessages to filter direction/text
   let filteredMessages = filterMessages(connection.messages, {
     direction: filterDirection,
     text: filterText,
     invert: filterInvert,
   });
 
-  // 排序消息
+  // Sort messages
   const sortedMessages = [...filteredMessages].sort((a, b) => {
     return sortOrder === "desc"
       ? b.timestamp - a.timestamp
       : a.timestamp - b.timestamp;
   });
 
-  // formatMessage 函数已移动到 JsonViewer 组件内部处理
+  // formatMessage function has been moved to the JsonViewer component for internal handling
 
   const handleMessageClick = (messageKey) => {
     setSelectedMessageKey(
@@ -144,10 +144,10 @@ const MessageDetails = ({
     return message.data ? message.data.length : 0;
   };
 
-  // 拷贝消息内容到剪贴板
+  // Copy message content to clipboard
   const handleCopyMessage = async (messageData, messageKey) => {
     try {
-      // messageData 现在已经是格式化后的字符串（来自 JsonViewer）
+      // messageData is now a formatted string (from JsonViewer)
       const textToCopy = messageData;
       await navigator.clipboard.writeText(textToCopy);
       setCopiedMessageKey(messageKey);
@@ -173,7 +173,7 @@ const MessageDetails = ({
     }
   };
 
-  // 从JsonViewer添加到收藏夹（打开Simulate面板的favorites tab）
+  // Add to favorites from JsonViewer (open Simulate panel's favorites tab)
   const handleAddToFavoritesFromViewer = (data) => {
     console.log(
       "📋 MessageDetails: Add to favorites clicked with data:",
@@ -185,7 +185,7 @@ const MessageDetails = ({
       return;
     }
 
-    // 打开SimulateMessagePanel的favorites tab，并创建新收藏
+    // Open SimulateMessagePanel's favorites tab and create new favorite
     if (onOpenSimulatePanel) {
       console.log("📋 MessageDetails: Calling onOpenSimulatePanel");
       onOpenSimulatePanel({
@@ -356,7 +356,7 @@ const MessageDetails = ({
                       const isHovered = hoveredMessageKey === messageKey;
                       return (
                         <tr
-                          key={`${messageKey}-${index}`} // 保持React key的唯一性
+                          key={`${messageKey}-${index}`} // Keep React key unique
                           className={`message-row ${message.direction} ${message.simulated ? "simulated" : ""} ${
                             message.blocked ? "blocked" : ""
                           } ${isSelected ? "selected" : ""} ${isNewMsg ? "new-message" : ""} ${

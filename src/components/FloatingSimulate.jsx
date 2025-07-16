@@ -5,7 +5,7 @@ const FloatingSimulate = forwardRef(
   ({ connection, onSimulateMessage, onManualConnect }, ref) => {
     const simulatePanelRef = useRef(null);
 
-    // 暴露openPanel函数给外部使用
+    // Expose openPanel function for external use
     useImperativeHandle(ref, () => ({
       openPanel: (options = {}) => {
         if (simulatePanelRef.current) {

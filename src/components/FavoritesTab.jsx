@@ -295,7 +295,7 @@ const FavoritesItem = React.memo(
           </div>
         </div>
 
-        {/* 编辑模式下的数据编辑器 */}
+                        {/* Data editor in edit mode */}
         {isEditing && (
           <div className="favorite-item-editor">
             <JsonViewer
@@ -312,7 +312,7 @@ const FavoritesItem = React.memo(
           </div>
         )}
 
-        {/* 展开模式下的详细视图 */}
+                      {/* Detailed view in expanded mode */}
         {isSelected && !isEditing && (
           <div className="favorite-item-expanded">
             <JsonViewer

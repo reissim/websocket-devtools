@@ -335,7 +335,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           disabled={isExecuting}
                         >
                           <X size={16} />
-                          {t("system.events.error.unexpectedCondition", "意外情况")}
+                          {t("system.events.error.unexpectedCondition", "Unexpected condition")}
                         </button>
                       </div>
                     </div>
@@ -476,7 +476,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           disabled={isExecuting}
                         >
                           <X size={16} />
-                          {t("system.events.error.serviceRestart", "服务重启")}
+                          {t("system.events.error.serviceRestart", "Service restart")}
                         </button>
                       </div>
                     </div>

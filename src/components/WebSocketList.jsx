@@ -30,7 +30,7 @@ const WebSocketList = ({
   );
 
 
-// Retain a few decimal places for the second argument
+  // Retain a few decimal places for the second argument
   const formatTimestamp = (timestamp, numberOfDecimalPlaces = 3) => {
     const date = new Date(timestamp);
     const timeString = date.toLocaleTimeString(undefined, {
