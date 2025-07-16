@@ -145,34 +145,28 @@ const Popup = () => {
 
       {/* 版本信息和打赏 */}
       <div style={styles.versionSection}>
-        <div style={styles.versionInfo}>
-          <span style={styles.versionText}>v1.0.0</span>
-          <a 
-            href="https://github.com/BrianLuo/websocket-proxy-pro" 
-            target="_blank" 
-            style={styles.githubLink}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = "#2563eb";
-              e.target.style.transform = "scale(1.1)";
-              e.target.style.boxShadow = "0 4px 8px rgba(59, 130, 246, 0.3)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = "#3b82f6";
-              e.target.style.transform = "scale(1)";
-              e.target.style.boxShadow = "0 2px 4px rgba(59, 130, 246, 0.2)";
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              chrome.tabs.create({ url: "https://github.com/BrianLuo/websocket-proxy-pro" });
-            }}
-          >
-            <Github size={16} />
-          </a>
-        </div>
-        {/* 打赏码区域 - 预留位置 */}
-        <div style={styles.donationSection}>
-          {/* 激活后显示打赏码 */}
-        </div>
+        <span style={styles.versionText}>v1.0.0</span>
+        <a 
+          href="https://github.com/BrianLuo/websocket-proxy-pro" 
+          target="_blank" 
+          style={styles.githubLink}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = "#2563eb";
+            e.target.style.transform = "scale(1.1)";
+            e.target.style.boxShadow = "0 4px 8px rgba(59, 130, 246, 0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "#3b82f6";
+            e.target.style.transform = "scale(1)";
+            e.target.style.boxShadow = "0 2px 4px rgba(59, 130, 246, 0.2)";
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            chrome.tabs.create({ url: "https://github.com/BrianLuo/websocket-proxy-pro" });
+          }}
+        >
+          <Github size={12} />
+        </a>
       </div>
     </div>
   );
@@ -335,42 +329,32 @@ const styles = {
     fontSize: "14px",
   },
   versionSection: {
-    marginTop: "16px",
-    paddingTop: "16px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: "12px",
+    paddingTop: "10px",
     borderTop: "1px solid #334155",
     boxShadow: "0 -1px 0 0 rgba(71, 85, 105, 0.1)",
   },
-  versionInfo: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "12px",
-    padding: "0 4px",
-  },
   versionText: {
-    fontSize: "12px",
+    fontSize: "10px",
     color: "#94a3b8",
-    fontWeight: "500",
+    fontWeight: "400",
   },
   githubLink: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: "32px",
-    height: "32px",
+    width: "24px",
+    height: "24px",
     borderRadius: "50%",
     backgroundColor: "#3b82f6",
     color: "#ffffff",
     textDecoration: "none",
     cursor: "pointer",
     transition: "all 0.2s ease",
-    boxShadow: "0 2px 4px rgba(59, 130, 246, 0.2)",
-  },
-  donationSection: {
-    marginTop: "8px",
-    padding: "0 4px",
-    minHeight: "0px",
-    // 预留打赏码区域
+    boxShadow: "0 1px 3px rgba(59, 130, 246, 0.2)",
   },
 };
 

@@ -180,7 +180,7 @@
 /* 更早切换到单列布局，适应tab环境 */
 @media (max-width: 900px) {
   .sys-evt-events-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
 }
@@ -518,154 +518,12 @@
   }
 }
 
-/* 很小宽度容器 */
-@container (max-width: 320px) {
-  .system-events-tab {
-    padding: 8px;
-  }
-  
-  .system-events-tab .sys-evt-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  
-  .system-events-tab .sys-evt-header-text h2 {
-    font-size: 14px;
-  }
-  
-  .system-events-tab .sys-evt-connection-info {
-    padding: 3px 6px;
-  }
-  
-  .system-events-tab .sys-evt-connection-url {
-    font-size: 9px;
-  }
-  
-  .system-events-tab .sys-evt-tab-content {
-    padding: 8px;
-  }
-  
-  .system-events-tab .sys-evt-card-header {
-    padding: 8px 8px 6px 8px;
-  }
-  
-  .system-events-tab .sys-evt-card-content {
-    padding: 8px;
-  }
-  
-  .system-events-tab .sys-evt-card-title {
-    font-size: 12px;
-    gap: 4px;
-  }
-  
-  .system-events-tab .sys-evt-card-icon {
-    width: 14px;
-    height: 14px;
-  }
-  
-  .system-events-tab .sys-evt-card-description {
-    font-size: 10px;
-  }
-  
-  .system-events-tab .sys-evt-form-group {
-    margin-bottom: 8px;
-  }
-  
-  .system-events-tab .sys-evt-form-label {
-    font-size: 10px;
-  }
-  
-  .system-events-tab .sys-evt-form-select,
-  .system-events-tab .sys-evt-form-input {
-    padding: 5px 6px;
-    font-size: 10px;
-  }
-  
-  .system-events-tab .sys-evt-event-button {
-    padding: 6px 8px;
-    font-size: 10px;
-    gap: 4px;
-  }
-  
-  .system-events-tab .sys-evt-event-button svg {
-    width: 12px;
-    height: 12px;
-  }
-  
-  .system-events-tab .sys-evt-error-button,
-  .system-events-tab .sys-evt-close-button {
-    margin-bottom: 4px;
-  }
-}
-
-/* 极小宽度容器 */
-@container (max-width: 280px) {
-  .system-events-tab {
-    padding: 6px;
-  }
-  
-  .system-events-tab .sys-evt-header {
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-  }
-  
-  .system-events-tab .sys-evt-header-content {
-    gap: 6px;
-  }
-  
-  .system-events-tab .sys-evt-header-icon {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .system-events-tab .sys-evt-header-text h2 {
-    font-size: 13px;
-  }
-  
-  .system-events-tab .sys-evt-header-text p {
-    display: none; /* 隐藏描述文字以节省空间 */
-  }
-  
-  .system-events-tab .sys-evt-tab-trigger {
-    padding: 6px 8px;
-    font-size: 10px;
-    gap: 4px;
-  }
-  
-  .system-events-tab .sys-evt-tab-trigger svg {
-    width: 10px;
-    height: 10px;
-  }
-  
-  .system-events-tab .sys-evt-tab-content {
-    padding: 6px;
-  }
-  
-  .system-events-tab .sys-evt-card-title {
-    font-size: 11px;
-  }
-  
-  .system-events-tab .sys-evt-card-description {
-    font-size: 9px;
-  }
-  
-  .system-events-tab .sys-evt-connection-info {
-    padding: 2px 4px;
-  }
-  
-  .system-events-tab .sys-evt-connection-url {
-    font-size: 8px;
-  }
-}
-
 /* Fallback: 传统媒体查询，支持不支持容器查询的浏览器 */
 @supports not (container-type: inline-size) {
   /* Tab面板环境 */
   @media (max-width: 900px) {
     .system-events-tab .sys-evt-events-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
     
