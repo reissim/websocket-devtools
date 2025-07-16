@@ -454,7 +454,7 @@
 .simulate-window-header:hover {
   /* background: linear-gradient(135deg, var(--accent-color), #0088cc); */
   color: white;
-  filter: brightness(1.2);
+  filter: brightness(1.15);
 }
 
 .simulate-window-header.pinned {
