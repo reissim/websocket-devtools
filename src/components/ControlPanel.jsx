@@ -163,10 +163,10 @@ const ControlPanel = ({
                         tabId: currentTabId,
                       })
                       .catch((error) => {
-                        console.error(
-                          "❌ Failed to toggle outgoing block:",
-                          error
-                        );
+                        // console.error(
+                        //   "❌ Failed to toggle outgoing block:",
+                        //   error
+                        // ); Removed for clean up.
                       });
                   }}
                   size="xs"
@@ -213,10 +213,10 @@ const ControlPanel = ({
                         tabId: currentTabId,
                       })
                       .catch((error) => {
-                        console.error(
-                          "❌ Failed to toggle incoming block:",
-                          error
-                        );
+                        // console.error(
+                        //   "❌ Failed to toggle incoming block:",
+                        //   error
+                        // ); Removed for clean up.
                       });
                   }}
                   size="xs"

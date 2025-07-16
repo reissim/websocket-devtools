@@ -1,31 +1,31 @@
 import favoritesService from "./favoritesService";
 
-// 全局收藏功能
+// Global favorites functionality
 class GlobalFavorites {
   constructor() {
     this.tabSwitchCallbacks = new Set();
   }
 
-  // 添加tab切换回调
+  // Add tab switch callback
   addTabSwitchCallback(callback) {
     this.tabSwitchCallbacks.add(callback);
     return () => this.tabSwitchCallbacks.delete(callback);
   }
 
-  // 通知所有tab切换回调
+  // Notify all tab switch callbacks
   notifyTabSwitch() {
     this.tabSwitchCallbacks.forEach((callback) => {
       try {
         callback();
       } catch (error) {
-        console.error("Error in tab switch callback:", error);
+        // console.error("Error in tab switch callback:", error); Removed for clean up.
       }
     });
   }
 
-  // 快速添加收藏 (用于从编辑器添加)
+  // Quick add favorite (used for adding from editor)
   quickAdd(messageData, options = {}) {
-    console.log("🌟 GlobalFavorites: quickAdd called with options:", options);
+    // console.log("🌟 GlobalFavorites: quickAdd called with options:", options); Removed for clean up.
 
     const defaultOptions = {
       switchToFavoritesTab: true,
@@ -35,23 +35,23 @@ class GlobalFavorites {
     };
 
     const finalOptions = { ...defaultOptions, ...options };
-    console.log("🌟 GlobalFavorites: final options:", finalOptions);
+    // console.log("🌟 GlobalFavorites: final options:", finalOptions); Removed for clean up.
 
-    // 决定名称
+    // Decide name
     let name = "";
     if (finalOptions.generateName) {
-      // 改为默认不生成名字，让用户自己填写
+      // Changed to not generate name by default, let user fill it in
       name = "";
-      console.log("🌟 GlobalFavorites: using empty name for user to fill");
+      // console.log("🌟 GlobalFavorites: using empty name for user to fill"); Removed for clean up.
     } else {
-      name = ""; // 空名字，用户需要填写
-      console.log("🌟 GlobalFavorites: using empty name");
+      name = ""; // Empty name, user needs to fill in
+      // console.log("🌟 GlobalFavorites: using empty name"); Removed for clean up.
     }
 
-    console.log(
-      "🌟 GlobalFavorites: calling favoritesService.addFavorite with name:",
-      name
-    );
+    // console.log(
+    //   "🌟 GlobalFavorites: calling favoritesService.addFavorite with name:",
+    //   name
+    // ); Removed for clean up.
     const newFavorite = favoritesService.addFavorite(
       {
         name,
@@ -66,14 +66,14 @@ class GlobalFavorites {
       }
 
       if (finalOptions.showNotification) {
-        console.log(`✅ Added to favorites: ${newFavorite.name || "Unnamed"}`);
+        // console.log(`✅ Added to favorites: ${newFavorite.name || "Unnamed"}`); Removed for clean up.
       }
     }
 
     return newFavorite;
   }
 
-  // 从消息列表添加收藏 (不自动切换tab，不自动编辑)
+  // Add favorite from message list (no auto tab switch, no auto edit)
   addFromMessageList(messageData, options = {}) {
     const defaultOptions = {
       switchToFavoritesTab: false,
@@ -85,12 +85,12 @@ class GlobalFavorites {
     return this.quickAdd(messageData, { ...defaultOptions, ...options });
   }
 
-  // 从编辑器添加收藏 (自动切换tab，自动编辑)
+  // Add favorite from editor (auto tab switch, auto edit)
   addFromEditor(messageData, options = {}) {
-    console.log(
-      "🌟 GlobalFavorites: addFromEditor called with options:",
-      options
-    );
+    // console.log(
+    //   "🌟 GlobalFavorites: addFromEditor called with options:",
+    //   options
+    // ); Removed for clean up.
 
     const defaultOptions = {
       switchToFavoritesTab: true,
@@ -100,12 +100,12 @@ class GlobalFavorites {
     };
 
     const mergedOptions = { ...defaultOptions, ...options };
-    console.log("🌟 GlobalFavorites: merged options:", mergedOptions);
+    // console.log("🌟 GlobalFavorites: merged options:", mergedOptions); Removed for clean up.
 
     return this.quickAdd(messageData, mergedOptions);
   }
 
-  // 静默添加收藏 (不切换tab，不编辑，不显示通知)
+  // Add favorite silently (no tab switch, no edit, no notification)
   addSilently(messageData, options = {}) {
     const defaultOptions = {
       switchToFavoritesTab: false,
@@ -117,35 +117,35 @@ class GlobalFavorites {
     return this.quickAdd(messageData, { ...defaultOptions, ...options });
   }
 
-  // 获取所有收藏
+  // Get all favorites
   getAll() {
     return favoritesService.getFavorites();
   }
 
-  // 删除收藏
+  // Delete favorite
   delete(id) {
     return favoritesService.deleteFavorite(id);
   }
 
-  // 更新收藏
+  // Update favorite
   update(id, updates) {
     return favoritesService.updateFavorite(id, updates);
   }
 
-  // 添加监听器
+  // Add listener
   addListener(listener) {
     return favoritesService.addListener(listener);
   }
 }
 
-// 创建全局实例
+// Create global instance
 const globalFavorites = new GlobalFavorites();
 
-// 导出单例和类
+// Export singleton and class
 export default globalFavorites;
 export { GlobalFavorites };
 
-// 为了向后兼容，也导出一些快捷方法
+// For backward compatibility, also export some shortcut methods
 export const quickAddFavorite = (messageData, options) =>
   globalFavorites.quickAdd(messageData, options);
 export const addFromMessageList = (messageData, options) =>

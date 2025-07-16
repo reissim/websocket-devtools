@@ -8,20 +8,20 @@ const Popup = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [, forceUpdate] = useState({});
 
-  // 加载保存的状态并初始化popup语言设置
+  // Load saved state and initialize popup language settings
   useEffect(() => {
     const initializePopup = async () => {
       try {
-        // 初始化popup语言设置（优先使用浏览器语言）
+        // Initialize popup language settings (prioritize browser language)
         await initForPopup();
         
-        // 加载扩展状态
+        // Load extension state
         chrome.storage.local.get(["websocket-proxy-enabled"], (result) => {
-          setIsEnabled(result["websocket-proxy-enabled"] !== false); // 默认启用
+          setIsEnabled(result["websocket-proxy-enabled"] !== false); // Enabled by default
           setIsLoading(false);
         });
       } catch (error) {
-        console.error('Failed to initialize popup:', error);
+        // console.error('Failed to initialize popup:', error); Removed for clean up.
         setIsLoading(false);
       }
     };
@@ -29,7 +29,7 @@ const Popup = () => {
     initializePopup();
   }, []);
 
-  // 监听语言变化并强制更新UI
+  // Listen for language changes and force UI update
   useEffect(() => {
     const unsubscribe = i18n.addLanguageChangeListener(() => {
       forceUpdate({});
@@ -37,24 +37,24 @@ const Popup = () => {
     return unsubscribe;
   }, []);
 
-  // 处理开关切换
+  // Handle switch toggle
   const handleToggle = () => {
     const newState = !isEnabled;
     setIsEnabled(newState);
 
-    // 保存状态
+    // Save state
     chrome.storage.local.set({
       "websocket-proxy-enabled": newState,
     });
 
-    // 通知background script状态变化
+    // Notify background script of state change
     chrome.runtime.sendMessage({
       type: "toggle-extension",
       enabled: newState,
     });
   };
 
-  // 打开DevTools提示
+  // Open DevTools hint
   const handleOpenDevTools = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, {
@@ -62,7 +62,7 @@ const Popup = () => {
       });
     });
 
-    // 关闭popup
+    // Close popup
     window.close();
   };
 
@@ -76,7 +76,7 @@ const Popup = () => {
 
   return (
     <div style={styles.container}>
-      {/* 标题 */}
+      {/* Title */}
       <div style={styles.header}>
         <div style={styles.headerIcon}>
           <Globe size={20} />
@@ -93,7 +93,7 @@ const Popup = () => {
         </div>
       </div>
 
-      {/* 开关控制 */}
+      {/* Switch control */}
       <div style={styles.section}>
         <div style={styles.switchContainer}>
           <div style={styles.switchLabel}>
@@ -121,7 +121,7 @@ const Popup = () => {
         </div>
       </div>
 
-      {/* 使用提示 */}
+      {/* Usage hint */}
       <div style={styles.section}>
         <button style={styles.instructionButton} onClick={handleOpenDevTools}>
           <div style={styles.buttonIcon}>
@@ -132,7 +132,7 @@ const Popup = () => {
         <div style={styles.hint}>{t("popup.devToolsHint")}</div>
       </div>
 
-      {/* 快速信息 */}
+      {/* Quick info */}
       <div style={styles.infoCard}>
         <div style={styles.infoIcon}>
           <Zap size={16} />
@@ -143,7 +143,7 @@ const Popup = () => {
         </div>
       </div>
 
-      {/* 版本信息和打赏 */}
+      {/* Version info and donation */}
       <div style={styles.versionSection}>
         <span style={styles.versionText}>v1.0.0</span>
         <a 

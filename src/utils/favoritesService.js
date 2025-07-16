@@ -4,35 +4,35 @@ class FavoritesService {
     this.storageKey = "websocket-favorites";
     this.listeners = new Set();
     this.notificationTimeoutId = null;
-    // 新增：批量更新防抖，减少频繁触发
+    // New: Debounce batch updates to reduce frequent triggers
     this.batchUpdateTimeoutId = null;
     this.pendingUpdates = [];
   }
 
-  // 获取所有收藏
+  // Get all favorites
   getFavorites() {
     try {
       const saved = localStorage.getItem(this.storageKey);
       return saved ? JSON.parse(saved) : [];
     } catch (error) {
-      console.error("Failed to load favorites:", error);
+      // console.error("Failed to load favorites:", error); Removed for clean up.
       return [];
     }
   }
 
-  // 保存收藏到 localStorage
+  // Save favorites to localStorage
   saveFavorites(favorites) {
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(favorites));
       this.notifyListeners(favorites);
       return true;
     } catch (error) {
-      console.error("Failed to save favorites:", error);
+      // console.error("Failed to save favorites:", error); Removed for clean up.
       return false;
     }
   }
 
-  // 添加新收藏
+  // Add new favorite
   addFavorite(favoriteData, options = {}) {
     const {
       name = "",
@@ -42,16 +42,16 @@ class FavoritesService {
       switchToFavoritesTab = true,
     } = { ...favoriteData, ...options };
 
-    console.log("⭐ FavoritesService: Adding favorite with options:", {
-      name,
-      dataLength: data.length,
-      autoEdit,
-      switchToFavoritesTab,
-    });
+    // console.log("⭐ FavoritesService: Adding favorite with options:", {
+    //   name,
+    //   dataLength: data.length,
+    //   autoEdit,
+    //   switchToFavoritesTab,
+    // }); Removed for clean up.
 
-    // 验证数据
+    // Validate data
     if (!data || !data.trim()) {
-      console.warn("Cannot add favorite: data is empty");
+      // console.warn("Cannot add favorite: data is empty"); Removed for clean up.
       return null;
     }
 
@@ -64,21 +64,21 @@ class FavoritesService {
       updatedAt: new Date().toISOString(),
     };
 
-    console.log("⭐ FavoritesService: Created favorite object:", {
-      id: newFavorite.id,
-      name: newFavorite.name,
-      nameLength: newFavorite.name.length,
-    });
+    // console.log("⭐ FavoritesService: Created favorite object:", {
+    //   id: newFavorite.id,
+    //   name: newFavorite.name,
+    //   nameLength: newFavorite.name.length,
+    // }); Removed for clean up.
 
     const currentFavorites = this.getFavorites();
     const newFavorites = [newFavorite, ...currentFavorites];
 
     if (this.saveFavorites(newFavorites)) {
-      // 优化：使用更长的防抖延迟，减少频繁通知
-      console.log(
-        "⭐ FavoritesService: Notifying listeners with autoEdit:",
-        autoEdit
-      );
+      // Optimization: use a longer debounce delay to reduce frequent notifications
+      // console.log(
+      //   "⭐ FavoritesService: Notifying listeners with autoEdit:",
+      //   autoEdit
+      // ); Removed for clean up.
       this.debouncedNotify(newFavorites, {
         type: "add",
         favorite: newFavorite,
@@ -92,13 +92,13 @@ class FavoritesService {
     return null;
   }
 
-  // 更新收藏
+  // Update favorite
   updateFavorite(id, updates) {
     const favorites = this.getFavorites();
     const favoriteIndex = favorites.findIndex((fav) => fav.id === id);
 
     if (favoriteIndex === -1) {
-      console.warn("Favorite not found:", id);
+      // console.warn("Favorite not found:", id); Removed for clean up.
       return null;
     }
 
@@ -121,13 +121,13 @@ class FavoritesService {
     return null;
   }
 
-  // 删除收藏
+  // Delete favorite
   deleteFavorite(id) {
     const favorites = this.getFavorites();
     const favoriteToDelete = favorites.find((f) => f.id === id);
 
     if (!favoriteToDelete) {
-      console.warn("Favorite not found:", id);
+      // console.warn("Favorite not found:", id); Removed for clean up.
       return false;
     }
 
@@ -144,17 +144,17 @@ class FavoritesService {
     return false;
   }
 
-  // 根据内容查找是否已存在相似收藏
+  // Find if similar favorite already exists based on content
   findSimilarFavorite(data) {
     const favorites = this.getFavorites();
     const normalizedData = data.trim();
     return favorites.find((fav) => fav.data.trim() === normalizedData);
   }
 
-  // 添加监听器
+  // Add listener
   addListener(listener) {
     if (typeof listener !== "function") {
-      console.warn("Listener must be a function");
+      // console.warn("Listener must be a function"); Removed for clean up.
       return () => {};
     }
 
@@ -162,7 +162,7 @@ class FavoritesService {
     return () => this.listeners.delete(listener);
   }
 
-  // 优化：增加防抖延迟，减少频繁通知
+  // Optimization: add debounce delay, reduce frequent notifications
   debouncedNotify(favorites, eventData = {}) {
     if (this.notificationTimeoutId) {
       clearTimeout(this.notificationTimeoutId);
@@ -170,10 +170,10 @@ class FavoritesService {
 
     this.notificationTimeoutId = setTimeout(() => {
       this.notifyListeners(favorites, eventData);
-    }, 100); // 增加到100ms防抖，减少频繁通知
+    }, 100); // Increased to 100ms debounce to reduce frequent notifications
   }
 
-  // 通知所有监听器
+  // Notify all listeners
   notifyListeners(favorites, eventData = {}) {
     if (this.listeners.size === 0) return;
 
@@ -181,12 +181,12 @@ class FavoritesService {
       try {
         listener(favorites, eventData);
       } catch (error) {
-        console.error("Error in favorites listener:", error);
+        // console.error("Error in favorites listener:", error); Removed for clean up.
       }
     });
   }
 
-  // 快速添加收藏的便捷方法
+  // Convenience method for quick add favorite
   quickAddFavorite(messageData, options = {}) {
     const {
       switchToFavoritesTab = true,
@@ -194,14 +194,14 @@ class FavoritesService {
       ...otherOptions
     } = options;
 
-    // 检查是否已存在相似收藏
+    // Check if similar favorite already exists
     const existingFavorite = this.findSimilarFavorite(messageData);
     if (existingFavorite) {
-      console.log("Similar favorite already exists:", existingFavorite.name);
+      // console.log("Similar favorite already exists:", existingFavorite.name); Removed for clean up.
       return existingFavorite;
     }
 
-    // 生成收藏名称
+    // Generate favorite name
     let favoriteName = "";
     if (generateName) {
       favoriteName = this.generateFavoriteName(messageData);
@@ -219,12 +219,12 @@ class FavoritesService {
     );
   }
 
-  // 生成收藏名称
+  // Generate favorite name
   generateFavoriteName(messageData) {
     try {
       const parsed = JSON.parse(messageData);
 
-      // 尝试从常见字段生成名称
+      // Try to generate name from common fields
       if (parsed.type) {
         return `${parsed.type} Message`;
       }
@@ -242,23 +242,18 @@ class FavoritesService {
         return `Message: ${msg}${msg.length >= 20 ? "..." : ""}`;
       }
 
-      // 使用第一个属性名
+      // Use first property name
       const keys = Object.keys(parsed);
       if (keys.length > 0) {
         return `${keys[0]} Data`;
       }
     } catch (error) {
-      // 如果不是JSON，使用文本内容的前20个字符
-      const text = String(messageData).substring(0, 20).trim();
-      if (text) {
-        return `Message: ${text}${messageData.length > 20 ? "..." : ""}`;
-      }
+      // console.error("Error generating favorite name from JSON:", error); Removed for clean up.
     }
-
-    return "WebSocket Message";
+    return `Unnamed Message - ${Date.now().toString().slice(-4)}`;
   }
 
-  // 清理资源
+  // Clean up resources
   cleanup() {
     if (this.notificationTimeoutId) {
       clearTimeout(this.notificationTimeoutId);
@@ -270,7 +265,5 @@ class FavoritesService {
   }
 }
 
-// 创建单例
 const favoritesService = new FavoritesService();
-
 export default favoritesService;

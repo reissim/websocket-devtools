@@ -6,28 +6,28 @@ export const useWindowConstraints = () => {
   // Calculate max size based on viewport
   useEffect(() => {
     const updateMaxSize = () => {
-      const margin = 40; // 预留更多边距给maxSize
+      const margin = 40; // Reserve more margin for maxSize
       setMaxSize({
         width: Math.max(300, window.innerWidth - margin),
         height: Math.max(350, window.innerHeight - margin),
       });
     };
 
-    // 初始计算
+    // Initial calculation
     updateMaxSize();
 
-    // 监听窗口resize
+    // Listen for window resize
     window.addEventListener("resize", updateMaxSize);
     return () => window.removeEventListener("resize", updateMaxSize);
   }, []);
 
-  // 位置和尺寸边界检查和修正函数
+  // Function to check and correct position and size boundaries
   const validateAndFixPositionAndSize = useCallback((position, size) => {
-    // 获取当前视口尺寸
+    // Get current viewport dimensions
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    // 解析窗口尺寸
+    // Parse window size
     let windowWidth = 400;
     let windowHeight = 500;
 
@@ -42,12 +42,12 @@ export const useWindowConstraints = () => {
           : size.height || 500;
     }
 
-    // 预留边距
+    // Reserve margin
     const margin = 20;
     const maxWidth = viewportWidth - margin * 2;
     const maxHeight = viewportHeight - margin * 2;
 
-    // 检查和修正尺寸
+    // Check and correct size
     let adjustedWidth = windowWidth;
     let adjustedHeight = windowHeight;
     let sizeChanged = false;
@@ -62,29 +62,29 @@ export const useWindowConstraints = () => {
       sizeChanged = true;
     }
 
-    // 检查和修正位置（基于调整后的尺寸）
+    // Check and correct position (based on adjusted size)
     let { x, y } = position;
     let positionChanged = false;
 
-    // 确保窗口右边不超出视口
+    // Ensure window right edge does not exceed viewport
     if (x + adjustedWidth > viewportWidth) {
       x = Math.max(margin, viewportWidth - adjustedWidth - margin);
       positionChanged = true;
     }
 
-    // 确保窗口左边不超出视口
+    // Ensure window left edge does not exceed viewport
     if (x < margin) {
       x = margin;
       positionChanged = true;
     }
 
-    // 确保窗口底部不超出视口
+    // Ensure window bottom edge does not exceed viewport
     if (y + adjustedHeight > viewportHeight) {
       y = Math.max(margin, viewportHeight - adjustedHeight - margin);
       positionChanged = true;
     }
 
-    // 确保窗口顶部不超出视口
+    // Ensure window top edge does not exceed viewport
     if (y < margin) {
       y = margin;
       positionChanged = true;

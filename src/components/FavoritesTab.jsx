@@ -31,7 +31,7 @@ import favoritesService from "../utils/favoritesService";
 import { t } from "../utils/i18n";
 import "../styles/FavoritesTab.css";
 
-// 优化的FavoritesItem组件，使用React.memo避免不必要的重新渲染
+// Optimized FavoritesItem component, using React.memo to avoid unnecessary re-renders
 const FavoritesItem = React.memo(
   ({
     favorite,
@@ -51,7 +51,7 @@ const FavoritesItem = React.memo(
     const [editData, setEditData] = useState(favorite.data);
     const nameInputRef = useRef(null);
 
-    // 缓存格式化的日期，避免每次渲染都计算
+    // Cache formatted date to avoid recalculating on every render
     const formattedDate = useMemo(() => {
       const dateString = favorite.updatedAt || favorite.createdAt;
       const date = new Date(dateString);
@@ -62,13 +62,13 @@ const FavoritesItem = React.memo(
       );
     }, [favorite.updatedAt, favorite.createdAt]);
 
-    // 缓存预览文本，使用纯文本显示前150个字符
+    // Cache preview text, display first 150 characters as plain text
     const preview = useMemo(() => {
       const text = favorite.data.replace(/\s+/g, " ").trim();
       return text.substring(0, 150) + (text.length > 150 ? "..." : "");
     }, [favorite.data]);
 
-    // 优化：减少useCallback的依赖项，使用稳定的favorite.id
+    // Optimization: reduce useCallback dependencies, use stable favorite.id
     const favoriteId = favorite.id;
     const favoriteData = favorite.data;
 
@@ -98,7 +98,7 @@ const FavoritesItem = React.memo(
 
     const handleSelect = useCallback(
       (e) => {
-        // 如果正在编辑模式，不允许展开/收起
+        // If in editing mode, do not allow expanding/collapsing
         if (isEditing) {
           e?.stopPropagation();
           return;
@@ -156,19 +156,19 @@ const FavoritesItem = React.memo(
       [handleSaveEdit]
     );
 
-    // 当favorite发生变化时，更新编辑状态
+    // Update edit state when favorite changes
     useEffect(() => {
       setEditName(favorite.name);
       setEditData(favorite.data);
     }, [favorite.name, favorite.data]);
 
-    // 当进入编辑状态时，如果名字为空，自动focus到名字输入框
+    // When entering edit mode, if name is empty, auto-focus on name input
     useEffect(() => {
       if (isEditing && nameInputRef.current) {
-        // 使用setTimeout确保DOM已经更新
+        // Use setTimeout to ensure DOM has updated
         setTimeout(() => {
           nameInputRef.current?.focus();
-          // 如果名字为空，选中全部文本
+          // If name is empty, select all text
           if (!editName.trim()) {
             nameInputRef.current?.select();
           }
@@ -327,7 +327,7 @@ const FavoritesItem = React.memo(
       </div>
     );
   },
-  // 优化：添加精确的比较函数，只有关键props变化时才重渲染
+  // Optimization: add precise comparison function, only re-render when key props change
   (prevProps, nextProps) => {
     return (
       prevProps.favorite.id === nextProps.favorite.id &&
@@ -353,7 +353,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
   const [selectedFavoriteId, setSelectedFavoriteId] = useState(null);
   const [editingFavoriteId, setEditingFavoriteId] = useState(null);
 
-  // 优化：缓存稳定的事件处理函数，避免每次渲染都重新创建
+  // Optimization: cache stable event handlers to avoid re-creating on every render
   const stableHandlers = useMemo(() => {
     const handleDeleteFavorite = (id) => {
       const success = favoritesService.deleteFavorite(id);
@@ -376,7 +376,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
     };
 
     const handleSelectFavorite = (favorite) => {
-      if (editingFavoriteId) return; // 如果正在编辑，不允许切换选择
+      if (editingFavoriteId) return; // If editing, do not allow switching selection
       setSelectedFavoriteId(
         selectedFavoriteId === favorite.id ? null : favorite.id
       );
@@ -388,7 +388,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
     };
 
     const handleCancelEdit = () => {
-      // 如果是新添加的项目且没有保存，则删除它
+      // If it's a newly added item and not saved, delete it
       const editingFavorite = favorites.find((f) => f.id === editingFavoriteId);
       if (
         editingFavorite &&
@@ -434,30 +434,18 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
     favorites,
   ]);
 
-  // 从 favoritesService 加载收藏夹
+  // Load favorites from favoritesService
   useEffect(() => {
     const loadedFavorites = favoritesService.getFavorites();
     setFavorites(loadedFavorites);
 
-    // 监听收藏夹变化
+    // Listen for favorites changes
     const unsubscribe = favoritesService.addListener(
       (newFavorites, eventData) => {
-        console.log("⭐ FavoritesTab: Received favorites update:", {
-          favoritesCount: newFavorites.length,
-          eventType: eventData?.type,
-          autoEdit: eventData?.autoEdit,
-          favoriteId: eventData?.favorite?.id,
-          favoriteName: eventData?.favorite?.name,
-        });
-
         setFavorites(newFavorites);
 
-        // 处理添加收藏事件
+        // Handle add favorite event
         if (eventData?.type === "add" && eventData?.autoEdit) {
-          console.log(
-            "⭐ FavoritesTab: Setting editing state for favorite:",
-            eventData.favorite.id
-          );
           setEditingFavoriteId(eventData.favorite.id);
           setSelectedFavoriteId(null);
         }
@@ -467,7 +455,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
     return unsubscribe;
   }, []);
 
-  // 监听外部添加收藏的事件
+  // Listen for external add favorite events
   useEffect(() => {
     if (onAddFavorite) {
       onAddFavorite((favoriteData) => {
@@ -476,11 +464,11 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
     }
   }, [onAddFavorite]);
 
-  // 使用useCallback优化事件处理函数
+  // Optimize event handlers using useCallback
   const handleAddFavorite = useCallback((initialData = null) => {
     const newFavorite = favoritesService.addFavorite(initialData || {}, {
       autoEdit: true,
-      switchToFavoritesTab: false, // 由外部控制切换
+      switchToFavoritesTab: false, // Controlled by external
     });
 
     if (newFavorite) {
@@ -491,7 +479,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
 
   const clearSearch = useCallback(() => setSearchText(""), []);
 
-  // 优化：使用useMemo缓存过滤结果，并添加依赖项优化
+  // Optimize: use useMemo to cache filtered results and add dependencies
   const filteredFavorites = useMemo(() => {
     if (!searchText.trim()) return favorites;
     const searchLower = searchText.toLowerCase();
@@ -504,7 +492,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
 
   return (
     <div className="favorites-tab">
-      {/* 搜索和添加控件 */}
+      {/* Search and Add Controls */}
       <div className="favorites-controls">
         <div className="search-container">
           <TextInput
@@ -531,7 +519,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
         </Button>
       </div>
 
-      {/* 收藏列表 */}
+      {/* Favorites List */}
       <div className="favorites-list">
         {filteredFavorites.length === 0 ? (
           <div className="empty-state">

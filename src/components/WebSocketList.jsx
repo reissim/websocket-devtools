@@ -7,30 +7,30 @@ import "../styles/WebSocketList.css";
 import { t } from "../utils/i18n";
 
 const WebSocketList = ({
-  websocketEvents, // 所有WebSocket事件的数组
-  connectionsMap, // 所有连接的基础信息Map（包括active和inactive）
+  websocketEvents, // Array of all WebSocket events
+  connectionsMap, // Map of basic info for all connections (including active and inactive)
   selectedConnectionId,
   onSelectConnection,
   onClearConnections,
-  onManualConnect, // 新增：手动连接回调
+  onManualConnect, // New: manual connection callback
 }) => {
-  const [activeCollapsed, setActiveCollapsed] = useState(false); // 活跃连接折叠状态
-  const [inactiveCollapsed, setInactiveCollapsed] = useState(true); // 非活跃连接折叠状态
-  const [filterText, setFilterText] = useState(""); // 连接过滤文本
-  const [filterInvert, setFilterInvert] = useState(false); // 反向过滤
+  const [activeCollapsed, setActiveCollapsed] = useState(false); // Active connections collapsed state
+  const [inactiveCollapsed, setInactiveCollapsed] = useState(true); // Inactive connections collapsed state
+  const [filterText, setFilterText] = useState(""); // Connection filter text
+  const [filterInvert, setFilterInvert] = useState(false); // Invert filter
   
-  // 手动连接对话框状态
+  // Manual connection dialog state
   const [isManualConnectOpen, setIsManualConnectOpen] = useState(false);
 
-  // 使用新消息追踪 hook
+  // Use new message tracking hook
   const { hasNewMessages, getNewMessageTimestamp, clearNewMessage } = useConnectionNewMessage(
     websocketEvents,
     connectionsMap,
-    300 // 闪烁持续时间300毫秒
+    300 // Flash duration 300ms
   );
 
 
-// 第二个参数保留几位小数点
+// Retain a few decimal places for the second argument
   const formatTimestamp = (timestamp, numberOfDecimalPlaces = 3) => {
     const date = new Date(timestamp);
     const timeString = date.toLocaleTimeString(undefined, {
@@ -46,7 +46,7 @@ const WebSocketList = ({
     return timeString;
   };
 
-  // 使用connectionsMap构建连接列表
+  // Build connection list using connectionsMap
   const uniqueConnections =
     connectionsMap && connectionsMap.size > 0
       ? Array.from(connectionsMap.values()).map((connInfo) => {
@@ -76,14 +76,14 @@ const WebSocketList = ({
             url: connInfo.url,
             type: "connection",
             timestamp: connInfo.timestamp,
-            status: connInfo.status === "close" ? "closed" : connInfo.status, // 映射"close"为"closed"
+            status: connInfo.status === "close" ? "closed" : connInfo.status, // Map "close" to "closed"
             messageCount,
             lastActivity,
           };
         })
       : [];
 
-  // 分组连接：活跃和非活跃，按创建时间排序（新到旧）
+  // Group connections: active and inactive, sorted by creation time (new to old)
   const filteredConnections = filterConnections(uniqueConnections, {
     text: filterText,
     invert: filterInvert,
@@ -97,12 +97,12 @@ const WebSocketList = ({
     .filter((conn) => conn.status === "closed" || conn.status === "error")
     .sort((a, b) => b.timestamp - a.timestamp);
 
-  // 渲染连接项的通用函数
+  // Generic function to render connection item
   const renderConnection = (connection, isActive) => {
     const isSelected = connection.id === selectedConnectionId;
     const hasNewMsg = hasNewMessages(connection.id);
 
-    // 关闭连接
+    // Close connection
     const handleCloseConnection = (e) => {
       e.stopPropagation();
       chrome.runtime.sendMessage({
@@ -155,7 +155,7 @@ const WebSocketList = ({
               />
             </div>
           </button>
-          {/* 右上角关闭按钮，仅在active时渲染，hover时显示 */}
+          {/* Top-right close button, only render when active, show on hover */}
           {isActive && (
             <button
               className="ws-connection-close-btn"

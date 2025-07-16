@@ -27,7 +27,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
   const [serverCloseReason, setServerCloseReason] = useState("");
   const [serverCustomCodeMode, setServerCustomCodeMode] = useState(false);
 
-  // 关闭代码选项
+  // Close code options
   const closeCodeOptions = [
     { value: "1000", label: t("system.closeCode.1000") },
     { value: "1001", label: t("system.closeCode.1001") },
@@ -38,7 +38,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
     { value: "custom", label: t("system.closeCode.custom") },
   ];
 
-  // 获取关闭码的说明信息
+  // Get close code explanation info
   const getCloseCodeInfo = (code) => {
     const numCode = parseInt(code);
     if (numCode === 1000) {
@@ -52,7 +52,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
     }
   };
 
-  // 处理系统事件模拟
+  // Handle system event simulation
   const handleSimulateEvent = useCallback(async (eventType, options = {}) => {
     if (!connection || isExecuting) return;
 
@@ -65,13 +65,13 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
         ...options
       });
     } catch (error) {
-      console.error("Failed to simulate system event:", error);
+      // console.error("Failed to simulate system event:", error); Removed for clean up.
     } finally {
       setTimeout(() => setIsExecuting(false), 500);
     }
   }, [connection, isExecuting, onSimulateSystemEvent]);
 
-  // Client事件处理器
+  // Client event handlers
   const handleClientClose = () => {
     handleSimulateEvent("client-close", {
       code: parseInt(closeCode),
@@ -94,7 +94,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
     });
   };
 
-  // Server事件处理器
+  // Server event handlers
   const handleServerClose = (closeType) => {
     if (closeType === "custom") {
       handleSimulateEvent("server-close", {

@@ -10,7 +10,7 @@ import {
 } from '../utils/i18n.js';
 
 const LanguageSelector = () => {
-  // 同步初始化，避免延迟
+  // Synchronous initialization, avoid delay
   const [currentLanguage, setCurrentLanguage] = useState(() => getCurrentLanguage());
   const [isOpen, setIsOpen] = useState(false);
   const [supportedLanguages, setSupportedLanguages] = useState(() => getSupportedLanguages());
@@ -52,7 +52,7 @@ const LanguageSelector = () => {
       await setLanguage(languageCode);
       setIsOpen(false);
     } catch (error) {
-      console.error('Failed to change language:', error);
+      // console.error('Failed to change language:', error); Removed for clean up.
     }
   };
 

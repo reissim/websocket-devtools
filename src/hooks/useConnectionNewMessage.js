@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from "react";
  * @returns {Object} Object containing functions to check if connection has new messages
  */
 export const useConnectionNewMessage = (websocketEvents, connectionsMap, flashDuration = 300) => {
-  const [newMessageConnections, setNewMessageConnections] = useState(new Map()); // 改为Map存储时间戳
+  const [newMessageConnections, setNewMessageConnections] = useState(new Map()); // Change to Map to store timestamps
   const previousMessageCountsRef = useRef(new Map());
   const flashTimeoutsRef = useRef(new Map());
 
@@ -74,7 +74,7 @@ export const useConnectionNewMessage = (websocketEvents, connectionsMap, flashDu
       }
     });
 
-  }, [websocketEvents, connectionsMap, flashDuration]); // 移除newMessageConnections依赖
+  }, [websocketEvents, connectionsMap, flashDuration]); // Remove newMessageConnections dependency
 
   // Function to check if a connection has new messages
   const hasNewMessages = (connectionId) => {

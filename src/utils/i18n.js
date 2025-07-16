@@ -20,8 +20,6 @@ class I18n {
       this.translations.set(lang, this.flattenTranslations(data));
     });
     
-    console.log('🌐 I18n: Synchronously loaded translations for languages:', Object.keys(preloadedTranslations));
-    
     // Asynchronously detect and set user preference
     this.initUserPreference();
   }
@@ -46,18 +44,14 @@ class I18n {
    */
   async initUserPreference(preferBrowserLanguage = false) {
     try {
-      console.log('🌐 I18n: Detecting user language preference...');
       const preferredLanguage = await this.detectLanguage(preferBrowserLanguage);
-      console.log('🌐 I18n: Detected preferred language:', preferredLanguage);
       
       if (preferredLanguage !== this.currentLanguage) {
         await this.setLanguage(preferredLanguage);
       }
       
       this.isInitialized = true;
-      console.log('🌐 I18n: User preference initialization complete, current language:', this.currentLanguage);
     } catch (error) {
-      console.warn('🌐 I18n: Failed to initialize user preference, using default:', error);
       this.isInitialized = true;
     }
   }
@@ -81,38 +75,32 @@ class I18n {
       if (preferBrowserLanguage) {
         // For popup: prioritize browser language
         const browserLang = this.getBrowserLanguage();
-        console.log('🌐 I18n: Browser language:', browserLang);
         if (browserLang && this.supportedLanguages.includes(browserLang)) {
           return browserLang;
         }
 
         // Check saved preference as fallback
         const saved = await this.getSavedLanguage();
-        console.log('🌐 I18n: Saved language:', saved);
         if (saved && this.supportedLanguages.includes(saved)) {
           return saved;
         }
       } else {
         // For panel: prioritize saved preference
         const saved = await this.getSavedLanguage();
-        console.log('🌐 I18n: Saved language:', saved);
         if (saved && this.supportedLanguages.includes(saved)) {
           return saved;
         }
 
         // Check browser language as fallback
         const browserLang = this.getBrowserLanguage();
-        console.log('🌐 I18n: Browser language:', browserLang);
         if (browserLang && this.supportedLanguages.includes(browserLang)) {
           return browserLang;
         }
       }
 
       // Return fallback
-      console.log('🌐 I18n: Using fallback language:', this.fallbackLanguage);
       return this.fallbackLanguage;
     } catch (error) {
-      console.warn('🌐 I18n: Failed to detect language:', error);
       return this.fallbackLanguage;
     }
   }
@@ -141,7 +129,6 @@ class I18n {
       
       return familyMatch || null;
     } catch (error) {
-      console.warn('Failed to get browser language:', error);
       return null;
     }
   }
@@ -160,7 +147,6 @@ class I18n {
       // Fallback to localStorage for testing
       return localStorage.getItem('ws_inspector_language');
     } catch (error) {
-      console.warn('Failed to get saved language:', error);
       return null;
     }
   }
@@ -178,7 +164,6 @@ class I18n {
         localStorage.setItem('ws_inspector_language', language);
       }
     } catch (error) {
-      console.warn('Failed to save language:', error);
     }
   }
 
@@ -187,18 +172,14 @@ class I18n {
    */
   async loadTranslations(language) {
     if (this.translations.has(language)) {
-      console.log('🌐 I18n: Using preloaded translations for', language);
       return this.translations.get(language);
     }
 
     // If language is not preloaded, fall back to the default language
     if (language !== this.fallbackLanguage) {
-      console.warn(`🌐 I18n: Language '${language}' not preloaded, falling back to '${this.fallbackLanguage}'`);
       return this.translations.get(this.fallbackLanguage) || {};
     }
 
-    // This should not happen since we preload all supported languages
-    console.error(`🌐 I18n: Fallback language '${this.fallbackLanguage}' not found in preloaded translations`);
     return {};
   }
 
@@ -207,11 +188,8 @@ class I18n {
    */
   async setLanguage(language) {
     if (!this.supportedLanguages.includes(language)) {
-      console.warn(`🌐 I18n: Unsupported language: ${language}, using fallback`);
       language = this.fallbackLanguage;
     }
-
-    console.log('🌐 I18n: Setting language to:', language);
 
     // Load translations for the language
     await this.loadTranslations(language);
@@ -225,7 +203,6 @@ class I18n {
 
     // Notify listeners
     if (oldLanguage !== language) {
-      console.log('🌐 I18n: Language changed from', oldLanguage, 'to', language, '- notifying', this.listeners.size, 'listeners');
       this.notifyLanguageChange(language, oldLanguage);
     }
   }
@@ -248,24 +225,11 @@ class I18n {
    * Translate a key to the current language
    */
   t(key, params = {}) {
-    const language = this.getCurrentLanguage();
-    const translations = this.translations.get(language) || {};
-    
-    // Get translation from current language
-    let translation = translations[key];
-    
-    // Fallback to default language if translation not found
-    if (translation === undefined && language !== this.fallbackLanguage) {
-      const fallbackTranslations = this.translations.get(this.fallbackLanguage) || {};
-      translation = fallbackTranslations[key];
-    }
-    
-    // If still no translation, return the key itself
+    const translation = this.translations.get(this.currentLanguage)?.[key] ||
+                        this.translations.get(this.fallbackLanguage)?.[key];
     if (translation === undefined) {
-      return key;
+      return key; // Return key as fallback
     }
-
-    // Replace parameters in translation
     return this.replaceParams(translation, params);
   }
 
@@ -309,7 +273,6 @@ class I18n {
       try {
         listener(newLanguage, oldLanguage);
       } catch (error) {
-        console.error('Error in language change listener:', error);
       }
     });
   }
@@ -353,11 +316,9 @@ class I18n {
   async forceBrowserLanguage() {
     try {
       const browserLang = this.getBrowserLanguage();
-      console.log('🌐 I18n: Forcing browser language:', browserLang);
       
       if (browserLang && this.supportedLanguages.includes(browserLang)) {
         if (browserLang !== this.currentLanguage) {
-          console.log('🌐 I18n: Setting browser language:', browserLang);
           const oldLanguage = this.currentLanguage;
           this.currentLanguage = browserLang;
           this.notifyLanguageChange(browserLang, oldLanguage);
@@ -366,10 +327,8 @@ class I18n {
       }
       
       // If browser language not supported, keep current language
-      console.log('🌐 I18n: Browser language not supported, keeping current:', this.currentLanguage);
       return this.currentLanguage;
     } catch (error) {
-      console.warn('🌐 I18n: Failed to force browser language:', error);
       return this.currentLanguage;
     }
   }

@@ -17,28 +17,28 @@ const ManualConnectModal = ({
   // Auto-focus input when modal opens
   useEffect(() => {
     if (opened) {
-      // 使用 setTimeout 确保 Modal 完全打开后再聚焦
+      // Use setTimeout to ensure the Modal is fully open before focusing
       const timer = setTimeout(() => {
-        // 尝试多种方式来聚焦 input
+        // Try various ways to focus the input
         if (inputRef.current) {
-          // 如果是 Mantine TextInput，可能需要聚焦内部的 input 元素
+          // If it's a Mantine TextInput, it might need to focus the internal input element
           const inputElement = inputRef.current.querySelector('input') || inputRef.current;
           if (inputElement && inputElement.focus) {
             inputElement.focus();
           }
         } else {
-          // 备用方案：通过选择器查找 input
+          // Fallback: find input by selector
           const modalInput = document.querySelector('.ws-modal input[type="text"]');
           if (modalInput) {
             modalInput.focus();
           }
         }
-      }, 200); // 增加延迟时间确保 Modal 动画完成
+      }, 200); // Increase delay to ensure Modal animation completes
       return () => clearTimeout(timer);
     }
   }, [opened]);
 
-  // 验证WebSocket URL
+  // Validate WebSocket URL
   const isValidWsUrl = useCallback((url) => {
     try {
       const wsUrl = new URL(url);
@@ -48,7 +48,7 @@ const ManualConnectModal = ({
     }
   }, []);
 
-  // 处理手动连接
+  // Handle manual connection
   const handleManualConnect = async () => {
     if (!wsUrl.trim() || !onConnect) return;
     
@@ -59,7 +59,7 @@ const ManualConnectModal = ({
       onClose();
       return result;
     } catch (error) {
-      console.error("Failed to create manual WebSocket connection:", error);
+      // console.error("Failed to create manual WebSocket connection:", error); Removed for clean up.
       onClose();
       setWsUrl("");
     } finally {
@@ -67,7 +67,7 @@ const ManualConnectModal = ({
     }
   };
 
-  // 处理关闭
+  // Handle close
   const handleClose = () => {
     setWsUrl("");
     onClose();

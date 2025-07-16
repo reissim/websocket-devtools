@@ -36,30 +36,30 @@ const JsonViewer = ({
   onAddToFavorites = null,
   showFavoritesButton = false,
   onSimulate = null,
-  // 新增props
-  showNestedParseButton = true, // 控制原有嵌套解析按钮
-  showSimulateNestedParseButton = false, // 控制Simulate Message专用按钮
-  onSimulateNestedParse = null, // Simulate Message专用嵌套解析回调
+  // New props
+  showNestedParseButton = true, // Control existing nested parse button
+  showSimulateNestedParseButton = false, // Control button specifically for Simulate Message
+  onSimulateNestedParse = null, // Callback for Simulate Message specific nested parse
 }) => {
-  // 根据内容类型设置wrap初始值：JSON默认不wrap，非JSON默认wrap
+  // Set initial wrap value based on content type: JSON defaults to no wrap, non-JSON defaults to wrap
   const [textWrap, setTextWrap] = useState(() => {
-    // 只读模式下根据内容类型自动 wrap，可编辑模式下默认不 wrap
+    // In read-only mode, auto wrap based on content type; in editable mode, default to no wrap
     if (!readOnly) return false;
     if (typeof data === 'string') {
       try {
         JSON.parse(data);
-        return false; // 是JSON
+        return false; // Is JSON
       } catch {
-        return true; // 不是JSON
+        return true; // Is not JSON
       }
     }
     return true;
   });
 
-  // 监听data变化，自动切换textWrap初始值（仅当用户未手动切换过，且只读模式下）
+  // Listen for data changes, automatically switch textWrap initial value (only if user hasn't manually toggled, and in read-only mode)
   const [userToggledWrap, setUserToggledWrap] = useState(false);
   useEffect(() => {
-    if (!readOnly) return; // 可编辑模式下不自动切换 wrap
+    if (!readOnly) return; // Do not auto-toggle wrap in editable mode
     if (!userToggledWrap) {
       if (typeof data === 'string') {
         try {
@@ -74,18 +74,9 @@ const JsonViewer = ({
     }
   }, [data, userToggledWrap, readOnly]);
   const [collapsed, setCollapsed] = useState(false);
-  const [nestedParse, setNestedParse] = useState(false); // 默认不嵌套解析
+  const [nestedParse, setNestedParse] = useState(false); // Default to no nested parsing
   const [forceUpdate, setForceUpdate] = useState(0);
   const [isCopied, setIsCopied] = useState(false);
-
-  // 添加调试信息
-  console.log("🔍 JsonViewer render:", {
-    showControls,
-    onCopy: !!onCopy,
-    showFavoritesButton,
-    className,
-    readOnly,
-  });
 
   // Recursively parse nested JSON strings
   const parseNestedJson = useCallback((obj) => {
@@ -123,10 +114,6 @@ const JsonViewer = ({
     nestedParsedData,
     hasNestedData,
   } = useMemo(() => {
-    console.log(
-      "🔍 JsonViewer: Recalculating data for:",
-      data?.substring(0, 100) + "..."
-    );
 
     if (!data || typeof data !== "string") {
       return {
@@ -145,12 +132,6 @@ const JsonViewer = ({
       // Check if nested parsing actually found nested JSON
       const hasNestedData =
         JSON.stringify(parsed) !== JSON.stringify(nestedParsed);
-
-      console.log("🔍 JsonViewer: Parsed data", {
-        hasNestedData,
-        parsedDataLength: JSON.stringify(parsed).length,
-        nestedParsedDataLength: JSON.stringify(nestedParsed).length,
-      });
 
       return {
         isValidJson: true,
@@ -188,7 +169,7 @@ const JsonViewer = ({
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     } else {
-      // 默认的copy实现
+      // Default copy implementation
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard
           .writeText(copyData)
@@ -205,7 +186,7 @@ const JsonViewer = ({
     }
   };
 
-  // 传统的copy方法（降级方案）
+  // Fallback copy method (for older browsers or non-secure contexts)
   const fallbackCopyTextToClipboard = (text) => {
     const textArea = document.createElement("textarea");
     textArea.value = text;
@@ -220,15 +201,9 @@ const JsonViewer = ({
       const successful = document.execCommand("copy");
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
-      if (successful) {
-        console.log("📋 Text copied to clipboard via execCommand");
-      } else {
-        console.error("Failed to copy text via execCommand");
-      }
     } catch (err) {
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
-      console.error("Failed to copy text:", err);
     }
 
     document.body.removeChild(textArea);
@@ -269,14 +244,6 @@ const JsonViewer = ({
   // Handle formatting changes in edit mode
   const handleFormatChange = useCallback(
     (newCollapsed, newNestedParse) => {
-      console.log("🔄 JsonViewer: handleFormatChange called", {
-        newCollapsed,
-        newNestedParse,
-        readOnly,
-        hasOnChange: !!onChange,
-        isValidJson,
-      });
-
       if (!readOnly && onChange && isValidJson) {
         try {
           const jsonData = newNestedParse ? nestedParsedData : parsedData;
@@ -285,7 +252,6 @@ const JsonViewer = ({
             null,
             newCollapsed ? 0 : 2
           );
-          console.log("🔄 JsonViewer: Calling onChange with formatted content");
           onChange(formattedContent);
         } catch (error) {
           console.error("Error formatting JSON:", error);
@@ -306,12 +272,6 @@ const JsonViewer = ({
 
   const handleNestedParseChange = useCallback(
     (newNestedParse) => {
-      console.log("🔄 JsonViewer: handleNestedParseChange called", {
-        newNestedParse,
-        currentNestedParse: nestedParse,
-        hasNestedData,
-      });
-
       setNestedParse(newNestedParse);
       handleFormatChange(collapsed, newNestedParse);
 
