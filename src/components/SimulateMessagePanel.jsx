@@ -24,7 +24,9 @@ import {
   CircleArrowDown,
   CircleArrowUp,
   Send,
-  Move
+  Move,
+  Plus,
+  Activity
 } from "lucide-react";
 import JsonViewer from "./JsonViewer";
 import useWindowConstraints from "../hooks/useWindowConstraints";
@@ -33,12 +35,13 @@ import useWindowAnimation from "../hooks/useWindowAnimation";
 import usePanelManager from "../hooks/usePanelManager";
 import FavoritesTab from "./FavoritesTab";
 import SystemEventsTab from "./SystemEventsTab";
+import ManualConnectModal from "./ManualConnectModal";
 import globalFavorites, { addFromEditor } from "../utils/globalFavorites";
 import { t } from "../utils/i18n";
 import SimulateEditorTab from "./SimulateEditorTab";
 
 const SimulateMessagePanel = forwardRef(
-  ({ connection, onSimulateMessage }, ref) => {
+  ({ connection, onSimulateMessage, onManualConnect }, ref) => {
     const [simulateMessage, setSimulateMessage] = useState(
       t("simulate.content.jsonPlaceholder")
     );
@@ -53,15 +56,18 @@ const SimulateMessagePanel = forwardRef(
     const windowRef = useRef(null);
     const saveTimeoutRef = useRef(null);
     const listenersRef = useRef(null);
+    
+    // Manual connection state
+    const [isManualConnectOpen, setIsManualConnectOpen] = useState(false);
 
-    // 使用窗口约束 hook
+    // Use window constraints hook
     const { maxSize, validateAndFixPositionAndSize } = useWindowConstraints();
 
-    // 使用窗口动画 hook
+    // Use window animation hook
     const { isAnimating, animateWindowOpen } =
       useWindowAnimation(setWindowPosition);
 
-    // 使用面板管理 hook
+    // Use panel management hook
     const { openPanel, toggleWindow, minimizeWindow } = usePanelManager({
       isWindowOpen,
       isAnimating,
@@ -72,7 +78,7 @@ const SimulateMessagePanel = forwardRef(
       animateWindowOpen,
     });
 
-    // 使用自动resize hook
+    // Use auto-resize hook
     useAutoResize({
       isWindowOpen,
       isAnimating,
@@ -83,7 +89,7 @@ const SimulateMessagePanel = forwardRef(
       setWindowSize,
     });
 
-    // 防抖保存到 localStorage
+    // Debounced save to localStorage
     const debouncedSave = useCallback((stateToSave) => {
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
@@ -95,17 +101,17 @@ const SimulateMessagePanel = forwardRef(
             JSON.stringify(stateToSave)
           );
         } catch (error) {
-          console.error("Failed to save state:", error);
+          // console.error("Failed to save state:", error); Removed for clean up.
         }
-      }, 300); // 300ms 防抖
+      }, 300); // 300ms debounce
     }, []);
 
-    // 优化：只在组件挂载时设置监听器，避免重复创建
+    // Optimization: only set listeners on component mount to avoid recreating
     useEffect(() => {
-      // 监听收藏夹服务事件和tab切换
+      // Listen for favorites service events and tab switch
       const unsubscribeFavorites = globalFavorites.addListener(
         (favorites, eventData) => {
-          // 拖动期间忽略收藏夹变化，避免干扰
+          // Ignore favorites changes during drag to avoid interference
           if (isDragging) return;
 
           if (eventData?.type === "add" && eventData?.switchToFavoritesTab) {
@@ -115,12 +121,12 @@ const SimulateMessagePanel = forwardRef(
       );
 
       const unsubscribeTabSwitch = globalFavorites.addTabSwitchCallback(() => {
-        // 拖动期间忽略tab切换请求
+        // Ignore tab switch requests during drag
         if (isDragging) return;
         setActiveTab("favorites");
       });
 
-      // 缓存监听器取消函数
+      // Cache listener unsubscribe functions
       listenersRef.current = () => {
         unsubscribeFavorites();
         unsubscribeTabSwitch();
@@ -134,9 +140,9 @@ const SimulateMessagePanel = forwardRef(
           clearTimeout(saveTimeoutRef.current);
         }
       };
-    }, []); // 移除isDragging依赖，避免重复创建监听器
+    }, []); // Removed isDragging dependency to avoid recreating listeners
 
-    // Load saved state from localStorage (只在组件挂载时执行一次)
+    // Load saved state from localStorage (only executed once on component mount)
     useEffect(() => {
       const savedState = localStorage.getItem("simulateMessagePanel");
       if (savedState) {
@@ -152,16 +158,16 @@ const SimulateMessagePanel = forwardRef(
           );
           setWindowSize(parsed.size || { width: 400, height: 500 });
         } catch (error) {
-          console.error("Failed to load saved state:", error);
+          // console.error("Failed to load saved state:", error); Removed for clean up.
         }
       } else {
         setWindowPosition({ x: window.innerWidth - 420, y: 100 });
       }
-    }, []); // 空依赖数组，只在挂载时执行一次
+    }, []); // Empty dependency array, only runs once on mount
 
-    // 优化：拖动期间暂停localStorage保存
+    // Optimization: pause localStorage saving during drag
     useEffect(() => {
-      // 在动画期间或拖动期间忽略位置变化，避免保存临时位置
+      // Ignore position changes during animation or drag to avoid saving temporary positions
       if (isAnimating || isDragging) return;
 
       const stateToSave = {
@@ -177,11 +183,11 @@ const SimulateMessagePanel = forwardRef(
       windowPosition,
       windowSize,
       isAnimating,
-      isDragging, // 添加isDragging依赖
+      isDragging, // Added isDragging dependency
       debouncedSave,
     ]);
 
-    // Handle click outside to close (只有在窗口打开时才添加监听器)
+    // Handle click outside to close (only add listener when window is open)
     useEffect(() => {
       if (!isWindowOpen || isPinned) return;
 
@@ -200,7 +206,7 @@ const SimulateMessagePanel = forwardRef(
         document.removeEventListener("mousedown", handleClickOutside);
     }, [isWindowOpen, isPinned]);
 
-    // 使用 useCallback 优化函数引用
+    // Use useCallback to optimize function references
     const handleSimulateMessage = useCallback(
       async (direction, data = null) => {
         const messageData = data || simulateMessage;
@@ -218,7 +224,7 @@ const SimulateMessagePanel = forwardRef(
             direction: direction,
           });
         } catch (error) {
-          console.error("Failed to simulate message:", error);
+          // console.error("Failed to simulate message:", error); Removed for clean up.
         } finally {
           setTimeout(() => setIsSending(false), 200);
         }
@@ -228,13 +234,13 @@ const SimulateMessagePanel = forwardRef(
 
     const handleMessageChange = useCallback(
       (value) => {
-        console.log("📨 SimulateMessagePanel handleMessageChange:", {
-          valueLength: value.length,
-          currentMessageLength: simulateMessage.length,
-          valuePreview:
-            value.substring(0, 100) + (value.length > 100 ? "..." : ""),
-          changed: value !== simulateMessage,
-        });
+        // console.log("📨 SimulateMessagePanel handleMessageChange:", {
+        //   valueLength: value.length,
+        //   currentMessageLength: simulateMessage.length,
+        //   valuePreview:
+        //     value.substring(0, 100) + (value.length > 100 ? "..." : ""),
+        //   changed: value !== simulateMessage,
+        // }); Removed for clean up.
         setSimulateMessage(value);
       },
       [simulateMessage]
@@ -258,7 +264,7 @@ const SimulateMessagePanel = forwardRef(
         const newFavorite = addFromEditor(messageData.trim());
 
         if (newFavorite) {
-          console.log("Added to favorites:", newFavorite.name);
+          // console.log("Added to favorites:", newFavorite.name); Removed for clean up.
         }
       },
       [simulateMessage]
@@ -273,7 +279,7 @@ const SimulateMessagePanel = forwardRef(
         setIsSending(true);
 
         try {
-          // 发送系统事件模拟请求到 background script
+          // Send system event simulation request to background script
           await chrome.runtime.sendMessage({
             type: "simulate-system-event",
             data: {
@@ -282,9 +288,9 @@ const SimulateMessagePanel = forwardRef(
             },
           });
 
-          console.log("✅ System event simulated:", eventData.eventType);
+          // console.log("✅ System event simulated:", eventData.eventType); Removed for clean up.
         } catch (error) {
-          console.error("❌ Failed to simulate system event:", error);
+          // console.error("❌ Failed to simulate system event:", error); Removed for clean up.
         } finally {
           setTimeout(() => setIsSending(false), 500);
         }
@@ -292,42 +298,44 @@ const SimulateMessagePanel = forwardRef(
       [connection]
     );
 
+
+
     const clearMessage = () => {
       setSimulateMessage("");
     };
 
-    // 暴露openPanel函数给外部使用
+    // Expose openPanel function to external use
     useImperativeHandle(ref, () => ({
       openPanel: (options = {}) => {
-        console.log(
-          "🎭 SimulateMessagePanel openPanel called with options:",
-          options
-        );
+        // console.log(
+        //   "🎭 SimulateMessagePanel openPanel called with options:",
+        //   options
+        // ); Removed for clean up.
         openPanel();
 
-        // 如果指定了tab，切换到对应tab
+        // If tab is specified, switch to the corresponding tab
         if (options.tab) {
           setActiveTab(options.tab);
 
-          // 新增：切换到editor时填充内容
+          // New: fill content when switching to editor
           if (options.tab === "editor" && options.data) {
             setSimulateMessage(options.data);
           }
 
-          // 如果指定了数据且要切换到favorites tab，延迟添加到收藏夹
+          // If data is specified and switching to favorites tab, add to favorites with a delay
           if (options.tab === "favorites" && options.data) {
             setTimeout(() => {
-              console.log(
-                "🎭 Adding data to favorites:",
-                options.data.substring(0, 100) + "..."
-              );
+              // console.log(
+              //   "🎭 Adding data to favorites:",
+              //   options.data.substring(0, 100) + "..."
+              // ); Removed for clean up.
               const newFavorite = addFromEditor(options.data, {
-                switchToFavoritesTab: false, // 不再次切换tab，因为我们已经切换了
-                generateName: false, // 生成空名字供用户编辑
-                autoEdit: true, // 自动进入编辑状态
-                showNotification: false, // 不显示通知
+                switchToFavoritesTab: false, // Do not switch tab again, as we have already switched
+                generateName: false, // Generate an empty name for user editing
+                autoEdit: true, // Automatically enter edit mode
+                showNotification: false, // Do not show notification
               });
-              console.log("🎭 New favorite created:", newFavorite);
+              // console.log("🎭 New favorite created:", newFavorite); Removed for clean up.
             }, 100);
           }
         }
@@ -338,14 +346,14 @@ const SimulateMessagePanel = forwardRef(
       setIsPinned(!isPinned);
     };
 
-    // 优化：添加拖动开始和结束处理
+    // Optimization: add drag start and end handlers
     const handleDragStart = useCallback(() => {
       setIsDragging(true);
     }, []);
 
     const handleDragStop = useCallback((e, data) => {
       setWindowPosition({ x: data.x, y: data.y });
-      // 延迟重置拖动状态，确保状态更新完成
+      // Delay reset drag state to ensure state update is complete
       setTimeout(() => setIsDragging(false), 50);
     }, []);
 
@@ -360,13 +368,13 @@ const SimulateMessagePanel = forwardRef(
       []
     );
 
-    // 优化按钮状态计算
+    // Optimize button state calculation
     const isSimulateDisabled = useMemo(
       () => !simulateMessage.trim() || isSending,
       [simulateMessage, isSending]
     );
 
-    // 可复用的模拟按钮组件
+    // Reusable simulate button component
     const SimulateButton = ({ direction, icon: Icon, label, className }) => (
       <button
         className={`simulate-btn ${className}`}
@@ -378,7 +386,7 @@ const SimulateMessagePanel = forwardRef(
       </button>
     );
 
-    // 优化：使用useMemo缓存FavoritesTab props，避免不必要的重渲染
+    // Optimization: use useMemo to cache FavoritesTab props to avoid unnecessary re-renders
     const favoritesTabProps = useMemo(
       () => ({
         onSendMessage: (data) => handleSimulateMessage("outgoing", data),
@@ -388,14 +396,14 @@ const SimulateMessagePanel = forwardRef(
       [handleSimulateMessage]
     );
 
-    // 在组件内实现handleSimulateNestedParse
+    // Implement handleSimulateNestedParse within the component
     const handleSimulateNestedParse = useCallback((nestedContent) => {
       handleMessageChange(nestedContent);
     }, [handleMessageChange]);
 
     return (
       <>
-        {/* Floating toggle button - 只在panel关闭时显示 */}
+        {/* Floating toggle button - only show when panel is closed */}
         {!isWindowOpen && (
           <div
             className={`floating-simulate-button ${isWindowOpen ? "open" : ""}`}
@@ -455,7 +463,7 @@ const SimulateMessagePanel = forwardRef(
                         : t("simulate.tooltips.pin")
                     }
                   >
-                    {isPinned ? <Pin size={12} /> : <PinOff size={12} />}
+                    {isPinned ? <Pin size={12} /> : <Pin size={12} />}
                   </button>
                   <button
                     className="window-control-btn minimize"
@@ -471,7 +479,24 @@ const SimulateMessagePanel = forwardRef(
               <div className="simulate-window-content">
                 {!connection ? (
                   <div className="simulate-panel-empty floating">
-                    <p><Wifi size={16} style={{display: 'inline', marginRight: '10px'}} />{t("simulate.status.noConnection")}</p>
+                    <div className="simulate-empty-state">
+                      <div className="simulate-empty-icon">
+                        <Activity size={48} color="white" />
+                      </div>
+                      <h3 className="simulate-empty-title">
+                        {t("simulate.status.noConnection")}
+                      </h3>
+                      <p className="simulate-empty-description">
+                        {t("simulate.status.noConnectionDescription")}
+                      </p>
+                      <button
+                        className="simulate-add-connection-btn"
+                        onClick={() => setIsManualConnectOpen(true)}
+                      >
+                        <Plus size={16} />
+                        {t("panel.connectionList.addConnection")}
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <Tabs
@@ -510,7 +535,7 @@ const SimulateMessagePanel = forwardRef(
                         leftSection={
                           <Settings
                             size={20}
-                            color={activeTab === "system" ? "#e01210" : "#b6b6b6"}
+                            color={activeTab === "system" ? "#cd7726" : "#b6b6b6"}
                             // color={"#e01210"}
                             className="tab-icon"
                           />
@@ -546,6 +571,14 @@ const SimulateMessagePanel = forwardRef(
             </div>
           </Rnd>
         )}
+
+        {/* Manual Connection Modal */}
+        <ManualConnectModal
+          opened={isManualConnectOpen}
+          onClose={() => setIsManualConnectOpen(false)}
+          onConnect={onManualConnect}
+          iconComponent={Activity}
+        />
       </>
     );
   }

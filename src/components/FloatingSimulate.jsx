@@ -2,10 +2,10 @@ import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import SimulateMessagePanel from "./SimulateMessagePanel";
 
 const FloatingSimulate = forwardRef(
-  ({ connection, onSimulateMessage }, ref) => {
+  ({ connection, onSimulateMessage, onManualConnect }, ref) => {
     const simulatePanelRef = useRef(null);
 
-    // 暴露openPanel函数给外部使用
+    // Expose openPanel function for external use
     useImperativeHandle(ref, () => ({
       openPanel: (options = {}) => {
         if (simulatePanelRef.current) {
@@ -19,6 +19,7 @@ const FloatingSimulate = forwardRef(
         ref={simulatePanelRef}
         connection={connection}
         onSimulateMessage={onSimulateMessage}
+        onManualConnect={onManualConnect}
       />
     );
   }

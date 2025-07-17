@@ -20,8 +20,6 @@ class I18n {
       this.translations.set(lang, this.flattenTranslations(data));
     });
     
-    console.log('🌐 I18n: Synchronously loaded translations for languages:', Object.keys(preloadedTranslations));
-    
     // Asynchronously detect and set user preference
     this.initUserPreference();
   }
@@ -44,20 +42,16 @@ class I18n {
   /**
    * Initialize user preference asynchronously (called from constructor)
    */
-  async initUserPreference() {
+  async initUserPreference(preferBrowserLanguage = false) {
     try {
-      console.log('🌐 I18n: Detecting user language preference...');
-      const preferredLanguage = await this.detectLanguage();
-      console.log('🌐 I18n: Detected preferred language:', preferredLanguage);
+      const preferredLanguage = await this.detectLanguage(preferBrowserLanguage);
       
       if (preferredLanguage !== this.currentLanguage) {
         await this.setLanguage(preferredLanguage);
       }
       
       this.isInitialized = true;
-      console.log('🌐 I18n: User preference initialization complete, current language:', this.currentLanguage);
     } catch (error) {
-      console.warn('🌐 I18n: Failed to initialize user preference, using default:', error);
       this.isInitialized = true;
     }
   }
@@ -73,29 +67,40 @@ class I18n {
 
   /**
    * Detect the user's preferred language
-   * Priority: 1. Saved preference 2. Browser language 3. Fallback
+   * Priority for panel: 1. Saved preference 2. Browser language 3. Fallback
+   * Priority for popup: 1. Browser language 2. Saved preference 3. Fallback
    */
-  async detectLanguage() {
+  async detectLanguage(preferBrowserLanguage = false) {
     try {
-      // Check saved preference first
-      const saved = await this.getSavedLanguage();
-      console.log('🌐 I18n: Saved language:', saved);
-      if (saved && this.supportedLanguages.includes(saved)) {
-        return saved;
-      }
+      if (preferBrowserLanguage) {
+        // For popup: prioritize browser language
+        const browserLang = this.getBrowserLanguage();
+        if (browserLang && this.supportedLanguages.includes(browserLang)) {
+          return browserLang;
+        }
 
-      // Check browser language
-      const browserLang = this.getBrowserLanguage();
-      console.log('🌐 I18n: Browser language:', browserLang);
-      if (browserLang && this.supportedLanguages.includes(browserLang)) {
-        return browserLang;
+        // Check saved preference as fallback
+        const saved = await this.getSavedLanguage();
+        if (saved && this.supportedLanguages.includes(saved)) {
+          return saved;
+        }
+      } else {
+        // For panel: prioritize saved preference
+        const saved = await this.getSavedLanguage();
+        if (saved && this.supportedLanguages.includes(saved)) {
+          return saved;
+        }
+
+        // Check browser language as fallback
+        const browserLang = this.getBrowserLanguage();
+        if (browserLang && this.supportedLanguages.includes(browserLang)) {
+          return browserLang;
+        }
       }
 
       // Return fallback
-      console.log('🌐 I18n: Using fallback language:', this.fallbackLanguage);
       return this.fallbackLanguage;
     } catch (error) {
-      console.warn('🌐 I18n: Failed to detect language:', error);
       return this.fallbackLanguage;
     }
   }
@@ -124,7 +129,6 @@ class I18n {
       
       return familyMatch || null;
     } catch (error) {
-      console.warn('Failed to get browser language:', error);
       return null;
     }
   }
@@ -143,7 +147,6 @@ class I18n {
       // Fallback to localStorage for testing
       return localStorage.getItem('ws_inspector_language');
     } catch (error) {
-      console.warn('Failed to get saved language:', error);
       return null;
     }
   }
@@ -161,7 +164,6 @@ class I18n {
         localStorage.setItem('ws_inspector_language', language);
       }
     } catch (error) {
-      console.warn('Failed to save language:', error);
     }
   }
 
@@ -170,18 +172,14 @@ class I18n {
    */
   async loadTranslations(language) {
     if (this.translations.has(language)) {
-      console.log('🌐 I18n: Using preloaded translations for', language);
       return this.translations.get(language);
     }
 
     // If language is not preloaded, fall back to the default language
     if (language !== this.fallbackLanguage) {
-      console.warn(`🌐 I18n: Language '${language}' not preloaded, falling back to '${this.fallbackLanguage}'`);
       return this.translations.get(this.fallbackLanguage) || {};
     }
 
-    // This should not happen since we preload all supported languages
-    console.error(`🌐 I18n: Fallback language '${this.fallbackLanguage}' not found in preloaded translations`);
     return {};
   }
 
@@ -190,11 +188,8 @@ class I18n {
    */
   async setLanguage(language) {
     if (!this.supportedLanguages.includes(language)) {
-      console.warn(`🌐 I18n: Unsupported language: ${language}, using fallback`);
       language = this.fallbackLanguage;
     }
-
-    console.log('🌐 I18n: Setting language to:', language);
 
     // Load translations for the language
     await this.loadTranslations(language);
@@ -208,7 +203,6 @@ class I18n {
 
     // Notify listeners
     if (oldLanguage !== language) {
-      console.log('🌐 I18n: Language changed from', oldLanguage, 'to', language, '- notifying', this.listeners.size, 'listeners');
       this.notifyLanguageChange(language, oldLanguage);
     }
   }
@@ -231,24 +225,11 @@ class I18n {
    * Translate a key to the current language
    */
   t(key, params = {}) {
-    const language = this.getCurrentLanguage();
-    const translations = this.translations.get(language) || {};
-    
-    // Get translation from current language
-    let translation = translations[key];
-    
-    // Fallback to default language if translation not found
-    if (translation === undefined && language !== this.fallbackLanguage) {
-      const fallbackTranslations = this.translations.get(this.fallbackLanguage) || {};
-      translation = fallbackTranslations[key];
-    }
-    
-    // If still no translation, return the key itself
+    const translation = this.translations.get(this.currentLanguage)?.[key] ||
+                        this.translations.get(this.fallbackLanguage)?.[key];
     if (translation === undefined) {
-      return key;
+      return key; // Return key as fallback
     }
-
-    // Replace parameters in translation
     return this.replaceParams(translation, params);
   }
 
@@ -292,7 +273,6 @@ class I18n {
       try {
         listener(newLanguage, oldLanguage);
       } catch (error) {
-        console.error('Error in language change listener:', error);
       }
     });
   }
@@ -328,6 +308,46 @@ class I18n {
     await this.loadTranslations(language);
     this.notifyLanguageChange(language, language);
   }
+
+  /**
+   * Force browser language detection and set it as current language
+   * Used for popup to always follow browser language
+   */
+  async forceBrowserLanguage() {
+    try {
+      const browserLang = this.getBrowserLanguage();
+      
+      if (browserLang && this.supportedLanguages.includes(browserLang)) {
+        if (browserLang !== this.currentLanguage) {
+          const oldLanguage = this.currentLanguage;
+          this.currentLanguage = browserLang;
+          this.notifyLanguageChange(browserLang, oldLanguage);
+        }
+        return browserLang;
+      }
+      
+      // If browser language not supported, keep current language
+      return this.currentLanguage;
+    } catch (error) {
+      return this.currentLanguage;
+    }
+  }
+
+  /**
+   * Initialize for panel with saved preference priority
+   * This will use saved preference if available, otherwise browser language
+   */
+  async initForPanel() {
+    return this.initUserPreference(false);
+  }
+
+  /**
+   * Initialize for popup with browser language priority
+   * This will use browser language if available, otherwise saved preference
+   */
+  async initForPopup() {
+    return this.initUserPreference(true);
+  }
 }
 
 // Create and export singleton instance
@@ -340,6 +360,9 @@ export const getCurrentLanguage = () => i18n.getCurrentLanguage();
 export const getSupportedLanguages = () => i18n.getSupportedLanguages();
 export const getLanguageDisplayName = (language) => i18n.getLanguageDisplayName(language);
 export const addLanguageChangeListener = (listener) => i18n.addLanguageChangeListener(listener);
+export const forceBrowserLanguage = () => i18n.forceBrowserLanguage();
+export const initForPanel = () => i18n.initForPanel();
+export const initForPopup = () => i18n.initForPopup();
 
 // Export the main instance
 export default i18n; 

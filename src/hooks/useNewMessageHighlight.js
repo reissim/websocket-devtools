@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 /**
  * Custom hook to manage new message highlighting animation
@@ -10,10 +10,19 @@ export const useNewMessageHighlight = (connection, highlightDuration = 500) => {
   const [newMessageKeys, setNewMessageKeys] = useState(new Set());
   const previousMessageCountRef = useRef(0);
   const messageTimestampsRef = useRef(new Set());
+  const previousConnectionIdRef = useRef(null);
 
   // Effect to detect new messages and trigger highlight animation
   useEffect(() => {
     if (!connection || !connection.messages) return;
+    
+    // Reset everything if connection changed
+    if (previousConnectionIdRef.current !== connection.id) {
+      setNewMessageKeys(new Set());
+      previousMessageCountRef.current = 0;
+      messageTimestampsRef.current = new Set();
+      previousConnectionIdRef.current = connection.id;
+    }
     
     const currentMessages = connection.messages;
     const currentMessageCount = currentMessages.length;
@@ -54,7 +63,7 @@ export const useNewMessageHighlight = (connection, highlightDuration = 500) => {
     currentMessages.forEach(msg => {
       messageTimestampsRef.current.add(msg.timestamp);
     });
-  }, [connection?.messages, newMessageKeys, highlightDuration]);
+  }, [connection?.messages, connection?.id, highlightDuration]);
 
   // Function to check if a message is new
   const isNewMessage = (messageKey) => {
@@ -62,9 +71,9 @@ export const useNewMessageHighlight = (connection, highlightDuration = 500) => {
   };
 
   // Clear all highlights (useful for cleanup)
-  const clearHighlights = () => {
+  const clearHighlights = useCallback(() => {
     setNewMessageKeys(new Set());
-  };
+  }, []);
 
   return {
     isNewMessage,

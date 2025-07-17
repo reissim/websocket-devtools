@@ -3,7 +3,7 @@ import JsonViewer from "./JsonViewer";
 import { CircleArrowDown, CircleArrowUp } from "lucide-react";
 import { t } from "../utils/i18n";
 
-// 可复用的模拟按钮组件
+// Reusable simulate button component
 const SimulateButton = ({ direction, icon: Icon, label, className, onSimulate, isDisabled }) => (
   <button
     className={`simulate-btn ${className}`}

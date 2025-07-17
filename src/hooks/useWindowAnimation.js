@@ -3,23 +3,23 @@ import { useState, useCallback } from "react";
 export const useWindowAnimation = (setWindowPosition) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // 启动动画函数
+  // Start animation function
   const animateWindowOpen = useCallback(
     (targetPos) => {
       const startPos = { x: targetPos.x, y: targetPos.y + 100 };
       setWindowPosition(startPos);
       setIsAnimating(true);
 
-      // 立即开始动画，不延迟
+      // Start animation immediately, no delay
       requestAnimationFrame(() => {
         const startTime = performance.now();
         const deltaY = -100;
 
         const animate = (currentTime) => {
           const elapsed = currentTime - startTime;
-          const progress = Math.min(elapsed / 350, 1); // 稍微缩短动画时间
+          const progress = Math.min(elapsed / 350, 1); // Slightly shorten animation time
 
-          // 使用更平滑的缓动函数 (ease-out-quart)
+          // Use a smoother easing function (ease-out-quart)
           const eased = 1 - Math.pow(1 - progress, 4);
 
           const currentY = startPos.y + deltaY * eased;
@@ -28,7 +28,7 @@ export const useWindowAnimation = (setWindowPosition) => {
           if (progress < 1) {
             requestAnimationFrame(animate);
           } else {
-            // 确保精确到达目标位置
+            // Ensure precise arrival at target position
             setWindowPosition(targetPos);
             setIsAnimating(false);
           }

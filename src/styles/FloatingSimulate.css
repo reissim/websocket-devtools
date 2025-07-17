@@ -1,4 +1,4 @@
-/* 悬浮模拟消息组件样式 */
+/* Floating simulate message component styles */
 .floating-simulate-button {
   position: fixed;
   bottom: 24px;
@@ -15,7 +15,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
   user-select: none;
-  /* 添加从下往上100px的入场动画 */
+  /* Add entrance animation sliding up 100px from bottom */
   animation: slideUpFromBottom 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
@@ -109,7 +109,7 @@
   }
 }
 
-/* 浮动按钮从下往上100px的入场动画 */
+/* Floating button entrance animation sliding up 100px from bottom */
 @keyframes slideUpFromBottom {
   from {
     transform: translateY(150px);
@@ -166,7 +166,7 @@
   flex-direction: column;
 }
 
-/* 浮动窗口内的模拟面板样式调整 */
+/* Floating window simulate panel style adjustments */
 .floating-simulate-content .simulate-section {
   height: 100%;
   padding: 16px;
@@ -217,7 +217,7 @@
   text-align: center;
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 480px) {
   .floating-simulate-window {
     width: calc(100vw - 48px);

@@ -7,7 +7,7 @@ import WebSocketList from "../components/WebSocketList.jsx";
 import MessageDetails from "../components/MessageDetails.jsx";
 import FloatingSimulate from "../components/FloatingSimulate.jsx";
 import LanguageSelector from "../components/LanguageSelector.jsx";
-import { t, addLanguageChangeListener, getCurrentLanguage } from "../utils/i18n.js";
+import { t, addLanguageChangeListener, getCurrentLanguage, initForPanel } from "../utils/i18n.js";
 import i18n from "../utils/i18n.js";
 import "../styles/main.css";
 import { Ban } from "lucide-react";
@@ -22,22 +22,24 @@ const WebSocketPanel = () => {
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
   const [currentTabId, setCurrentTabId] = useState(null);
 
-  // 分离连接管理和消息管理
-  const [connectionsMap, setConnectionsMap] = useState(new Map()); // 所有连接的基础信息（包括active和inactive）
+  // Separate connection management and message management
+  const [connectionsMap, setConnectionsMap] = useState(new Map()); // Basic info for all connections (including active and inactive)
 
-  // 消息去重机制
+  // Message deduplication mechanism
   const processedMessageIds = useRef(new Set());
 
-  // FloatingSimulate组件的ref
+  // Ref for FloatingSimulate component
   const floatingSimulateRef = useRef(null);
 
   // Language state for triggering re-renders when language changes
   const [currentLanguage, setCurrentLanguage] = useState(() => getCurrentLanguage());
 
   useEffect(() => {
+    // Initialize panel with saved preference priority
+    initForPanel();
+    
     // Language change listener for re-rendering when language changes
     const unsubscribeLanguage = addLanguageChangeListener((newLanguage) => {
-      console.log('🌐 Panel: Language changed to:', newLanguage);
       setCurrentLanguage(newLanguage);
     });
 
@@ -47,18 +49,17 @@ const WebSocketPanel = () => {
   }, []);
 
   useEffect(() => {
-    // 获取当前DevTools所附加的tab ID
+    // Get the tab ID that current DevTools is attached to
     const tabId = chrome.devtools.inspectedWindow.tabId;
     setCurrentTabId(tabId);
-    console.log("🎯 DevTools Panel attached to tab:", tabId);
 
-    // === 新增：建立与 background 的持久连接并发送 tabId ===
+    // === NEW: Establish persistent connection with background and send tabId ===
     const port = chrome.runtime.connect({ name: "devtools" });
     port.postMessage({ type: "init", tabId });
-    window._wsInspectorPort = port; // 保持全局引用，防止被 GC
-    // === 新增结束 ===
+    window._wsInspectorPort = port; // Keep global reference to prevent GC
+    // === END NEW ===
 
-    // 请求现有数据
+    // Request existing data
     const loadExistingData = async () => {
       try {
         const response = await chrome.runtime.sendMessage({
@@ -66,30 +67,19 @@ const WebSocketPanel = () => {
         });
 
         if (response && response.success) {
-          console.log(
-            "📊 Loading existing data:",
-            response.data?.length || 0,
-            "events"
-          );
-
-          // 同步监控状态
+          // Sync monitoring state
           if (response.isMonitoring !== undefined) {
             setIsMonitoring(response.isMonitoring);
-            console.log("🔄 Synced monitoring state:", response.isMonitoring);
           }
 
-          // 加载现有事件数据
+          // Load existing event data
           if (response.data && response.data.length > 0) {
-            // 过滤当前tab的事件
+            // Filter events for current tab
             const tabEvents = response.data.filter(
               (event) => event.tabId === tabId
             );
-            console.log(
-              "📊 Filtered events for current tab:",
-              tabEvents.length
-            );
 
-            // 更新连接信息
+            // Update connection info
             const newConnectionsMap = new Map();
             tabEvents.forEach((eventData) => {
               if (
@@ -129,13 +119,6 @@ const WebSocketPanel = () => {
 
             setConnectionsMap(newConnectionsMap);
             setWebsocketEvents(tabEvents);
-            console.log(
-              "✅ Loaded existing data:",
-              tabEvents.length,
-              "events,",
-              newConnectionsMap.size,
-              "connections"
-            );
           }
         }
       } catch (error) {
@@ -143,10 +126,10 @@ const WebSocketPanel = () => {
       }
     };
 
-    // 加载现有数据
+    // Load existing data
     loadExistingData();
 
-    // 监听来自 background script 的消息
+    // Listen to messages from background script
     const messageListener = (message, sender, sendResponse) => {
       if (message.type === "websocket-event") {
         const eventData = message.data;
@@ -163,12 +146,8 @@ const WebSocketPanel = () => {
           return;
         }
 
-        // 基于messageId的去重机制
+        // MessageId-based deduplication mechanism
         if (messageId && processedMessageIds.current.has(messageId)) {
-          console.log(
-            "🚫 Duplicate message detected by ID, skipping:",
-            messageId
-          );
           sendResponse({ received: true, duplicate: true, messageId });
           return;
         }
@@ -178,14 +157,21 @@ const WebSocketPanel = () => {
           processedMessageIds.current.add(messageId);
         }
 
-        console.log("📊 Processing WebSocket event:", eventData);
+        // Handle manual connection creation success event
+        if (eventData.type === "manual-connection-created") {
+          // Delay to ensure connection event is processed
+          setTimeout(() => {
+            setSelectedConnectionId(eventData.connectionId);
+          }, 100);
+        }
 
-        // 更新连接信息
+        // Update connection info
         setConnectionsMap((prevConnections) => {
           const newConnections = new Map(prevConnections);
+          const hadConnections = prevConnections.size > 0;
 
           if (eventData.type === "connection" || eventData.type === "open") {
-            // 创建或更新连接为active状态
+            // Create or update connection to active status
             newConnections.set(eventData.id, {
               id: eventData.id,
               url: eventData.url,
@@ -193,30 +179,25 @@ const WebSocketPanel = () => {
               timestamp: eventData.timestamp,
               lastActivity: eventData.timestamp,
             });
-            console.log(
-              "📊 Created/Updated connection:",
-              eventData.id,
-              "Status:",
-              eventData.type
-            );
+
+            // Auto-select connection: automatically select when transitioning from 0 to 1 connection
+            if (!hadConnections && newConnections.size === 1) {
+              setTimeout(() => {
+                setSelectedConnectionId(eventData.id);
+              }, 100);
+            }
           } else if (eventData.type === "close" || eventData.type === "error") {
-            // 更新连接为inactive状态，如果连接不存在则创建它
+            // Update connection to inactive status, create if connection does not exist
             const existing = newConnections.get(eventData.id);
             newConnections.set(eventData.id, {
               id: eventData.id,
               url: existing?.url || eventData.url || "Unknown URL",
-              status: eventData.type, // "close" 或 "error"
+              status: eventData.type, // "close" or "error"
               timestamp: existing?.timestamp || eventData.timestamp,
               lastActivity: eventData.timestamp,
             });
-            console.log(
-              "📊 Updated connection to inactive:",
-              eventData.id,
-              "Status:",
-              eventData.type
-            );
           } else if (eventData.type === "message") {
-            // 更新最后活动时间（对于消息事件）
+            // Update last activity time (for message events)
             const existing = newConnections.get(eventData.id);
             if (existing) {
               newConnections.set(eventData.id, {
@@ -231,7 +212,6 @@ const WebSocketPanel = () => {
 
         setWebsocketEvents((prevEvents) => {
           const newEvents = [...prevEvents, eventData];
-          console.log("📈 Total WebSocket events:", newEvents.length);
           return newEvents;
         });
       }
@@ -247,7 +227,6 @@ const WebSocketPanel = () => {
   }, []);
 
   const handleStartMonitoring = () => {
-    console.log("🚀 Starting WebSocket monitoring...");
     setIsMonitoring(true);
 
     // 发送开始监控消息到 background script
@@ -257,7 +236,6 @@ const WebSocketPanel = () => {
         tabId: currentTabId,
       })
       .then((response) => {
-        console.log("✅ Start monitoring response:", response);
       })
       .catch((error) => {
         console.error("❌ Failed to start monitoring:", error);
@@ -265,7 +243,6 @@ const WebSocketPanel = () => {
   };
 
   const handleStopMonitoring = () => {
-    console.log("⏹️ Stopping WebSocket monitoring...");
     setIsMonitoring(false);
 
     // 发送停止监控消息到 background script
@@ -275,7 +252,6 @@ const WebSocketPanel = () => {
         tabId: currentTabId,
       })
       .then((response) => {
-        console.log("✅ Stop monitoring response:", response);
       })
       .catch((error) => {
         console.error("❌ Failed to stop monitoring:", error);
@@ -283,26 +259,20 @@ const WebSocketPanel = () => {
   };
 
   const handleClearConnections = () => {
-    console.log("🗑️ Clearing all WebSocket connections and events...");
     setWebsocketEvents([]);
     setConnectionsMap(new Map());
     setSelectedConnectionId(null);
   };
 
   const handleClearMessages = (connectionId) => {
-    console.log(
-      "🗑️ Clearing all messages and events for connection:",
-      connectionId
-    );
     setWebsocketEvents((prevEvents) => {
-      // 移除目标连接的所有事件（消息和系统事件都清除）
+      // Remove all events (messages and system events) for the target connection
       return prevEvents.filter((event) => event.id !== connectionId);
     });
-    // 连接基础信息保留在connections Map中，所以连接仍会显示在列表中
+    // Basic connection information remains in the connections Map, so the connection will still be displayed in the list
   };
 
   const handleSelectConnection = (connectionId) => {
-    console.log("👆 Selected connection:", connectionId);
     setSelectedConnectionId(connectionId);
   };
 
@@ -311,7 +281,6 @@ const WebSocketPanel = () => {
     message,
     direction,
   }) => {
-    console.log("🎭 Simulating message:", { connectionId, message, direction });
 
     try {
       // 1. Send simulate message to background (for actual simulation execution)
@@ -321,7 +290,7 @@ const WebSocketPanel = () => {
           connectionId,
           message,
           direction,
-          tabId: currentTabId, // 包含当前tab ID
+          tabId: currentTabId, // Include current tab ID
         },
       });
 
@@ -339,28 +308,26 @@ const WebSocketPanel = () => {
           simulated: true, // Mark as simulated message
         };
 
-        // 直接添加到事件列表中
+        // Add directly to the event list
         setWebsocketEvents((prevEvents) => [simulatedEvent, ...prevEvents]);
 
-        console.log("✅ Simulated message added to panel locally");
       }
 
       return response;
     } catch (error) {
-      console.error("❌ Failed to simulate message:", error);
       throw error;
     }
   };
 
-  // 获取选中连接的所有消息和事件
+  // Get all messages and events for the selected connection
   const getSelectedConnectionData = () => {
     if (!selectedConnectionId) return null;
 
-    // 从connectionsMap获取连接基本信息
+    // Get basic connection info from connectionsMap
     const connectionInfo = connectionsMap.get(selectedConnectionId);
     if (!connectionInfo) return null;
 
-    // 获取该连接的所有事件/消息
+    // Get all events/messages for this connection
     const connectionMessages = websocketEvents.filter(
       (event) => event.id === selectedConnectionId
     );
@@ -372,27 +339,45 @@ const WebSocketPanel = () => {
     };
   };
 
-  // 处理打开SimulateMessagePanel
+  // Handle opening SimulateMessagePanel
   const handleOpenSimulatePanel = (options = {}) => {
-    console.log(
-      "🎯 Panel: handleOpenSimulatePanel called with options:",
-      options
-    );
 
     if (floatingSimulateRef.current) {
-      console.log("🎯 Panel: FloatingSimulate ref found, calling openPanel");
       floatingSimulateRef.current.openPanel(options);
     } else {
-      console.warn("🎯 Panel: FloatingSimulate ref not found");
     }
   };
 
-  // 处理手动WebSocket连接
+  // Handle manual WebSocket connection
   const handleManualConnect = async (wsUrl) => {
-    console.log("🔗 Creating manual WebSocket connection:", wsUrl);
     
     try {
-      // 发送消息到background script，让它在当前tab中创建WebSocket连接
+      // Set a Promise to wait for the manual-connection-created event
+      const connectionCreatedPromise = new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error("Connection creation timeout"));
+        }, 10000); // 10 second timeout
+
+        const listener = (message) => {
+          if (message.type === "websocket-event" && 
+              message.data.type === "manual-connection-created" &&
+              message.data.url === wsUrl) {
+            clearTimeout(timeout);
+            chrome.runtime.onMessage.removeListener(listener);
+            resolve(message.data.connectionId);
+          } else if (message.type === "websocket-event" && 
+                     message.data.type === "manual-connection-error" &&
+                     message.data.url === wsUrl) {
+            clearTimeout(timeout);
+            chrome.runtime.onMessage.removeListener(listener);
+            reject(new Error(message.data.error || "Manual connection failed"));
+          }
+        };
+
+        chrome.runtime.onMessage.addListener(listener);
+      });
+
+      // Send message to background script to create WebSocket connection in current tab
       const response = await chrome.runtime.sendMessage({
         type: "create-manual-websocket",
         data: {
@@ -402,18 +387,18 @@ const WebSocketPanel = () => {
       });
 
       if (response && response.success) {
-        console.log("✅ Manual WebSocket connection created successfully");
-        return response;
+        // Wait for actual connection creation event
+        const connectionId = await connectionCreatedPromise;
+        return { success: true, connectionId };
       } else {
         throw new Error(response?.error || "Failed to create manual connection");
       }
     } catch (error) {
-      console.error("❌ Failed to create manual WebSocket connection:", error);
       throw error;
     }
   };
 
-  // 获取阻止状态显示文本
+  // Get block status display text
   const getBlockStatusText = () => {
     const { send, receive } = blockStatus;
     if (!send && !receive) return null;
@@ -422,9 +407,8 @@ const WebSocketPanel = () => {
     if (receive) return t("panel.header.block_receive");
   };
 
-  // 处理拦截状态变化
+  // Handle interception status change
   const handleBlockChange = (type, enabled) => {
-    console.log(`🚫 Intercept ${type} ${enabled ? 'enabled' : 'disabled'}`);
     setBlockStatus(prev => ({
       ...prev,
       [type]: enabled
@@ -500,6 +484,7 @@ const WebSocketPanel = () => {
               <div className="panel-body">
                 <MessageDetails
                   connection={selectedConnection}
+                  selectedConnectionId={selectedConnectionId} // 传递连接ID用于详情面板重新渲染
                   onSimulateMessage={handleSimulateMessage}
                   onClearMessages={handleClearMessages}
                   onOpenSimulatePanel={handleOpenSimulatePanel}
@@ -514,6 +499,7 @@ const WebSocketPanel = () => {
           ref={floatingSimulateRef}
           connection={selectedConnection}
           onSimulateMessage={handleSimulateMessage}
+          onManualConnect={handleManualConnect}
         />
       </div>
     </MantineProvider>

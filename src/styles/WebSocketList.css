@@ -238,45 +238,48 @@
 .modal-button-group {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
-  margin-top: 24px;
+  gap: 12px;
+  margin-top: 0;
 }
 
 .modal-button {
-  padding: 6px 16px;
-  font-size: 11px;
+  padding: 8px 16px;
+  font-size: 13px;
   font-weight: 500;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 1px solid;
   cursor: pointer;
   transition: all 0.2s ease;
   outline: none;
-  height: 28px;
-  min-width: 60px;
+  height: 32px;
+  min-width: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
 }
 
 .modal-button-cancel {
-  background-color: transparent;
-  border-color: var(--border-color);
-  color: var(--text-secondary);
+  background-color: var(--bg-card);
+  border-color: var(--border);
+  color: var(--text-primary);
 }
 
 .modal-button-cancel:hover:not(:disabled) {
-  background-color: var(--bg-tertiary);
-  border-color: var(--text-secondary);
+  background-color: var(--bg-input);
+  border-color: var(--border-light);
   transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .modal-button-cancel:active:not(:disabled) {
   transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .modal-button-cancel:disabled {
-  background-color: var(--bg-tertiary);
-  border-color: var(--border-color);
+  background-color: var(--bg-secondary);
+  border-color: var(--border);
   color: var(--text-muted);
   opacity: 0.6;
   cursor: not-allowed;
@@ -286,24 +289,24 @@
   background-color: var(--accent-color);
   border-color: var(--accent-color);
   color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 122, 204, 0.3);
 }
 
 .modal-button-connect:hover:not(:disabled) {
-  background-color: #4f46e5;
-  border-color: #4f46e5;
+  background-color: #0056b3;
+  border-color: #0056b3;
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 122, 204, 0.4);
 }
 
 .modal-button-connect:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 122, 204, 0.3);
 }
 
 .modal-button-connect:disabled {
-  background-color: var(--bg-tertiary);
-  border-color: var(--border-color);
+  background-color: var(--bg-secondary);
+  border-color: var(--border);
   color: var(--text-muted);
   opacity: 0.6;
   cursor: not-allowed;
@@ -635,30 +638,100 @@
 
 /* Modal dialog content wrapper */
 .ws-modal-content-wrapper {
-  padding: 16px 0;
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Modal header section with icon and description */
+.ws-modal-header-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(0, 122, 204, 0.1), rgba(16, 185, 129, 0.1));
+  border-radius: 8px;
+  border: 1px solid rgba(0, 122, 204, 0.2);
+}
+
+.ws-modal-icon-container {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--accent-color), #10b981);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3);
+}
+
+.ws-modal-icon {
+  color: white;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.ws-modal-description {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ws-modal-description-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.ws-modal-features {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ws-modal-feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.ws-modal-feature svg {
+  color: var(--accent-color);
+  flex-shrink: 0;
 }
 
 /* ===== Modal 样式 ===== */
 
 /* Modal 整体样式 */
 .ws-modal {
-  background-color: var(--bg-secondary) !important;
+  background-color: var(--bg-content) !important;
   color: var(--text-primary) !important;
-  border: 1px solid var(--border-color) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Modal 头部样式 */
 .ws-modal-header {
-  background-color: var(--bg-secondary) !important;
-  border-bottom: 1px solid var(--border-color) !important;
+  background-color: var(--bg-content) !important;
+  border-bottom: 1px solid var(--border) !important;
   color: var(--text-primary) !important;
+  padding: 20px 24px 16px 24px !important;
+  border-radius: 12px 12px 0 0 !important;
 }
 
 /* Modal 标题样式 */
 .ws-modal-title {
   color: var(--text-primary) !important;
   font-weight: 600 !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
+  margin: 0 !important;
 }
 
 /* Modal 关闭按钮样式 */
@@ -666,61 +739,81 @@
   color: var(--text-secondary) !important;
   background-color: transparent !important;
   border: none !important;
+  border-radius: 6px !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.ws-modal-close:hover {
+  background-color: var(--bg-card) !important;
+  color: var(--text-primary) !important;
 }
 
 /* Modal 内容区域样式 */
 .ws-modal-content {
-  background-color: var(--bg-secondary) !important;
+  background-color: var(--bg-content) !important;
   color: var(--text-primary) !important;
+  border-radius: 12px !important;
 }
 
 /* Modal 主体样式 */
 .ws-modal-body {
-  background-color: var(--bg-secondary) !important;
+  background-color: var(--bg-content) !important;
   color: var(--text-primary) !important;
+  padding: 24px !important;
+  border-radius: 0 0 12px 12px !important;
 }
 
 /* Modal 遮罩层样式 */
 .ws-modal-overlay {
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.75) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  backdrop-filter: blur(2px) !important;
 }
 
 /* ===== TextInput 样式 ===== */
 
 /* TextInput 标签样式 */
 .ws-text-input-label {
-  font-size: 12px !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
-  color: var(--text-secondary) !important;
+  color: var(--text-primary) !important;
   margin-bottom: 8px !important;
+  display: block !important;
 }
 
 /* TextInput 输入框样式 */
 .ws-text-input-field {
-  background-color: var(--bg-primary) !important;
-  border-color: var(--border-color) !important;
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
   color: var(--text-primary) !important;
-  font-size: 12px !important;
+  font-size: 14px !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
   transition: all 0.2s ease !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
 }
 
 .ws-text-input-field:focus {
   border-color: var(--accent-color) !important;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1) !important;
-  transform: translateY(-1px) !important;
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.2) !important;
+  outline: none !important;
 }
 
 .ws-text-input-field:hover:not(:focus) {
-  border-color: var(--text-secondary) !important;
-  transform: translateY(-0.5px) !important;
+  border-color: var(--border-light) !important;
+  background-color: var(--bg-input) !important;
 }
 
 .ws-text-input-field:disabled {
-  background-color: var(--bg-tertiary) !important;
-  border-color: var(--border-color) !important;
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border) !important;
   color: var(--text-muted) !important;
   opacity: 0.6 !important;
   cursor: not-allowed !important;
@@ -729,11 +822,13 @@
 /* TextInput 错误样式 */
 .ws-text-input-error {
   border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
 }
 
 /* TextInput 错误文本样式 */
 .ws-text-input-error-text {
-  font-size: 11px !important;
+  font-size: 12px !important;
   color: #ef4444 !important;
-  margin-top: 4px !important;
+  margin-top: 6px !important;
+  font-weight: 500 !important;
 } 

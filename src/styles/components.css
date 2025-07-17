@@ -1,4 +1,4 @@
-/* 按钮样式 */
+/* Button styles */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -75,7 +75,7 @@
   border-color: var(--accent-color);
 }
 
-/* 开关样式 */
+/* Switch styles */
 .switch-item {
   display: flex;
   justify-content: space-between;
@@ -144,7 +144,7 @@
   letter-spacing: 0.5px;
 }
 
-/* 表单元素样式 */
+/* Form element styles */
 .form-control {
   padding: 3px 6px;
   border: 1px solid var(--border-color);
@@ -165,7 +165,7 @@
   color: var(--text-muted);
 }
 
-/* 复选框样式 */
+/* Checkbox styles */
 .checkbox-control {
   display: flex;
   align-items: center;
@@ -226,7 +226,7 @@
   color: var(--text-secondary);
 }
 
-/* 复制按钮样式 */
+/* Copy button styles */
 .copy-btn {
   display: inline-flex;
   align-items: center;
@@ -262,7 +262,7 @@
   border-color: var(--success-color);
 }
 
-/* 关闭按钮样式 */
+/* Close button styles */
 .close-btn {
   background: none;
   border: none;
@@ -278,7 +278,7 @@
   color: var(--text-primary);
 }
 
-/* 状态指示器样式 */
+/* Status indicator styles */
 .status {
   display: inline-flex;
   align-items: center;
@@ -314,7 +314,7 @@
   height: 12px;
 }
 
-/* WebSocket Panel Block Status Label - 模仿 json-viewer-badge 样式，暗红色 */
+/* WebSocket Panel Block Status Label - mimics json-viewer-badge style, dark red */
 .websocket-panel-block-status-label {
   display: flex;
   align-items: center;
@@ -340,7 +340,7 @@
   color: black;
 }
 
-/* 动作按钮样式 */
+/* Action button styles */
 .action-btn {
   padding: 4px 8px;
   border: 1px solid var(--border-color);

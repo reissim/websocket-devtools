@@ -1,44 +1,44 @@
-// Injected script - 注入到页面上下文中监听 WebSocket
+// Injected script - Injects into page context to listen for WebSocket
 (function () {
   "use strict";
 
-  // 立即标记脚本已加载
-  console.log("🔧 WebSocket Proxy injected script STARTING...");
-  console.log("🔍 Current WebSocket:", window.WebSocket);
-  console.log("🌍 Script context:", window.location.href);
+  // Immediately mark script as loaded
+  // console.log("🔧 WebSocket DevTools injected script STARTING..."); Removed for clean up.
+  // console.log("🔍 Current WebSocket:", window.WebSocket); Removed for clean up.
+  // console.log("🌍 Script context:", window.location.href); Removed for clean up.
 
-  // 避免重复注入
+  // Prevent duplicate injection
   if (window.websocketProxyInjected) {
-    console.log("⚠️ WebSocket Proxy already injected, skipping");
+    // console.log("⚠️ WebSocket DevTools already injected, skipping"); Removed for clean up.
     return;
   }
 
-  // 立即设置标记
+  // Immediately set flag
   window.websocketProxyInjected = true;
-  console.log("✅ WebSocket Proxy injection started");
+  // console.log("✅ WebSocket DevTools injection started"); Removed for clean up.
 
-  // 保存原始的 WebSocket 构造函数
+  // Save original WebSocket constructor
   const OriginalWebSocket = window.WebSocket;
-  console.log("💾 Original WebSocket saved:", OriginalWebSocket);
+  // console.log("💾 Original WebSocket saved:", OriginalWebSocket); Removed for clean up.
 
   let connectionIdCounter = 0;
   const connections = new Map();
 
-  // 控制状态
+  // Control state
   let proxyState = {
-    isMonitoring: true, // 默认开启监控，与background.js保持一致
+    isMonitoring: true, // Monitoring enabled by default, consistent with background.js
     blockOutgoing: false,
     blockIncoming: false,
   };
-  // 保存初始状态的深拷贝
+  // Deep copy of initial state
   const proxyStateInitial = JSON.parse(JSON.stringify(proxyState));
 
-  // 生成唯一连接 ID
+  // Generate unique connection ID
   function generateConnectionId() {
     return `ws_${Date.now()}_${++connectionIdCounter}`;
   }
 
-  // 发送事件到 content script
+  // Send event to content script
   function sendEvent(eventData) {
     if(!proxyState.isMonitoring){
       return;
@@ -52,55 +52,55 @@
         "*"
       );
     } catch (error) {
-      console.error("❌ Failed to send event:", error);
+      // console.error("❌ Failed to send event:", error); Removed for clean up.
     }
   }
 
-  // 处理模拟消息
+  // Handle simulated message
   function handleSimulateMessage(connectionId, message, direction) {
-    console.log(`🎭 Handling simulate message for ${connectionId}:`, {
-      message,
-      direction,
-    });
+    // console.log(`🎭 Handling simulate message for ${connectionId}:`, {
+    //   message,
+    //   direction,
+    // }); Removed for clean up.
 
     const connectionInfo = connections.get(connectionId);
     if (!connectionInfo) {
-      console.error("❌ Connection not found:", connectionId);
+      // console.error("❌ Connection not found:", connectionId); Removed for clean up.
       return;
     }
 
     const ws = connectionInfo.ws;
     if (!ws) {
-      console.error("❌ WebSocket instance not found for:", connectionId);
+      // console.error("❌ WebSocket instance not found for:", connectionId); Removed for clean up.
       return;
     }
 
     try {
       if (direction === "outgoing") {
-        // 模拟发送消息 - 直接使用原始WebSocket发送，绕过我们的拦截
-        console.log("📤 Simulating outgoing message (bypassing proxy)");
+        // Simulate sending message - use original WebSocket to send, bypassing our interception
+        // console.log("📤 Simulating outgoing message (bypassing proxy)"); Removed for clean up.
 
         try {
-          // 使用保存的原始send方法，这样不会触发我们的拦截逻辑
-          console.log("🚀 Sending simulated message via original WebSocket send");
+          // Use saved original send method, so it won't trigger our interception logic
+          // console.log("🚀 Sending simulated message via original WebSocket send"); Removed for clean up.
           
-          // 创建原始WebSocket实例，或者直接使用保存的原始方法
-          // 这里使用原始send方法应该能绕过我们的代理
+          // Create original WebSocket instance, or directly use the saved original method
+          // Using the original send method here should bypass our proxy
           const originalWebSocket = connectionInfo.ws.constructor;
           
-          // 直接调用保存的原始send方法
-          // 注意：这应该不会触发我们的拦截，因为是在原始WebSocket上调用的
+          // Directly call the saved original send method
+          // Note: This should not trigger our interception, as it's called on the original WebSocket
           connectionInfo.originalSend.call(ws, message);
           
-          console.log("✅ Simulated outgoing message sent successfully");
+          // console.log("✅ Simulated outgoing message sent successfully"); Removed for clean up.
         } catch (error) {
-          console.error("❌ Failed to send simulated message:", error);
+          // console.error("❌ Failed to send simulated message:", error); Removed for clean up.
         }
       } else if (direction === "incoming") {
-        // 模拟接收消息 - 不通过WebSocket事件系统，直接调用用户监听器
-        console.log("📥 Simulating incoming message (bypassing proxy)");
+        // Simulate receiving message - directly call user listeners, not through WebSocket event system
+        // console.log("📥 Simulating incoming message (bypassing proxy)"); Removed for clean up.
 
-        // 创建模拟事件但不通过WebSocket的事件系统
+        // Create simulated event but not through WebSocket's event system
         const simulatedEvent = new MessageEvent("message", {
           data: message,
           origin: connectionInfo.url,
@@ -111,20 +111,20 @@
           cancelable: false,
         });
         
-        // 添加模拟标记
+        // Add simulation flag
         simulatedEvent._isSimulated = true;
 
         try {
-          console.log("🎯 Directly calling user handlers for simulated message");
+          // console.log("🎯 Directly calling user handlers for simulated message"); Removed for clean up.
           
-          // 直接调用用户的监听器，不通过WebSocket事件系统
-          // 这样就完全绕过了我们的拦截器
+          // Directly call user's listeners, not through WebSocket event system
+          // This completely bypasses our interceptor
           
           if (connectionInfo.userOnMessage) {
             try {
               connectionInfo.userOnMessage.call(ws, simulatedEvent);
             } catch (error) {
-              console.error("❌ Error in user onmessage handler:", error);
+              // console.error("❌ Error in user onmessage handler:", error); Removed for clean up.
             }
           }
           
@@ -132,33 +132,33 @@
             try {
               listener.call(ws, simulatedEvent);
             } catch (error) {
-              console.error("❌ Error in user event listener:", error);
+              // console.error("❌ Error in user event listener:", error); Removed for clean up.
             }
           });
           
-          console.log("✅ Simulated incoming message processed successfully");
+          // console.log("✅ Simulated incoming message processed successfully"); Removed for clean up.
         } catch (error) {
-          console.error("❌ Failed to simulate incoming message:", error);
+          // console.error("❌ Failed to simulate incoming message:", error); Removed for clean up.
         }
       }
     } catch (error) {
-      console.error("❌ Failed to simulate message:", error);
+      // console.error("❌ Failed to simulate message:", error); Removed for clean up.
     }
   }
 
-  // 处理模拟系统事件
+  // Handle simulated system event
   function handleSimulateSystemEvent(connectionId, eventData) {
-    console.log(`🎭 Handling simulate system event for ${connectionId}:`, eventData);
+    // console.log(`🎭 Handling simulate system event for ${connectionId}:`, eventData); Removed for clean up.
 
     const connectionInfo = connections.get(connectionId);
     if (!connectionInfo) {
-      console.error("❌ Connection not found:", connectionId);
+      // console.error("❌ Connection not found:", connectionId); Removed for clean up.
       return;
     }
 
     const ws = connectionInfo.ws;
     if (!ws) {
-      console.error("❌ WebSocket instance not found for:", connectionId);
+      // console.error("❌ WebSocket instance not found for:", connectionId); Removed for clean up.
       return;
     }
 
@@ -167,22 +167,22 @@
 
       switch (eventType) {
         case "client-close":
-          console.log(`🔒 Simulating client-initiated close event by calling ws.close()`);
-          console.log(`🔍 handleSimulateSystemEvent received code: ${eventData.code}, reason: ${eventData.reason}`);
+          // console.log(`🔒 Simulating client-initiated close event by calling ws.close()`); Removed for clean up.
+          // console.log(`🔍 handleSimulateSystemEvent received code: ${eventData.code}, reason: ${eventData.reason}`); Removed for clean up.
           
           const requestedCode = eventData.code || 1000;
           const requestedReason = eventData.reason || "Simulated client-initiated close";
           
-          // WebSocket.close() 只允许 1000 或 3000-4999 范围的关闭码
-          // 1001-2999 是保留给协议使用的，不能手动调用
+          // WebSocket.close() only allows close codes in the range 1000 or 3000-4999
+          // 1001-2999 are reserved for the protocol and cannot be called manually
           if (requestedCode !== 1000 && (requestedCode < 3000 || requestedCode > 4999)) {
-            console.warn(`⚠️ Close code ${requestedCode} is not allowed for client-initiated close. Using 1000 instead.`);
-            console.warn(`💡 Tip: Client-close only supports 1000 or 3000-4999. Use server-close for other codes.`);
+            // console.warn(`⚠️ Close code ${requestedCode} is not allowed for client-initiated close. Using 1000 instead.`); Removed for clean up.
+            // console.warn(`💡 Tip: Client-close only supports 1000 or 3000-4999. Use server-close for other codes.`); Removed for clean up.
             
-            // 对于不支持的关闭码，改为使用 server-close 模拟
-            console.log(`🔄 Converting to server-close simulation for code ${requestedCode}`);
+            // For unsupported close codes, use server-close simulation instead
+            // console.log(`🔄 Converting to server-close simulation for code ${requestedCode}`); Removed for clean up.
             
-            // 创建模拟的 CloseEvent
+            // Create simulated CloseEvent
             const closeEvent = new CloseEvent("close", {
               code: requestedCode,
               reason: requestedReason,
@@ -191,23 +191,23 @@
               cancelable: false,
             });
 
-            // 添加模拟标记
+            // Add simulation flag
             closeEvent._isSimulated = true;
-            closeEvent._eventType = "server-close"; // 标记为服务器关闭
+            closeEvent._eventType = "server-close"; // Mark as server-closed
 
-            // 更新连接状态
+            // Update connection status
             connectionInfo.status = "closed";
 
-            // 触发close事件
+            // Trigger close event
             if (ws.onclose) {
               try {
                 ws.onclose.call(ws, closeEvent);
               } catch (error) {
-                console.error("❌ Error in user onclose handler:", error);
+                // console.error("❌ Error in user onclose handler:", error); Removed for clean up.
               }
             }
 
-            // 发送系统事件到扩展
+            // Send system event to extension
             sendEvent({
               id: connectionId,
               url: connectionInfo.url,
@@ -217,33 +217,33 @@
               timestamp: Date.now(),
               status: "closed",
               simulated: true,
-              systemEventType: "client-close", // 保持原始意图
+              systemEventType: "client-close", // Keep original intention
             });
 
-            // 清理连接
+            // Clean up connection
             connections.delete(connectionId);
             return;
           }
           
-          connectionInfo.isSimulatingClose = true; // 设置标志
+          connectionInfo.isSimulatingClose = true; // Set flag
           
           try {
-            // 调用原始 WebSocket 的 close 方法
-            // 这将触发原生 WebSocket 关闭握手，浏览器将自然地发出 'close' 事件，
-            // 我们的代理的 'close' 事件监听器会捕获到它并进行后续处理。
+            // Call original WebSocket's close method
+            // This will trigger the native WebSocket close handshake, and the browser will naturally emit a 'close' event,
+            // which our proxy's 'close' event listener will capture and process.
             connectionInfo.originalClose.call(ws, requestedCode, requestedReason);
-            console.log(`✅ ws.close() called successfully with code: ${requestedCode}, reason: "${requestedReason}"`);
+            // console.log(`✅ ws.close() called successfully with code: ${requestedCode}, reason: "${requestedReason}"`); Removed for clean up.
           } catch (error) {
-            console.error(`❌ Error calling ws.close():`, error);
-            console.error(`❌ This should not happen for code ${requestedCode}`);
+            // console.error(`❌ Error calling ws.close():`, error); Removed for clean up.
+            // console.error(`❌ This should not happen for code ${requestedCode}`); Removed for clean up.
           }
 
           break;
 
         case "server-close":
-          console.log(`🔒 Simulating ${eventType} event`);
+          // console.log(`🔒 Simulating ${eventType} event`); Removed for clean up.
           
-          // 创建模拟的 CloseEvent
+          // Create simulated CloseEvent
           const closeEvent = new CloseEvent("close", {
             code: eventData.code || 1000,
             reason: eventData.reason || "Simulated server-initiated close",
@@ -252,23 +252,23 @@
             cancelable: false,
           });
 
-          // 添加模拟标记
+          // Add simulation flag
           closeEvent._isSimulated = true;
           closeEvent._eventType = eventType;
 
-          // 更新连接状态
+          // Update connection status
           connectionInfo.status = "closed";
 
-          // 触发close事件
+          // Trigger close event
           if (ws.onclose) {
             try {
               ws.onclose.call(ws, closeEvent);
             } catch (error) {
-              console.error("❌ Error in user onclose handler:", error);
+              // console.error("❌ Error in user onclose handler:", error); Removed for clean up.
             }
           }
 
-          // 发送系统事件到扩展 (保持不变)
+          // Send system event to extension (keep unchanged)
           sendEvent({
             id: connectionId,
             url: connectionInfo.url,
@@ -285,9 +285,9 @@
 
         case "client-error":
         case "server-error":
-          console.log(`⚠️ Simulating ${eventType} event`);
+          // console.log(`⚠️ Simulating ${eventType} event`); Removed for clean up.
           
-          // 创建模拟的 ErrorEvent
+          // Create simulated ErrorEvent
           const errorEvent = new ErrorEvent("error", {
             message: eventData.message || "Simulated error",
             error: new Error(eventData.message || "Simulated error"),
@@ -295,24 +295,24 @@
             cancelable: false,
           });
 
-          // 添加模拟标记和错误信息
+          // Add simulation flag and error info
           errorEvent._isSimulated = true;
           errorEvent._eventType = eventType;
           errorEvent._errorCode = eventData.code;
 
-          // 更新连接状态
+          // Update connection status
           connectionInfo.status = "error";
 
-          // 触发error事件
+          // Trigger error event
           if (ws.onerror) {
             try {
               ws.onerror.call(ws, errorEvent);
             } catch (error) {
-              console.error("❌ Error in user onerror handler:", error);
+              // console.error("❌ Error in user onerror handler:", error); Removed for clean up.
             }
           }
 
-          // 发送系统事件到扩展
+          // Send system event to extension
           sendEvent({
             id: connectionId,
             url: connectionInfo.url,
@@ -328,32 +328,32 @@
           break;
 
         default:
-          console.warn("⚠️ Unknown system event type:", eventType);
+          // console.warn("⚠️ Unknown system event type:", eventType); Removed for clean up.
           break;
       }
 
-      console.log("✅ System event simulated successfully:", eventType);
+      // console.log("✅ System event simulated successfully:", eventType); Removed for clean up.
     } catch (error) {
-      console.error("❌ Failed to simulate system event:", error);
+      // console.error("❌ Failed to simulate system event:", error); Removed for clean up.
     }
   }
 
-  // 创建代理的 WebSocket 构造函数
+  // Create proxy WebSocket constructor
   function ProxiedWebSocket(url, protocols) {
-    console.log("🚀 ProxiedWebSocket called with:", url, protocols);
+    // console.log("🚀 ProxiedWebSocket called with:", url, protocols); Removed for clean up.
 
     const connectionId = generateConnectionId();
     let ws;
 
     try {
       ws = new OriginalWebSocket(url, protocols);
-      console.log("✅ WebSocket created with ID:", connectionId);
+      // console.log("✅ WebSocket created with ID:", connectionId); Removed for clean up.
     } catch (error) {
-      console.error("❌ Failed to create WebSocket:", error);
+      // console.error("❌ Failed to create WebSocket:", error); Removed for clean up.
       throw error;
     }
 
-    // 存储连接信息
+    // Store connection info
     const connectionInfo = {
       id: connectionId,
       url: url,
@@ -363,17 +363,17 @@
       originalClose: ws.close.bind(ws),
       originalAddEventListener: ws.addEventListener.bind(ws),
       originalRemoveEventListener: ws.removeEventListener.bind(ws),
-      userOnMessage: null, // 用户设置的onmessage处理器
-      userEventListeners: [], // 用户添加的事件监听器
-      messageQueue: [], // 暂停期间的消息队列
-      blockedMessages: [], // 被阻止的消息
-      isSimulatingClose: false, // 新增：用于标记是否正在模拟客户端关闭
+      userOnMessage: null, // User-set onmessage handler
+      userEventListeners: [], // User-added event listeners
+      messageQueue: [], // Message queue during pause
+      blockedMessages: [], // Blocked messages
+      isSimulatingClose: false, // New: for marking if client-initiated close is being simulated
     };
 
     connections.set(connectionId, connectionInfo);
-    console.log("📊 Total connections:", connections.size);
+    // console.log("📊 Total connections:", connections.size); Removed for clean up.
 
-    // 发送连接事件
+    // Send connection event
     sendEvent({
       id: connectionId,
       url: url,
@@ -384,21 +384,21 @@
       status: "connecting",
     });
     
-    // 🔥 关键修复：立即添加我们的消息监听器，不管用户是否注册
-    // 这确保我们总是能拦截所有消息，实现真正的中间人攻击
+    // 🔥 Critical fix: Immediately add our message listener, regardless of whether the user registers
+    // This ensures we always intercept all messages, achieving true man-in-the-middle attack
     const ourMessageListener = function(event) {
-      console.log("📨 [INTERCEPTED] WebSocket message:", connectionId, event.data);
+      // console.log("📨 [INTERCEPTED] WebSocket message:", connectionId, event.data); Removed for clean up.
       
-      // 跳过模拟消息的处理（模拟消息由Panel直接管理）
+      // Skip simulated message handling (simulated messages are managed directly by Panel)
       if (event._isSimulated) {
-        console.log("🎭 Simulated message, forwarding to user handlers");
+        // console.log("🎭 Simulated message, forwarding to user handlers"); Removed for clean up.
         
-        // 直接转发给用户的监听器，无视任何阻止设置
+        // Directly forward to user's listeners, ignoring any block settings
         if (connectionInfo.userOnMessage) {
           try {
             connectionInfo.userOnMessage.call(ws, event);
           } catch (error) {
-            console.error("❌ Error in user onmessage handler:", error);
+            // console.error("❌ Error in user onmessage handler:", error); Removed for clean up.
           }
         }
         
@@ -406,25 +406,25 @@
           try {
             listener.call(ws, event);
           } catch (error) {
-            console.error("❌ Error in user event listener:", error);
+            // console.error("❌ Error in user event listener:", error); Removed for clean up.
           }
         });
         
-        return; // 早期返回，不做其他处理
+        return; // Early return, no other processing
       }
 
-      // 处理真实消息 - 先检查是否要阻止，再决定如何记录
+      // Process real message - first check if blocking, then decide how to log
       if (proxyState.blockIncoming && proxyState.isMonitoring) {
-        console.log("🚫 Incoming message BLOCKED by proxy:", connectionId);
+        // console.log("🚫 Incoming message BLOCKED by proxy:", connectionId); Removed for clean up.
 
-        // 存储被阻止的消息
+        // Store blocked messages
         connectionInfo.blockedMessages.push({
           data: event.data,
           timestamp: Date.now(),
           direction: "incoming",
         });
 
-        // 只发送一次事件，带blocked标记
+        // Send event only once, with blocked flag
         if (proxyState.isMonitoring) {
           sendEvent({
             id: connectionId,
@@ -439,13 +439,13 @@
           });
         }
 
-        // 被阻止的消息不转发给用户监听器
+        // Blocked messages are not forwarded to user listeners
         return;
       }
 
-      // 消息未被阻止，正常处理
+      // Message not blocked, normal processing
       
-      // 记录到扩展（只在监控开启时）
+      // Log to extension (only when monitoring is enabled)
       if (proxyState.isMonitoring) {
         sendEvent({
           id: connectionId,
@@ -455,16 +455,16 @@
           direction: "incoming",
           timestamp: Date.now(),
           status: connectionInfo.status,
-          // 不添加blocked标记，因为消息正常通过
+          // Do not add blocked flag, as message passed normally
         });
       }
 
-      // 转发给用户的监听器
+      // Forward to user's listeners
       if (connectionInfo.userOnMessage) {
         try {
           connectionInfo.userOnMessage.call(ws, event);
         } catch (error) {
-          console.error("❌ Error in user onmessage handler:", error);
+          // console.error("❌ Error in user onmessage handler:", error); Removed for clean up.
         }
       }
       
@@ -472,21 +472,21 @@
         try {
           listener.call(ws, event);
         } catch (error) {
-          console.error("❌ Error in user event listener:", error);
+          // console.error("❌ Error in user event listener:", error); Removed for clean up.
         }
       });
     };
 
-    // 使用capture-phase监听，确保我们总是第一个收到事件
+    // Listen with capture-phase to ensure we receive events first
     connectionInfo.originalAddEventListener("message", ourMessageListener, true);
-    console.log("✅ [CRITICAL] Unconditional message interception installed for:", connectionId);
+    // console.log("✅ [CRITICAL] Unconditional message interception installed for:", connectionId); Removed for clean up.
 
-    // 拦截 send 方法 - 添加控制逻辑
+    // Intercept send method - add control logic
     const originalSend = ws.send.bind(ws);
     ws.send = function (data) {
-      console.log("📡 WebSocket send intercepted:", connectionId, data);
+      // console.log("📡 WebSocket send intercepted:", connectionId, data); Removed for clean up.
 
-      // 记录发送事件
+      // Log send event
       const eventData = {
         id: connectionId,
         url: url,
@@ -497,29 +497,29 @@
         status: connectionInfo.status,
       };
 
-      // 检查是否应该阻止发送
+      // Check if sending should be blocked
       if (proxyState.blockOutgoing && proxyState.isMonitoring) {
-        console.log("🚫 Message sending BLOCKED by proxy:", connectionId);
+        // console.log("🚫 Message sending BLOCKED by proxy:", connectionId); Removed for clean up.
 
-        // 添加阻止标记
+        // Add blocked flag
         eventData.blocked = true;
         eventData.reason = "Outgoing messages blocked";
 
-        // 存储被阻止的消息
+        // Store blocked messages
         connectionInfo.blockedMessages.push({
           data: data,
           timestamp: Date.now(),
           direction: "outgoing",
         });
 
-        // 总是通知扩展消息被阻止，即使监控关闭
+        // Always notify extension that message was blocked, even if monitoring is off
         sendEvent(eventData);
 
-        // 不调用原始send方法，直接返回
+        // Do not call original send method, return directly
         return;
       }
 
-      // 正常发送消息
+      // Normal send message
       if (proxyState.isMonitoring) {
         sendEvent(eventData);
       }
@@ -527,61 +527,61 @@
       try {
         return originalSend(data);
       } catch (error) {
-        console.error("❌ Send failed:", error);
+        // console.error("❌ Send failed:", error); Removed for clean up.
         throw error;
       }
     };
 
-    // 拦截 addEventListener - 现在只负责收集用户的监听器
+    // Intercept addEventListener - now only responsible for collecting user listeners
     const originalAddEventListener = ws.addEventListener.bind(ws);
     ws.addEventListener = function (type, listener, options) {
       if (type === "message" && listener) {
-        console.log("🎯 User registered message listener for:", connectionId);
-        // 存储用户的监听器，但不直接注册到WebSocket
+        // console.log("🎯 User registered message listener for:", connectionId); Removed for clean up.
+        // Store user's listeners, but do not register them directly to WebSocket
         connectionInfo.userEventListeners.push(listener);
         
-        // 返回成功，但实际上我们会通过我们的拦截器转发消息
+        // Return success, but in fact we will forward messages through our interceptor
         return;
       } else {
-        // 非message事件正常处理
+        // Non-message events handled normally
         return originalAddEventListener(type, listener, options);
       }
     };
 
-    // 拦截 removeEventListener
+    // Intercept removeEventListener
     ws.removeEventListener = function (type, listener, options) {
       if (type === "message" && listener) {
-        console.log("🎯 User removing message listener for:", connectionId);
-        // 从我们的列表中移除
+        // console.log("🎯 User removing message listener for:", connectionId); Removed for clean up.
+        // Remove from our list
         const index = connectionInfo.userEventListeners.indexOf(listener);
         if (index > -1) {
           connectionInfo.userEventListeners.splice(index, 1);
         }
         return;
       } else {
-        // 非message事件正常处理
+        // Non-message events handled normally
         return connectionInfo.originalRemoveEventListener(type, listener, options);
       }
     };
 
-    // 拦截 onmessage 属性 - 现在只负责存储用户的处理器
+    // Intercept onmessage property - now only responsible for storing user's handler
     Object.defineProperty(ws, "onmessage", {
       get: function () {
         return connectionInfo.userOnMessage;
       },
       set: function (handler) {
-        console.log("🎯 User setting onmessage handler for:", connectionId);
+        // console.log("🎯 User setting onmessage handler for:", connectionId); Removed for clean up.
         connectionInfo.userOnMessage = handler;
-        // 不需要在这里做其他事情，我们的拦截器会转发消息
+        // No other actions needed here, our interceptor will forward messages
       },
     });
 
-    // 监听连接状态变化
+    // Listen for connection status changes
     ["open", "close", "error"].forEach((eventType) => {
       connectionInfo.originalAddEventListener(eventType, (event) => {
-        console.log(`🔔 WebSocket ${eventType}:`, connectionId);
+        // console.log(`🔔 WebSocket ${eventType}:`, connectionId); Removed for clean up.
 
-        // 更新连接状态
+        // Update connection status
         if (eventType === "open") {
           connectionInfo.status = "open";
         } else if (eventType === "close") {
@@ -594,36 +594,36 @@
           id: connectionId,
           url: url,
           type: eventType,
-          // 默认数据，如果事件类型是close或error，下面会更新
+          // Default data, will be updated below if event type is close or error
           data: event.reason || event.message || `WebSocket ${eventType}`,
           direction: "system",
           timestamp: Date.now(),
           status: connectionInfo.status,
         };
 
-        // 对于 close 事件，判断是否是模拟的 client-close
+        // For close event, determine if it's a simulated client-close
         if (eventType === "close") {
-          // 优先使用事件自带的code和reason
+          // Prioritize event's own code and reason
           const code = event.code;
           const reason = event.reason;
 
           if (connectionInfo.isSimulatingClose) {
-            // 如果是模拟的客户端关闭，则标记为模拟事件
+            // If it's a simulated client-close, mark as simulated event
             payload.simulated = true;
             payload.systemEventType = "client-close";
-            connectionInfo.isSimulatingClose = false; // 重置标志
+            connectionInfo.isSimulatingClose = false; // Reset flag
             payload.data = `Simulated Client Close: Code: ${code || 'N/A'}, Reason: ${reason || 'No reason'}`;
           } else if (event._isSimulated) { // For server-close, which manually creates event and has _isSimulated
             payload.simulated = true;
             payload.systemEventType = event._eventType;
             payload.data = `Simulated ${event._eventType}: Code: ${code || 'N/A'}, Reason: ${reason || 'No reason'}`;
           } else {
-            // 真实关闭事件
+            // Real close event
             payload.data = `Client/Server Close: Code: ${code || 'N/A'}, Reason: ${reason || 'No reason'}`;
           }
         } else if (eventType === "error") {
-            // 错误事件，确保包含错误代码和类型
-            payload.data = `Simulated ${eventType}: Code: ${event._errorCode || 'N/A'}, Message: ${event.message || 'No message'}`; // 使用_errorCode和message
+            // Error event, ensure error code and type are included
+            payload.data = `Simulated ${eventType}: Code: ${event._errorCode || 'N/A'}, Message: ${event.message || 'No message'}`; // Use _errorCode and message
             if (event._isSimulated) {
                 payload.simulated = true;
                 payload.systemEventType = event._eventType;
@@ -634,17 +634,17 @@
 
         if (eventType === "close") {
           connections.delete(connectionId);
-          console.log(
-            "🗑️ Connection removed:",
-            connectionId,
-            "Remaining:",
-            connections.size
-          );
+          // console.log(
+          //   "🗑️ Connection removed:",
+          //   connectionId,
+          //   "Remaining:",
+          //   connections.size
+          // ); Removed for clean up.
         }
       });
     });
 
-    // 添加代理控制方法
+    // Add proxy control methods
     ws._proxyControl = {
       getBlockedMessages: () => connectionInfo.blockedMessages,
       clearBlockedMessages: () => {
@@ -653,30 +653,30 @@
       getConnectionInfo: () => connectionInfo,
     };
 
-    // 添加代理标记
+    // Add proxy flag
     ws._isProxied = true;
     ws._connectionId = connectionId;
 
     return ws;
   }
 
-  // 复制原始 WebSocket 的属性和方法
+  // Copy original WebSocket's properties and methods
   try {
     Object.setPrototypeOf(ProxiedWebSocket, OriginalWebSocket);
     ProxiedWebSocket.prototype = OriginalWebSocket.prototype;
 
-    // 复制静态常量
+    // Copy static constants
     ProxiedWebSocket.CONNECTING = OriginalWebSocket.CONNECTING;
     ProxiedWebSocket.OPEN = OriginalWebSocket.OPEN;
     ProxiedWebSocket.CLOSING = OriginalWebSocket.CLOSING;
     ProxiedWebSocket.CLOSED = OriginalWebSocket.CLOSED;
 
-    console.log("✅ WebSocket properties copied successfully");
+    // console.log("✅ WebSocket properties copied successfully"); Removed for clean up.
   } catch (error) {
-    console.error("❌ Failed to copy WebSocket properties:", error);
+    // console.error("❌ Failed to copy WebSocket properties:", error); Removed for clean up.
   }
 
-  // 替换全局 WebSocket!
+  // Replace global WebSocket!
   try {
     Object.defineProperty(window, "WebSocket", {
       value: ProxiedWebSocket,
@@ -684,30 +684,30 @@
       configurable: true,
     });
 
-    console.log("✅ WebSocket replaced successfully");
-    console.log("🔍 New WebSocket:", window.WebSocket);
-    console.log("🧪 Replacement test:", window.WebSocket === ProxiedWebSocket);
+    // console.log("✅ WebSocket replaced successfully"); Removed for clean up.
+    // console.log("🔍 New WebSocket:", window.WebSocket); Removed for clean up.
+    // console.log("🧪 Replacement test:", window.WebSocket === ProxiedWebSocket); Removed for clean up.
   } catch (error) {
-    console.error("❌ Failed to replace WebSocket:", error);
-    // 备用方案
+    // console.error("❌ Failed to replace WebSocket:", error); Removed for clean up.
+    // Fallback
     try {
       window.WebSocket = ProxiedWebSocket;
-      console.log("🔄 Fallback replacement successful");
+      // console.log("🔄 Fallback replacement successful"); Removed for clean up.
     } catch (fallbackError) {
-      console.error("❌ Fallback replacement failed:", fallbackError);
+      // console.error("❌ Fallback replacement failed:", fallbackError); Removed for clean up.
     }
   }
 
-  // 监听来自content script的控制消息
+  // Listen for control messages from content script
   window.addEventListener("message", (event) => {
     if (event.data && event.data.source === "websocket-proxy-content") {
-      console.log("📥 [injected.js] Received control message from content script:", event.data); // Added debug log
+      // console.log("📥 [injected.js] Received control message from content script:", event.data); Removed for clean up.
 
       switch (event.data.type) {
         case "start-monitoring":
-          console.log("🚀 Starting WebSocket monitoring...");
+          // console.log("🚀 Starting WebSocket monitoring..."); Removed for clean up.
           proxyState.isMonitoring = true;
-          // 发送状态更新
+          // Send state update
           sendEvent({
             type: "proxy-state-change",
             state: proxyState,
@@ -716,9 +716,9 @@
           break;
 
         case "stop-monitoring":
-          console.log("⏹️ Stopping WebSocket monitoring...");
+          // console.log("⏹️ Stopping WebSocket monitoring..."); Removed for clean up.
           proxyState.isMonitoring = false;
-          // // 发送状态更新
+          // // Send state update
           // sendEvent({
           //   type: "proxy-state-change",
           //   state: proxyState,
@@ -727,7 +727,7 @@
           break;
 
         case "block-outgoing":
-          console.log("🚫 Toggling outgoing messages:", event.data.enabled);
+          // console.log("🚫 Toggling outgoing messages:", event.data.enabled); Removed for clean up.
           proxyState.blockOutgoing = event.data.enabled;
           // sendEvent({
           //   type: "proxy-state-change",
@@ -737,7 +737,7 @@
           break;
 
         case "block-incoming":
-          console.log("🚫 Toggling incoming messages:", event.data.enabled);
+          // console.log("🚫 Toggling incoming messages:", event.data.enabled); Removed for clean up.
           proxyState.blockIncoming = event.data.enabled;
           sendEvent({
             type: "proxy-state-change",
@@ -756,7 +756,7 @@
           break;
 
         case "simulate-message":
-          console.log("🎭 Simulating message:", event.data);
+          // console.log("🎭 Simulating message:", event.data); Removed for clean up.
           handleSimulateMessage(
             event.data.connectionId,
             event.data.message,
@@ -765,7 +765,7 @@
           break;
 
         case "simulate-system-event":
-          console.log("🎭 Simulating system event:", event.data);
+          // console.log("🎭 Simulating system event:", event.data); Removed for clean up.
           handleSimulateSystemEvent(
             event.data.connectionId,
             event.data
@@ -773,28 +773,47 @@
           break;
 
         case "create-manual-websocket":
-          console.log("🔗 Creating manual WebSocket connection:", event.data.url);
+          // console.log("🔗 Creating manual WebSocket connection:", event.data.url); Removed for clean up.
           try {
-            // 直接在页面上下文中创建WebSocket连接
-            // 这会被我们的代理拦截，就像用户页面创建的连接一样
+            // Create WebSocket connection directly in page context
+            // This will be intercepted by our proxy, just like a connection created by the user's page
             const manualWs = new window.WebSocket(event.data.url);
-            console.log("✅ Manual WebSocket connection created successfully");
+            // console.log("✅ Manual WebSocket connection created successfully"); Removed for clean up.
             
-            // 可选：为手动连接添加一些基本的事件监听器
+            // Get new connection ID
+            const newConnectionId = manualWs._connectionId;
+            // console.log("🆔 New connection ID:", newConnectionId); Removed for clean up.
+            
+            // Send success event back to content script, including connection ID
+            sendEvent({
+              type: "manual-connection-created",
+              connectionId: newConnectionId,
+              url: event.data.url,
+              timestamp: Date.now(),
+            });
+            
+            // Optional: Add some basic event listeners for manual connections
             manualWs.addEventListener('open', () => {
-              console.log("🔗 Manual WebSocket connection opened");
+              // console.log("🔗 Manual WebSocket connection opened"); Removed for clean up.
             });
             
             manualWs.addEventListener('error', (error) => {
-              console.error("❌ Manual WebSocket connection error:", error);
+              // console.error("❌ Manual WebSocket connection error:", error); Removed for clean up.
             });
             
             manualWs.addEventListener('close', () => {
-              console.log("🔗 Manual WebSocket connection closed");
+              // console.log("🔗 Manual WebSocket connection closed"); Removed for clean up.
             });
             
           } catch (error) {
-            console.error("❌ Failed to create manual WebSocket connection:", error);
+            // console.error("❌ Failed to create manual WebSocket connection:", error); Removed for clean up.
+            // Send error event
+            sendEvent({
+              type: "manual-connection-error",
+              error: error.message,
+              url: event.data.url,
+              timestamp: Date.now(),
+            });
           }
           break;
         case "reset-proxy-state":
@@ -805,7 +824,7 @@
     }
   });
 
-  // 暴露调试信息到全局
+  // Expose debug info to global
   window.websocketProxyDebug = {
     connections: connections,
     originalWebSocket: OriginalWebSocket,
@@ -821,11 +840,11 @@
     },
   };
 
-  console.log("🏁 WebSocket Proxy injection complete");
-  console.log("🔍 Final WebSocket:", window.WebSocket);
-  console.log(
-    "🧪 Injection verification:",
-    window.WebSocket.toString().includes("ProxiedWebSocket")
-  );
-  console.log("🎛️ Proxy state:", proxyState);
+  // console.log("🏁 WebSocket DevTools injection complete"); Removed for clean up.
+  // console.log("🔍 Final WebSocket:", window.WebSocket); Removed for clean up.
+  // console.log(
+  //   "🧪 Injection verification:",
+  //   window.WebSocket.toString().includes("ProxiedWebSocket")
+  // ); Removed for clean up.
+  // console.log("🎛️ Proxy state:", proxyState); Removed for clean up.
 })();

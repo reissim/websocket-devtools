@@ -1,4 +1,4 @@
-/* 模拟消息面板样式 - 仅浮动模式 */
+/* Simulate message panel styles - floating mode only */
 
 .simulate-controls {
   flex-shrink: 0;
@@ -145,6 +145,7 @@
   height: 100%;
   background-color: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
+  padding: 40px 20px;
 }
 
 .simulate-panel-empty p {
@@ -153,7 +154,69 @@
   margin: 0;
 }
 
-/* 模拟消息面板适配 */
+.simulate-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 280px;
+  text-align: center;
+}
+
+.simulate-empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-color), #10b981);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3);
+}
+
+.simulate-empty-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.simulate-empty-description {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.simulate-empty-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 122, 204, 0.3);
+}
+
+.simulate-empty-button:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 122, 204, 0.4);
+}
+
+.simulate-empty-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 122, 204, 0.3);
+}
+
+/* Simulate message panel adaptation */
 .simulate-content {
   display: flex;
   flex-direction: column;
@@ -391,7 +454,7 @@
 .simulate-window-header:hover {
   /* background: linear-gradient(135deg, var(--accent-color), #0088cc); */
   color: white;
-  filter: brightness(1.2);
+  filter: brightness(1.15);
 }
 
 .simulate-window-header.pinned {
@@ -417,13 +480,26 @@
   flex: 1;
   min-width: 0;
   transition: color 0.3s ease;
+  overflow: hidden; /* Ensure content doesn't overflow */
 }
 
-.simulate-window-header.pinned .simulate-window-title::after {
-  content: "●";
+/* Move pinned indicator to appear after title text span */
+.simulate-window-header.pinned .simulate-window-title span:first-of-type::after {
+  content: " ●";
   margin-left: 4px;
   font-size: 12px;
   opacity: 0.8;
+  color: #10b981; /* Green color for better visibility */
+}
+
+/* Ensure title text and icon don't shrink */
+.simulate-window-title .simulate-icon-small {
+  flex-shrink: 0; /* Icon should not shrink */
+}
+
+.simulate-window-title > span:first-of-type {
+  flex-shrink: 0; /* Title text should not shrink */
+  white-space: nowrap; /* Prevent title text wrapping */
 }
 
 .simulate-window-header::before {
@@ -453,10 +529,12 @@
   font-size: 11px;
   opacity: 0.8;
   margin-left: 4px;
+  margin-right: 40px; /* Add 40px right margin */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
+  flex-shrink: 1; /* Allow compression when space is limited */
+  min-width: 0; /* Enable text-overflow ellipsis */
 }
 
 /* Window control buttons */
@@ -580,6 +658,71 @@
   border: 2px dashed var(--border-color);
 }
 
+/* Empty state styles */
+.simulate-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.simulate-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-color), #10b981);
+  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3);
+}
+
+.simulate-empty-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.simulate-empty-description {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.simulate-add-connection-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 122, 204, 0.3);
+}
+
+.simulate-add-connection-btn:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.4);
+}
+
+.simulate-add-connection-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 122, 204, 0.3);
+}
+
 .simulate-window-content .simulate-panel-empty p {
   margin: 0;
   font-size: 14px;
@@ -669,7 +812,7 @@
 }
 
 
-/* 统一设置所有Mantine组件的leftSection间距为0 */
+/* Uniformly set all Mantine component leftSection spacing to 0 */
 .m_a74036a:where([data-position='left']) {
   margin-inline-end: 0 !important;
 }

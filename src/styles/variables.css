@@ -1,6 +1,6 @@
-/* 基础变量 */
+/* Base variables */
 :root {
-  --bg-primary: #181818;   /* 主背景，近黑 */
+  --bg-primary: #181818;   /* Main background, near black */
   --bg-secondary: #2d2d2d;
   --bg-tertiary: #404040;
   --text-primary: #ffffff;
@@ -15,15 +15,15 @@
   --radius: 6px;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   --bg-main: #111111;
-  --bg-content: #232323;   /* 内容区，明显浅于主背景 */
-  --bg-card: #2e2e2e;      /* 卡片，更浅 */
-  --bg-input: #393939;     /* 输入/按钮，最浅 */
-  --bg-tab: #444444;      /* 小Tab区域，最浅灰 */
-  --border: #505050;       /* 边框，亮灰 */
-  --border-light: #6a6a6a; /* 浅边框，更亮 */
+  --bg-content: #232323;   /* Content area, noticeably lighter than main background */
+  --bg-card: #2e2e2e;      /* Card, lighter */
+  --bg-input: #393939;     /* Input/button, lightest */
+  --bg-tab: #444444;      /* Small tab area, lightest gray */
+  --border: #505050;       /* Border, bright gray */
+  --border-light: #6a6a6a; /* Light border, brighter */
 }
 
-/* 基础重置 */
+/* Base reset */
 * {
   margin: 0;
   padding: 0;
@@ -38,13 +38,13 @@ body {
   line-height: 1.5;
 }
 
-/* 改进等宽字体 */
+/* Improved monospace font */
 .monospace {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
 }
 
-/* 滚动条样式 */
+/* Scrollbar styles */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -63,7 +63,7 @@ body {
   background: var(--text-secondary);
 }
 
-/* 通用点击样式 */
+/* Common click styles */
 .clickable {
   cursor: pointer;
   user-select: none;
@@ -73,7 +73,7 @@ body {
   background-color: var(--bg-tertiary);
 }
 
-/* 空状态样式 */
+/* Empty state styles */
 .empty-state {
   text-align: center;
   padding: 40px 20px;
@@ -99,7 +99,7 @@ body {
   max-width: 300px;
 }
 
-/* 动画效果 */
+/* Animation effects */
 @keyframes pulse {
   0%,
   100% {

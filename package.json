@@ -1,7 +1,7 @@
 {
-  "name": "websocket-proxy-extension",
+  "name": "websocket-devtools",
   "version": "1.0.0",
-  "description": "WebSocket proxy tool for monitoring, intercepting, and modifying WebSocket messages",
+  "description": "WebSocket DevTools - Monitor, simulate, proxy, block and favorite WebSocket messages with advanced debugging capabilities",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -15,11 +15,36 @@
     "websocket",
     "proxy",
     "chrome-extension",
-    "debugging"
+    "debugging",
+    "devtools",
+    "monitoring",
+    "simulation",
+    "interception",
+    "developer-tools",
+    "network-debugging",
+    "real-time-monitoring",
+    "message-simulation",
+    "web-development"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Brian Luo",
+    "email": "ianloe666@gmail.com",
+    "url": "https://github.com/law-chain-hot"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/law-chain-hot/WebSocket-DevTool#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/law-chain-hot/WebSocket-DevTool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/law-chain-hot/WebSocket-DevTool/issues"
+  },
   "packageManager": "pnpm@10.5.2",
+  "engines": {
+    "node": ">=16.0.0",
+    "pnpm": ">=8.0.0"
+  },
   "dependencies": {
     "@codemirror/commands": "^6.8.1",
     "@codemirror/lang-json": "^6.0.2",

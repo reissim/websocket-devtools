@@ -1,38 +1,60 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
-import { t } from "../utils/i18n.js";
-import { Settings } from "lucide-react";
+import i18n, { t, initForPopup } from "../utils/i18n.js";
+import { Settings, Zap, Globe, Power, Github } from "lucide-react";
 
 const Popup = () => {
   const [isEnabled, setIsEnabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [, forceUpdate] = useState({});
 
-  // 加载保存的状态
+  // Load saved state and initialize popup language settings
   useEffect(() => {
-    chrome.storage.local.get(["websocket-proxy-enabled"], (result) => {
-      setIsEnabled(result["websocket-proxy-enabled"] !== false); // 默认启用
-      setIsLoading(false);
-    });
+    const initializePopup = async () => {
+      try {
+        // Initialize popup language settings (prioritize browser language)
+        await initForPopup();
+        
+        // Load extension state
+        chrome.storage.local.get(["websocket-proxy-enabled"], (result) => {
+          setIsEnabled(result["websocket-proxy-enabled"] !== false); // Enabled by default
+          setIsLoading(false);
+        });
+      } catch (error) {
+        // console.error('Failed to initialize popup:', error); Removed for clean up.
+        setIsLoading(false);
+      }
+    };
+    
+    initializePopup();
   }, []);
 
-  // 处理开关切换
+  // Listen for language changes and force UI update
+  useEffect(() => {
+    const unsubscribe = i18n.addLanguageChangeListener(() => {
+      forceUpdate({});
+    });
+    return unsubscribe;
+  }, []);
+
+  // Handle switch toggle
   const handleToggle = () => {
     const newState = !isEnabled;
     setIsEnabled(newState);
 
-    // 保存状态
+    // Save state
     chrome.storage.local.set({
       "websocket-proxy-enabled": newState,
     });
 
-    // 通知background script状态变化
+    // Notify background script of state change
     chrome.runtime.sendMessage({
       type: "toggle-extension",
       enabled: newState,
     });
   };
 
-  // 打开DevTools提示
+  // Open DevTools hint
   const handleOpenDevTools = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, {
@@ -40,7 +62,7 @@ const Popup = () => {
       });
     });
 
-    // 关闭popup
+    // Close popup
     window.close();
   };
 
@@ -54,26 +76,42 @@ const Popup = () => {
 
   return (
     <div style={styles.container}>
-      {/* 标题 */}
+      {/* Title */}
       <div style={styles.header}>
+        <div style={styles.headerIcon}>
+          <Globe size={20} />
+        </div>
         <h3 style={styles.title}>{t("popup.title")}</h3>
+        <div style={styles.statusBadge}>
+          <div style={{
+            ...styles.statusDot,
+            backgroundColor: isEnabled ? "#10b981" : "#ef4444"
+          }} />
+          <span style={styles.statusText}>
+            {isEnabled ? t("popup.status.enabled") : t("popup.status.disabled")}
+          </span>
+        </div>
       </div>
 
-      {/* 开关控制 */}
+      {/* Switch control */}
       <div style={styles.section}>
         <div style={styles.switchContainer}>
-          <span style={styles.switchLabel}>{t("popup.enableExtension")}</span>
+          <div style={styles.switchLabel}>
+            <Power size={16} style={{ marginRight: "8px" }} />
+            <span>{t("popup.enableExtension")}</span>
+          </div>
           <button
             style={{
               ...styles.switchButton,
-              backgroundColor: isEnabled ? "#38a169" : "#4a5568",
+              backgroundColor: isEnabled ? "#10b981" : "#6b7280",
+              boxShadow: isEnabled ? "0 0 0 2px rgba(16, 185, 129, 0.2)" : "none",
             }}
             onClick={handleToggle}
           >
             <div
               style={{
                 ...styles.switchThumb,
-                transform: isEnabled ? "translateX(22px)" : "translateX(2px)",
+                transform: isEnabled ? "translateX(22px)" : "translateX(0px)",
               }}
             />
           </button>
@@ -83,23 +121,52 @@ const Popup = () => {
         </div>
       </div>
 
-      {/* 使用提示 */}
+      {/* Usage hint */}
       <div style={styles.section}>
         <button style={styles.instructionButton} onClick={handleOpenDevTools}>
-          <Settings />
-          {t("popup.openDevTools")}
+          <div style={styles.buttonIcon}>
+            <Settings size={18} />
+          </div>
+          <span>{t("popup.openDevTools")}</span>
         </button>
         <div style={styles.hint}>{t("popup.devToolsHint")}</div>
       </div>
 
-      {/* 状态提示 */}
-      <div style={styles.footer}>
-        <div style={styles.status}>
-          {t("popup.status")}:{" "}
-          <span style={{ color: isEnabled ? "#38a169" : "#e53e3e" }}>
-            {isEnabled ? t("popup.status.enabled") : t("popup.status.disabled")}
-          </span>
+      {/* Quick info */}
+      <div style={styles.infoCard}>
+        <div style={styles.infoIcon}>
+          <Zap size={16} />
         </div>
+        <div style={styles.infoContent}>
+          <div style={styles.infoTitle}>{t("popup.infoCard.title")}</div>
+          <div style={styles.infoDesc}>{t("popup.infoCard.description")}</div>
+        </div>
+      </div>
+
+      {/* Version info and donation */}
+      <div style={styles.versionSection}>
+        <span style={styles.versionText}>v1.0.0</span>
+        <a 
+          href="https://github.com/BrianLuo/websocket-proxy-pro" 
+          target="_blank" 
+          style={styles.githubLink}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = "#2563eb";
+            e.target.style.transform = "scale(1.1)";
+            e.target.style.boxShadow = "0 4px 8px rgba(59, 130, 246, 0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "#3b82f6";
+            e.target.style.transform = "scale(1)";
+            e.target.style.boxShadow = "0 2px 4px rgba(59, 130, 246, 0.2)";
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            chrome.tabs.create({ url: "https://github.com/BrianLuo/websocket-proxy-pro" });
+          }}
+        >
+          <Github size={12} />
+        </a>
       </div>
     </div>
   );
@@ -107,34 +174,68 @@ const Popup = () => {
 
 const styles = {
   container: {
-    padding: "16px",
-    minHeight: "200px",
-    backgroundColor: "#1a202c",
-    color: "#f7fafc",
+    padding: "20px",
+    minHeight: "240px",
+    backgroundColor: "#1e293b",
+    color: "#f1f5f9",
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)",
   },
   header: {
-    textAlign: "center",
-    marginBottom: "16px",
-    paddingBottom: "12px",
-    borderBottom: "1px solid #4a5568",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: "20px",
+    paddingBottom: "16px",
+    borderBottom: "1px solid #334155",
+  },
+  headerIcon: {
+    display: "flex",
+    alignItems: "center",
+    color: "#3b82f6",
   },
   title: {
     margin: 0,
-    fontSize: "18px",
+    fontSize: "16px",
     fontWeight: "600",
+    color: "#f1f5f9",
+  },
+  statusBadge: {
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    fontSize: "12px",
+    fontWeight: "500",
+  },
+  statusDot: {
+    width: "8px",
+    height: "8px",
+    borderRadius: "50%",
+    animation: "pulse 2s infinite",
+  },
+  statusText: {
+    color: "#cbd5e1",
   },
   section: {
-    marginBottom: "16px",
+    marginBottom: "20px",
   },
   switchContainer: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: "6px",
+    marginBottom: "8px",
+    padding: "12px",
+    backgroundColor: "#334155",
+    borderRadius: "12px",
+    border: "1px solid #475569",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)",
   },
   switchLabel: {
+    display: "flex",
+    alignItems: "center",
     fontSize: "14px",
     fontWeight: "500",
+    color: "#f1f5f9",
   },
   switchButton: {
     width: "48px",
@@ -143,7 +244,9 @@ const styles = {
     border: "none",
     position: "relative",
     cursor: "pointer",
-    transition: "background-color 0.2s",
+    transition: "all 0.3s ease",
+    outline: "none",
+    boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.1)",
   },
   switchThumb: {
     width: "20px",
@@ -152,44 +255,106 @@ const styles = {
     backgroundColor: "#ffffff",
     position: "absolute",
     top: "2px",
-    transition: "transform 0.2s",
+    left: "2px",
+    transition: "transform 0.3s ease",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1)",
   },
   switchHint: {
     fontSize: "12px",
-    color: "#a0aec0",
+    color: "#94a3b8",
     fontStyle: "italic",
+    paddingLeft: "12px",
   },
   instructionButton: {
     width: "100%",
-    padding: "12px",
-    backgroundColor: "#3182ce",
+    padding: "16px",
+    backgroundColor: "#3b82f6",
     color: "#ffffff",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "12px",
     fontSize: "14px",
     fontWeight: "500",
     cursor: "pointer",
-    transition: "background-color 0.2s",
+    transition: "all 0.3s ease",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+    boxShadow: "0 4px 6px rgba(59, 130, 246, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1)",
+  },
+  buttonIcon: {
+    display: "flex",
+    alignItems: "center",
   },
   hint: {
     fontSize: "12px",
-    color: "#a0aec0",
+    color: "#94a3b8",
     textAlign: "center",
-    marginTop: "8px",
+    marginTop: "10px",
+    lineHeight: "1.4",
   },
-  footer: {
-    borderTop: "1px solid #4a5568",
-    paddingTop: "12px",
-    textAlign: "center",
+  infoCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    padding: "16px",
+    backgroundColor: "#334155",
+    borderRadius: "12px",
+    border: "1px solid #475569",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)",
   },
-  status: {
+  infoIcon: {
+    display: "flex",
+    alignItems: "center",
+    color: "#10b981",
+  },
+  infoContent: {
+    flex: 1,
+  },
+  infoTitle: {
+    fontSize: "14px",
+    fontWeight: "600",
+    color: "#f1f5f9",
+    marginBottom: "2px",
+  },
+  infoDesc: {
     fontSize: "12px",
-    color: "#e2e8f0",
+    color: "#94a3b8",
+    lineHeight: "1.3",
   },
   loading: {
     textAlign: "center",
-    padding: "20px",
-    color: "#a0aec0",
+    padding: "32px",
+    color: "#94a3b8",
+    fontSize: "14px",
+  },
+  versionSection: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: "12px",
+    paddingTop: "10px",
+    borderTop: "1px solid #334155",
+    boxShadow: "0 -1px 0 0 rgba(71, 85, 105, 0.1)",
+  },
+  versionText: {
+    fontSize: "10px",
+    color: "#94a3b8",
+    fontWeight: "400",
+  },
+  githubLink: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "24px",
+    height: "24px",
+    borderRadius: "50%",
+    backgroundColor: "#3b82f6",
+    color: "#ffffff",
+    textDecoration: "none",
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+    boxShadow: "0 1px 3px rgba(59, 130, 246, 0.2)",
   },
 };
 

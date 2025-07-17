@@ -13,13 +13,13 @@ export const useAutoResize = ({
   useEffect(() => {
     const handleWindowResize = () => {
       if (isWindowOpen && !isAnimating) {
-        // 检查当前位置和尺寸是否仍然有效
+        // Check if current position and size are still valid
         const result = validateAndFixPositionAndSize(
           windowPosition,
           windowSize
         );
 
-        // 如果位置或尺寸需要修正，更新状态
+        // If position or size needs correction, update state
         if (result.positionChanged || result.sizeChanged) {
           console.log("📍 Auto-correcting after resize:", {
             position: result.positionChanged

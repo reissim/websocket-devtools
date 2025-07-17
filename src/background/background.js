@@ -1,27 +1,25 @@
 // Background script - Service Worker for Chrome Extension V3
-console.log("🚀 WebSocket Proxy background script loaded");
 
-// 存储 WebSocket 连接数据
+// Store WebSocket connection data
 let websocketData = {
   connections: [],
-  isMonitoring: true, // 默认开启监控
+  isMonitoring: true, // Monitoring enabled by default
 };
 
-// 新增：维护 DevTools port <-> tabId 映射
+// New: Maintain DevTools port <-> tabId mapping
 const devtoolsPorts = new Map(); // port -> tabId
 
-// 检查扩展是否启用
+// Check if extension is enabled
 async function isExtensionEnabled() {
   return new Promise((resolve) => {
     chrome.storage.local.get(["websocket-proxy-enabled"], (result) => {
-      resolve(result["websocket-proxy-enabled"] !== false); // 默认启用
+      resolve(result["websocket-proxy-enabled"] !== false); // Enabled by default
     });
   });
 }
 
-// 监听来自 DevTools Panel 的消息
+// Listen for messages from DevTools Panel
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("📨 Background received message:", message, "from:", sender);
   const tabId = message.tabId || sender.tab?.id;
 
   switch (message.type) {
@@ -44,12 +42,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     case "get-existing-data": {
-      console.log(
-        "📊 Panel requesting existing data, connections:",
-        websocketData.connections.length
-      );
-
-      // 发送现有数据到 DevTools Panel
+      // Send existing data to DevTools Panel
       sendResponse({
         success: true,
         data: websocketData.connections,
@@ -77,10 +70,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case "websocket-event": {
       // Ensure tabId is present
       if (!sender.tab?.id) {
-        console.warn(
-          "⚠️ WebSocket event missing tabId, ignoring:",
-          message.data
-        );
         sendResponse({ received: false, reason: "missing-tabId" });
         break;
       }
@@ -99,18 +88,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     case "proxy-state-change": {
-      console.log("🎛️ Proxy state change:", message.data);
-
-      // 转发状态变化到 DevTools Panel
+      // Forward state change to DevTools Panel
       forwardToDevTools(message);
       sendResponse({ received: true });
       break;
     }
 
     case "simulate-message": {
-      console.log("🎭 Simulating message:", message.data);
-
-      // 如果有指定的 tabId，只通知那个标签页；否则通知所有标签页
+      // If a tabId is specified, notify only that tab; otherwise, notify all tabs
       const targetTabId = message.data.tabId || null;
       notifyAllTabs("simulate-message", message.data, targetTabId);
       sendResponse({ success: true, simulated: true });
@@ -118,9 +103,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     case "simulate-system-event": {
-      console.log("🎭 Simulating system event:", message.data);
-
-      // 获取当前活动的标签页ID（从devtools面板的上下文）
+      // Get current active tab ID (from devtools panel context)
       const systemEventTabId = message.data.tabId || null;
       notifyAllTabs("simulate-system-event", message.data, systemEventTabId);
       sendResponse({ success: true, simulated: true, eventType: message.data.eventType });
@@ -128,31 +111,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     case "create-manual-websocket": {
-      console.log("🔗 Creating manual WebSocket connection:", message.data);
-      // 通知指定tab的content script创建WebSocket连接
+      // Notify content script of specific tab to create WebSocket connection
       const tabId = message.data.tabId;
       if (tabId) {
         chrome.tabs.sendMessage(tabId, {
           type: "create-manual-websocket",
           url: message.data.url,
         }).then(() => {
-          console.log("✅ Manual WebSocket creation request sent to tab:", tabId);
           sendResponse({ success: true });
         }).catch((error) => {
-          console.error("❌ Failed to send manual WebSocket creation request:", error);
           sendResponse({ success: false, error: error.message });
         });
       } else {
-        console.error("❌ No tabId specified for manual WebSocket creation");
         sendResponse({ success: false, error: "No tabId specified" });
       }
       break;
     }
 
     case "toggle-extension": {
-      console.log("🔄 Toggling extension:", message.enabled);
-
-      // 保存状态
+      // Save state
       chrome.storage.local.set({
         "websocket-proxy-enabled": message.enabled,
       });
@@ -162,40 +139,33 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     case "show-devtools-hint": {
-      console.log("💡 Showing DevTools hint");
-      // 这个消息由popup发送，不需要特别处理
+      // This message is sent by the popup, no special handling needed
       sendResponse({ success: true });
       break;
     }
 
     default: {
-      console.log("❓ Unknown message type:", message.type);
       sendResponse({ error: "Unknown message type" });
       break;
     }
   }
 
-  return true; // 保持消息通道开放以支持异步响应
+  return true; // Keep message channel open to support asynchronous response
 });
 
-// 通知所有标签页或特定标签页的 content scripts
+// Notify all tabs or specific tab's content scripts
 async function notifyAllTabs(type, data = {}, targetTabId = null) {
   try {
     let tabs;
 
     if (targetTabId) {
-      // 通知特定标签页
+      // Notify specific tab
       tabs = await chrome.tabs.query({ currentWindow: true });
       tabs = tabs.filter((tab) => tab.id === targetTabId);
     } else {
-      // 通知所有标签页（不仅仅是活动的）
+      // Notify all tabs (not just active ones)
       tabs = await chrome.tabs.query({ currentWindow: true });
     }
-
-    console.log(
-      `📢 Notifying ${tabs.length} tabs about: ${type}`,
-      targetTabId ? `(target: ${targetTabId})` : "(all tabs)"
-    );
 
     const promises = tabs.map((tab) => {
       if (tab.id) {
@@ -204,89 +174,90 @@ async function notifyAllTabs(type, data = {}, targetTabId = null) {
             type: type,
             ...data,
           })
-          .catch((error) => {
-            console.warn(`⚠️ Failed to notify tab ${tab.id}:`, error);
+          .catch(() => {
           });
       }
     });
 
     await Promise.all(promises);
-    console.log(`✅ Notification sent to tabs: ${type}`);
   } catch (error) {
-    console.error("❌ Failed to notify tabs:", error);
   }
 }
 
-// 转发消息到 DevTools Panel
+// Forward message to DevTools Panel
 function forwardToDevTools(message) {
   try {
-    // DevTools Panel 也通过 chrome.runtime.onMessage 监听
-    // 我们可以直接广播消息，Panel 会接收到
-    chrome.runtime.sendMessage(message).catch((error) => {
-      // 这是正常的，因为 Panel 可能还未打开
-      console.log("📤 Message queued for DevTools Panel:", message.type);
+    // DevTools Panel also listens via chrome.runtime.onMessage
+    // We can directly broadcast messages, and the Panel will receive them
+    chrome.runtime.sendMessage(message).catch(() => {
+      // This is normal, as the Panel might not be open yet
     });
   } catch (error) {
-    console.error("❌ Failed to forward to DevTools Panel:", error);
   }
 }
 
-// 监听标签页更新，可能需要重新注入脚本
+// Listen for tab updates, may need to re-inject script
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && websocketData.isMonitoring) {
-    console.log("🔄 Tab updated, monitoring is active for tab:", tabId);
-    // 可以在这里重新注入脚本或发送状态更新
+    // Can re-inject script or send status update here
   }
 });
 
-// 当扩展启动时
+// When extension starts up
 chrome.runtime.onStartup.addListener(() => {
-  console.log("🌅 Extension started");
   websocketData = {
     connections: [],
-    isMonitoring: true, // 默认开启监控
+    isMonitoring: true, // Monitoring enabled by default
   };
 
-  // 开始监控所有标签页
-  console.log("🚀 Auto-starting WebSocket monitoring on startup");
-  notifyAllTabs("start-monitoring");
-});
-
-// 当扩展安装时
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("📦 Extension installed/updated");
-  websocketData = {
-    connections: [],
-    isMonitoring: true, // 默认开启监控
-  };
-
-  // 开始监控所有标签页
-  console.log("🚀 Auto-starting WebSocket monitoring on install");
-  notifyAllTabs("start-monitoring");
-});
-
-// 监听 DevTools Panel 连接和断开
-chrome.runtime.onConnect.addListener(function(port) {
-  console.log("🔌 DevTools connected:", port);
-
-  // 监听 port 消息，获取 tabId
-  port.onMessage.addListener(function(msg) {
-    if (msg.type === "init" && msg.tabId) {
-      devtoolsPorts.set(port, msg.tabId);
-      console.log("🆔 Registered DevTools port for tab:", msg.tabId);
-    }
-  });
-
-  port.onDisconnect.addListener(function() {
-    const tabId = devtoolsPorts.get(port);
-    devtoolsPorts.delete(port);
-    if (tabId) {
-      console.log("❌ DevTools disconnected, triggering proxy reset for tab:", tabId);
-      notifyAllTabs("reset-proxy-state", {}, tabId);
-    } else {
-      console.log("❌ DevTools disconnected, but no tabId found");
+  // Auto-start monitoring on startup (if enabled)
+  chrome.storage.local.get(["websocket-proxy-enabled"], (result) => {
+    if (result["websocket-proxy-enabled"] !== false) {
+      notifyAllTabs("start-monitoring", {}, null); // Notify all tabs
     }
   });
 });
 
-console.log("✅ Background script initialization complete");
+// When extension is installed or updated
+chrome.runtime.onInstalled.addListener((details) => {
+  // Initialize extension state on first install
+  if (details.reason === "install") {
+    chrome.storage.local.set({
+      "websocket-proxy-enabled": true, // Enable by default on install
+    });
+    notifyAllTabs("start-monitoring", {}, null); // Notify all tabs
+  }
+});
+
+// Listen for DevTools connections
+chrome.runtime.onConnect.addListener((port) => {
+  if (port.name === "devtools") {
+    
+    let tabId = null;
+
+    port.onMessage.addListener((msg) => {
+      if (msg.type === "init" && msg.tabId) {
+        tabId = msg.tabId;
+        devtoolsPorts.set(port, tabId); // Store port -> tabId mapping
+        // Send existing data immediately to the newly connected DevTools panel
+        port.postMessage({
+          type: "existing-data",
+          data: websocketData.connections.filter(conn => conn.tabId === tabId),
+          isMonitoring: websocketData.isMonitoring,
+        });
+      }
+    });
+
+    port.onDisconnect.addListener(() => {
+      if (tabId) {
+        // Send a reset message to the content script of the disconnected tab
+        // This will revert the WebSocket DevTools for that tab
+        chrome.tabs.sendMessage(tabId, {
+          type: "reset-proxy-state",
+        }).catch(() => {
+        });
+      }
+      devtoolsPorts.delete(port);
+    });
+  }
+});

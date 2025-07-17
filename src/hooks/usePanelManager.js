@@ -9,11 +9,11 @@ export const usePanelManager = ({
   validateAndFixPositionAndSize,
   animateWindowOpen,
 }) => {
-  // 可被外部调用的打开函数
+  // Function that can be called externally to open panel
   const openPanel = useCallback(() => {
     if (isWindowOpen || isAnimating) return;
 
-    // 获取保存的状态
+    // Get saved state
     const savedState = localStorage.getItem("simulateMessagePanel");
     let targetPos = { x: window.innerWidth - 420, y: 100 };
     let savedSize = windowSize;
@@ -24,14 +24,14 @@ export const usePanelManager = ({
         targetPos = parsed.position || targetPos;
         savedSize = parsed.size || savedSize;
       } catch (error) {
-        // 使用默认位置
+        // Use default position
       }
     }
 
-    // 验证并修正位置和尺寸，防止超出视口
+    // Validate and correct position and size to prevent overflow
     const result = validateAndFixPositionAndSize(targetPos, savedSize);
 
-    // 如果位置或尺寸被修正了，更新到状态中
+    // If position or size was corrected, update to state
     if (result.positionChanged || result.sizeChanged) {
       console.log("📍 Opening with corrections:", {
         position: result.positionChanged
@@ -42,7 +42,7 @@ export const usePanelManager = ({
           : "unchanged",
       });
 
-      // 更新尺寸（如果需要的话）
+      // Update size if needed
       if (result.sizeChanged) {
         setWindowSize(result.size);
       }

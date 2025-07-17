@@ -1,68 +1,37 @@
 import React, { useState } from "react";
-import { CheckCircle, XCircle, Trash2, Plus } from "lucide-react";
-import { Modal, TextInput } from "@mantine/core";
+import { CheckCircle, XCircle, Trash2, Plus, Activity } from "lucide-react";
 import { filterConnections } from "../utils/filterUtils";
 import useConnectionNewMessage from "../hooks/useConnectionNewMessage";
+import ManualConnectModal from "./ManualConnectModal";
 import "../styles/WebSocketList.css";
 import { t } from "../utils/i18n";
 
 const WebSocketList = ({
-  websocketEvents, // 所有WebSocket事件的数组
-  connectionsMap, // 所有连接的基础信息Map（包括active和inactive）
+  websocketEvents, // Array of all WebSocket events
+  connectionsMap, // Map of basic info for all connections (including active and inactive)
   selectedConnectionId,
   onSelectConnection,
   onClearConnections,
-  onManualConnect, // 新增：手动连接回调
+  onManualConnect, // New: manual connection callback
 }) => {
-  const [activeCollapsed, setActiveCollapsed] = useState(false); // 活跃连接折叠状态
-  const [inactiveCollapsed, setInactiveCollapsed] = useState(true); // 非活跃连接折叠状态
-  const [filterText, setFilterText] = useState(""); // 连接过滤文本
-  const [filterInvert, setFilterInvert] = useState(false); // 反向过滤
+  const [activeCollapsed, setActiveCollapsed] = useState(false); // Active connections collapsed state
+  const [inactiveCollapsed, setInactiveCollapsed] = useState(true); // Inactive connections collapsed state
+  const [filterText, setFilterText] = useState(""); // Connection filter text
+  const [filterInvert, setFilterInvert] = useState(false); // Invert filter
   
-  // 手动连接对话框状态
+  // Manual connection dialog state
   const [isManualConnectOpen, setIsManualConnectOpen] = useState(false);
-  const [wsUrl, setWsUrl] = useState("");
-  const [isConnecting, setIsConnecting] = useState(false);
 
-  // 使用新消息追踪 hook
+  // Use new message tracking hook
   const { hasNewMessages, getNewMessageTimestamp, clearNewMessage } = useConnectionNewMessage(
     websocketEvents,
     connectionsMap,
-    300 // 闪烁持续时间300毫秒
+    300 // Flash duration 300ms
   );
 
-  // 处理手动连接
-  const handleManualConnect = async () => {
-    if (!wsUrl.trim()) return;
-    
-    setIsConnecting(true);
-    try {
-      // 调用父组件的连接处理函数
-      await onManualConnect(wsUrl.trim());
-      // 成功时关闭 Modal
-      setWsUrl("");
-      setIsManualConnectOpen(false);
-    } catch (error) {
-      console.error("Failed to create manual WebSocket connection:", error);
-      // 失败时也关闭 Modal，让用户重新尝试
-      setIsManualConnectOpen(false);
-      setWsUrl("");
-    } finally {
-      setIsConnecting(false);
-    }
-  };
 
-  // 验证WebSocket URL
-  const isValidWsUrl = (url) => {
-    try {
-      const urlObj = new URL(url);
-      return urlObj.protocol === 'ws:' || urlObj.protocol === 'wss:';
-    } catch {
-      return false;
-    }
-  };
-
-  const formatTimestamp = (timestamp) => {
+  // Retain a few decimal places for the second argument
+  const formatTimestamp = (timestamp, numberOfDecimalPlaces = 3) => {
     const date = new Date(timestamp);
     const timeString = date.toLocaleTimeString(undefined, {
       hour: "2-digit",
@@ -71,10 +40,13 @@ const WebSocketList = ({
       hour12: false,
     });
     const milliseconds = date.getMilliseconds().toString().padStart(3, "0");
-    return `${timeString}.${milliseconds.substring(0, 3)}`;
+    if (numberOfDecimalPlaces > 0) {
+      return `${timeString}.${milliseconds.substring(0, numberOfDecimalPlaces)}`;
+    }
+    return timeString;
   };
 
-  // 使用connectionsMap构建连接列表
+  // Build connection list using connectionsMap
   const uniqueConnections =
     connectionsMap && connectionsMap.size > 0
       ? Array.from(connectionsMap.values()).map((connInfo) => {
@@ -104,14 +76,14 @@ const WebSocketList = ({
             url: connInfo.url,
             type: "connection",
             timestamp: connInfo.timestamp,
-            status: connInfo.status === "close" ? "closed" : connInfo.status, // 映射"close"为"closed"
+            status: connInfo.status === "close" ? "closed" : connInfo.status, // Map "close" to "closed"
             messageCount,
             lastActivity,
           };
         })
       : [];
 
-  // 分组连接：活跃和非活跃，按创建时间排序（新到旧）
+  // Group connections: active and inactive, sorted by creation time (new to old)
   const filteredConnections = filterConnections(uniqueConnections, {
     text: filterText,
     invert: filterInvert,
@@ -125,12 +97,12 @@ const WebSocketList = ({
     .filter((conn) => conn.status === "closed" || conn.status === "error")
     .sort((a, b) => b.timestamp - a.timestamp);
 
-  // 渲染连接项的通用函数
+  // Generic function to render connection item
   const renderConnection = (connection, isActive) => {
     const isSelected = connection.id === selectedConnectionId;
     const hasNewMsg = hasNewMessages(connection.id);
 
-    // 关闭连接
+    // Close connection
     const handleCloseConnection = (e) => {
       e.stopPropagation();
       chrome.runtime.sendMessage({
@@ -183,7 +155,7 @@ const WebSocketList = ({
               />
             </div>
           </button>
-          {/* 右上角关闭按钮，仅在active时渲染，hover时显示 */}
+          {/* Top-right close button, only render when active, show on hover */}
           {isActive && (
             <button
               className="ws-connection-close-btn"
@@ -201,7 +173,7 @@ const WebSocketList = ({
         </div>
         <div className="ws-connection-bottom-info">
           <span>{t("panel.connectionList.messagesCount", { count: connection.messageCount })}</span>
-          <span>{t("panel.connectionList.created", { time: formatTimestamp(connection.timestamp) })}</span>
+          <span>{t("panel.connectionList.created", { time: formatTimestamp(connection.timestamp, 0) })}</span>
         </div>
       </div>
     );
@@ -296,64 +268,12 @@ const WebSocketList = ({
       </div>
 
       {/* Manual Connection Dialog */}
-      <Modal
+      <ManualConnectModal
         opened={isManualConnectOpen}
-        onClose={() => {
-          setIsManualConnectOpen(false);
-          setWsUrl("");
-        }}
-        title={t("panel.connectionList.modal.title")}
-        size="sm"
-        centered
-        zIndex={1500}
-        classNames={{
-          modal: 'ws-modal',
-          header: 'ws-modal-header',
-          title: 'ws-modal-title',
-          close: 'ws-modal-close',
-          content: 'ws-modal-content',
-          body: 'ws-modal-body',
-          overlay: 'ws-modal-overlay',
-        }}
-      >
-                 <div className="ws-modal-content-wrapper">
-          <TextInput
-             label={t("panel.connectionList.modal.urlLabel")}
-             placeholder={t("panel.connectionList.modal.urlPlaceholder")}
-             value={wsUrl}
-             onChange={(e) => setWsUrl(e.currentTarget.value)}
-             disabled={isConnecting}
-             error={wsUrl.length > 0 && !isValidWsUrl(wsUrl) ? t("panel.connectionList.modal.urlError") : null}
-             size="sm"
-             classNames={{
-               label: 'ws-text-input-label',
-               input: `ws-text-input-field ${wsUrl.length > 0 && !isValidWsUrl(wsUrl) ? 'ws-text-input-error' : ''}`,
-               error: 'ws-text-input-error-text',
-             }}
-          />
-          
-          <div className="modal-button-group">
-            <button
-              className="modal-button modal-button-cancel"
-              onClick={() => {
-                setIsManualConnectOpen(false);
-                setWsUrl("");
-              }}
-              disabled={isConnecting}
-            >
-              {t("common.cancel")}
-            </button>
-            
-            <button
-              className="modal-button modal-button-connect"
-              onClick={handleManualConnect}
-              disabled={isConnecting || !isValidWsUrl(wsUrl)}
-            >
-              {t("panel.connectionList.modal.connect")}
-            </button>
-          </div>
-        </div>
-      </Modal>
+        onClose={() => setIsManualConnectOpen(false)}
+        onConnect={onManualConnect}
+        iconComponent={Activity}
+      />
     </div>
   );
 };

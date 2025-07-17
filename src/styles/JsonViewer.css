@@ -1,10 +1,11 @@
-/* JsonViewer 组件样式 */
+/* JsonViewer component styles */
 .json-viewer {
   background: var(--bg-primary);
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  container-type: inline-size; /* Enable container queries */
 }
 
 .json-viewer-controls {
@@ -16,18 +17,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-width: 0; /* Allow flex children to shrink */
 }
 
 .json-viewer-controls-left {
   display: flex;
   align-items: center;
   gap: 3px;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow instead of wrapping */
+  min-width: 0; /* Allow shrinking */
+  flex-shrink: 2; /* Allow left side to shrink more than right */
 }
 
 .json-viewer-controls-right {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow instead of wrapping */
+  min-width: 0; /* Allow shrinking */
+  flex-shrink: 0; /* Right side should not shrink too much */
 }
 
 /* Action buttons container */
@@ -35,6 +45,8 @@
   display: flex;
   align-items: center;
   gap: 3px;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow instead of wrapping */
 }
 
 .json-viewer-action-buttons .json-viewer-btn {
@@ -96,7 +108,7 @@
   stroke: #d1d5db;
 }
 
-/* 按钮样式 */
+/* Button styles */
 .json-viewer-btn {
   display: flex;
   align-items: center;
@@ -112,6 +124,86 @@
   transition: all 0.2s ease;
   font-family: inherit;
   min-height: 20px;
+  white-space: nowrap; /* Prevent text wrapping */
+  flex-shrink: 1; /* Allow button shrinking but not to zero */
+  min-width: 0; /* Allow for ellipsis */
+  overflow: hidden; /* Hide overflowing text */
+}
+
+.json-viewer-btn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* Hide button text when space is very limited */
+@container (max-width: 450px) {
+  .json-viewer-controls {
+    padding: 6px 8px;
+  }
+  
+  .json-viewer-btn span.json-viewer-controls-left {
+    display: none; /* Hide text, show only icons */
+  }
+  
+  .json-viewer-btn {
+    padding: 3px;
+    min-width: 24px;
+    justify-content: center;
+  }
+  
+  .json-viewer-controls-left {
+    gap: 2px;
+  }
+  
+  .json-viewer-controls-right {
+    gap: 4px;
+  }
+  
+  .json-viewer-action-buttons {
+    gap: 2px;
+  }
+  
+  /* Also hide text in badges when space is limited */
+  .json-viewer-badge span {
+    display: none;
+  }
+  
+  .json-viewer-badge {
+    padding: 3px;
+    min-width: 18px;
+    justify-content: center;
+  }
+}
+
+/* For very small containers, further compress */
+@container (max-width: 250px) {
+  .json-viewer-controls {
+    padding: 4px 6px;
+  }
+  
+  .json-viewer-btn {
+    padding: 2px;
+    min-width: 20px;
+  }
+  
+  .json-viewer-controls-left {
+    gap: 1px;
+  }
+  
+  .json-viewer-controls-right {
+    gap: 2px;
+  }
+  
+  .json-viewer-action-buttons {
+    gap: 1px;
+  }
+  
+  .json-viewer-badge {
+    padding: 2px;
+    min-width: 16px;
+  }
 }
 
 .json-viewer-btn-inactive {
@@ -129,9 +221,9 @@
 }
 
 .json-viewer-btn-active-green {
-  background: rgba(5, 150, 105, 0.15);
-  border-color: rgba(5, 150, 105, 0.25);
-  color: #10b981;
+  background: #1ed69d24;
+  border-color: #0cf7ae40;
+  color: #15eca5;
 }
 
 .json-viewer-btn-active-orange {
@@ -141,9 +233,9 @@
 }
 
 .json-viewer-btn-active-purple {
-  background: rgb(65 25 102);
-  border-color: rgb(147 51 234);
-  color: #bb73ff;
+  background: #7033a933;
+  border-color: #aa56f7;
+  color: #d787ff;
 }
 
 .json-viewer-btn-active-blue {
@@ -172,7 +264,7 @@
   margin: 0 3px;
 }
 
-/* Badge样式 */
+/* Badge styles */
 .json-viewer-badge {
   display: flex;
   align-items: center;
@@ -184,6 +276,17 @@
   font-size: 10px;
   font-weight: 500;
   font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.json-viewer-badge span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .json-viewer-badge-green {
@@ -320,7 +423,7 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 紧凑的 JSON 查看器（用于详情面板）*/
+/* Compact JSON viewer (for details panel) */
 .json-viewer.compact .json-viewer-controls {
   /* border-top-left-radius: 16px;
   border-top-right-radius: 16px; */
@@ -345,7 +448,7 @@
   font-size: 10px;
 }
 
-/* 确保 CodeMirror 在小高度时也能正常滚动 */
+/* Ensure CodeMirror scrolls properly even at small heights */
 .json-viewer-container {
   min-height: 100px;
   overflow: auto;
@@ -355,12 +458,12 @@
   outline: none;
 }
 
-/* 在没有足够空间时强制显示滚动条 */
+/* Force show scrollbar when there isn't enough space */
 .json-viewer-codemirror .cm-scroller {
   min-height: 100%;
 }
 
-/* Simulate 编辑器专用样式 */
+/* Simulate editor specific styles */
 .json-viewer.simulate-editor {
   height: 100%;
   min-height: 200px;
@@ -389,13 +492,13 @@
   overflow-y: auto;
 }
 
-/* 为嵌套解析的 JSON 内容添加特殊样式 */
+/* Add special styles for nested parsed JSON content */
 .json-viewer-codemirror .cm-content[data-nested="true"] {
   border-left: 3px solid var(--accent-color);
   padding-left: 12px;
 }
 
-/* 确保文本选择样式与主题一致 */
+/* Ensure text selection styles match theme */
 .json-viewer-codemirror .cm-selectionBackground {
   background-color: rgba(0, 122, 204, 0.3) !important;
 }
@@ -404,12 +507,12 @@
   background-color: rgba(0, 122, 204, 0.4) !important;
 }
 
-/* 修复高度计算问题 */
+/* Fix height calculation issues */
 .json-viewer-codemirror .cm-editor.cm-focused .cm-scroller {
   outline: none;
 }
 
-/* 为搜索功能添加样式 */
+/* Add styles for search functionality */
 .json-viewer-codemirror .cm-searchMatch {
   background-color: rgba(255, 193, 7, 0.3);
   border: 1px solid rgba(255, 193, 7, 0.6);

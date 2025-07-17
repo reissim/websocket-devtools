@@ -332,12 +332,12 @@
 }
 
 .ws-messages-table th.col-length {
-  width: 60px;
+  width: 55px;
   text-align: right;
 }
 
 .ws-messages-table th.col-time {
-  width: 110px;
+  width: 95px;
   text-align: right;
   user-select: none;
 }
@@ -535,6 +535,12 @@
 
 .data-cell.system {
   color: var(--accent-color);
+  flex-wrap: nowrap;
+}
+
+.data-cell.system > :first-child {
+  flex-shrink: 0;
+  min-width: 12px;
 }
 
 .direction-arrow {
@@ -563,6 +569,8 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  width: 12px;
+  min-width: 12px;
 }
 
 .system-text {
@@ -1041,11 +1049,15 @@
 }
 
 .message-detail-resize-handle.panel-resize-handle.horizontal::after {
+  content: "";
   position: absolute;
+  left: 50%;
   top: -5px;
+  transform: translateX(-50%);
   width: 24px;
   height: 2px;
   background-color: rgba(255, 255, 255, 0.838);
   opacity: 0.7;
   box-shadow: 0px 1px 7px 4px rgb(0 0 0 / 21%);
+  pointer-events: none;
 }
