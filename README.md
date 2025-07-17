@@ -17,9 +17,9 @@
 <!-- ![Main Interface Screenshot](./images/main-interface.png) -->
 
 - **Real-time Monitoring**: Monitor all WebSocket connections with message flow tracking
-- **Message Analysis**: Beautiful JSON syntax highlighting and formatting
 - **Message Simulation**: Send custom messages to any active WebSocket connection
 - **Traffic Interception**: Modify messages in real-time
+- **Message Analysis**: Beautiful JSON syntax highlighting and formatting
 - **Favorites System**: Save and organize frequently used connections
 - **Multi-language Support**: English and Chinese localization
 
