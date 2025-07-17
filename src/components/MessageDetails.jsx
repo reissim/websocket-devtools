@@ -6,6 +6,7 @@ import useNewMessageHighlight from "../hooks/useNewMessageHighlight";
 import { addFromMessageList } from "../utils/globalFavorites";
 import { Ban, Search, Settings, CircleX } from "lucide-react";
 import { t } from "../utils/i18n.js";
+import CheeseIcon from "../Icons/cheese.jsx";
 
 // SVG icon components
 const Icons = {
@@ -23,6 +24,9 @@ const Icons = {
     < Settings size={12} />
   ),
   Simulate: () => (
+    <CheeseIcon width={14} height={14} color="black" spotColor="black"/>
+  ),
+  Simulate2: () => (
     <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
       <path
         d="M6 1L7.5 4H10.5L8.25 6L9 9L6 7.5L3 9L3.75 6L1.5 4H4.5L6 1Z"
