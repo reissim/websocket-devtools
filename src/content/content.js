@@ -227,12 +227,12 @@ function showDevToolsHint() {
           <circle cx="12" cy="12" r="10"/>
           <path d="M16 12l-4-4-4 4"/>
         </svg>
-        WebSocket DevTool
+        WebSocket DevTools
       </div>
       
       <div style="margin-bottom: 16px; line-height: 1.5;">
         <div style="margin-bottom: 8px;">Press <strong style="color: #10b981;">F12</strong> to open DevTools</div>
-        <div style="color: #94a3b8; font-size: 13px;">Find <strong>"WebSocket DevTool"</strong> tab to start monitoring</div>
+        <div style="color: #94a3b8; font-size: 13px;">Find <strong>"WebSocket DevTools"</strong> tab to start monitoring</div>
       </div>
       
       <div style="display: flex; justify-content: flex-end; gap: 8px;">

@@ -1,7 +1,7 @@
 {
-  "name": "websocket-proxy-pro",
+  "name": "websocket-devtools",
   "version": "1.0.0",
-  "description": "WebSocket DevTool - Monitor, simulate, proxy, block and favorite WebSocket messages with advanced debugging capabilities",
+  "description": "WebSocket DevTools - Monitor, simulate, proxy, block and favorite WebSocket messages with advanced debugging capabilities",
   "type": "module",
   "main": "index.js",
   "scripts": {

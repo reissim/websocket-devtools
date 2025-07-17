@@ -3,19 +3,19 @@
   "use strict";
 
   // Immediately mark script as loaded
-  // console.log("🔧 WebSocket DevTool injected script STARTING..."); Removed for clean up.
+  // console.log("🔧 WebSocket DevTools injected script STARTING..."); Removed for clean up.
   // console.log("🔍 Current WebSocket:", window.WebSocket); Removed for clean up.
   // console.log("🌍 Script context:", window.location.href); Removed for clean up.
 
   // Prevent duplicate injection
   if (window.websocketProxyInjected) {
-    // console.log("⚠️ WebSocket DevTool already injected, skipping"); Removed for clean up.
+    // console.log("⚠️ WebSocket DevTools already injected, skipping"); Removed for clean up.
     return;
   }
 
   // Immediately set flag
   window.websocketProxyInjected = true;
-  // console.log("✅ WebSocket DevTool injection started"); Removed for clean up.
+  // console.log("✅ WebSocket DevTools injection started"); Removed for clean up.
 
   // Save original WebSocket constructor
   const OriginalWebSocket = window.WebSocket;
@@ -840,7 +840,7 @@
     },
   };
 
-  // console.log("🏁 WebSocket DevTool injection complete"); Removed for clean up.
+  // console.log("🏁 WebSocket DevTools injection complete"); Removed for clean up.
   // console.log("🔍 Final WebSocket:", window.WebSocket); Removed for clean up.
   // console.log(
   //   "🧪 Injection verification:",
