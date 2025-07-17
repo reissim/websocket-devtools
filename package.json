@@ -32,13 +32,13 @@
     "url": "https://github.com/law-chain-hot"
   },
   "license": "MIT",
-  "homepage": "https://github.com/law-chain-hot/WebSocket-DevTool#readme",
+  "homepage": "https://github.com/law-chain-hot/websocket-devtools#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/law-chain-hot/WebSocket-DevTool.git"
+    "url": "git+https://github.com/law-chain-hot/websocket-devtools.git"
   },
   "bugs": {
-    "url": "https://github.com/law-chain-hot/WebSocket-DevTool/issues"
+    "url": "https://github.com/law-chain-hot/websocket-devtools/issues"
   },
   "packageManager": "pnpm@10.5.2",
   "engines": {

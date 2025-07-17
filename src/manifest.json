@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Professional WebSocket debugging tool with real-time monitoring, message simulation, and traffic interception",
   "author": "Brian Luo",
-  "homepage_url": "https://github.com/law-chain-hot/WebSocket-DevTool",
+  "homepage_url": "https://github.com/law-chain-hot/websocket-devtools",
 
   "permissions": [
     "debugger", 
