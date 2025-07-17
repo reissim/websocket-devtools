@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Chrome Extension V3 WebSocket proxy tool for monitoring, intercepting, and modifying WebSocket messages. The extension provides a DevTools panel for real-time WebSocket debugging with message simulation capabilities.
+This is a Chrome Extension V3 WebSocket DevTool tool for monitoring, intercepting, and modifying WebSocket messages. The extension provides a DevTools panel for real-time WebSocket debugging with message simulation capabilities.
 
 ## Build and Development Commands
 
@@ -88,11 +88,11 @@ Key message types handled by the extension:
 ### Adding New Features
 1. **UI Components**: Add to `src/components/` with corresponding CSS in `src/styles/`
 2. **Message Handling**: Extend message types in `background.js` message listener
-3. **WebSocket Events**: Add new event types in `injected.js` WebSocket proxy
+3. **WebSocket Events**: Add new event types in `injected.js` WebSocket DevTool
 4. **State Management**: Use React hooks pattern established in `panel.jsx`
 
-### WebSocket Proxy Extension
-The WebSocket proxy in `injected.js` can be extended to:
+### WebSocket DevTool Extension
+The WebSocket DevTool in `injected.js` can be extended to:
 - Add new WebSocket event listeners
 - Implement custom message filtering
 - Add new simulation capabilities

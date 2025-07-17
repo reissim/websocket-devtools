@@ -251,7 +251,7 @@ chrome.runtime.onConnect.addListener((port) => {
     port.onDisconnect.addListener(() => {
       if (tabId) {
         // Send a reset message to the content script of the disconnected tab
-        // This will revert the WebSocket proxy for that tab
+        // This will revert the WebSocket DevTool for that tab
         chrome.tabs.sendMessage(tabId, {
           type: "reset-proxy-state",
         }).catch(() => {

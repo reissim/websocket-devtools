@@ -1,7 +1,7 @@
 {
-  "name": "websocket-proxy-extension",
+  "name": "websocket-devtool",
   "version": "1.0.0",
-  "description": "WebSocket proxy tool for monitoring, intercepting, and modifying WebSocket messages",
+  "description": "WebSocket DevTool - Monitor, simulate, proxy, block and bookmark WebSocket messages with advanced debugging capabilities",
   "type": "module",
   "main": "index.js",
   "scripts": {

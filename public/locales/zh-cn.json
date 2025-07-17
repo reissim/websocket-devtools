@@ -223,7 +223,7 @@
   "common.paste": "粘贴",
   "common.cut": "剪切",
   "common.selectAll": "全选",
-  "popup.title": "WebSocket 代理",
+  "popup.title": "WebSocket DevTool",
   "popup.enableExtension": "启用扩展",
   "popup.status.enabled": "已启用",
   "popup.status.disabled": "已禁用",
