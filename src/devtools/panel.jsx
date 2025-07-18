@@ -7,6 +7,7 @@ import WebSocketList from "../components/WebSocketList.jsx";
 import MessageDetails from "../components/MessageDetails.jsx";
 import FloatingSimulate from "../components/FloatingSimulate.jsx";
 import LanguageSelector from "../components/LanguageSelector.jsx";
+import ExtensionIcon from "../Icons/ExtensionIcon.jsx";
 import { t, addLanguageChangeListener, getCurrentLanguage, initForPanel } from "../utils/i18n.js";
 import i18n from "../utils/i18n.js";
 import "../styles/main.css";
@@ -440,6 +441,32 @@ const WebSocketPanel = () => {
           </div>
           <div className="panel-status">
             <LanguageSelector />
+            <button 
+              className="extension-icon-panel"
+              onClick={() => {
+                chrome.tabs.create({ url: "https://github.com/law-chain-hot/websocket-devtools" });
+              }}
+              style={{
+                marginLeft: '8px',
+                padding: '2px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.3s ease',
+                border: '0px solid rgba(148, 163, 184, 0.2)',
+                background: 'rgba(71, 85, 105, 0.1)',
+                outline: 'none',
+              }}
+            >
+              <ExtensionIcon 
+                size={20}
+                // backgroundColor="rgba(71, 85, 105, 0.6)"
+                // primaryColor="#10b981"
+                // accentColor="#fbbf24"
+                // secondaryColor="#047857"
+              />
+            </button>
           </div>
         </div>
 
