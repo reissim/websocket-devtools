@@ -287,7 +287,7 @@ function showDevToolsHint() {
       
       <!-- Action buttons -->
       <div style="display: flex; justify-content: flex-end; gap: 10px;">
-        <button class="ws-hint-button" onclick="this.parentElement.parentElement.parentElement.classList.add('ws-hint-closing')">
+        <button class="ws-hint-button">
           Got it!
         </button>
       </div>
@@ -356,16 +356,16 @@ function showDevToolsHint() {
       }
       
       .ws-hint-button {
-        background: #10b981;
-        color: #ffffff;
-        border: 1px solid #059669;
+        background: #047857;
+        color: #e5e7eb;
+        border: 1px solid #065f46;
         padding: 12px 24px;
         border-radius: 10px;
         cursor: pointer;
         font-size: 14px;
         font-weight: 600;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        box-shadow: 0 2px 6px rgba(4, 120, 87, 0.2);
         backdrop-filter: blur(10px);
         font-family: inherit;
         outline: none !important;
@@ -373,19 +373,17 @@ function showDevToolsHint() {
       
       .ws-hint-button:hover {
         background: #059669 !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5) !important;
+        box-shadow: 0 3px 8px rgba(5, 150, 105, 0.25) !important;
         border-color: #047857 !important;
       }
       
       .ws-hint-button:active {
-        transform: translateY(0px) !important;
-        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4) !important;
+        box-shadow: 0 1px 4px rgba(4, 120, 87, 0.3) !important;
       }
       
       .ws-hint-button:focus {
         outline: none !important;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4), 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+        box-shadow: 0 2px 6px rgba(4, 120, 87, 0.2), 0 0 0 2px rgba(16, 185, 129, 0.15) !important;
       }
       
       .ws-devtools-hint * {
@@ -404,15 +402,7 @@ function showDevToolsHint() {
   // Enhanced close functionality
   const closeHint = () => {
     if (hint.parentElement) {
-      const hintDiv = hint.querySelector('.ws-devtools-hint');
-      if (hintDiv) {
-        hintDiv.classList.add('ws-hint-closing');
-        setTimeout(() => {
-          hint.remove();
-        }, 400);
-      } else {
-        hint.remove();
-      }
+      hint.remove();
     }
   };
 
@@ -422,6 +412,6 @@ function showDevToolsHint() {
     button.onclick = closeHint;
   }
 
-  // 8秒后自动消失，使用增强的关闭动画
+  // 8秒后自动消失
   setTimeout(closeHint, 8000);
 }
