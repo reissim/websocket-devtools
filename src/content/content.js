@@ -198,89 +198,230 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 function showDevToolsHint() {
   const hint = document.createElement("div");
   hint.innerHTML = `
-    <div style="
+    <div class="ws-devtools-hint" style="
       position: fixed;
       top: 20px;
       right: 20px;
-      background: #0f172a;
+      background: linear-gradient(135deg,rgb(20, 28, 40) 0%,rgb(37, 48, 62) 50%,rgb(49, 59, 73) 100%);
       color: #f1f5f9;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3), 0 4px 10px rgba(0,0,0,0.2);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 8px 16px rgba(0,0,0,0.3);
       z-index: 10000;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 14px;
-      max-width: 320px;
-      border: 1px solid #334155;
-      backdrop-filter: blur(10px);
-      animation: slideIn 0.3s ease-out;
+      max-width: 360px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      backdrop-filter: blur(20px);
+      animation: slideInBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-origin: right center;
     ">
+      <!-- Header with icon -->
       <div style="
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-weight: 600;
-        margin-bottom: 16px;
-        color: #3b82f6;
+        gap: 12px;
+        margin-bottom: 20px;
       ">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M16 12l-4-4-4 4"/>
-        </svg>
-        WebSocket DevTools
+        <div style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          background: rgba(16, 185, 129, 0.15);
+          border-radius: 10px;
+          border: 1px solid rgba(16, 185, 129, 0.3);
+        ">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div>
+          <div style="
+            font-weight: 700;
+            font-size: 16px;
+            color: #f1f5f9;
+            margin-bottom: 2px;
+          ">WebSocket DevTools</div>
+          <div style="
+            font-size: 12px;
+            color: rgba(241, 245, 249, 0.7);
+          ">Ready to monitor</div>
+        </div>
       </div>
       
-      <div style="margin-bottom: 16px; line-height: 1.5;">
-        <div style="margin-bottom: 8px;">Press <strong style="color: #10b981;">F12</strong> to open DevTools</div>
-        <div style="color: #94a3b8; font-size: 13px;">Find <strong>"WebSocket DevTools"</strong> tab to start monitoring</div>
-      </div>
-      
-      <div style="display: flex; justify-content: flex-end; gap: 8px;">
-        <button onclick="this.parentElement.parentElement.remove()" style="
-          background: #3b82f6;
-          color: white;
-          border: none;
-          padding: 8px 16px;
-          border-radius: 8px;
-          cursor: pointer;
+      <!-- Instructions -->
+      <div style="
+        margin-bottom: 20px;
+        line-height: 1.5;
+        background: rgba(71, 85, 105, 0.3);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      ">
+        <div style="
+          margin-bottom: 12px;
+          font-size: 15px;
+          font-weight: 600;
+          color: #f1f5f9;
+        ">
+          Press <span style="
+            background: #10b981;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+          ">F12</span> to open DevTools
+        </div>
+        <div style="
+          color: rgba(203, 213, 225, 0.8);
           font-size: 13px;
-          font-weight: 500;
-          transition: all 0.2s ease;
-          box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-        " onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
-          Got it
+          line-height: 1.4;
+        ">
+          Look for the <strong style="color: #10b981;">WebSocket DevTools</strong> tab to start monitoring connections
+        </div>
+      </div>
+      
+      <!-- Action buttons -->
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="ws-hint-button" onclick="this.parentElement.parentElement.parentElement.classList.add('ws-hint-closing')">
+          Got it!
         </button>
       </div>
     </div>
     
     <style>
-      @keyframes slideIn {
-        from {
-          transform: translateX(100%);
+      @keyframes slideInBounce {
+        0% {
+          transform: translateX(120%) scale(0.8);
           opacity: 0;
         }
-        to {
-          transform: translateX(0);
+        60% {
+          transform: translateX(-10px) scale(1.05);
           opacity: 1;
         }
+        100% {
+          transform: translateX(0) scale(1);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes slideOutBounce {
+        0% {
+          transform: translateX(0) scale(1);
+          opacity: 1;
+        }
+        40% {
+          transform: translateX(-10px) scale(1.02);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateX(120%) scale(0.9);
+          opacity: 0;
+        }
+      }
+      
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-2px);
+        }
+      }
+      
+      .ws-devtools-hint {
+        position: relative;
+      }
+      
+      .ws-devtools-hint::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(35deg, #50ae8e, #000604, #9a7413, #000000));
+        border-radius: 18px;
+        z-index: -1;
+        opacity: 0.3;
+        animation: float 3s ease-in-out infinite;
+      }
+      
+      .ws-hint-closing {
+        animation: slideOutBounce 0.4s ease-in-out forwards !important;
+      }
+      
+      .ws-hint-button {
+        background: #10b981;
+        color: #ffffff;
+        border: 1px solid #059669;
+        padding: 12px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        backdrop-filter: blur(10px);
+        font-family: inherit;
+        outline: none !important;
+      }
+      
+      .ws-hint-button:hover {
+        background: #059669 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5) !important;
+        border-color: #047857 !important;
+      }
+      
+      .ws-hint-button:active {
+        transform: translateY(0px) !important;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4) !important;
+      }
+      
+      .ws-hint-button:focus {
+        outline: none !important;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4), 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+      }
+      
+      .ws-devtools-hint * {
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+      
+      .ws-devtools-hint *:focus {
+        outline: none !important;
       }
     </style>
   `;
 
   document.body.appendChild(hint);
 
-  // 8秒后自动消失，增加动画效果
-  setTimeout(() => {
+  // Enhanced close functionality
+  const closeHint = () => {
     if (hint.parentElement) {
-      const hintDiv = hint.querySelector('div');
+      const hintDiv = hint.querySelector('.ws-devtools-hint');
       if (hintDiv) {
-        hintDiv.style.animation = 'slideIn 0.3s ease-out reverse';
+        hintDiv.classList.add('ws-hint-closing');
         setTimeout(() => {
           hint.remove();
-        }, 300);
+        }, 400);
       } else {
         hint.remove();
       }
     }
-  }, 8000);
+  };
+
+  // Update button click handler to use the new close function
+  const button = hint.querySelector('button');
+  if (button) {
+    button.onclick = closeHint;
+  }
+
+  // 8秒后自动消失，使用增强的关闭动画
+  setTimeout(closeHint, 8000);
 }
