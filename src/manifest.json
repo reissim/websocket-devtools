@@ -6,6 +6,13 @@
   "author": "Brian Luo",
   "homepage_url": "https://github.com/law-chain-hot/websocket-devtools",
 
+  "icons": {
+    "16": "icons/icon.png",
+    "32": "icons/icon.png",
+    "48": "icons/icon.png",
+    "128": "icons/icon.png"
+  },
+
   "permissions": [
     "debugger", 
     "activeTab", 
@@ -32,14 +39,20 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["src/content/injected.js", "locales/*.json"],
+      "resources": ["src/content/injected.js", "locales/*.json", "icons/**/*"],
       "matches": ["http://*/*", "https://*/*"]
     }
   ],
 
   "action": {
     "default_title": "WebSocket Proxy Pro - Monitor & Debug WebSocket Connections",
-    "default_popup": "src/popup/popup.html"
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon.png",
+      "32": "icons/icon.png",
+      "48": "icons/icon.png",
+      "128": "icons/icon.png"
+    }
   },
 
   "minimum_chrome_version": "88",
