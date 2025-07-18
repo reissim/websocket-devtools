@@ -117,6 +117,11 @@ const SimulateMessagePanel = forwardRef(
           if (eventData?.type === "add" && eventData?.switchToFavoritesTab) {
             setActiveTab("favorites");
           }
+          
+          // Handle navigation to favorites tab
+          if (eventData?.type === "navigate_to_favorites" && eventData?.switchToFavoritesTab) {
+            setActiveTab("favorites");
+          }
         }
       );
 

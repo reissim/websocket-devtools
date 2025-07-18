@@ -20,6 +20,11 @@ class FavoritesService {
     }
   }
 
+  // Get favorites count
+  getFavoritesCount() {
+    return this.getFavorites().length;
+  }
+
   // Save favorites to localStorage
   saveFavorites(favorites) {
     try {
@@ -55,6 +60,23 @@ class FavoritesService {
       return null;
     }
 
+    const currentFavorites = this.getFavorites();
+    
+    // Always switch to favorites tab regardless of limit
+    if (switchToFavoritesTab) {
+      this.notifyListeners(currentFavorites, { 
+        type: "navigate_to_favorites", 
+        switchToFavoritesTab: true 
+      });
+    }
+
+    // Check favorites limit (maximum 10) - this is the final interception point
+    if (currentFavorites.length >= 10) {
+      // Trigger limit exceeded notification but don't save
+      this.notifyListeners(currentFavorites, { type: "limit_exceeded", count: currentFavorites.length });
+      return { error: 'LIMIT_EXCEEDED', message: 'Maximum 10 favorites allowed' };
+    }
+
     const newFavorite = {
       id: Date.now().toString(),
       name: name.trim(),
@@ -70,7 +92,6 @@ class FavoritesService {
     //   nameLength: newFavorite.name.length,
     // }); Removed for clean up.
 
-    const currentFavorites = this.getFavorites();
     const newFavorites = [newFavorite, ...currentFavorites];
 
     if (this.saveFavorites(newFavorites)) {

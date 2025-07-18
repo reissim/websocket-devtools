@@ -352,6 +352,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
   const [searchText, setSearchText] = useState("");
   const [selectedFavoriteId, setSelectedFavoriteId] = useState(null);
   const [editingFavoriteId, setEditingFavoriteId] = useState(null);
+  const [showLimitTooltip, setShowLimitTooltip] = useState(false);
 
   // Optimization: cache stable event handlers to avoid re-creating on every render
   const stableHandlers = useMemo(() => {
@@ -449,6 +450,12 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
           setEditingFavoriteId(eventData.favorite.id);
           setSelectedFavoriteId(null);
         }
+
+        // Handle limit exceeded event
+        if (eventData?.type === "limit_exceeded") {
+          setShowLimitTooltip(true);
+          setTimeout(() => setShowLimitTooltip(false), 3000); // Auto hide after 3 seconds
+        }
       }
     );
 
@@ -466,15 +473,13 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
 
   // Optimize event handlers using useCallback
   const handleAddFavorite = useCallback((initialData = null) => {
-    const newFavorite = favoritesService.addFavorite(initialData || {}, {
+    const result = favoritesService.addFavorite(initialData || {}, {
       autoEdit: true,
       switchToFavoritesTab: false, // Controlled by external
     });
 
-    if (newFavorite) {
-      setEditingFavoriteId(newFavorite.id);
-      setSelectedFavoriteId(null);
-    }
+    // Success case is handled by the listener, error cases are handled by the listener too
+    // This keeps the component simple and lets the service handle all logic
   }, []);
 
   const clearSearch = useCallback(() => setSearchText(""), []);
@@ -494,29 +499,42 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
     <div className="favorites-tab">
       {/* Search and Add Controls */}
       <div className="favorites-controls">
-        <div className="search-container">
-          <TextInput
-            placeholder={t("favorites.placeholders.search")}
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            leftSection={<Search size={16} />}
-            rightSection={
-              searchText && (
-                <ActionIcon variant="subtle" size="sm" onClick={clearSearch}>
-                  <X size={16} />
-                </ActionIcon>
-              )
-            }
-            className="search-input"
-          />
+        {/* Usage count display - separate line */}
+        {favorites.length > 0 && (
+          <div className="favorites-usage-count">
+            {t("favorites.limit.usage", { count: favorites.length })}
+            {showLimitTooltip && (
+              <span className="limit-message"> - {t("favorites.limit.exceeded.message")}</span>
+            )}
+          </div>
+        )}
+        
+        {/* Search and Add button - same line */}
+        <div className="search-and-add-container">
+          <div className="search-container">
+            <TextInput
+              placeholder={t("favorites.placeholders.search")}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              leftSection={<Search size={16} />}
+              rightSection={
+                searchText && (
+                  <ActionIcon variant="subtle" size="sm" onClick={clearSearch}>
+                    <X size={16} />
+                  </ActionIcon>
+                )
+              }
+              className="search-input"
+            />
+          </div>
+          <Button
+            leftSection={<Plus size={16} />}
+            onClick={() => handleAddFavorite()}
+            className="add-favorite-btn"
+          >
+            {t("favorites.add")}
+          </Button>
         </div>
-        <Button
-          leftSection={<Plus size={16} />}
-          onClick={() => handleAddFavorite()}
-          className="add-favorite-btn"
-        >
-          {t("favorites.add")}
-        </Button>
       </div>
 
       {/* Favorites List */}
