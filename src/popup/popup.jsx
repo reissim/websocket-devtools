@@ -101,7 +101,8 @@ const Popup = () => {
             <div style={styles.statusBadge}>
               <div style={{
                 ...styles.statusDot,
-                backgroundColor: isEnabled ? "#fbbf24" : "#ef4444"
+                backgroundColor: isEnabled ? "#fbbf24" : "#ef4444",
+                boxShadow: isEnabled ? "0 0 8px rgba(251, 191, 36, 0.6)" : "0 0 8px rgba(239, 68, 68, 0.6)"
               }} />
               <span style={styles.statusText}>
                 {isEnabled ? t("popup.status.enabled") : t("popup.status.disabled")}
@@ -134,7 +135,7 @@ const Popup = () => {
             <div
               style={{
                 ...styles.switchThumb,
-                transform: isEnabled ? "translateX(28px)" : "translateX(2px)",
+                transform: isEnabled ? "translateX(24px)" : "translateX(-4px)",
                 backgroundColor: isEnabled ? "#ffffff" : "#f3f4f6",
               }}
             />
@@ -145,18 +146,9 @@ const Popup = () => {
       {/* Action buttons */}
       <div style={styles.actionSection}>
         <button 
+          className="primary-button" 
           style={styles.primaryButton} 
           onClick={handleOpenDevTools}
-          onMouseEnter={(e) => {
-            e.target.style.background = "rgba(16, 185, 129, 0.25)";
-            e.target.style.transform = "translateY(-2px)";
-            e.target.style.boxShadow = "0 6px 20px rgba(0, 0, 0, 0.25)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = "rgba(16, 185, 129, 0.15)";
-            e.target.style.transform = "translateY(0px)";
-            e.target.style.boxShadow = "0 4px 16px rgba(0, 0, 0, 0.2)";
-          }}
         >
           <div style={styles.buttonIcon}>
             <MonitorSpeaker size={20} />
@@ -171,15 +163,8 @@ const Popup = () => {
       {/* Feature highlights */}
       <div style={styles.featuresGrid}>
         <div 
+          className="feature-card"
           style={styles.featureCard}
-          onMouseEnter={(e) => {
-            e.target.style.background = "rgba(71, 85, 105, 0.4)";
-            e.target.style.transform = "translateY(-2px)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = "rgba(71, 85, 105, 0.3)";
-            e.target.style.transform = "translateY(0px)";
-          }}
         >
           <div style={styles.featureIcon}>
             <SquareActivity size={16} />
@@ -190,15 +175,8 @@ const Popup = () => {
           </div>
         </div>
         <div 
+          className="feature-card"
           style={styles.featureCard}
-          onMouseEnter={(e) => {
-            e.target.style.background = "rgba(71, 85, 105, 0.4)";
-            e.target.style.transform = "translateY(-2px)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = "rgba(71, 85, 105, 0.3)";
-            e.target.style.transform = "translateY(0px)";
-          }}
         >
           <div style={styles.featureIcon}>
             <Send size={16} />
@@ -209,15 +187,8 @@ const Popup = () => {
           </div>
         </div>
         <div 
+          className="feature-card feature-card-with-bg"
           style={styles.featureCard}
-          onMouseEnter={(e) => {
-            e.target.style.background = "rgba(71, 85, 105, 0.4)";
-            e.target.style.transform = "translateY(-2px)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = "rgba(71, 85, 105, 0.3)";
-            e.target.style.transform = "translateY(0px)";
-          }}
         >
           <div style={styles.featureIcon}>
             <Ban size={16} />
@@ -235,15 +206,8 @@ const Popup = () => {
         <a 
           href="https://github.com/BrianLuo/websocket-proxy-pro" 
           target="_blank" 
+          className="github-link"
           style={styles.githubLink}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = "rgba(16, 185, 129, 0.2)";
-            e.target.style.transform = "scale(1.1)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "rgba(71, 85, 105, 0.4)";
-            e.target.style.transform = "scale(1)";
-          }}
           onClick={(e) => {
             e.preventDefault();
             chrome.tabs.create({ url: "https://github.com/BrianLuo/websocket-proxy-pro" });
@@ -385,7 +349,6 @@ const styles = {
     height: "8px",
     borderRadius: "50%",
     animation: "pulse 2s infinite",
-    boxShadow: "0 0 8px rgba(251, 191, 36, 0.6)",
   },
   statusText: {
     color: "rgba(241, 245, 249, 0.8)",
@@ -515,10 +478,10 @@ const styles = {
     border: "1px solid rgba(148, 163, 184, 0.2)",
     textAlign: "center",
     transition: "all 0.3s ease",
-    cursor: "pointer",
+    // cursor: "pointer",
     ':hover': {
       background: "rgba(71, 85, 105, 0.4)",
-      transform: "translateY(-2px)",
+      // transform: "translateY(-2px)",
     },
   },
   featureIcon: {
@@ -587,6 +550,29 @@ const styles = {
     fontWeight: "500",
   },
 };
+
+// 注入CSS样式
+const style = document.createElement('style');
+style.textContent = `
+  .primary-button:hover {
+    background: rgba(16, 185, 129, 0.25) !important;
+    transform: translateY(-2px) !important;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-2px) !important;
+  }
+  
+  .feature-card-with-bg:hover {
+    background: rgba(71, 85, 105, 0.4) !important;
+  }
+  
+  .github-link:hover {
+    background-color: rgba(16, 185, 129, 0.2) !important;
+    transform: scale(1.1) !important;
+  }
+`;
+document.head.appendChild(style);
 
 // 渲染到DOM
 const container = document.getElementById("popup-root");

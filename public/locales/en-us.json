@@ -230,7 +230,7 @@
   "popup.status.activeOnNewPages": "Active on new pages",
   "popup.status.disabledOnNewPages": "Disabled on new pages",
   "popup.openDevTools": "Open DevTools Panel",
-  "popup.devToolsHint": "Press F12 → Find \"WebSocket Monitor\" tab",
+  "popup.devToolsHint": "Press F12 → Find \"WebSocket DevTools\" tab",
   "popup.infoCard.title": "WebSocket DevTools",
   "popup.infoCard.description": "Monitor and debug WebSocket connections",
   "popup.status": "Status",
