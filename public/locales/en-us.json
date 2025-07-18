@@ -99,6 +99,8 @@
   "favorites.tooltips.toggleExpand": "Toggle Expand",
   "favorites.tooltips.simulateReceive": "Simulate Receive",
   "favorites.tooltips.simulateSend": "Simulate Send",
+  "favorites.limit.usage": "{{count}}/10 favorites used",
+  "favorites.limit.exceeded.message": "You can save up to 10 favorite messages",
   "system.title": "System Events",
   "system.description": "Simulate WebSocket system events and states",
   "system.tabs.client": "Client Events",

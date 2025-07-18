@@ -10,16 +10,21 @@
   color: var(--text-primary);
 }
 
-/* 控制区域 - 现代化设计 */
 .favorites-controls {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 8px;
   padding: 12px 16px;
   background: var(--bg-secondary);
   border-bottom: 0px solid var(--border-color);
   position: relative;
   border-radius: 8px;
+}
+
+.search-and-add-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .search-container {
@@ -123,6 +128,7 @@
   box-shadow: 0 1px 3px rgba(255, 215, 0, 0.3);
 }
 
+
 .add-favorite-btn .mantine-Button-inner {
   gap: 8px !important;
   display: flex !important;
@@ -139,6 +145,10 @@
 @media (max-width: 768px) {
   .favorites-controls {
     padding: 10px 12px;
+    gap: 6px;
+  }
+  
+  .search-and-add-container {
     gap: 8px;
   }
   
@@ -155,11 +165,26 @@
   }
 }
 
-/* 收藏列表区域 */
+.favorites-usage-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 0 4px;
+  opacity: 0.7;
+}
+
+.limit-message {
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+.add-favorite-btn.mantine-Button-root {
+  align-self: flex-start;
+  margin-top: 0;
+}
+
 .favorites-list {
   flex: 1;
   overflow-y: auto;
-  /* 为滚动条留出空间：左边16px，右边8px（内容空间）+ 6px（滚动条）+ 4px（额外间距）= 18px */
   padding: 16px 18px 16px 16px;
 }
 
@@ -170,7 +195,6 @@
 
 .favorites-list::-webkit-scrollbar {
   width: 6px;
-  /* 移除position: absolute，让滚动条占用正常空间 */
 }
 
 .favorites-list::-webkit-scrollbar-track {
@@ -560,19 +584,19 @@
   animation: fadeIn 0.3s ease-out;
 }
 
-/* 响应式设计 */
+
 @media (max-width: 768px) {
   .favorites-tab {
     padding: 12px;
   }
 
   .favorites-controls {
-    flex-direction: column;
+    padding: 10px 12px;
     gap: 8px;
   }
 
   .search-container {
-    width: 100%;
+    flex: 1;
   }
 
   .favorite-item-content {
@@ -593,10 +617,8 @@
     max-width: none;
   }
 
-  /* 移除了过时的.edit-json-editor样式 */
 }
 
-/* 选中状态特殊样式 */
 .favorite-item.selected .favorite-item-name {
   color: var(--text-primary);
   font-weight: 700;
@@ -606,12 +628,10 @@
   opacity: 1;
 }
 
-/* 编辑状态下禁用悬停效果 */
 .favorite-item.editing .favorite-item-actions {
   opacity: 1;
 }
 
-/* 悬停状态优化 */
 .favorite-item:hover .favorite-item-actions {
   opacity: 1;
 }
@@ -620,40 +640,30 @@
   opacity: 1;
 }
 
-/* ===========================================
-   JSON Editor 统一布局设计
-   =========================================== */
 
-/* 编辑状态下的JSON编辑器容器 */
 .favorite-item-editor {
   border-top: 1px solid var(--border-color);
   background: var(--bg-primary);
   padding: 16px;
   
-  /* 设置固定高度 */
   height: 280px;
-  
-  /* 不要滚动条，让内部处理 */
+    
   overflow: visible;
 }
 
-/* 编辑器内部的JsonViewer容器 */
 .edit-data-editor {
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   background: var(--bg-secondary);
   
-  /* 填满父容器，不滚动 */
   height: 100%;
   min-height: 80px;
   overflow: visible;
   
-  /* 使用flex布局，让控制栏固定，内容区域滚动 */
   display: flex;
   flex-direction: column;
 }
 
-/* 编辑器内部的json-viewer组件 */
 .edit-data-editor .json-viewer {
   height: 100%;
   min-height: 80px;
@@ -661,21 +671,17 @@
   flex-direction: column;
 }
 
-/* 编辑器内部的控制栏固定 */
 .edit-data-editor .json-viewer-controls {
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-color);
 }
 
-/* 编辑器内部的json-viewer-container处理滚动 */
 .edit-data-editor .json-viewer-container {
   flex: 1;
   min-height: 0;
   
-  /* 启用完整的滚动机制 */
   overflow: auto;
   
-  /* 滚动条样式 */
   scrollbar-width: thin;
   scrollbar-color: var(--text-muted) transparent;
 }
@@ -700,7 +706,6 @@
   opacity: 0.8;
 }
 
-/* 编辑器内部的CodeMirror */
 .edit-data-editor .cm-editor {
   background: var(--bg-secondary) !important;
   height: 100%;
@@ -709,14 +714,13 @@
 
 .edit-data-editor .cm-content {
   padding: 12px !important;
-  min-height: 68px; /* 减去padding后的最小高度 */
+  min-height: 68px;
 }
 
 .edit-data-editor .cm-scroller {
   overflow: auto !important;
 }
 
-/* 编辑器样式增强 */
 .edit-data-editor .cm-gutters {
   background: var(--bg-tertiary) !important;
   border-right: 1px solid var(--border-color) !important;
@@ -731,36 +735,29 @@
   box-shadow: 0 0 0 2px var(--accent-transparent-color);
 }
 
-/* 非编辑状态下的展开内容区域 */
 .favorite-item-expanded {
   border-top: 1px solid var(--border-color);
   background: var(--bg-primary);
   padding: 16px;
   
-  /* 设置固定高度 */
   height: 280px;
   
-  /* 不要滚动条，让内部处理 */
   overflow: visible;
 }
 
-/* 展开内容的JsonViewer容器 */
 .favorite-data-viewer {
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   background: var(--bg-secondary);
   
-  /* 填满父容器，不滚动 */
   height: 100%;
   min-height: 80px;
   overflow: visible;
   
-  /* 使用flex布局，让控制栏固定，内容区域滚动 */
   display: flex;
   flex-direction: column;
 }
 
-/* 展开内容的json-viewer组件 */
 .favorite-data-viewer .json-viewer {
   height: 100%;
   min-height: 80px;
@@ -768,21 +765,17 @@
   flex-direction: column;
 }
 
-/* 展开内容的控制栏固定 */
 .favorite-data-viewer .json-viewer-controls {
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-color);
 }
 
-/* 展开内容的json-viewer-container处理滚动 */
 .favorite-data-viewer .json-viewer-container {
   flex: 1;
   min-height: 0;
   
-  /* 启用完整的滚动机制 */
   overflow: auto;
   
-  /* 滚动条样式 */
   scrollbar-width: thin;
   scrollbar-color: var(--text-muted) transparent;
 }
@@ -807,7 +800,6 @@
   opacity: 0.8;
 }
 
-/* 展开内容的CodeMirror */
 .favorite-data-viewer .cm-editor {
   background: var(--bg-secondary) !important;
   height: 100%;
@@ -816,14 +808,13 @@
 
 .favorite-data-viewer .cm-content {
   padding: 12px !important;
-  min-height: 68px; /* 减去padding后的最小高度 */
+  min-height: 68px;
 }
 
 .favorite-data-viewer .cm-scroller {
   overflow: auto !important;
 }
 
-/* 展开内容的样式增强 */
 .favorite-data-viewer .cm-gutters {
   background: var(--bg-tertiary) !important;
   border-right: 1px solid var(--border-color) !important;
@@ -838,15 +829,6 @@
   box-shadow: 0 0 0 2px var(--accent-transparent-color);
 }
 
-/* ===========================================
-   布局总结：
-   - 外层容器：固定高度，不滚动
-   - JsonViewer容器：Flex布局，不滚动
-   - 控制栏：固定，不滚动
-   - 内容区域：可滚动（XY轴）
-   =========================================== */
-
-/* 响应式设计优化 */
 @media (max-width: 768px) {
   .favorite-item-editor,
   .favorite-item-expanded {

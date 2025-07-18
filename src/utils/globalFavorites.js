@@ -52,7 +52,7 @@ class GlobalFavorites {
     //   "🌟 GlobalFavorites: calling favoritesService.addFavorite with name:",
     //   name
     // ); Removed for clean up.
-    const newFavorite = favoritesService.addFavorite(
+    const result = favoritesService.addFavorite(
       {
         name,
         data: messageData,
@@ -60,17 +60,18 @@ class GlobalFavorites {
       finalOptions
     );
 
-    if (newFavorite) {
+    if (result && result.id) {
       if (finalOptions.switchToFavoritesTab) {
         this.notifyTabSwitch();
       }
 
       if (finalOptions.showNotification) {
-        // console.log(`✅ Added to favorites: ${newFavorite.name || "Unnamed"}`); Removed for clean up.
+        // console.log(`✅ Added to favorites: ${result.name || "Unnamed"}`); Removed for clean up.
       }
     }
+    // Error cases (like LIMIT_EXCEEDED) are handled by the service's listener system
 
-    return newFavorite;
+    return result;
   }
 
   // Add favorite from message list (no auto tab switch, no auto edit)
