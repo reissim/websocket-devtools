@@ -1,5 +1,5 @@
 {
-  "app.title": "WebSocket 检查器",
+  "app.title": "WebSocket DevTools",
   "app.description": "监控和调试 WebSocket 连接",
   "monitor.status.active": "监控进行中",
   "monitor.status.inactive": "监控已停止",
@@ -8,7 +8,7 @@
   "monitor.actions.stop": "停止监控",
   "monitor.actions.pause": "暂停监控",
   "monitor.actions.resume": "恢复监控",
-  "panel.header.title": "WebSocket 检查器",
+  "panel.header.title": "WebSocket DevTools",
   "panel.header.status_active": "监控进行中",
   "panel.header.status_inactive": "监控已停止",
   "panel.header.block_send": "阻止发送",

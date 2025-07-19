@@ -1,5 +1,5 @@
 {
-  "app.title": "WebSocket Inspector",
+  "app.title": "WebSocket DevTools",
   "app.description": "Monitor and debug WebSocket connections",
   "monitor.status.active": "Monitoring Active",
   "monitor.status.inactive": "Monitoring Stopped",
@@ -8,7 +8,7 @@
   "monitor.actions.stop": "Stop Monitoring",
   "monitor.actions.pause": "Pause Monitoring",
   "monitor.actions.resume": "Resume Monitoring",
-  "panel.header.title": "WebSocket Inspector",
+  "panel.header.title": "WebSocket DevTools",
   "panel.header.status_active": "Monitoring Active",
   "panel.header.status_inactive": "Monitoring Stopped",
   "panel.header.block_send": "Block Send",
