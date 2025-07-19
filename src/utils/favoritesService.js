@@ -15,7 +15,6 @@ class FavoritesService {
       const saved = localStorage.getItem(this.storageKey);
       return saved ? JSON.parse(saved) : [];
     } catch (error) {
-      // console.error("Failed to load favorites:", error); Removed for clean up.
       return [];
     }
   }
@@ -32,7 +31,6 @@ class FavoritesService {
       this.notifyListeners(favorites);
       return true;
     } catch (error) {
-      // console.error("Failed to save favorites:", error); Removed for clean up.
       return false;
     }
   }
@@ -47,16 +45,8 @@ class FavoritesService {
       switchToFavoritesTab = true,
     } = { ...favoriteData, ...options };
 
-    // console.log("⭐ FavoritesService: Adding favorite with options:", {
-    //   name,
-    //   dataLength: data.length,
-    //   autoEdit,
-    //   switchToFavoritesTab,
-    // }); Removed for clean up.
-
     // Validate data
     if (!data || !data.trim()) {
-      // console.warn("Cannot add favorite: data is empty"); Removed for clean up.
       return null;
     }
 
@@ -86,7 +76,6 @@ class FavoritesService {
       updatedAt: new Date().toISOString(),
     };
 
-    // console.log("⭐ FavoritesService: Created favorite object:", {
     //   id: newFavorite.id,
     //   name: newFavorite.name,
     //   nameLength: newFavorite.name.length,
@@ -96,10 +85,6 @@ class FavoritesService {
 
     if (this.saveFavorites(newFavorites)) {
       // Optimization: use a longer debounce delay to reduce frequent notifications
-      // console.log(
-      //   "⭐ FavoritesService: Notifying listeners with autoEdit:",
-      //   autoEdit
-      // ); Removed for clean up.
       this.debouncedNotify(newFavorites, {
         type: "add",
         favorite: newFavorite,
@@ -119,7 +104,6 @@ class FavoritesService {
     const favoriteIndex = favorites.findIndex((fav) => fav.id === id);
 
     if (favoriteIndex === -1) {
-      // console.warn("Favorite not found:", id); Removed for clean up.
       return null;
     }
 
@@ -148,7 +132,6 @@ class FavoritesService {
     const favoriteToDelete = favorites.find((f) => f.id === id);
 
     if (!favoriteToDelete) {
-      // console.warn("Favorite not found:", id); Removed for clean up.
       return false;
     }
 
@@ -175,7 +158,6 @@ class FavoritesService {
   // Add listener
   addListener(listener) {
     if (typeof listener !== "function") {
-      // console.warn("Listener must be a function"); Removed for clean up.
       return () => {};
     }
 
@@ -202,7 +184,6 @@ class FavoritesService {
       try {
         listener(favorites, eventData);
       } catch (error) {
-        // console.error("Error in favorites listener:", error); Removed for clean up.
       }
     });
   }
@@ -218,7 +199,6 @@ class FavoritesService {
     // Check if similar favorite already exists
     const existingFavorite = this.findSimilarFavorite(messageData);
     if (existingFavorite) {
-      // console.log("Similar favorite already exists:", existingFavorite.name); Removed for clean up.
       return existingFavorite;
     }
 
@@ -269,7 +249,6 @@ class FavoritesService {
         return `${keys[0]} Data`;
       }
     } catch (error) {
-      // console.error("Error generating favorite name from JSON:", error); Removed for clean up.
     }
     return `Unnamed Message - ${Date.now().toString().slice(-4)}`;
   }

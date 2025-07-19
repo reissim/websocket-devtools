@@ -14,7 +14,6 @@
   },
 
   "permissions": [
-    "debugger", 
     "activeTab", 
     "scripting", 
     "storage"

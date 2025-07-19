@@ -3,23 +3,17 @@
   "use strict";
 
   // Immediately mark script as loaded
-  // console.log("🔧 WebSocket DevTools injected script STARTING..."); Removed for clean up.
-  // console.log("🔍 Current WebSocket:", window.WebSocket); Removed for clean up.
-  // console.log("🌍 Script context:", window.location.href); Removed for clean up.
 
   // Prevent duplicate injection
   if (window.websocketProxyInjected) {
-    // console.log("⚠️ WebSocket DevTools already injected, skipping"); Removed for clean up.
     return;
   }
 
   // Immediately set flag
   window.websocketProxyInjected = true;
-  // console.log("✅ WebSocket DevTools injection started"); Removed for clean up.
 
   // Save original WebSocket constructor
   const OriginalWebSocket = window.WebSocket;
-  // console.log("💾 Original WebSocket saved:", OriginalWebSocket); Removed for clean up.
 
   let connectionIdCounter = 0;
   const connections = new Map();
@@ -52,37 +46,27 @@
         "*"
       );
     } catch (error) {
-      // console.error("❌ Failed to send event:", error); Removed for clean up.
     }
   }
 
   // Handle simulated message
   function handleSimulateMessage(connectionId, message, direction) {
-    // console.log(`🎭 Handling simulate message for ${connectionId}:`, {
-    //   message,
-    //   direction,
-    // }); Removed for clean up.
-
     const connectionInfo = connections.get(connectionId);
     if (!connectionInfo) {
-      // console.error("❌ Connection not found:", connectionId); Removed for clean up.
       return;
     }
 
     const ws = connectionInfo.ws;
     if (!ws) {
-      // console.error("❌ WebSocket instance not found for:", connectionId); Removed for clean up.
       return;
     }
 
     try {
       if (direction === "outgoing") {
         // Simulate sending message - use original WebSocket to send, bypassing our interception
-        // console.log("📤 Simulating outgoing message (bypassing proxy)"); Removed for clean up.
 
         try {
           // Use saved original send method, so it won't trigger our interception logic
-          // console.log("🚀 Sending simulated message via original WebSocket send"); Removed for clean up.
           
           // Create original WebSocket instance, or directly use the saved original method
           // Using the original send method here should bypass our proxy
@@ -92,13 +76,10 @@
           // Note: This should not trigger our interception, as it's called on the original WebSocket
           connectionInfo.originalSend.call(ws, message);
           
-          // console.log("✅ Simulated outgoing message sent successfully"); Removed for clean up.
         } catch (error) {
-          // console.error("❌ Failed to send simulated message:", error); Removed for clean up.
         }
       } else if (direction === "incoming") {
         // Simulate receiving message - directly call user listeners, not through WebSocket event system
-        // console.log("📥 Simulating incoming message (bypassing proxy)"); Removed for clean up.
 
         // Create simulated event but not through WebSocket's event system
         const simulatedEvent = new MessageEvent("message", {
@@ -115,7 +96,6 @@
         simulatedEvent._isSimulated = true;
 
         try {
-          // console.log("🎯 Directly calling user handlers for simulated message"); Removed for clean up.
           
           // Directly call user's listeners, not through WebSocket event system
           // This completely bypasses our interceptor
@@ -124,7 +104,6 @@
             try {
               connectionInfo.userOnMessage.call(ws, simulatedEvent);
             } catch (error) {
-              // console.error("❌ Error in user onmessage handler:", error); Removed for clean up.
             }
           }
           
@@ -132,33 +111,26 @@
             try {
               listener.call(ws, simulatedEvent);
             } catch (error) {
-              // console.error("❌ Error in user event listener:", error); Removed for clean up.
             }
           });
           
-          // console.log("✅ Simulated incoming message processed successfully"); Removed for clean up.
         } catch (error) {
-          // console.error("❌ Failed to simulate incoming message:", error); Removed for clean up.
         }
       }
     } catch (error) {
-      // console.error("❌ Failed to simulate message:", error); Removed for clean up.
     }
   }
 
   // Handle simulated system event
   function handleSimulateSystemEvent(connectionId, eventData) {
-    // console.log(`🎭 Handling simulate system event for ${connectionId}:`, eventData); Removed for clean up.
 
     const connectionInfo = connections.get(connectionId);
     if (!connectionInfo) {
-      // console.error("❌ Connection not found:", connectionId); Removed for clean up.
       return;
     }
 
     const ws = connectionInfo.ws;
     if (!ws) {
-      // console.error("❌ WebSocket instance not found for:", connectionId); Removed for clean up.
       return;
     }
 
@@ -167,8 +139,6 @@
 
       switch (eventType) {
         case "client-close":
-          // console.log(`🔒 Simulating client-initiated close event by calling ws.close()`); Removed for clean up.
-          // console.log(`🔍 handleSimulateSystemEvent received code: ${eventData.code}, reason: ${eventData.reason}`); Removed for clean up.
           
           const requestedCode = eventData.code || 1000;
           const requestedReason = eventData.reason || "Simulated client-initiated close";
@@ -176,11 +146,8 @@
           // WebSocket.close() only allows close codes in the range 1000 or 3000-4999
           // 1001-2999 are reserved for the protocol and cannot be called manually
           if (requestedCode !== 1000 && (requestedCode < 3000 || requestedCode > 4999)) {
-            // console.warn(`⚠️ Close code ${requestedCode} is not allowed for client-initiated close. Using 1000 instead.`); Removed for clean up.
-            // console.warn(`💡 Tip: Client-close only supports 1000 or 3000-4999. Use server-close for other codes.`); Removed for clean up.
             
             // For unsupported close codes, use server-close simulation instead
-            // console.log(`🔄 Converting to server-close simulation for code ${requestedCode}`); Removed for clean up.
             
             // Create simulated CloseEvent
             const closeEvent = new CloseEvent("close", {
@@ -203,7 +170,6 @@
               try {
                 ws.onclose.call(ws, closeEvent);
               } catch (error) {
-                // console.error("❌ Error in user onclose handler:", error); Removed for clean up.
               }
             }
 
@@ -232,16 +198,12 @@
             // This will trigger the native WebSocket close handshake, and the browser will naturally emit a 'close' event,
             // which our proxy's 'close' event listener will capture and process.
             connectionInfo.originalClose.call(ws, requestedCode, requestedReason);
-            // console.log(`✅ ws.close() called successfully with code: ${requestedCode}, reason: "${requestedReason}"`); Removed for clean up.
           } catch (error) {
-            // console.error(`❌ Error calling ws.close():`, error); Removed for clean up.
-            // console.error(`❌ This should not happen for code ${requestedCode}`); Removed for clean up.
           }
 
           break;
 
         case "server-close":
-          // console.log(`🔒 Simulating ${eventType} event`); Removed for clean up.
           
           // Create simulated CloseEvent
           const closeEvent = new CloseEvent("close", {
@@ -264,7 +226,6 @@
             try {
               ws.onclose.call(ws, closeEvent);
             } catch (error) {
-              // console.error("❌ Error in user onclose handler:", error); Removed for clean up.
             }
           }
 
@@ -285,7 +246,6 @@
 
         case "client-error":
         case "server-error":
-          // console.log(`⚠️ Simulating ${eventType} event`); Removed for clean up.
           
           // Create simulated ErrorEvent
           const errorEvent = new ErrorEvent("error", {
@@ -308,7 +268,6 @@
             try {
               ws.onerror.call(ws, errorEvent);
             } catch (error) {
-              // console.error("❌ Error in user onerror handler:", error); Removed for clean up.
             }
           }
 
@@ -328,28 +287,22 @@
           break;
 
         default:
-          // console.warn("⚠️ Unknown system event type:", eventType); Removed for clean up.
           break;
       }
 
-      // console.log("✅ System event simulated successfully:", eventType); Removed for clean up.
     } catch (error) {
-      // console.error("❌ Failed to simulate system event:", error); Removed for clean up.
     }
   }
 
   // Create proxy WebSocket constructor
   function ProxiedWebSocket(url, protocols) {
-    // console.log("🚀 ProxiedWebSocket called with:", url, protocols); Removed for clean up.
 
     const connectionId = generateConnectionId();
     let ws;
 
     try {
       ws = new OriginalWebSocket(url, protocols);
-      // console.log("✅ WebSocket created with ID:", connectionId); Removed for clean up.
     } catch (error) {
-      // console.error("❌ Failed to create WebSocket:", error); Removed for clean up.
       throw error;
     }
 
@@ -371,7 +324,6 @@
     };
 
     connections.set(connectionId, connectionInfo);
-    // console.log("📊 Total connections:", connections.size); Removed for clean up.
 
     // Send connection event
     sendEvent({
@@ -387,18 +339,15 @@
     // 🔥 Critical fix: Immediately add our message listener, regardless of whether the user registers
     // This ensures we always intercept all messages, achieving true man-in-the-middle attack
     const ourMessageListener = function(event) {
-      // console.log("📨 [INTERCEPTED] WebSocket message:", connectionId, event.data); Removed for clean up.
       
       // Skip simulated message handling (simulated messages are managed directly by Panel)
       if (event._isSimulated) {
-        // console.log("🎭 Simulated message, forwarding to user handlers"); Removed for clean up.
         
         // Directly forward to user's listeners, ignoring any block settings
         if (connectionInfo.userOnMessage) {
           try {
             connectionInfo.userOnMessage.call(ws, event);
           } catch (error) {
-            // console.error("❌ Error in user onmessage handler:", error); Removed for clean up.
           }
         }
         
@@ -406,7 +355,6 @@
           try {
             listener.call(ws, event);
           } catch (error) {
-            // console.error("❌ Error in user event listener:", error); Removed for clean up.
           }
         });
         
@@ -415,7 +363,6 @@
 
       // Process real message - first check if blocking, then decide how to log
       if (proxyState.blockIncoming && proxyState.isMonitoring) {
-        // console.log("🚫 Incoming message BLOCKED by proxy:", connectionId); Removed for clean up.
 
         // Store blocked messages
         connectionInfo.blockedMessages.push({
@@ -464,7 +411,6 @@
         try {
           connectionInfo.userOnMessage.call(ws, event);
         } catch (error) {
-          // console.error("❌ Error in user onmessage handler:", error); Removed for clean up.
         }
       }
       
@@ -472,19 +418,16 @@
         try {
           listener.call(ws, event);
         } catch (error) {
-          // console.error("❌ Error in user event listener:", error); Removed for clean up.
         }
       });
     };
 
     // Listen with capture-phase to ensure we receive events first
     connectionInfo.originalAddEventListener("message", ourMessageListener, true);
-    // console.log("✅ [CRITICAL] Unconditional message interception installed for:", connectionId); Removed for clean up.
 
     // Intercept send method - add control logic
     const originalSend = ws.send.bind(ws);
     ws.send = function (data) {
-      // console.log("📡 WebSocket send intercepted:", connectionId, data); Removed for clean up.
 
       // Log send event
       const eventData = {
@@ -499,7 +442,6 @@
 
       // Check if sending should be blocked
       if (proxyState.blockOutgoing && proxyState.isMonitoring) {
-        // console.log("🚫 Message sending BLOCKED by proxy:", connectionId); Removed for clean up.
 
         // Add blocked flag
         eventData.blocked = true;
@@ -527,7 +469,6 @@
       try {
         return originalSend(data);
       } catch (error) {
-        // console.error("❌ Send failed:", error); Removed for clean up.
         throw error;
       }
     };
@@ -536,7 +477,6 @@
     const originalAddEventListener = ws.addEventListener.bind(ws);
     ws.addEventListener = function (type, listener, options) {
       if (type === "message" && listener) {
-        // console.log("🎯 User registered message listener for:", connectionId); Removed for clean up.
         // Store user's listeners, but do not register them directly to WebSocket
         connectionInfo.userEventListeners.push(listener);
         
@@ -551,7 +491,6 @@
     // Intercept removeEventListener
     ws.removeEventListener = function (type, listener, options) {
       if (type === "message" && listener) {
-        // console.log("🎯 User removing message listener for:", connectionId); Removed for clean up.
         // Remove from our list
         const index = connectionInfo.userEventListeners.indexOf(listener);
         if (index > -1) {
@@ -570,7 +509,6 @@
         return connectionInfo.userOnMessage;
       },
       set: function (handler) {
-        // console.log("🎯 User setting onmessage handler for:", connectionId); Removed for clean up.
         connectionInfo.userOnMessage = handler;
         // No other actions needed here, our interceptor will forward messages
       },
@@ -579,7 +517,6 @@
     // Listen for connection status changes
     ["open", "close", "error"].forEach((eventType) => {
       connectionInfo.originalAddEventListener(eventType, (event) => {
-        // console.log(`🔔 WebSocket ${eventType}:`, connectionId); Removed for clean up.
 
         // Update connection status
         if (eventType === "open") {
@@ -634,12 +571,6 @@
 
         if (eventType === "close") {
           connections.delete(connectionId);
-          // console.log(
-          //   "🗑️ Connection removed:",
-          //   connectionId,
-          //   "Remaining:",
-          //   connections.size
-          // ); Removed for clean up.
         }
       });
     });
@@ -671,9 +602,7 @@
     ProxiedWebSocket.CLOSING = OriginalWebSocket.CLOSING;
     ProxiedWebSocket.CLOSED = OriginalWebSocket.CLOSED;
 
-    // console.log("✅ WebSocket properties copied successfully"); Removed for clean up.
   } catch (error) {
-    // console.error("❌ Failed to copy WebSocket properties:", error); Removed for clean up.
   }
 
   // Replace global WebSocket!
@@ -684,28 +613,20 @@
       configurable: true,
     });
 
-    // console.log("✅ WebSocket replaced successfully"); Removed for clean up.
-    // console.log("🔍 New WebSocket:", window.WebSocket); Removed for clean up.
-    // console.log("🧪 Replacement test:", window.WebSocket === ProxiedWebSocket); Removed for clean up.
   } catch (error) {
-    // console.error("❌ Failed to replace WebSocket:", error); Removed for clean up.
     // Fallback
     try {
       window.WebSocket = ProxiedWebSocket;
-      // console.log("🔄 Fallback replacement successful"); Removed for clean up.
     } catch (fallbackError) {
-      // console.error("❌ Fallback replacement failed:", fallbackError); Removed for clean up.
     }
   }
 
   // Listen for control messages from content script
   window.addEventListener("message", (event) => {
     if (event.data && event.data.source === "websocket-proxy-content") {
-      // console.log("📥 [injected.js] Received control message from content script:", event.data); Removed for clean up.
 
       switch (event.data.type) {
         case "start-monitoring":
-          // console.log("🚀 Starting WebSocket monitoring..."); Removed for clean up.
           proxyState.isMonitoring = true;
           // Send state update
           sendEvent({
@@ -716,7 +637,6 @@
           break;
 
         case "stop-monitoring":
-          // console.log("⏹️ Stopping WebSocket monitoring..."); Removed for clean up.
           proxyState.isMonitoring = false;
           // // Send state update
           // sendEvent({
@@ -727,7 +647,6 @@
           break;
 
         case "block-outgoing":
-          // console.log("🚫 Toggling outgoing messages:", event.data.enabled); Removed for clean up.
           proxyState.blockOutgoing = event.data.enabled;
           // sendEvent({
           //   type: "proxy-state-change",
@@ -737,7 +656,6 @@
           break;
 
         case "block-incoming":
-          // console.log("🚫 Toggling incoming messages:", event.data.enabled); Removed for clean up.
           proxyState.blockIncoming = event.data.enabled;
           sendEvent({
             type: "proxy-state-change",
@@ -756,7 +674,6 @@
           break;
 
         case "simulate-message":
-          // console.log("🎭 Simulating message:", event.data); Removed for clean up.
           handleSimulateMessage(
             event.data.connectionId,
             event.data.message,
@@ -765,7 +682,6 @@
           break;
 
         case "simulate-system-event":
-          // console.log("🎭 Simulating system event:", event.data); Removed for clean up.
           handleSimulateSystemEvent(
             event.data.connectionId,
             event.data
@@ -773,16 +689,13 @@
           break;
 
         case "create-manual-websocket":
-          // console.log("🔗 Creating manual WebSocket connection:", event.data.url); Removed for clean up.
           try {
             // Create WebSocket connection directly in page context
             // This will be intercepted by our proxy, just like a connection created by the user's page
             const manualWs = new window.WebSocket(event.data.url);
-            // console.log("✅ Manual WebSocket connection created successfully"); Removed for clean up.
             
             // Get new connection ID
             const newConnectionId = manualWs._connectionId;
-            // console.log("🆔 New connection ID:", newConnectionId); Removed for clean up.
             
             // Send success event back to content script, including connection ID
             sendEvent({
@@ -794,19 +707,15 @@
             
             // Optional: Add some basic event listeners for manual connections
             manualWs.addEventListener('open', () => {
-              // console.log("🔗 Manual WebSocket connection opened"); Removed for clean up.
             });
             
             manualWs.addEventListener('error', (error) => {
-              // console.error("❌ Manual WebSocket connection error:", error); Removed for clean up.
             });
             
             manualWs.addEventListener('close', () => {
-              // console.log("🔗 Manual WebSocket connection closed"); Removed for clean up.
             });
             
           } catch (error) {
-            // console.error("❌ Failed to create manual WebSocket connection:", error); Removed for clean up.
             // Send error event
             sendEvent({
               type: "manual-connection-error",
@@ -839,12 +748,4 @@
       proxyState.blockIncoming = enabled;
     },
   };
-
-  // console.log("🏁 WebSocket DevTools injection complete"); Removed for clean up.
-  // console.log("🔍 Final WebSocket:", window.WebSocket); Removed for clean up.
-  // console.log(
-  //   "🧪 Injection verification:",
-  //   window.WebSocket.toString().includes("ProxiedWebSocket")
-  // ); Removed for clean up.
-  // console.log("🎛️ Proxy state:", proxyState); Removed for clean up.
 })();

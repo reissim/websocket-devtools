@@ -18,14 +18,12 @@ class GlobalFavorites {
       try {
         callback();
       } catch (error) {
-        // console.error("Error in tab switch callback:", error); Removed for clean up.
       }
     });
   }
 
   // Quick add favorite (used for adding from editor)
   quickAdd(messageData, options = {}) {
-    // console.log("🌟 GlobalFavorites: quickAdd called with options:", options); Removed for clean up.
 
     const defaultOptions = {
       switchToFavoritesTab: true,
@@ -35,23 +33,18 @@ class GlobalFavorites {
     };
 
     const finalOptions = { ...defaultOptions, ...options };
-    // console.log("🌟 GlobalFavorites: final options:", finalOptions); Removed for clean up.
 
     // Decide name
     let name = "";
     if (finalOptions.generateName) {
       // Changed to not generate name by default, let user fill it in
       name = "";
-      // console.log("🌟 GlobalFavorites: using empty name for user to fill"); Removed for clean up.
     } else {
       name = ""; // Empty name, user needs to fill in
-      // console.log("🌟 GlobalFavorites: using empty name"); Removed for clean up.
     }
 
-    // console.log(
     //   "🌟 GlobalFavorites: calling favoritesService.addFavorite with name:",
     //   name
-    // ); Removed for clean up.
     const result = favoritesService.addFavorite(
       {
         name,
@@ -66,7 +59,6 @@ class GlobalFavorites {
       }
 
       if (finalOptions.showNotification) {
-        // console.log(`✅ Added to favorites: ${result.name || "Unnamed"}`); Removed for clean up.
       }
     }
     // Error cases (like LIMIT_EXCEEDED) are handled by the service's listener system
@@ -88,11 +80,6 @@ class GlobalFavorites {
 
   // Add favorite from editor (auto tab switch, auto edit)
   addFromEditor(messageData, options = {}) {
-    // console.log(
-    //   "🌟 GlobalFavorites: addFromEditor called with options:",
-    //   options
-    // ); Removed for clean up.
-
     const defaultOptions = {
       switchToFavoritesTab: true,
       generateName: true,
@@ -101,7 +88,6 @@ class GlobalFavorites {
     };
 
     const mergedOptions = { ...defaultOptions, ...options };
-    // console.log("🌟 GlobalFavorites: merged options:", mergedOptions); Removed for clean up.
 
     return this.quickAdd(messageData, mergedOptions);
   }

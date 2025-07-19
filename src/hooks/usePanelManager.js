@@ -31,18 +31,9 @@ export const usePanelManager = ({
     // Validate and correct position and size to prevent overflow
     const result = validateAndFixPositionAndSize(targetPos, savedSize);
 
-    // If position or size was corrected, update to state
-    if (result.positionChanged || result.sizeChanged) {
-      console.log("📍 Opening with corrections:", {
-        position: result.positionChanged
-          ? `${targetPos.x},${targetPos.y} → ${result.position.x},${result.position.y}`
-          : "unchanged",
-        size: result.sizeChanged
-          ? `${savedSize.width}x${savedSize.height} → ${result.size.width}x${result.size.height}`
-          : "unchanged",
-      });
-
-      // Update size if needed
+          // If position or size was corrected, update to state
+      if (result.positionChanged || result.sizeChanged) {
+        // Update size if needed
       if (result.sizeChanged) {
         setWindowSize(result.size);
       }
