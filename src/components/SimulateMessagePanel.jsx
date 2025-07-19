@@ -159,14 +159,20 @@ const SimulateMessagePanel = forwardRef(
           );
           setIsPinned(parsed.isPinned || false);
           setWindowPosition(
-            parsed.position || { x: window.innerWidth - 420, y: 100 }
+            parsed.position || { 
+              x: window.innerWidth - 400 - 30, 
+              y: window.innerHeight - 500 - 30 
+            }
           );
           setWindowSize(parsed.size || { width: 400, height: 500 });
         } catch (error) {
           // console.error("Failed to load saved state:", error); Removed for clean up.
         }
       } else {
-        setWindowPosition({ x: window.innerWidth - 420, y: 100 });
+        setWindowPosition({ 
+          x: window.innerWidth - 490 - 15, 
+          y: window.innerHeight - 490 - 15 
+        });
       }
     }, []); // Empty dependency array, only runs once on mount
 
