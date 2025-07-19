@@ -4,6 +4,25 @@ import { json } from "@codemirror/lang-json";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorView } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
+
+const deepEqual = (a, b) => {
+  if (a === b) return true;
+  if (a === null || b === null) return a === b;
+  if (typeof a !== typeof b) return false;
+  if (typeof a !== 'object') return false;
+  
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  if (Array.isArray(a)) {
+    if (a.length !== b.length) return false;
+    return a.every((item, i) => deepEqual(item, b[i]));
+  }
+  
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+  if (keysA.length !== keysB.length) return false;
+  
+  return keysA.every(key => keysB.includes(key) && deepEqual(a[key], b[key]));
+};
 import {
   WrapText,
   Minimize2,
@@ -129,9 +148,8 @@ const JsonViewer = ({
       const parsed = JSON.parse(data);
       const nestedParsed = parseNestedJson(parsed);
 
-      // Check if nested parsing actually found nested JSON
-      const hasNestedData =
-        JSON.stringify(parsed) !== JSON.stringify(nestedParsed);
+      // Check if nested parsing actually found nested JSON using shallow comparison
+      const hasNestedData = !deepEqual(parsed, nestedParsed);
 
       return {
         isValidJson: true,

@@ -5,6 +5,7 @@
   "description": "Professional WebSocket debugging tool with real-time monitoring, message simulation, and traffic interception",
   "author": "Brian Luo",
   "homepage_url": "https://github.com/law-chain-hot/websocket-devtools",
+  "default_locale": "en",
 
   "icons": {
     "16": "icons/icon.png",
@@ -37,7 +38,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["src/content/injected.js", "locales/*.json", "icons/**/*"],
+      "resources": ["src/content/injected.js", "locales/*.json", "icons/**/*", "src/utils/i18n-key-mapping.json"],
       "matches": ["http://*/*", "https://*/*"]
     }
   ],
