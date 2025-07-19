@@ -14,6 +14,7 @@
 
 </div>
 
+---
 <img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" width="100%" style="border-radius: 8px;">
 
 ## ✨ Key Features
