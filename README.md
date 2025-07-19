@@ -28,17 +28,17 @@
 
 <div align="center">
 
-**Main Interface - Real-time Monitoring**
-<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" style="width: 65%; height: auto;">
+### Main Interface - Real-time Monitoring
+<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" width="65%">
 
-**Message Details & JSON Viewer**
-<img src="./ScreenShot/ScreenShot-2.png" alt="Message Monitoring" style="width: 65%; height: auto;">
+### Message Details & JSON Viewer
+<img src="./ScreenShot/ScreenShot-2.png" alt="Message Monitoring" width="65%">
 
-**Message Simulation & Traffic Control**
-<img src="./ScreenShot/ScreenShot-3.png" alt="Simulation" style="width: 65%; height: auto;">
+### Message Simulation & Traffic Control
+<img src="./ScreenShot/ScreenShot-3.png" alt="Simulation" width="65%">
 
-**Smart Favorites System**
-<img src="./ScreenShot/ScreenShot-4.png" alt="Additional Features" style="width: 65%; height: auto;">
+### Smart Favorites System
+<img src="./ScreenShot/ScreenShot-4.png" alt="Additional Features" width="65%">
 
 </div>
 

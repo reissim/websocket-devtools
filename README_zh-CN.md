@@ -27,17 +27,17 @@
 
 <div align="center">
 
-**主界面 - 实时监控**
-<img src="./ScreenShot/ScreenShot1.png" alt="主界面" style="width: 65%; height: auto;">
+### 主界面 - 实时监控
+<img src="./ScreenShot/ScreenShot1.png" alt="主界面" width="65%">
 
-**消息详情和 JSON 查看器**
-<img src="./ScreenShot/ScreenShot-2.png" alt="消息监控" style="width: 65%; height: auto;">
+### 消息详情和 JSON 查看器
+<img src="./ScreenShot/ScreenShot-2.png" alt="消息监控" width="65%">
 
-**消息模拟和流量控制**
-<img src="./ScreenShot/ScreenShot-3.png" alt="模拟功能" style="width: 65%; height: auto;">
+### 消息模拟和流量控制
+<img src="./ScreenShot/ScreenShot-3.png" alt="模拟功能" width="65%">
 
-**智能收藏系统**
-<img src="./ScreenShot/ScreenShot-4.png" alt="收藏功能" style="width: 65%; height: auto;">
+### 智能收藏系统
+<img src="./ScreenShot/ScreenShot-4.png" alt="收藏功能" width="65%">
 
 </div>
 
