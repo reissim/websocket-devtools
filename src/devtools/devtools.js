@@ -12,27 +12,19 @@ function checkExtensionEnabled() {
 // Only create DevTools Panel when extension is enabled
 checkExtensionEnabled().then((enabled) => {
   if (enabled) {
-    console.log("✅ Extension enabled, creating WebSocket DevTools panel");
-
     chrome.devtools.panels.create(
       "WebSocket DevTools",
       "icon.png", // Optional icon
       "src/devtools/panel.html",
       function (panel) {
-        console.log("WebSocket DevTools panel created");
-
         // When panel is shown
         panel.onShown.addListener(function (panelWindow) {
-          console.log("WebSocket DevTools panel shown");
         });
 
         // When panel is hidden
         panel.onHidden.addListener(function () {
-          console.log("WebSocket DevTools panel hidden");
         });
       }
     );
-  } else {
-    console.log("❌ Extension disabled, skipping DevTools panel creation");
   }
 });

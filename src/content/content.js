@@ -412,6 +412,6 @@ function showDevToolsHint() {
     button.onclick = closeHint;
   }
 
-  // 8秒后自动消失
+  // Auto hide after 8 seconds
   setTimeout(closeHint, 8000);
 }
