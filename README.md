@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![WebSocket DevTools](./ScreenShot/Promo_Tile.png)
+<img src="./ScreenShot/Promo_Tile-1.png" alt="WebSocket DevTools" width="80%">
 
 **Professional WebSocket debugging tool for Chrome DevTools**
 
@@ -16,25 +16,33 @@
 
 Monitor all WebSocket connections with live status tracking and message flow visualization. View incoming and outgoing messages as they happen with precise timestamps.
 
-![Main Interface](./ScreenShot/ScreenShot1.png)
+<div align="center">
+<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" style="max-width: 65%; height: auto;">
+</div>
 
 ## 📋 Message Details & JSON Viewer
 
 Click any connection to inspect message history with beautiful syntax highlighting. JSON messages are automatically formatted for easy reading and debugging.
 
-![Message Monitoring](./ScreenShot/ScreenShot-2.png)
+<div align="center">
+<img src="./ScreenShot/ScreenShot-2.png" alt="Message Monitoring" style="max-width: 65%; height: auto;">
+</div>
 
 ## 🎮 Message Simulation & Traffic Control
 
 Send custom messages in both directions with our advanced editor. Block specific messages to test error scenarios and edge cases.
 
-![Simulation](./ScreenShot/ScreenShot-3.png)
+<div align="center">
+<img src="./ScreenShot/ScreenShot-3.png" alt="Simulation" style="max-width: 65%; height: auto;">
+</div>
 
 ## 💾 Smart Favorites System
 
 Save frequently used messages for quick access. Organize your message library and export/import collections for team collaboration.
 
-![Additional Features](./ScreenShot/ScreenShot-4.png)
+<div align="center">
+<img src="./ScreenShot/ScreenShot-4.png" alt="Additional Features" style="max-width: 65%; height: auto;">
+</div>
 
 ## ✨ Key Features
 
