@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="./ScreenShot/Promo_Tile-1.png" alt="WebSocket DevTools" width="80%">
+<img src="./ScreenShot/Promo_Tile-1.png" alt="WebSocket DevTools" width="70%">
 
 **Professional WebSocket debugging tool for Chrome DevTools**
 
