@@ -10,38 +10,8 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Privacy](https://img.shields.io/badge/privacy-local%20only-brightgreen.svg)](./PRIVACY.md)
 
-</div>
+**English** | [简体中文](./README_zh-CN.md)
 
-## 🔍 Real-time WebSocket Monitoring
-
-Monitor all WebSocket connections with live status tracking and message flow visualization. View incoming and outgoing messages as they happen with precise timestamps.
-
-<div align="center">
-<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" style="width: 65%; height: auto;">
-</div>
-
-## 📋 Message Details & JSON Viewer
-
-Click any connection to inspect message history with beautiful syntax highlighting. JSON messages are automatically formatted for easy reading and debugging.
-
-<div align="center">
-<img src="./ScreenShot/ScreenShot-2.png" alt="Message Monitoring" style="width: 65%; height: auto;">
-</div>
-
-## 🎮 Message Simulation & Traffic Control
-
-Send custom messages in both directions with our advanced editor. Block specific messages to test error scenarios and edge cases.
-
-<div align="center">
-<img src="./ScreenShot/ScreenShot-3.png" alt="Simulation" style="width: 65%; height: auto;">
-</div>
-
-## 💾 Smart Favorites System
-
-Save frequently used messages for quick access. Organize your message library and export/import collections for team collaboration.
-
-<div align="center">
-<img src="./ScreenShot/ScreenShot-4.png" alt="Additional Features" style="width: 65%; height: auto;">
 </div>
 
 ## ✨ Key Features
@@ -52,6 +22,25 @@ Save frequently used messages for quick access. Organize your message library an
 - **💾 Favorites System** - Save and organize frequently used messages
 - **🌍 Multi-language** - Full English and Chinese support
 - **🎨 DevTools Integration** - Native Chrome DevTools panel experience
+
+
+## 📷 Screenshots
+
+<div align="center">
+
+**Main Interface - Real-time Monitoring**
+<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" style="width: 65%; height: auto;">
+
+**Message Details & JSON Viewer**
+<img src="./ScreenShot/ScreenShot-2.png" alt="Message Monitoring" style="width: 65%; height: auto;">
+
+**Message Simulation & Traffic Control**
+<img src="./ScreenShot/ScreenShot-3.png" alt="Simulation" style="width: 65%; height: auto;">
+
+**Smart Favorites System**
+<img src="./ScreenShot/ScreenShot-4.png" alt="Additional Features" style="width: 65%; height: auto;">
+
+</div>
 
 ## 🚀 Installation
 
