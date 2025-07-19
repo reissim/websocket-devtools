@@ -202,7 +202,7 @@ const Popup = () => {
 
       {/* Footer */}
       <div style={styles.footer}>
-        <span style={styles.versionText}>v0.9.0</span>
+        <span style={styles.versionText}>v1.0.0</span>
         <a 
           href="https://github.com/law-chain-hot/websocket-devtools" 
           target="_blank" 
