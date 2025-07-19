@@ -8,10 +8,10 @@
   "default_locale": "en",
 
   "icons": {
-    "16": "icons/icon.png",
-    "32": "icons/icon.png",
-    "48": "icons/icon.png",
-    "128": "icons/icon.png"
+    "16": "icons/icon-small.png",
+    "32": "icons/icon-small.png",
+    "48": "icons/icon-small.png",
+    "128": "icons/icon-normal.png"
   },
 
   "permissions": [
@@ -47,10 +47,10 @@
     "default_title": "WebSocket Proxy Pro - Monitor & Debug WebSocket Connections",
     "default_popup": "src/popup/popup.html",
     "default_icon": {
-      "16": "icons/icon.png",
-      "32": "icons/icon.png",
-      "48": "icons/icon.png",
-      "128": "icons/icon.png"
+      "16": "icons/icon-small.png",
+      "32": "icons/icon-small.png",
+      "48": "icons/icon-small.png",
+      "128": "icons/icon-normal.png"
     }
   },
 
