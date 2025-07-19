@@ -10,9 +10,11 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Privacy](https://img.shields.io/badge/privacy-local%20only-brightgreen.svg)](./PRIVACY.md)
 
-**English** | [简体中文](./README_zh-CN.md)
+<!-- **English** | [简体中文](./README_zh-CN.md) -->
 
 </div>
+
+<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" width="100%" style="border-radius: 8px;">
 
 ## ✨ Key Features
 
@@ -28,17 +30,15 @@
 
 <div align="center">
 
-### Main Interface - Real-time Monitoring
-<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" width="65%">
 
 ### Message Details & JSON Viewer
-<img src="./ScreenShot/ScreenShot-2.png" alt="Message Monitoring" width="65%">
+<img src="./ScreenShot/ScreenShot-2.png" alt="Message Monitoring" width="65%" style="border-radius: 8px;">
 
 ### Message Simulation & Traffic Control
-<img src="./ScreenShot/ScreenShot-3.png" alt="Simulation" width="65%">
+<img src="./ScreenShot/ScreenShot-3.png" alt="Simulation" width="65%" style="border-radius: 8px;">
 
 ### Smart Favorites System
-<img src="./ScreenShot/ScreenShot-4.png" alt="Additional Features" width="65%">
+<img src="./ScreenShot/ScreenShot-4.png" alt="Additional Features" width="65%" style="border-radius: 8px;">
 
 </div>
 
