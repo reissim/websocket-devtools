@@ -45,14 +45,15 @@
 ## 🚀 Installation
 
 ### Chrome Web Store
-1. Visit [Chrome Web Store](https://chrome.google.com/webstore/detail/websocket-devtools/your-extension-id)
+TBD
+<!-- 1. Visit [Chrome Web Store](https://chrome.google.com/webstore/detail/websocket-devtools/your-extension-id)
 2. Click **"Add to Chrome"** and confirm installation
 3. Open DevTools (F12) → **"WebSocket DevTools"** tab
 
 ### Manual Installation  
 1. Download from [GitHub Releases](https://github.com/law-chain-hot/websocket-devtools/releases)
 2. Open `chrome://extensions/` → Enable **Developer mode**
-3. Click **"Load unpacked"** and select the folder
+3. Click **"Load unpacked"** and select the folder -->
 
 ## 📖 Quick Start
 
