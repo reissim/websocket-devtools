@@ -81,7 +81,7 @@ async function generateChromeLocales() {
 
     // Process each language
     for (const [flatLocale, chromeLocale] of Object.entries(localeMapping)) {
-      const flatPath = path.join(projectRoot, 'public', 'locales', `${flatLocale}.json`);
+      const flatPath = path.join(projectRoot, 'src', 'assets', 'locales', `${flatLocale}.json`);
       const chromePath = path.join(projectRoot, 'src', '_locales', chromeLocale, 'messages.json');
 
       if (fs.existsSync(flatPath)) {
@@ -108,7 +108,7 @@ async function generateChromeLocales() {
     }
 
     // Generate mapping table
-    const firstFlatPath = path.join(projectRoot, 'public', 'locales', 'en-us.json');
+    const firstFlatPath = path.join(projectRoot, 'src', 'assets', 'locales', 'en-us.json');
     if (fs.existsSync(firstFlatPath)) {
       const flatContent = fs.readFileSync(firstFlatPath, 'utf8');
       const flatTranslations = JSON.parse(flatContent);

@@ -1,5 +1,5 @@
 /**
- * Smart hybrid i18n system - WebSocket Inspector
+ * Smart hybrid i18n system - WebSocket DevTools
  * Supports Chrome official i18n API + custom manual language switching
  * Prioritizes Chrome API (better performance), uses custom system when manually switched
  */

@@ -6,8 +6,8 @@
  */
 
 // Import translation files directly (with JSON import assertions)
-import enUS from '../../public/locales/en-us.json' with { type: 'json' };
-import zhCN from '../../public/locales/zh-cn.json' with { type: 'json' };
+import enUS from '../assets/locales/en-us.json' with { type: 'json' };
+import zhCN from '../assets/locales/zh-cn.json' with { type: 'json' };
 
 // Export translations object for immediate access
 export const translations = {

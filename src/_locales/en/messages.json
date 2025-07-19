@@ -1,6 +1,6 @@
 {
   "app_title": {
-    "message": "WebSocket Inspector",
+    "message": "WebSocket DevTools",
     "description": "Translation for app.title"
   },
   "app_description": {
@@ -36,7 +36,7 @@
     "description": "Translation for monitor.actions.resume"
   },
   "panel_header_title": {
-    "message": "WebSocket Inspector",
+    "message": "WebSocket DevTools",
     "description": "Translation for panel.header.title"
   },
   "panel_header_status_active": {
@@ -980,7 +980,7 @@
     "description": "Translation for system.closeEvent.notice"
   },
   "extensionName": {
-    "message": "WebSocket Inspector",
+    "message": "WebSocket DevTools",
     "description": "Extension name"
   },
   "extensionDescription": {
