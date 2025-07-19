@@ -34,16 +34,17 @@ export const filterMessages = (messages, filters) => {
 
         return true;
       })
-      // Remove duplicates based on timestamp, data, and direction
+      // Remove duplicates using Set for O(n) performance
       .filter((msg, index, arr) => {
-        return (
-          arr.findIndex(
-            (m) =>
-              m.timestamp === msg.timestamp &&
-              m.data === msg.data &&
-              m.direction === msg.direction
-          ) === index
-        );
+        if (index === 0) {
+          arr._seenKeys = new Set();
+        }
+        const key = `${msg.timestamp}|${msg.data}|${msg.direction}`;
+        if (arr._seenKeys.has(key)) {
+          return false;
+        }
+        arr._seenKeys.add(key);
+        return true;
       })
       // Sort by timestamp (newest first)
       .sort((a, b) => b.timestamp - a.timestamp)

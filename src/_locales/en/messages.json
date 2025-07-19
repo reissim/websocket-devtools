@@ -1,0 +1,994 @@
+{
+  "app_title": {
+    "message": "WebSocket Inspector",
+    "description": "Translation for app.title"
+  },
+  "app_description": {
+    "message": "Monitor and debug WebSocket connections",
+    "description": "Translation for app.description"
+  },
+  "monitor_status_active": {
+    "message": "Monitoring Active",
+    "description": "Translation for monitor.status.active"
+  },
+  "monitor_status_inactive": {
+    "message": "Monitoring Stopped",
+    "description": "Translation for monitor.status.inactive"
+  },
+  "monitor_status_paused": {
+    "message": "Monitoring Paused",
+    "description": "Translation for monitor.status.paused"
+  },
+  "monitor_actions_start": {
+    "message": "Start Monitoring",
+    "description": "Translation for monitor.actions.start"
+  },
+  "monitor_actions_stop": {
+    "message": "Stop Monitoring",
+    "description": "Translation for monitor.actions.stop"
+  },
+  "monitor_actions_pause": {
+    "message": "Pause Monitoring",
+    "description": "Translation for monitor.actions.pause"
+  },
+  "monitor_actions_resume": {
+    "message": "Resume Monitoring",
+    "description": "Translation for monitor.actions.resume"
+  },
+  "panel_header_title": {
+    "message": "WebSocket Inspector",
+    "description": "Translation for panel.header.title"
+  },
+  "panel_header_status_active": {
+    "message": "Monitoring Active",
+    "description": "Translation for panel.header.status_active"
+  },
+  "panel_header_status_inactive": {
+    "message": "Monitoring Stopped",
+    "description": "Translation for panel.header.status_inactive"
+  },
+  "panel_header_block_send": {
+    "message": "Block Send",
+    "description": "Translation for panel.header.block_send"
+  },
+  "panel_header_block_receive": {
+    "message": "Block Receive",
+    "description": "Translation for panel.header.block_receive"
+  },
+  "panel_header_block_all": {
+    "message": "Block All",
+    "description": "Translation for panel.header.block_all"
+  },
+  "panel_messageDetails_title": {
+    "message": "💬 Message Details",
+    "description": "Translation for panel.messageDetails.title"
+  },
+  "panel_messageDetails_noConnection": {
+    "message": "No connection selected",
+    "description": "Translation for panel.messageDetails.noConnection"
+  },
+  "panel_messageDetails_selectConnection": {
+    "message": "Please select a WebSocket connection to view message details",
+    "description": "Translation for panel.messageDetails.selectConnection"
+  },
+  "panel_messageDetails_noMessages": {
+    "message": "No messages yet",
+    "description": "Translation for panel.messageDetails.noMessages"
+  },
+  "panel_messageDetails_waitingForMessages": {
+    "message": "Waiting for WebSocket messages...",
+    "description": "Translation for panel.messageDetails.waitingForMessages"
+  },
+  "panel_messageDetails_clear": {
+    "message": "Clear Messages",
+    "description": "Translation for panel.messageDetails.clear"
+  },
+  "panel_messageDetails_simulate": {
+    "message": "Simulate Message",
+    "description": "Translation for panel.messageDetails.simulate"
+  },
+  "panel_messageDetails_addToFavorites": {
+    "message": "Add to Favorites",
+    "description": "Translation for panel.messageDetails.addToFavorites"
+  },
+  "panel_connectionList_title": {
+    "message": "WebSocket Connections",
+    "description": "Translation for panel.connectionList.title"
+  },
+  "panel_connectionList_noConnections": {
+    "message": "No connections found",
+    "description": "Translation for panel.connectionList.noConnections"
+  },
+  "panel_connectionList_waiting": {
+    "message": "Waiting for WebSocket connections...",
+    "description": "Translation for panel.connectionList.waiting"
+  },
+  "panel_connectionList_activeConnections": {
+    "message": "Active Connections",
+    "description": "Translation for panel.connectionList.activeConnections"
+  },
+  "panel_connectionList_inactiveConnections": {
+    "message": "Inactive Connections",
+    "description": "Translation for panel.connectionList.inactiveConnections"
+  },
+  "panel_connectionList_messagesCount": {
+    "message": "{{count}} messages",
+    "description": "Translation for panel.connectionList.messagesCount"
+  },
+  "panel_connectionList_created": {
+    "message": "Created at {{time}}",
+    "description": "Translation for panel.connectionList.created"
+  },
+  "panel_connectionList_addConnection": {
+    "message": "Add Connection",
+    "description": "Translation for panel.connectionList.addConnection"
+  },
+  "panel_connectionList_modal_title": {
+    "message": "Add WebSocket Connection",
+    "description": "Translation for panel.connectionList.modal.title"
+  },
+  "panel_connectionList_modal_description": {
+    "message": "Create a manual WebSocket connection to test and debug your WebSocket applications. The proxy will automatically monitor all connection events and messages.",
+    "description": "Translation for panel.connectionList.modal.description"
+  },
+  "panel_connectionList_modal_feature1": {
+    "message": "Auto-proxy WebSocket connections",
+    "description": "Translation for panel.connectionList.modal.feature1"
+  },
+  "panel_connectionList_modal_feature2": {
+    "message": "Real-time message monitoring",
+    "description": "Translation for panel.connectionList.modal.feature2"
+  },
+  "panel_connectionList_modal_urlLabel": {
+    "message": "WebSocket URL",
+    "description": "Translation for panel.connectionList.modal.urlLabel"
+  },
+  "panel_connectionList_modal_urlPlaceholder": {
+    "message": "wss://example.com/websocket",
+    "description": "Translation for panel.connectionList.modal.urlPlaceholder"
+  },
+  "panel_connectionList_modal_urlError": {
+    "message": "Please enter a valid WebSocket URL",
+    "description": "Translation for panel.connectionList.modal.urlError"
+  },
+  "panel_connectionList_modal_cancel": {
+    "message": "Cancel",
+    "description": "Translation for panel.connectionList.modal.cancel"
+  },
+  "panel_connectionList_modal_connect": {
+    "message": "Connect",
+    "description": "Translation for panel.connectionList.modal.connect"
+  },
+  "panel_connectionList_status_connected": {
+    "message": "Connected",
+    "description": "Translation for panel.connectionList.status.connected"
+  },
+  "panel_connectionList_status_disconnected": {
+    "message": "Disconnected",
+    "description": "Translation for panel.connectionList.status.disconnected"
+  },
+  "panel_connectionList_status_connecting": {
+    "message": "Connecting",
+    "description": "Translation for panel.connectionList.status.connecting"
+  },
+  "panel_connectionList_status_error": {
+    "message": "Error",
+    "description": "Translation for panel.connectionList.status.error"
+  },
+  "panel_connectionList_tooltips_closeConnection": {
+    "message": "Close Connection",
+    "description": "Translation for panel.connectionList.tooltips.closeConnection"
+  },
+  "panel_connectionList_tooltips_clearAll": {
+    "message": "Clear All Connections",
+    "description": "Translation for panel.connectionList.tooltips.clearAll"
+  },
+  "panel_controlPanel_title": {
+    "message": "Control Panel",
+    "description": "Translation for panel.controlPanel.title"
+  },
+  "panel_controlPanel_monitor": {
+    "message": "Monitor",
+    "description": "Translation for panel.controlPanel.monitor"
+  },
+  "panel_controlPanel_messageControl": {
+    "message": "Message Control",
+    "description": "Translation for panel.controlPanel.messageControl"
+  },
+  "panel_controlPanel_blockOutgoing": {
+    "message": "Block Send",
+    "description": "Translation for panel.controlPanel.blockOutgoing"
+  },
+  "panel_controlPanel_blockIncoming": {
+    "message": "Block Receive",
+    "description": "Translation for panel.controlPanel.blockIncoming"
+  },
+  "panel_controlPanel_status_active": {
+    "message": "Active",
+    "description": "Translation for panel.controlPanel.status.active"
+  },
+  "panel_controlPanel_status_inactive": {
+    "message": "Inactive",
+    "description": "Translation for panel.controlPanel.status.inactive"
+  },
+  "simulate_title": {
+    "message": "Simulate Console",
+    "description": "Translation for simulate.title"
+  },
+  "simulate_direction_label": {
+    "message": "Direction",
+    "description": "Translation for simulate.direction.label"
+  },
+  "simulate_direction_incoming": {
+    "message": "Incoming (Server → Client)",
+    "description": "Translation for simulate.direction.incoming"
+  },
+  "simulate_direction_outgoing": {
+    "message": "Outgoing (Client → Server)",
+    "description": "Translation for simulate.direction.outgoing"
+  },
+  "simulate_content_placeholder": {
+    "message": "Enter your message content here...",
+    "description": "Translation for simulate.content.placeholder"
+  },
+  "simulate_content_jsonPlaceholder": {
+    "message": "{\n  \"message\": \"Hello World\",\n  \"timestamp\": \"{{timestamp}}\"\n}",
+    "description": "Translation for simulate.content.jsonPlaceholder"
+  },
+  "simulate_actions_send": {
+    "message": "Send Message",
+    "description": "Translation for simulate.actions.send"
+  },
+  "simulate_actions_clear": {
+    "message": "Clear",
+    "description": "Translation for simulate.actions.clear"
+  },
+  "simulate_actions_addToFavorites": {
+    "message": "Add to Favorites",
+    "description": "Translation for simulate.actions.addToFavorites"
+  },
+  "simulate_actions_loadFromFavorites": {
+    "message": "Load from Favorites",
+    "description": "Translation for simulate.actions.loadFromFavorites"
+  },
+  "simulate_actions_simulateReceive": {
+    "message": "Simulate Receive",
+    "description": "Translation for simulate.actions.simulateReceive"
+  },
+  "simulate_actions_simulateSend": {
+    "message": "Simulate Send",
+    "description": "Translation for simulate.actions.simulateSend"
+  },
+  "simulate_status_sending": {
+    "message": "Sending...",
+    "description": "Translation for simulate.status.sending"
+  },
+  "simulate_status_sent": {
+    "message": "Message sent successfully",
+    "description": "Translation for simulate.status.sent"
+  },
+  "simulate_status_error": {
+    "message": "Failed to send message",
+    "description": "Translation for simulate.status.error"
+  },
+  "simulate_status_noConnection": {
+    "message": "No Connection Selected",
+    "description": "Translation for simulate.status.noConnection"
+  },
+  "simulate_status_noConnectionDescription": {
+    "message": "Create a WebSocket connection to start sending and receiving messages.",
+    "description": "Translation for simulate.status.noConnectionDescription"
+  },
+  "simulate_status_addConnection": {
+    "message": "Add Connection",
+    "description": "Translation for simulate.status.addConnection"
+  },
+  "simulate_tabs_editor": {
+    "message": "Editor",
+    "description": "Translation for simulate.tabs.editor"
+  },
+  "simulate_tabs_favorites": {
+    "message": "Favorites",
+    "description": "Translation for simulate.tabs.favorites"
+  },
+  "simulate_tabs_system": {
+    "message": "System",
+    "description": "Translation for simulate.tabs.system"
+  },
+  "simulate_tooltips_open": {
+    "message": "Open Simulate Panel",
+    "description": "Translation for simulate.tooltips.open"
+  },
+  "simulate_tooltips_minimize": {
+    "message": "Minimize Panel",
+    "description": "Translation for simulate.tooltips.minimize"
+  },
+  "simulate_tooltips_pin": {
+    "message": "Pin Panel",
+    "description": "Translation for simulate.tooltips.pin"
+  },
+  "simulate_tooltips_unpin": {
+    "message": "Unpin Panel",
+    "description": "Translation for simulate.tooltips.unpin"
+  },
+  "favorites_title": {
+    "message": "Favorites",
+    "description": "Translation for favorites.title"
+  },
+  "favorites_add": {
+    "message": "Add to Favorites",
+    "description": "Translation for favorites.add"
+  },
+  "favorites_remove": {
+    "message": "Remove",
+    "description": "Translation for favorites.remove"
+  },
+  "favorites_load": {
+    "message": "Load",
+    "description": "Translation for favorites.load"
+  },
+  "favorites_edit": {
+    "message": "Edit",
+    "description": "Translation for favorites.edit"
+  },
+  "favorites_duplicate": {
+    "message": "Duplicate",
+    "description": "Translation for favorites.duplicate"
+  },
+  "favorites_export": {
+    "message": "Export",
+    "description": "Translation for favorites.export"
+  },
+  "favorites_import": {
+    "message": "Import",
+    "description": "Translation for favorites.import"
+  },
+  "favorites_clear": {
+    "message": "Clear All",
+    "description": "Translation for favorites.clear"
+  },
+  "favorites_empty": {
+    "message": "No favorites saved",
+    "description": "Translation for favorites.empty"
+  },
+  "favorites_emptyHint": {
+    "message": "Add frequently used messages to favorites for quick access",
+    "description": "Translation for favorites.emptyHint"
+  },
+  "favorites_name": {
+    "message": "Name",
+    "description": "Translation for favorites.name"
+  },
+  "favorites_message": {
+    "message": "Message",
+    "description": "Translation for favorites.message"
+  },
+  "favorites_actions": {
+    "message": "Actions",
+    "description": "Translation for favorites.actions"
+  },
+  "favorites_unnamedMessage": {
+    "message": "Unnamed Message",
+    "description": "Translation for favorites.unnamedMessage"
+  },
+  "favorites_noResults": {
+    "message": "No matching favorites found",
+    "description": "Translation for favorites.noResults"
+  },
+  "favorites_noResultsHint": {
+    "message": "Try adjusting your search terms",
+    "description": "Translation for favorites.noResultsHint"
+  },
+  "favorites_placeholders_messageName": {
+    "message": "Enter message name",
+    "description": "Translation for favorites.placeholders.messageName"
+  },
+  "favorites_placeholders_search": {
+    "message": "Search favorites...",
+    "description": "Translation for favorites.placeholders.search"
+  },
+  "favorites_tooltips_toggleExpand": {
+    "message": "Toggle Expand",
+    "description": "Translation for favorites.tooltips.toggleExpand"
+  },
+  "favorites_tooltips_simulateReceive": {
+    "message": "Simulate Receive",
+    "description": "Translation for favorites.tooltips.simulateReceive"
+  },
+  "favorites_tooltips_simulateSend": {
+    "message": "Simulate Send",
+    "description": "Translation for favorites.tooltips.simulateSend"
+  },
+  "favorites_limit_usage": {
+    "message": "{{count}}/10 favorites used",
+    "description": "Translation for favorites.limit.usage"
+  },
+  "favorites_limit_exceeded_message": {
+    "message": "You can save up to 10 favorite messages",
+    "description": "Translation for favorites.limit.exceeded.message"
+  },
+  "system_title": {
+    "message": "System Events",
+    "description": "Translation for system.title"
+  },
+  "system_description": {
+    "message": "Simulate WebSocket system events and states",
+    "description": "Translation for system.description"
+  },
+  "system_tabs_client": {
+    "message": "Client Events",
+    "description": "Translation for system.tabs.client"
+  },
+  "system_tabs_server": {
+    "message": "Server Events",
+    "description": "Translation for system.tabs.server"
+  },
+  "system_events_close_title": {
+    "message": "Close Events",
+    "description": "Translation for system.events.close.title"
+  },
+  "system_events_close_description": {
+    "message": "Simulate connection close scenarios",
+    "description": "Translation for system.events.close.description"
+  },
+  "system_events_close_code": {
+    "message": "Close Code",
+    "description": "Translation for system.events.close.code"
+  },
+  "system_events_close_reason": {
+    "message": "Close Reason",
+    "description": "Translation for system.events.close.reason"
+  },
+  "system_events_close_reasonPlaceholder": {
+    "message": "Optional close reason",
+    "description": "Translation for system.events.close.reasonPlaceholder"
+  },
+  "system_events_close_simulate": {
+    "message": "Simulate Client Close",
+    "description": "Translation for system.events.close.simulate"
+  },
+  "system_events_close_serverTitle": {
+    "message": "Server Close Events",
+    "description": "Translation for system.events.close.serverTitle"
+  },
+  "system_events_close_serverDescription": {
+    "message": "Simulate server-initiated close scenarios",
+    "description": "Translation for system.events.close.serverDescription"
+  },
+  "system_events_close_serverCode": {
+    "message": "Server Close Code",
+    "description": "Translation for system.events.close.serverCode"
+  },
+  "system_events_close_serverReason": {
+    "message": "Server Close Reason",
+    "description": "Translation for system.events.close.serverReason"
+  },
+  "system_events_close_serverReasonPlaceholder": {
+    "message": "Optional server close reason",
+    "description": "Translation for system.events.close.serverReasonPlaceholder"
+  },
+  "system_events_close_serverSimulate": {
+    "message": "Simulate Server Close",
+    "description": "Translation for system.events.close.serverSimulate"
+  },
+  "system_events_close_codePlaceholder": {
+    "message": "Enter custom close code (1000-4999)",
+    "description": "Translation for system.events.close.codePlaceholder"
+  },
+  "system_events_close_serverCodePlaceholder": {
+    "message": "Enter custom server close code (1000-4999)",
+    "description": "Translation for system.events.close.serverCodePlaceholder"
+  },
+  "system_events_close_clientInitiated": {
+    "message": "Client initiated close",
+    "description": "Translation for system.events.close.clientInitiated"
+  },
+  "system_events_close_serverInitiated": {
+    "message": "Server initiated close",
+    "description": "Translation for system.events.close.serverInitiated"
+  },
+  "system_events_close_serverNormal": {
+    "message": "Server normal shutdown",
+    "description": "Translation for system.events.close.serverNormal"
+  },
+  "system_events_close_policyViolation": {
+    "message": "Server policy violation",
+    "description": "Translation for system.events.close.policyViolation"
+  },
+  "system_events_close_heartbeatTimeout": {
+    "message": "Server heartbeat timeout",
+    "description": "Translation for system.events.close.heartbeatTimeout"
+  },
+  "system_events_close_authFailure": {
+    "message": "Authentication failure",
+    "description": "Translation for system.events.close.authFailure"
+  },
+  "system_events_error_title": {
+    "message": "Error Events",
+    "description": "Translation for system.events.error.title"
+  },
+  "system_events_error_description": {
+    "message": "Simulate various error conditions",
+    "description": "Translation for system.events.error.description"
+  },
+  "system_events_error_connectionFailed": {
+    "message": "Connection Failed",
+    "description": "Translation for system.events.error.connectionFailed"
+  },
+  "system_events_error_networkDisconnect": {
+    "message": "Network Disconnect",
+    "description": "Translation for system.events.error.networkDisconnect"
+  },
+  "system_events_error_protocolError": {
+    "message": "Protocol Error",
+    "description": "Translation for system.events.error.protocolError"
+  },
+  "system_events_error_timeoutError": {
+    "message": "Timeout Error",
+    "description": "Translation for system.events.error.timeoutError"
+  },
+  "system_events_error_messageFormatError": {
+    "message": "Message Format Error",
+    "description": "Translation for system.events.error.messageFormatError"
+  },
+  "system_events_error_clientDisconnect": {
+    "message": "Client Disconnect",
+    "description": "Translation for system.events.error.clientDisconnect"
+  },
+  "system_events_error_internalServerError": {
+    "message": "Internal Server Error",
+    "description": "Translation for system.events.error.internalServerError"
+  },
+  "system_events_error_resourceExhausted": {
+    "message": "Resource Exhausted",
+    "description": "Translation for system.events.error.resourceExhausted"
+  },
+  "system_events_error_serverTitle": {
+    "message": "Server Error Events",
+    "description": "Translation for system.events.error.serverTitle"
+  },
+  "system_events_error_serverDescription": {
+    "message": "Simulate server-side error conditions",
+    "description": "Translation for system.events.error.serverDescription"
+  },
+  "system_events_error_customError": {
+    "message": "Custom Error",
+    "description": "Translation for system.events.error.customError"
+  },
+  "system_events_error_customServerError": {
+    "message": "Custom Server Error",
+    "description": "Translation for system.events.error.customServerError"
+  },
+  "system_events_error_unexpectedCondition": {
+    "message": "Unexpected Condition",
+    "description": "Translation for system.events.error.unexpectedCondition"
+  },
+  "system_events_error_serviceRestart": {
+    "message": "Service Restart",
+    "description": "Translation for system.events.error.serviceRestart"
+  },
+  "system_closeCode_1000": {
+    "message": "1000 - Normal Closure",
+    "description": "Translation for system.closeCode.1000"
+  },
+  "system_closeCode_1001": {
+    "message": "1001 - Going Away",
+    "description": "Translation for system.closeCode.1001"
+  },
+  "system_closeCode_1002": {
+    "message": "1002 - Protocol Error",
+    "description": "Translation for system.closeCode.1002"
+  },
+  "system_closeCode_1008": {
+    "message": "1008 - Policy Violation",
+    "description": "Translation for system.closeCode.1008"
+  },
+  "system_closeCode_1009": {
+    "message": "1009 - Message Too Big",
+    "description": "Translation for system.closeCode.1009"
+  },
+  "system_closeCode_1011": {
+    "message": "1011 - Internal Server Error",
+    "description": "Translation for system.closeCode.1011"
+  },
+  "system_closeCode_4001": {
+    "message": "4001 - Authentication Failed",
+    "description": "Translation for system.closeCode.4001"
+  },
+  "system_closeCode_custom": {
+    "message": "Custom Code...",
+    "description": "Translation for system.closeCode.custom"
+  },
+  "system_closeCodeInfo_serverSupport": {
+    "message": "Server supports close codes 1000-1015 and 3000-4999",
+    "description": "Translation for system.closeCodeInfo.serverSupport"
+  },
+  "system_closeCodeInfo_normal": {
+    "message": "Normal closure - connection completed successfully",
+    "description": "Translation for system.closeCodeInfo.normal"
+  },
+  "system_closeCodeInfo_protocol": {
+    "message": "Protocol reserved codes - use with caution",
+    "description": "Translation for system.closeCodeInfo.protocol"
+  },
+  "system_closeCodeInfo_application": {
+    "message": "Application-specific codes - safe to use",
+    "description": "Translation for system.closeCodeInfo.application"
+  },
+  "system_closeCodeInfo_invalid": {
+    "message": "Invalid close code - must be 1000-4999",
+    "description": "Translation for system.closeCodeInfo.invalid"
+  },
+  "system_noConnection": {
+    "message": "Please select a WebSocket connection to simulate system events",
+    "description": "Translation for system.noConnection"
+  },
+  "system_noConnectionTitle": {
+    "message": "No Connection Selected",
+    "description": "Translation for system.noConnectionTitle"
+  },
+  "system_tooltips_resetToPreset": {
+    "message": "Reset to preset codes",
+    "description": "Translation for system.tooltips.resetToPreset"
+  },
+  "language_selector_title": {
+    "message": "Language",
+    "description": "Translation for language.selector.title"
+  },
+  "language_selector_change": {
+    "message": "Change Language",
+    "description": "Translation for language.selector.change"
+  },
+  "language_names_en_us": {
+    "message": "English",
+    "description": "Translation for language.names.en-us"
+  },
+  "language_names_zh_cn": {
+    "message": "中文",
+    "description": "Translation for language.names.zh-cn"
+  },
+  "jsonViewer_controls_wrap": {
+    "message": "Wrap",
+    "description": "Translation for jsonViewer.controls.wrap"
+  },
+  "jsonViewer_controls_nestedParse": {
+    "message": "Nested Parse",
+    "description": "Translation for jsonViewer.controls.nestedParse"
+  },
+  "jsonViewer_controls_copy": {
+    "message": "Copy",
+    "description": "Translation for jsonViewer.controls.copy"
+  },
+  "jsonViewer_controls_copied": {
+    "message": "Copied!",
+    "description": "Translation for jsonViewer.controls.copied"
+  },
+  "jsonViewer_controls_favorite": {
+    "message": "Favorite",
+    "description": "Translation for jsonViewer.controls.favorite"
+  },
+  "jsonViewer_status_edit": {
+    "message": "Edit",
+    "description": "Translation for jsonViewer.status.edit"
+  },
+  "jsonViewer_status_json": {
+    "message": "JSON",
+    "description": "Translation for jsonViewer.status.json"
+  },
+  "jsonViewer_status_nested": {
+    "message": "Nested",
+    "description": "Translation for jsonViewer.status.nested"
+  },
+  "jsonViewer_tooltips_wrapText": {
+    "message": "Wrap Text",
+    "description": "Translation for jsonViewer.tooltips.wrapText"
+  },
+  "jsonViewer_tooltips_nestedParseJson": {
+    "message": "Nested Parse JSON",
+    "description": "Translation for jsonViewer.tooltips.nestedParseJson"
+  },
+  "jsonViewer_tooltips_noNestedData": {
+    "message": "No nested JSON data found",
+    "description": "Translation for jsonViewer.tooltips.noNestedData"
+  },
+  "jsonViewer_tooltips_copy": {
+    "message": "Copy",
+    "description": "Translation for jsonViewer.tooltips.copy"
+  },
+  "jsonViewer_tooltips_copied": {
+    "message": "Copied!",
+    "description": "Translation for jsonViewer.tooltips.copied"
+  },
+  "jsonViewer_tooltips_addToFavorites": {
+    "message": "Add to Favorites",
+    "description": "Translation for jsonViewer.tooltips.addToFavorites"
+  },
+  "jsonViewer_tooltips_simulate": {
+    "message": "Simulate this message",
+    "description": "Translation for jsonViewer.tooltips.simulate"
+  },
+  "jsonViewer_tooltips_simulateNestedParseJson": {
+    "message": "Parse nested JSON and simulate",
+    "description": "Translation for jsonViewer.tooltips.simulateNestedParseJson"
+  },
+  "jsonViewer_controls_simulateNestedParse": {
+    "message": "Nested Parse & Fill",
+    "description": "Translation for jsonViewer.controls.simulateNestedParse"
+  },
+  "messageDetails_emptyState_selectConnection": {
+    "message": "Select a WebSocket connection to view messages",
+    "description": "Translation for messageDetails.emptyState.selectConnection"
+  },
+  "messageDetails_emptyState_noMessages": {
+    "message": "No messages to display",
+    "description": "Translation for messageDetails.emptyState.noMessages"
+  },
+  "messageDetails_connection_disconnected": {
+    "message": "Disconnected from {{url}}",
+    "description": "Translation for messageDetails.connection.disconnected"
+  },
+  "messageDetails_connection_requestServed": {
+    "message": "Request served by {{data}}",
+    "description": "Translation for messageDetails.connection.requestServed"
+  },
+  "messageDetails_connection_connectionError": {
+    "message": "Connection error",
+    "description": "Translation for messageDetails.connection.connectionError"
+  },
+  "messageDetails_tags_simulate": {
+    "message": "Simulate",
+    "description": "Translation for messageDetails.tags.simulate"
+  },
+  "messageDetails_tags_block": {
+    "message": "Block",
+    "description": "Translation for messageDetails.tags.block"
+  },
+  "messageDetails_controls_all": {
+    "message": "All",
+    "description": "Translation for messageDetails.controls.all"
+  },
+  "messageDetails_controls_send": {
+    "message": "Send",
+    "description": "Translation for messageDetails.controls.send"
+  },
+  "messageDetails_controls_receive": {
+    "message": "Receive",
+    "description": "Translation for messageDetails.controls.receive"
+  },
+  "messageDetails_controls_invert": {
+    "message": "Invert",
+    "description": "Translation for messageDetails.controls.invert"
+  },
+  "messageDetails_controls_filterPlaceholder": {
+    "message": "Filter messages by text content",
+    "description": "Translation for messageDetails.controls.filterPlaceholder"
+  },
+  "messageDetails_controls_clearMessages": {
+    "message": "Clear all messages",
+    "description": "Translation for messageDetails.controls.clearMessages"
+  },
+  "messageDetails_table_data": {
+    "message": "Data",
+    "description": "Translation for messageDetails.table.data"
+  },
+  "messageDetails_table_length": {
+    "message": "Length",
+    "description": "Translation for messageDetails.table.length"
+  },
+  "messageDetails_table_time": {
+    "message": "Time",
+    "description": "Translation for messageDetails.table.time"
+  },
+  "messageDetails_actions_edit": {
+    "message": "Edit",
+    "description": "Translation for messageDetails.actions.edit"
+  },
+  "messageDetails_actions_allow": {
+    "message": "Allow",
+    "description": "Translation for messageDetails.actions.allow"
+  },
+  "messageDetails_actions_block": {
+    "message": "Block",
+    "description": "Translation for messageDetails.actions.block"
+  },
+  "messageDetails_tooltips_simulatedMessage": {
+    "message": "Simulated message",
+    "description": "Translation for messageDetails.tooltips.simulatedMessage"
+  },
+  "messageDetails_tooltips_messageBlocked": {
+    "message": "Message was blocked",
+    "description": "Translation for messageDetails.tooltips.messageBlocked"
+  },
+  "common_ok": {
+    "message": "OK",
+    "description": "Translation for common.ok"
+  },
+  "common_cancel": {
+    "message": "Cancel",
+    "description": "Translation for common.cancel"
+  },
+  "common_save": {
+    "message": "Save",
+    "description": "Translation for common.save"
+  },
+  "common_delete": {
+    "message": "Delete",
+    "description": "Translation for common.delete"
+  },
+  "common_edit": {
+    "message": "Edit",
+    "description": "Translation for common.edit"
+  },
+  "common_close": {
+    "message": "Close",
+    "description": "Translation for common.close"
+  },
+  "common_loading": {
+    "message": "Loading...",
+    "description": "Translation for common.loading"
+  },
+  "common_error": {
+    "message": "Error",
+    "description": "Translation for common.error"
+  },
+  "common_success": {
+    "message": "Success",
+    "description": "Translation for common.success"
+  },
+  "common_warning": {
+    "message": "Warning",
+    "description": "Translation for common.warning"
+  },
+  "common_info": {
+    "message": "Info",
+    "description": "Translation for common.info"
+  },
+  "common_yes": {
+    "message": "Yes",
+    "description": "Translation for common.yes"
+  },
+  "common_no": {
+    "message": "No",
+    "description": "Translation for common.no"
+  },
+  "common_confirm": {
+    "message": "Confirm",
+    "description": "Translation for common.confirm"
+  },
+  "common_back": {
+    "message": "Back",
+    "description": "Translation for common.back"
+  },
+  "common_next": {
+    "message": "Next",
+    "description": "Translation for common.next"
+  },
+  "common_previous": {
+    "message": "Previous",
+    "description": "Translation for common.previous"
+  },
+  "common_refresh": {
+    "message": "Refresh",
+    "description": "Translation for common.refresh"
+  },
+  "common_reset": {
+    "message": "Reset",
+    "description": "Translation for common.reset"
+  },
+  "common_search": {
+    "message": "Search",
+    "description": "Translation for common.search"
+  },
+  "common_filter": {
+    "message": "Filter",
+    "description": "Translation for common.filter"
+  },
+  "common_sort": {
+    "message": "Sort",
+    "description": "Translation for common.sort"
+  },
+  "common_copy": {
+    "message": "Copy",
+    "description": "Translation for common.copy"
+  },
+  "common_paste": {
+    "message": "Paste",
+    "description": "Translation for common.paste"
+  },
+  "common_cut": {
+    "message": "Cut",
+    "description": "Translation for common.cut"
+  },
+  "common_selectAll": {
+    "message": "Select All",
+    "description": "Translation for common.selectAll"
+  },
+  "popup_title": {
+    "message": "WebSocket DevTools",
+    "description": "Translation for popup.title"
+  },
+  "popup_enableExtension": {
+    "message": "Enable Extension",
+    "description": "Translation for popup.enableExtension"
+  },
+  "popup_status_enabled": {
+    "message": "Enabled",
+    "description": "Translation for popup.status.enabled"
+  },
+  "popup_status_disabled": {
+    "message": "Disabled",
+    "description": "Translation for popup.status.disabled"
+  },
+  "popup_status_activeOnNewPages": {
+    "message": "Active on new pages",
+    "description": "Translation for popup.status.activeOnNewPages"
+  },
+  "popup_status_disabledOnNewPages": {
+    "message": "Disabled on new pages",
+    "description": "Translation for popup.status.disabledOnNewPages"
+  },
+  "popup_openDevTools": {
+    "message": "Open DevTools Panel",
+    "description": "Translation for popup.openDevTools"
+  },
+  "popup_devToolsHint": {
+    "message": "Press F12 → Find \"WebSocket DevTools\" tab",
+    "description": "Translation for popup.devToolsHint"
+  },
+  "popup_infoCard_title": {
+    "message": "WebSocket DevTools",
+    "description": "Translation for popup.infoCard.title"
+  },
+  "popup_infoCard_description": {
+    "message": "Monitor and debug WebSocket connections",
+    "description": "Translation for popup.infoCard.description"
+  },
+  "popup_status": {
+    "message": "Status",
+    "description": "Translation for popup.status"
+  },
+  "popup_loading": {
+    "message": "Loading...",
+    "description": "Translation for popup.loading"
+  },
+  "popup_features_proxy_title": {
+    "message": "Proxy",
+    "description": "Translation for popup.features.proxy.title"
+  },
+  "popup_features_proxy_desc": {
+    "message": "Monitoring",
+    "description": "Translation for popup.features.proxy.desc"
+  },
+  "popup_features_simulate_title": {
+    "message": "Simulate",
+    "description": "Translation for popup.features.simulate.title"
+  },
+  "popup_features_simulate_desc": {
+    "message": "Message",
+    "description": "Translation for popup.features.simulate.desc"
+  },
+  "popup_features_block_title": {
+    "message": "Block",
+    "description": "Translation for popup.features.block.title"
+  },
+  "popup_features_block_desc": {
+    "message": "Traffic",
+    "description": "Translation for popup.features.block.desc"
+  },
+  "system_closeEvent_notice": {
+    "message": "Only 'Client Close' events (with Close Code 1000 or 3000-4999) will actually call ws.close() and close the connection. All other close events (including server-side) are simulated: ws.onclose.call() will be triggered, but the underlying connection is not truly closed.",
+    "description": "Translation for system.closeEvent.notice"
+  },
+  "extensionName": {
+    "message": "WebSocket Inspector",
+    "description": "Extension name"
+  },
+  "extensionDescription": {
+    "message": "Monitor and debug WebSocket connections",
+    "description": "Extension description"
+  },
+  "popupTitle": {
+    "message": "WebSocket DevTools",
+    "description": "Popup title"
+  }
+}

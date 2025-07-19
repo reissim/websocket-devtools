@@ -170,8 +170,8 @@ const Popup = () => {
             <SquareActivity size={16} />
           </div>
           <div style={styles.featureText}>
-            <div style={styles.featureTitle}>Proxy</div>
-            <div style={styles.featureDesc}>Monitoring</div>
+            <div style={styles.featureTitle}>{t("popup.features.proxy.title")}</div>
+            <div style={styles.featureDesc}>{t("popup.features.proxy.desc")}</div>
           </div>
         </div>
         <div 
@@ -182,8 +182,8 @@ const Popup = () => {
             <Send size={16} />
           </div>
           <div style={styles.featureText}>
-            <div style={styles.featureTitle}>Simulate</div>
-            <div style={styles.featureDesc}>Message</div>
+            <div style={styles.featureTitle}>{t("popup.features.simulate.title")}</div>
+            <div style={styles.featureDesc}>{t("popup.features.simulate.desc")}</div>
           </div>
         </div>
         <div 
@@ -194,8 +194,8 @@ const Popup = () => {
             <Ban size={16} />
           </div>
           <div style={styles.featureText}>
-            <div style={styles.featureTitle}>Block</div>
-            <div style={styles.featureDesc}>Traffic</div>
+            <div style={styles.featureTitle}>{t("popup.features.block.title")}</div>
+            <div style={styles.featureDesc}>{t("popup.features.block.desc")}</div>
           </div>
         </div>
       </div>
@@ -204,13 +204,13 @@ const Popup = () => {
       <div style={styles.footer}>
         <span style={styles.versionText}>v0.9.0</span>
         <a 
-          href="https://github.com/BrianLuo/websocket-proxy-pro" 
+          href="https://github.com/law-chain-hot/websocket-devtools" 
           target="_blank" 
           className="github-link"
           style={styles.githubLink}
           onClick={(e) => {
             e.preventDefault();
-            chrome.tabs.create({ url: "https://github.com/BrianLuo/websocket-proxy-pro" });
+            chrome.tabs.create({ url: "https://github.com/law-chain-hot/websocket-devtools" });
           }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -529,8 +529,8 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: "32px",
-    height: "32px",
+    width: "24px",
+    height: "24px",
     borderRadius: "50%",
     background: "rgba(71, 85, 105, 0.4)",
     backdropFilter: "blur(10px)",

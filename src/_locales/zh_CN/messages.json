@@ -1,0 +1,994 @@
+{
+  "app_title": {
+    "message": "WebSocket 检查器",
+    "description": "Translation for app.title"
+  },
+  "app_description": {
+    "message": "监控和调试 WebSocket 连接",
+    "description": "Translation for app.description"
+  },
+  "monitor_status_active": {
+    "message": "监控进行中",
+    "description": "Translation for monitor.status.active"
+  },
+  "monitor_status_inactive": {
+    "message": "监控已停止",
+    "description": "Translation for monitor.status.inactive"
+  },
+  "monitor_status_paused": {
+    "message": "监控已暂停",
+    "description": "Translation for monitor.status.paused"
+  },
+  "monitor_actions_start": {
+    "message": "开始监控",
+    "description": "Translation for monitor.actions.start"
+  },
+  "monitor_actions_stop": {
+    "message": "停止监控",
+    "description": "Translation for monitor.actions.stop"
+  },
+  "monitor_actions_pause": {
+    "message": "暂停监控",
+    "description": "Translation for monitor.actions.pause"
+  },
+  "monitor_actions_resume": {
+    "message": "恢复监控",
+    "description": "Translation for monitor.actions.resume"
+  },
+  "panel_header_title": {
+    "message": "WebSocket 检查器",
+    "description": "Translation for panel.header.title"
+  },
+  "panel_header_status_active": {
+    "message": "监控进行中",
+    "description": "Translation for panel.header.status_active"
+  },
+  "panel_header_status_inactive": {
+    "message": "监控已停止",
+    "description": "Translation for panel.header.status_inactive"
+  },
+  "panel_header_block_send": {
+    "message": "阻止发送",
+    "description": "Translation for panel.header.block_send"
+  },
+  "panel_header_block_receive": {
+    "message": "阻止接收",
+    "description": "Translation for panel.header.block_receive"
+  },
+  "panel_header_block_all": {
+    "message": "全部阻止",
+    "description": "Translation for panel.header.block_all"
+  },
+  "panel_messageDetails_title": {
+    "message": "💬 消息详情",
+    "description": "Translation for panel.messageDetails.title"
+  },
+  "panel_messageDetails_noConnection": {
+    "message": "未选择连接",
+    "description": "Translation for panel.messageDetails.noConnection"
+  },
+  "panel_messageDetails_selectConnection": {
+    "message": "请选择一个 WebSocket 连接以查看消息详情",
+    "description": "Translation for panel.messageDetails.selectConnection"
+  },
+  "panel_messageDetails_noMessages": {
+    "message": "暂无消息",
+    "description": "Translation for panel.messageDetails.noMessages"
+  },
+  "panel_messageDetails_waitingForMessages": {
+    "message": "等待 WebSocket 消息...",
+    "description": "Translation for panel.messageDetails.waitingForMessages"
+  },
+  "panel_messageDetails_clear": {
+    "message": "清空消息",
+    "description": "Translation for panel.messageDetails.clear"
+  },
+  "panel_messageDetails_simulate": {
+    "message": "模拟消息",
+    "description": "Translation for panel.messageDetails.simulate"
+  },
+  "panel_messageDetails_addToFavorites": {
+    "message": "添加到收藏",
+    "description": "Translation for panel.messageDetails.addToFavorites"
+  },
+  "panel_connectionList_title": {
+    "message": "WebSocket 连接",
+    "description": "Translation for panel.connectionList.title"
+  },
+  "panel_connectionList_noConnections": {
+    "message": "未找到连接",
+    "description": "Translation for panel.connectionList.noConnections"
+  },
+  "panel_connectionList_waiting": {
+    "message": "等待 WebSocket 连接...",
+    "description": "Translation for panel.connectionList.waiting"
+  },
+  "panel_connectionList_activeConnections": {
+    "message": "活跃连接",
+    "description": "Translation for panel.connectionList.activeConnections"
+  },
+  "panel_connectionList_inactiveConnections": {
+    "message": "非活跃连接",
+    "description": "Translation for panel.connectionList.inactiveConnections"
+  },
+  "panel_connectionList_messagesCount": {
+    "message": "{{count}} 条消息",
+    "description": "Translation for panel.connectionList.messagesCount"
+  },
+  "panel_connectionList_created": {
+    "message": "创建于 {{time}}",
+    "description": "Translation for panel.connectionList.created"
+  },
+  "panel_connectionList_addConnection": {
+    "message": "添加连接",
+    "description": "Translation for panel.connectionList.addConnection"
+  },
+  "panel_connectionList_modal_title": {
+    "message": "添加 WebSocket 连接",
+    "description": "Translation for panel.connectionList.modal.title"
+  },
+  "panel_connectionList_modal_description": {
+    "message": "创建手动 WebSocket 连接以测试和调试您的 WebSocket 应用程序。代理将自动监控所有连接事件和消息。",
+    "description": "Translation for panel.connectionList.modal.description"
+  },
+  "panel_connectionList_modal_feature1": {
+    "message": "自动代理 WebSocket 连接",
+    "description": "Translation for panel.connectionList.modal.feature1"
+  },
+  "panel_connectionList_modal_feature2": {
+    "message": "实时消息监控",
+    "description": "Translation for panel.connectionList.modal.feature2"
+  },
+  "panel_connectionList_modal_urlLabel": {
+    "message": "WebSocket URL",
+    "description": "Translation for panel.connectionList.modal.urlLabel"
+  },
+  "panel_connectionList_modal_urlPlaceholder": {
+    "message": "wss://example.com/websocket",
+    "description": "Translation for panel.connectionList.modal.urlPlaceholder"
+  },
+  "panel_connectionList_modal_urlError": {
+    "message": "请输入有效的 WebSocket URL",
+    "description": "Translation for panel.connectionList.modal.urlError"
+  },
+  "panel_connectionList_modal_cancel": {
+    "message": "取消",
+    "description": "Translation for panel.connectionList.modal.cancel"
+  },
+  "panel_connectionList_modal_connect": {
+    "message": "连接",
+    "description": "Translation for panel.connectionList.modal.connect"
+  },
+  "panel_connectionList_status_connected": {
+    "message": "已连接",
+    "description": "Translation for panel.connectionList.status.connected"
+  },
+  "panel_connectionList_status_disconnected": {
+    "message": "已断开",
+    "description": "Translation for panel.connectionList.status.disconnected"
+  },
+  "panel_connectionList_status_connecting": {
+    "message": "连接中",
+    "description": "Translation for panel.connectionList.status.connecting"
+  },
+  "panel_connectionList_status_error": {
+    "message": "错误",
+    "description": "Translation for panel.connectionList.status.error"
+  },
+  "panel_connectionList_tooltips_closeConnection": {
+    "message": "关闭连接",
+    "description": "Translation for panel.connectionList.tooltips.closeConnection"
+  },
+  "panel_connectionList_tooltips_clearAll": {
+    "message": "清空所有连接",
+    "description": "Translation for panel.connectionList.tooltips.clearAll"
+  },
+  "panel_controlPanel_title": {
+    "message": "控制面板",
+    "description": "Translation for panel.controlPanel.title"
+  },
+  "panel_controlPanel_monitor": {
+    "message": "监控",
+    "description": "Translation for panel.controlPanel.monitor"
+  },
+  "panel_controlPanel_messageControl": {
+    "message": "消息控制",
+    "description": "Translation for panel.controlPanel.messageControl"
+  },
+  "panel_controlPanel_blockOutgoing": {
+    "message": "阻止发送",
+    "description": "Translation for panel.controlPanel.blockOutgoing"
+  },
+  "panel_controlPanel_blockIncoming": {
+    "message": "阻止接收",
+    "description": "Translation for panel.controlPanel.blockIncoming"
+  },
+  "panel_controlPanel_status_active": {
+    "message": "活跃",
+    "description": "Translation for panel.controlPanel.status.active"
+  },
+  "panel_controlPanel_status_inactive": {
+    "message": "未活跃",
+    "description": "Translation for panel.controlPanel.status.inactive"
+  },
+  "simulate_title": {
+    "message": "模拟控制台",
+    "description": "Translation for simulate.title"
+  },
+  "simulate_direction_label": {
+    "message": "方向",
+    "description": "Translation for simulate.direction.label"
+  },
+  "simulate_direction_incoming": {
+    "message": "接收 (服务器 → 客户端)",
+    "description": "Translation for simulate.direction.incoming"
+  },
+  "simulate_direction_outgoing": {
+    "message": "发送 (客户端 → 服务器)",
+    "description": "Translation for simulate.direction.outgoing"
+  },
+  "simulate_content_placeholder": {
+    "message": "在此输入消息内容...",
+    "description": "Translation for simulate.content.placeholder"
+  },
+  "simulate_content_jsonPlaceholder": {
+    "message": "{\n  \"message\": \"你好世界\",\n  \"timestamp\": \"{{timestamp}}\"\n}",
+    "description": "Translation for simulate.content.jsonPlaceholder"
+  },
+  "simulate_actions_send": {
+    "message": "发送消息",
+    "description": "Translation for simulate.actions.send"
+  },
+  "simulate_actions_clear": {
+    "message": "清空",
+    "description": "Translation for simulate.actions.clear"
+  },
+  "simulate_actions_addToFavorites": {
+    "message": "添加到收藏",
+    "description": "Translation for simulate.actions.addToFavorites"
+  },
+  "simulate_actions_loadFromFavorites": {
+    "message": "从收藏加载",
+    "description": "Translation for simulate.actions.loadFromFavorites"
+  },
+  "simulate_actions_simulateReceive": {
+    "message": "模拟接收",
+    "description": "Translation for simulate.actions.simulateReceive"
+  },
+  "simulate_actions_simulateSend": {
+    "message": "模拟发送",
+    "description": "Translation for simulate.actions.simulateSend"
+  },
+  "simulate_status_sending": {
+    "message": "发送中...",
+    "description": "Translation for simulate.status.sending"
+  },
+  "simulate_status_sent": {
+    "message": "消息发送成功",
+    "description": "Translation for simulate.status.sent"
+  },
+  "simulate_status_error": {
+    "message": "消息发送失败",
+    "description": "Translation for simulate.status.error"
+  },
+  "simulate_status_noConnection": {
+    "message": "未选择连接",
+    "description": "Translation for simulate.status.noConnection"
+  },
+  "simulate_status_noConnectionDescription": {
+    "message": "创建 WebSocket 连接以开始发送和接收消息。",
+    "description": "Translation for simulate.status.noConnectionDescription"
+  },
+  "simulate_status_addConnection": {
+    "message": "添加连接",
+    "description": "Translation for simulate.status.addConnection"
+  },
+  "simulate_tabs_editor": {
+    "message": "编辑器",
+    "description": "Translation for simulate.tabs.editor"
+  },
+  "simulate_tabs_favorites": {
+    "message": "收藏",
+    "description": "Translation for simulate.tabs.favorites"
+  },
+  "simulate_tabs_system": {
+    "message": "系统",
+    "description": "Translation for simulate.tabs.system"
+  },
+  "simulate_tooltips_open": {
+    "message": "打开模拟面板",
+    "description": "Translation for simulate.tooltips.open"
+  },
+  "simulate_tooltips_minimize": {
+    "message": "最小化面板",
+    "description": "Translation for simulate.tooltips.minimize"
+  },
+  "simulate_tooltips_pin": {
+    "message": "固定面板",
+    "description": "Translation for simulate.tooltips.pin"
+  },
+  "simulate_tooltips_unpin": {
+    "message": "取消固定面板",
+    "description": "Translation for simulate.tooltips.unpin"
+  },
+  "favorites_title": {
+    "message": "收藏",
+    "description": "Translation for favorites.title"
+  },
+  "favorites_add": {
+    "message": "添加到收藏",
+    "description": "Translation for favorites.add"
+  },
+  "favorites_remove": {
+    "message": "移除",
+    "description": "Translation for favorites.remove"
+  },
+  "favorites_load": {
+    "message": "加载",
+    "description": "Translation for favorites.load"
+  },
+  "favorites_edit": {
+    "message": "编辑",
+    "description": "Translation for favorites.edit"
+  },
+  "favorites_duplicate": {
+    "message": "复制",
+    "description": "Translation for favorites.duplicate"
+  },
+  "favorites_export": {
+    "message": "导出",
+    "description": "Translation for favorites.export"
+  },
+  "favorites_import": {
+    "message": "导入",
+    "description": "Translation for favorites.import"
+  },
+  "favorites_clear": {
+    "message": "清空全部",
+    "description": "Translation for favorites.clear"
+  },
+  "favorites_empty": {
+    "message": "暂无收藏",
+    "description": "Translation for favorites.empty"
+  },
+  "favorites_emptyHint": {
+    "message": "将常用消息添加到收藏以便快速访问",
+    "description": "Translation for favorites.emptyHint"
+  },
+  "favorites_name": {
+    "message": "名称",
+    "description": "Translation for favorites.name"
+  },
+  "favorites_message": {
+    "message": "消息",
+    "description": "Translation for favorites.message"
+  },
+  "favorites_actions": {
+    "message": "操作",
+    "description": "Translation for favorites.actions"
+  },
+  "favorites_unnamedMessage": {
+    "message": "未命名消息",
+    "description": "Translation for favorites.unnamedMessage"
+  },
+  "favorites_noResults": {
+    "message": "未找到匹配的收藏",
+    "description": "Translation for favorites.noResults"
+  },
+  "favorites_noResultsHint": {
+    "message": "尝试调整搜索条件",
+    "description": "Translation for favorites.noResultsHint"
+  },
+  "favorites_placeholders_messageName": {
+    "message": "输入消息名称",
+    "description": "Translation for favorites.placeholders.messageName"
+  },
+  "favorites_placeholders_search": {
+    "message": "搜索收藏...",
+    "description": "Translation for favorites.placeholders.search"
+  },
+  "favorites_tooltips_toggleExpand": {
+    "message": "切换展开",
+    "description": "Translation for favorites.tooltips.toggleExpand"
+  },
+  "favorites_tooltips_simulateReceive": {
+    "message": "模拟接收",
+    "description": "Translation for favorites.tooltips.simulateReceive"
+  },
+  "favorites_tooltips_simulateSend": {
+    "message": "模拟发送",
+    "description": "Translation for favorites.tooltips.simulateSend"
+  },
+  "favorites_limit_usage": {
+    "message": "已使用 {{count}}/10 个收藏",
+    "description": "Translation for favorites.limit.usage"
+  },
+  "favorites_limit_exceeded_message": {
+    "message": "最多只能保存 10 个收藏消息",
+    "description": "Translation for favorites.limit.exceeded.message"
+  },
+  "system_title": {
+    "message": "系统事件",
+    "description": "Translation for system.title"
+  },
+  "system_description": {
+    "message": "模拟 WebSocket 系统事件和状态",
+    "description": "Translation for system.description"
+  },
+  "system_tabs_client": {
+    "message": "客户端事件",
+    "description": "Translation for system.tabs.client"
+  },
+  "system_tabs_server": {
+    "message": "服务器事件",
+    "description": "Translation for system.tabs.server"
+  },
+  "system_events_close_title": {
+    "message": "关闭事件",
+    "description": "Translation for system.events.close.title"
+  },
+  "system_events_close_description": {
+    "message": "模拟连接关闭场景",
+    "description": "Translation for system.events.close.description"
+  },
+  "system_events_close_code": {
+    "message": "关闭代码",
+    "description": "Translation for system.events.close.code"
+  },
+  "system_events_close_reason": {
+    "message": "关闭原因",
+    "description": "Translation for system.events.close.reason"
+  },
+  "system_events_close_reasonPlaceholder": {
+    "message": "可选的关闭原因",
+    "description": "Translation for system.events.close.reasonPlaceholder"
+  },
+  "system_events_close_simulate": {
+    "message": "模拟客户端关闭",
+    "description": "Translation for system.events.close.simulate"
+  },
+  "system_events_close_serverTitle": {
+    "message": "服务器关闭事件",
+    "description": "Translation for system.events.close.serverTitle"
+  },
+  "system_events_close_serverDescription": {
+    "message": "模拟服务器发起的关闭场景",
+    "description": "Translation for system.events.close.serverDescription"
+  },
+  "system_events_close_serverCode": {
+    "message": "服务器关闭代码",
+    "description": "Translation for system.events.close.serverCode"
+  },
+  "system_events_close_serverReason": {
+    "message": "服务器关闭原因",
+    "description": "Translation for system.events.close.serverReason"
+  },
+  "system_events_close_serverReasonPlaceholder": {
+    "message": "可选的服务器关闭原因",
+    "description": "Translation for system.events.close.serverReasonPlaceholder"
+  },
+  "system_events_close_serverSimulate": {
+    "message": "模拟服务器关闭",
+    "description": "Translation for system.events.close.serverSimulate"
+  },
+  "system_events_close_codePlaceholder": {
+    "message": "输入自定义关闭代码 (1000-4999)",
+    "description": "Translation for system.events.close.codePlaceholder"
+  },
+  "system_events_close_serverCodePlaceholder": {
+    "message": "输入自定义服务器关闭代码 (1000-4999)",
+    "description": "Translation for system.events.close.serverCodePlaceholder"
+  },
+  "system_events_close_clientInitiated": {
+    "message": "客户端发起关闭",
+    "description": "Translation for system.events.close.clientInitiated"
+  },
+  "system_events_close_serverInitiated": {
+    "message": "服务器发起关闭",
+    "description": "Translation for system.events.close.serverInitiated"
+  },
+  "system_events_close_serverNormal": {
+    "message": "服务器正常关闭",
+    "description": "Translation for system.events.close.serverNormal"
+  },
+  "system_events_close_policyViolation": {
+    "message": "服务器策略违规",
+    "description": "Translation for system.events.close.policyViolation"
+  },
+  "system_events_close_heartbeatTimeout": {
+    "message": "服务器心跳超时",
+    "description": "Translation for system.events.close.heartbeatTimeout"
+  },
+  "system_events_close_authFailure": {
+    "message": "认证失败",
+    "description": "Translation for system.events.close.authFailure"
+  },
+  "system_events_error_title": {
+    "message": "错误事件",
+    "description": "Translation for system.events.error.title"
+  },
+  "system_events_error_description": {
+    "message": "模拟各种错误情况",
+    "description": "Translation for system.events.error.description"
+  },
+  "system_events_error_connectionFailed": {
+    "message": "连接失败",
+    "description": "Translation for system.events.error.connectionFailed"
+  },
+  "system_events_error_networkDisconnect": {
+    "message": "网络断开",
+    "description": "Translation for system.events.error.networkDisconnect"
+  },
+  "system_events_error_protocolError": {
+    "message": "协议错误",
+    "description": "Translation for system.events.error.protocolError"
+  },
+  "system_events_error_timeoutError": {
+    "message": "超时错误",
+    "description": "Translation for system.events.error.timeoutError"
+  },
+  "system_events_error_messageFormatError": {
+    "message": "消息格式错误",
+    "description": "Translation for system.events.error.messageFormatError"
+  },
+  "system_events_error_clientDisconnect": {
+    "message": "客户端断开",
+    "description": "Translation for system.events.error.clientDisconnect"
+  },
+  "system_events_error_internalServerError": {
+    "message": "内部服务器错误",
+    "description": "Translation for system.events.error.internalServerError"
+  },
+  "system_events_error_resourceExhausted": {
+    "message": "资源耗尽",
+    "description": "Translation for system.events.error.resourceExhausted"
+  },
+  "system_events_error_serverTitle": {
+    "message": "服务器错误事件",
+    "description": "Translation for system.events.error.serverTitle"
+  },
+  "system_events_error_serverDescription": {
+    "message": "模拟服务器端错误情况",
+    "description": "Translation for system.events.error.serverDescription"
+  },
+  "system_events_error_customError": {
+    "message": "自定义错误",
+    "description": "Translation for system.events.error.customError"
+  },
+  "system_events_error_customServerError": {
+    "message": "自定义服务器错误",
+    "description": "Translation for system.events.error.customServerError"
+  },
+  "system_events_error_unexpectedCondition": {
+    "message": "意外情况",
+    "description": "Translation for system.events.error.unexpectedCondition"
+  },
+  "system_events_error_serviceRestart": {
+    "message": "服务重启",
+    "description": "Translation for system.events.error.serviceRestart"
+  },
+  "system_closeCode_1000": {
+    "message": "1000 - 正常关闭",
+    "description": "Translation for system.closeCode.1000"
+  },
+  "system_closeCode_1001": {
+    "message": "1001 - 离开",
+    "description": "Translation for system.closeCode.1001"
+  },
+  "system_closeCode_1002": {
+    "message": "1002 - 协议错误",
+    "description": "Translation for system.closeCode.1002"
+  },
+  "system_closeCode_1008": {
+    "message": "1008 - 策略违规",
+    "description": "Translation for system.closeCode.1008"
+  },
+  "system_closeCode_1009": {
+    "message": "1009 - 消息过大",
+    "description": "Translation for system.closeCode.1009"
+  },
+  "system_closeCode_1011": {
+    "message": "1011 - 内部服务器错误",
+    "description": "Translation for system.closeCode.1011"
+  },
+  "system_closeCode_4001": {
+    "message": "4001 - 认证失败",
+    "description": "Translation for system.closeCode.4001"
+  },
+  "system_closeCode_custom": {
+    "message": "自定义代码...",
+    "description": "Translation for system.closeCode.custom"
+  },
+  "system_closeCodeInfo_serverSupport": {
+    "message": "服务器支持关闭代码 1000-1015 和 3000-4999",
+    "description": "Translation for system.closeCodeInfo.serverSupport"
+  },
+  "system_closeCodeInfo_normal": {
+    "message": "正常关闭 - 连接成功完成",
+    "description": "Translation for system.closeCodeInfo.normal"
+  },
+  "system_closeCodeInfo_protocol": {
+    "message": "协议保留代码 - 谨慎使用",
+    "description": "Translation for system.closeCodeInfo.protocol"
+  },
+  "system_closeCodeInfo_application": {
+    "message": "应用程序专用代码 - 安全使用",
+    "description": "Translation for system.closeCodeInfo.application"
+  },
+  "system_closeCodeInfo_invalid": {
+    "message": "无效关闭代码 - 必须在 1000-4999 范围内",
+    "description": "Translation for system.closeCodeInfo.invalid"
+  },
+  "system_noConnection": {
+    "message": "请选择一个 WebSocket 连接以模拟系统事件",
+    "description": "Translation for system.noConnection"
+  },
+  "system_noConnectionTitle": {
+    "message": "未选择连接",
+    "description": "Translation for system.noConnectionTitle"
+  },
+  "system_tooltips_resetToPreset": {
+    "message": "重置为预设代码",
+    "description": "Translation for system.tooltips.resetToPreset"
+  },
+  "language_selector_title": {
+    "message": "语言",
+    "description": "Translation for language.selector.title"
+  },
+  "language_selector_change": {
+    "message": "切换语言",
+    "description": "Translation for language.selector.change"
+  },
+  "language_names_en_us": {
+    "message": "English",
+    "description": "Translation for language.names.en-us"
+  },
+  "language_names_zh_cn": {
+    "message": "中文",
+    "description": "Translation for language.names.zh-cn"
+  },
+  "jsonViewer_controls_wrap": {
+    "message": "自动换行",
+    "description": "Translation for jsonViewer.controls.wrap"
+  },
+  "jsonViewer_controls_nestedParse": {
+    "message": "嵌套解析",
+    "description": "Translation for jsonViewer.controls.nestedParse"
+  },
+  "jsonViewer_controls_copy": {
+    "message": "复制",
+    "description": "Translation for jsonViewer.controls.copy"
+  },
+  "jsonViewer_controls_copied": {
+    "message": "已复制！",
+    "description": "Translation for jsonViewer.controls.copied"
+  },
+  "jsonViewer_controls_favorite": {
+    "message": "收藏",
+    "description": "Translation for jsonViewer.controls.favorite"
+  },
+  "jsonViewer_status_edit": {
+    "message": "编辑",
+    "description": "Translation for jsonViewer.status.edit"
+  },
+  "jsonViewer_status_json": {
+    "message": "JSON",
+    "description": "Translation for jsonViewer.status.json"
+  },
+  "jsonViewer_status_nested": {
+    "message": "嵌套",
+    "description": "Translation for jsonViewer.status.nested"
+  },
+  "jsonViewer_tooltips_wrapText": {
+    "message": "文本换行",
+    "description": "Translation for jsonViewer.tooltips.wrapText"
+  },
+  "jsonViewer_tooltips_nestedParseJson": {
+    "message": "嵌套解析 JSON",
+    "description": "Translation for jsonViewer.tooltips.nestedParseJson"
+  },
+  "jsonViewer_tooltips_noNestedData": {
+    "message": "未发现嵌套 JSON 数据",
+    "description": "Translation for jsonViewer.tooltips.noNestedData"
+  },
+  "jsonViewer_tooltips_copy": {
+    "message": "复制",
+    "description": "Translation for jsonViewer.tooltips.copy"
+  },
+  "jsonViewer_tooltips_copied": {
+    "message": "已复制！",
+    "description": "Translation for jsonViewer.tooltips.copied"
+  },
+  "jsonViewer_tooltips_addToFavorites": {
+    "message": "添加到收藏",
+    "description": "Translation for jsonViewer.tooltips.addToFavorites"
+  },
+  "jsonViewer_tooltips_simulate": {
+    "message": "模拟此消息",
+    "description": "Translation for jsonViewer.tooltips.simulate"
+  },
+  "jsonViewer_tooltips_simulateNestedParseJson": {
+    "message": "解析嵌套 JSON 并模拟",
+    "description": "Translation for jsonViewer.tooltips.simulateNestedParseJson"
+  },
+  "jsonViewer_controls_simulateNestedParse": {
+    "message": "嵌套解析并填充",
+    "description": "Translation for jsonViewer.controls.simulateNestedParse"
+  },
+  "messageDetails_emptyState_selectConnection": {
+    "message": "选择一个 WebSocket 连接以查看消息",
+    "description": "Translation for messageDetails.emptyState.selectConnection"
+  },
+  "messageDetails_emptyState_noMessages": {
+    "message": "暂无消息",
+    "description": "Translation for messageDetails.emptyState.noMessages"
+  },
+  "messageDetails_connection_disconnected": {
+    "message": "已从 {{url}} 断开连接",
+    "description": "Translation for messageDetails.connection.disconnected"
+  },
+  "messageDetails_connection_requestServed": {
+    "message": "请求由 {{data}} 处理",
+    "description": "Translation for messageDetails.connection.requestServed"
+  },
+  "messageDetails_connection_connectionError": {
+    "message": "连接错误",
+    "description": "Translation for messageDetails.connection.connectionError"
+  },
+  "messageDetails_tags_simulate": {
+    "message": "模拟",
+    "description": "Translation for messageDetails.tags.simulate"
+  },
+  "messageDetails_tags_block": {
+    "message": "阻止",
+    "description": "Translation for messageDetails.tags.block"
+  },
+  "messageDetails_controls_all": {
+    "message": "全部",
+    "description": "Translation for messageDetails.controls.all"
+  },
+  "messageDetails_controls_send": {
+    "message": "发送",
+    "description": "Translation for messageDetails.controls.send"
+  },
+  "messageDetails_controls_receive": {
+    "message": "接收",
+    "description": "Translation for messageDetails.controls.receive"
+  },
+  "messageDetails_controls_invert": {
+    "message": "反向",
+    "description": "Translation for messageDetails.controls.invert"
+  },
+  "messageDetails_controls_filterPlaceholder": {
+    "message": "按文本内容筛选消息",
+    "description": "Translation for messageDetails.controls.filterPlaceholder"
+  },
+  "messageDetails_controls_clearMessages": {
+    "message": "清空所有消息",
+    "description": "Translation for messageDetails.controls.clearMessages"
+  },
+  "messageDetails_table_data": {
+    "message": "数据",
+    "description": "Translation for messageDetails.table.data"
+  },
+  "messageDetails_table_length": {
+    "message": "长度",
+    "description": "Translation for messageDetails.table.length"
+  },
+  "messageDetails_table_time": {
+    "message": "时间",
+    "description": "Translation for messageDetails.table.time"
+  },
+  "messageDetails_actions_edit": {
+    "message": "编辑",
+    "description": "Translation for messageDetails.actions.edit"
+  },
+  "messageDetails_actions_allow": {
+    "message": "允许",
+    "description": "Translation for messageDetails.actions.allow"
+  },
+  "messageDetails_actions_block": {
+    "message": "阻止",
+    "description": "Translation for messageDetails.actions.block"
+  },
+  "messageDetails_tooltips_simulatedMessage": {
+    "message": "模拟消息",
+    "description": "Translation for messageDetails.tooltips.simulatedMessage"
+  },
+  "messageDetails_tooltips_messageBlocked": {
+    "message": "消息已被阻止",
+    "description": "Translation for messageDetails.tooltips.messageBlocked"
+  },
+  "common_ok": {
+    "message": "确定",
+    "description": "Translation for common.ok"
+  },
+  "common_cancel": {
+    "message": "取消",
+    "description": "Translation for common.cancel"
+  },
+  "common_save": {
+    "message": "保存",
+    "description": "Translation for common.save"
+  },
+  "common_delete": {
+    "message": "删除",
+    "description": "Translation for common.delete"
+  },
+  "common_edit": {
+    "message": "编辑",
+    "description": "Translation for common.edit"
+  },
+  "common_close": {
+    "message": "关闭",
+    "description": "Translation for common.close"
+  },
+  "common_loading": {
+    "message": "加载中...",
+    "description": "Translation for common.loading"
+  },
+  "common_error": {
+    "message": "错误",
+    "description": "Translation for common.error"
+  },
+  "common_success": {
+    "message": "成功",
+    "description": "Translation for common.success"
+  },
+  "common_warning": {
+    "message": "警告",
+    "description": "Translation for common.warning"
+  },
+  "common_info": {
+    "message": "信息",
+    "description": "Translation for common.info"
+  },
+  "common_yes": {
+    "message": "是",
+    "description": "Translation for common.yes"
+  },
+  "common_no": {
+    "message": "否",
+    "description": "Translation for common.no"
+  },
+  "common_confirm": {
+    "message": "确认",
+    "description": "Translation for common.confirm"
+  },
+  "common_back": {
+    "message": "返回",
+    "description": "Translation for common.back"
+  },
+  "common_next": {
+    "message": "下一步",
+    "description": "Translation for common.next"
+  },
+  "common_previous": {
+    "message": "上一步",
+    "description": "Translation for common.previous"
+  },
+  "common_refresh": {
+    "message": "刷新",
+    "description": "Translation for common.refresh"
+  },
+  "common_reset": {
+    "message": "重置",
+    "description": "Translation for common.reset"
+  },
+  "common_search": {
+    "message": "搜索",
+    "description": "Translation for common.search"
+  },
+  "common_filter": {
+    "message": "筛选",
+    "description": "Translation for common.filter"
+  },
+  "common_sort": {
+    "message": "排序",
+    "description": "Translation for common.sort"
+  },
+  "common_copy": {
+    "message": "复制",
+    "description": "Translation for common.copy"
+  },
+  "common_paste": {
+    "message": "粘贴",
+    "description": "Translation for common.paste"
+  },
+  "common_cut": {
+    "message": "剪切",
+    "description": "Translation for common.cut"
+  },
+  "common_selectAll": {
+    "message": "全选",
+    "description": "Translation for common.selectAll"
+  },
+  "popup_title": {
+    "message": "WebSocket DevTools",
+    "description": "Translation for popup.title"
+  },
+  "popup_enableExtension": {
+    "message": "启用扩展",
+    "description": "Translation for popup.enableExtension"
+  },
+  "popup_status_enabled": {
+    "message": "已启用",
+    "description": "Translation for popup.status.enabled"
+  },
+  "popup_status_disabled": {
+    "message": "已禁用",
+    "description": "Translation for popup.status.disabled"
+  },
+  "popup_status_activeOnNewPages": {
+    "message": "新页面上处于活跃状态",
+    "description": "Translation for popup.status.activeOnNewPages"
+  },
+  "popup_status_disabledOnNewPages": {
+    "message": "新页面上已禁用",
+    "description": "Translation for popup.status.disabledOnNewPages"
+  },
+  "popup_openDevTools": {
+    "message": "打开开发者工具面板",
+    "description": "Translation for popup.openDevTools"
+  },
+  "popup_devToolsHint": {
+    "message": "按 F12 → 找到\"WebSocket DevTools\"标签页",
+    "description": "Translation for popup.devToolsHint"
+  },
+  "popup_infoCard_title": {
+    "message": "WebSocket 代理",
+    "description": "Translation for popup.infoCard.title"
+  },
+  "popup_infoCard_description": {
+    "message": "监控和调试 WebSocket 连接",
+    "description": "Translation for popup.infoCard.description"
+  },
+  "popup_status": {
+    "message": "状态",
+    "description": "Translation for popup.status"
+  },
+  "popup_loading": {
+    "message": "加载中...",
+    "description": "Translation for popup.loading"
+  },
+  "popup_features_proxy_title": {
+    "message": "代理",
+    "description": "Translation for popup.features.proxy.title"
+  },
+  "popup_features_proxy_desc": {
+    "message": "监控",
+    "description": "Translation for popup.features.proxy.desc"
+  },
+  "popup_features_simulate_title": {
+    "message": "模拟",
+    "description": "Translation for popup.features.simulate.title"
+  },
+  "popup_features_simulate_desc": {
+    "message": "消息",
+    "description": "Translation for popup.features.simulate.desc"
+  },
+  "popup_features_block_title": {
+    "message": "阻止",
+    "description": "Translation for popup.features.block.title"
+  },
+  "popup_features_block_desc": {
+    "message": "流量",
+    "description": "Translation for popup.features.block.desc"
+  },
+  "system_closeEvent_notice": {
+    "message": "仅\"客户端关闭\"事件（Close Code 为 1000 或 3000-4999）会真实调用 ws.close() 并断开连接，其余所有关闭事件（包括服务端关闭）仅模拟关闭，虽然会触发 ws.onclose.call() 事件，但底层连接未真正断开。",
+    "description": "Translation for system.closeEvent.notice"
+  },
+  "extensionName": {
+    "message": "WebSocket 检查器",
+    "description": "Extension name"
+  },
+  "extensionDescription": {
+    "message": "监控和调试 WebSocket 连接",
+    "description": "Extension description"
+  },
+  "popupTitle": {
+    "message": "WebSocket DevTools",
+    "description": "Popup title"
+  }
+}

@@ -1,27 +1,35 @@
 /**
- * Internationalization utility for WebSocket Inspector
- * Supports multiple languages with JSON-based translations
+ * Smart hybrid i18n system - WebSocket Inspector
+ * Supports Chrome official i18n API + custom manual language switching
+ * Prioritizes Chrome API (better performance), uses custom system when manually switched
  */
 
 // Import preloaded translations for synchronous initialization
 import { translations as preloadedTranslations, supportedLanguages as preloadedSupportedLanguages, languageDisplayNames } from '../locales/index.js';
+import I18nConverter from './i18n-converter.js';
 
 class I18n {
   constructor() {
-    this.currentLanguage = 'en-us'; // Set default immediately
+    this.currentLanguage = 'en-us'; // Set default immediately  
     this.translations = new Map();
     this.fallbackLanguage = 'en-us';
     this.supportedLanguages = preloadedSupportedLanguages;
     this.listeners = new Set();
     this.isInitialized = false;
     
-    // Synchronously load preloaded translations
+    // Smart adapter pattern setup
+    this.useChromeAPI = false; // Default false, switch to custom mode when user manually switches
+    this.chromeSupported = this.detectChromeI18nSupport();
+    this.keyMapping = null; // Chrome key to flat key mapping
+    
+    // Synchronously load preloaded translations  
     Object.entries(preloadedTranslations).forEach(([lang, data]) => {
       this.translations.set(lang, this.flattenTranslations(data));
     });
     
-    // Asynchronously detect and set user preference
+    // Async initialization
     this.initUserPreference();
+    this.loadKeyMapping();
   }
 
   /**
@@ -40,20 +48,106 @@ class I18n {
   }
 
   /**
+   * Detect Chrome i18n API support
+   */
+  detectChromeI18nSupport() {
+    try {
+      return typeof chrome !== 'undefined' && chrome.i18n && chrome.i18n.getMessage;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Async load key mapping table
+   */
+  async loadKeyMapping() {
+    try {
+      if (this.chromeSupported) {
+        // Try to load mapping table
+        const response = await fetch(chrome.runtime.getURL('src/utils/i18n-key-mapping.json'));
+        this.keyMapping = await response.json();
+      }
+    } catch (error) {
+      // Use fallback mapping
+      console.warn('Unable to load key mapping table, using fallback');
+    }
+  }
+
+  /**
+   * Smart get translation - core adapter logic
+   */
+  smartGetMessage(key, params = {}) {
+    // If Chrome API is enabled and supported, prioritize Chrome API
+    if (this.useChromeAPI && this.chromeSupported) {
+      try {
+        const chromeKey = I18nConverter.flatKeyToChromeKey(key);
+        const message = chrome.i18n.getMessage(chromeKey, Object.values(params));
+        if (message) {
+          return this.replaceParams(message, params);
+        }
+      } catch (error) {
+        // Chrome API failed, fallback to custom system
+      }
+    }
+
+    // Use custom system
+    return this.getCustomMessage(key, params);
+  }
+
+  /**
+   * Custom translation system
+   */
+  getCustomMessage(key, params = {}) {
+    const translation = this.translations.get(this.currentLanguage)?.[key] ||
+                        this.translations.get(this.fallbackLanguage)?.[key];
+    if (translation === undefined) {
+      return key; // Return key as fallback
+    }
+    return this.replaceParams(translation, params);
+  }
+
+  /**
    * Initialize user preference asynchronously (called from constructor)
    */
   async initUserPreference(preferBrowserLanguage = false) {
     try {
-      const preferredLanguage = await this.detectLanguage(preferBrowserLanguage);
+      // Check if there's a manually set language preference
+      const savedLanguage = await this.getSavedLanguage();
       
-      if (preferredLanguage !== this.currentLanguage) {
-        await this.setLanguage(preferredLanguage);
+      if (savedLanguage) {
+        // Has manual setting, use custom system
+        this.useChromeAPI = false;
+        this.currentLanguage = savedLanguage;
+      } else if (this.chromeSupported) {
+        // No manual setting and Chrome API supported, prioritize Chrome API
+        this.useChromeAPI = true;
+        this.currentLanguage = this.mapChromeLocaleToFlat(chrome.i18n.getUILanguage());
+      } else {
+        // Detect browser language
+        const preferredLanguage = await this.detectLanguage(preferBrowserLanguage);
+        if (preferredLanguage !== this.currentLanguage) {
+          await this.setLanguage(preferredLanguage);
+        }
       }
       
       this.isInitialized = true;
     } catch (error) {
       this.isInitialized = true;
     }
+  }
+
+  /**
+   * Map Chrome locale to flat format
+   */
+  mapChromeLocaleToFlat(chromeLocale) {
+    const mapping = {
+      'en': 'en-us',
+      'en-US': 'en-us', 
+      'zh-CN': 'zh-cn',
+      'zh': 'zh-cn'
+    };
+    return mapping[chromeLocale] || this.fallbackLanguage;
   }
 
   /**
@@ -184,12 +278,16 @@ class I18n {
   }
 
   /**
-   * Set the current language and load its translations
+   * Set the current language and load its translations - supports manual switching
    */
   async setLanguage(language) {
     if (!this.supportedLanguages.includes(language)) {
       language = this.fallbackLanguage;
     }
+
+    // When manually switching language, force use of custom system
+    const wasUsingChromeAPI = this.useChromeAPI;
+    this.useChromeAPI = false;
 
     // Load translations for the language
     await this.loadTranslations(language);
@@ -198,8 +296,13 @@ class I18n {
     const oldLanguage = this.currentLanguage;
     this.currentLanguage = language;
 
-    // Save preference
+    // Save preference - mark as manually set
     await this.saveLanguage(language);
+
+    // Log mode switch
+    if (wasUsingChromeAPI) {
+      console.log(`🔄 Language switch: from Chrome API mode to custom mode (${language})`);
+    }
 
     // Notify listeners
     if (oldLanguage !== language) {
@@ -222,15 +325,10 @@ class I18n {
   }
 
   /**
-   * Translate a key to the current language
+   * Translate a key to the current language - smart adapter entry point
    */
   t(key, params = {}) {
-    const translation = this.translations.get(this.currentLanguage)?.[key] ||
-                        this.translations.get(this.fallbackLanguage)?.[key];
-    if (translation === undefined) {
-      return key; // Return key as fallback
-    }
-    return this.replaceParams(translation, params);
+    return this.smartGetMessage(key, params);
   }
 
   /**

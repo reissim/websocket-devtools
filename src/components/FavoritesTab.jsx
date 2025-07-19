@@ -327,23 +327,21 @@ const FavoritesItem = React.memo(
       </div>
     );
   },
-  // Optimization: add precise comparison function, only re-render when key props change
   (prevProps, nextProps) => {
-    return (
-      prevProps.favorite.id === nextProps.favorite.id &&
-      prevProps.favorite.name === nextProps.favorite.name &&
-      prevProps.favorite.data === nextProps.favorite.data &&
-      prevProps.favorite.updatedAt === nextProps.favorite.updatedAt &&
-      prevProps.isSelected === nextProps.isSelected &&
-      prevProps.isEditing === nextProps.isEditing &&
-      prevProps.onSend === nextProps.onSend &&
-      prevProps.onReceive === nextProps.onReceive &&
-      prevProps.onDelete === nextProps.onDelete &&
-      prevProps.onSelect === nextProps.onSelect &&
-      prevProps.onStartEdit === nextProps.onStartEdit &&
-      prevProps.onCancelEdit === nextProps.onCancelEdit &&
-      prevProps.onSaveEdit === nextProps.onSaveEdit
-    );
+    const { favorite: prevFav, isSelected: prevSel, isEditing: prevEdit } = prevProps;
+    const { favorite: nextFav, isSelected: nextSel, isEditing: nextEdit } = nextProps;
+    
+    if (prevSel !== nextSel || prevEdit !== nextEdit) return false;
+    
+    if (prevFav.id !== nextFav.id || 
+        prevFav.name !== nextFav.name || 
+        prevFav.data !== nextFav.data || 
+        prevFav.updatedAt !== nextFav.updatedAt) {
+      return false;
+    }
+    
+    const funcProps = ['onSend', 'onReceive', 'onDelete', 'onSelect', 'onStartEdit', 'onCancelEdit', 'onSaveEdit'];
+    return funcProps.every(prop => prevProps[prop] === nextProps[prop]);
   }
 );
 
@@ -473,7 +471,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
 
   // Optimize event handlers using useCallback
   const handleAddFavorite = useCallback((initialData = null) => {
-    const result = favoritesService.addFavorite(initialData || {}, {
+    favoritesService.addFavorite(initialData || {}, {
       autoEdit: true,
       switchToFavoritesTab: false, // Controlled by external
     });
