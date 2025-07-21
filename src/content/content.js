@@ -9,12 +9,13 @@ function checkExtensionEnabled() {
   });
 }
 
-// Message deduplication mechanism
+// Message deduplication mechanism with frame context
 let messageIdCounter = 0;
 function generateMessageId() {
+  const frameContext = window.location.href; // Include iframe context
   return `msg_${Date.now()}_${++messageIdCounter}_${Math.random()
     .toString(36)
-    .substr(2, 9)}`;
+    .substr(2, 9)}_${frameContext.length}`;
 }
 
 // Inject using external file to avoid CSP inline script restrictions
@@ -55,13 +56,20 @@ window.addEventListener("message", (event) => {
 
     // Add unique ID to message for deduplication
     const messageId = generateMessageId();
+    
     const messageWithId = {
       type: "websocket-event",
       data: event.data.payload,
       messageId: messageId,
       timestamp: Date.now(),
       source: "content-script",
+      frameContext: {
+        url: window.location.href,
+        isIframe: window !== window.top,
+        frameId: window !== window.top ? window.location.href : null
+      }
     };
+    
 
 
     // Send directly to DevTools Panel, also send to Background Script for data storage

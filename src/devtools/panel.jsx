@@ -94,6 +94,7 @@ const WebSocketPanel = () => {
                     eventData.type === "connection" ? "connecting" : "open",
                   timestamp: eventData.timestamp,
                   lastActivity: eventData.timestamp,
+                  frameContext: eventData.frameContext, // Preserve iframe context information
                 });
               } else if (
                 eventData.type === "close" ||
@@ -106,6 +107,7 @@ const WebSocketPanel = () => {
                   status: eventData.type,
                   timestamp: existing?.timestamp || eventData.timestamp,
                   lastActivity: eventData.timestamp,
+                  frameContext: existing?.frameContext || eventData.frameContext, // Preserve iframe context information
                 });
               } else if (eventData.type === "message") {
                 const existing = newConnectionsMap.get(eventData.id);
@@ -113,6 +115,7 @@ const WebSocketPanel = () => {
                   newConnectionsMap.set(eventData.id, {
                     ...existing,
                     lastActivity: eventData.timestamp,
+                    frameContext: existing.frameContext || eventData.frameContext, // Preserve iframe context information
                   });
                 }
               }
@@ -179,6 +182,7 @@ const WebSocketPanel = () => {
               status: eventData.type === "connection" ? "connecting" : "open",
               timestamp: eventData.timestamp,
               lastActivity: eventData.timestamp,
+              frameContext: eventData.frameContext, // Preserve iframe context information
             });
 
             // Auto-select connection: automatically select when transitioning from 0 to 1 connection
@@ -196,6 +200,7 @@ const WebSocketPanel = () => {
               status: eventData.type, // "close" or "error"
               timestamp: existing?.timestamp || eventData.timestamp,
               lastActivity: eventData.timestamp,
+              frameContext: existing?.frameContext || eventData.frameContext, // Preserve iframe context information
             });
           } else if (eventData.type === "message") {
             // Update last activity time (for message events)
@@ -204,6 +209,7 @@ const WebSocketPanel = () => {
               newConnections.set(eventData.id, {
                 ...existing,
                 lastActivity: eventData.timestamp,
+                frameContext: existing.frameContext || eventData.frameContext, // Preserve iframe context information
               });
             }
           }
@@ -303,6 +309,11 @@ const WebSocketPanel = () => {
     setSelectedConnectionId(connectionId);
   };
 
+  // Generate unique message ID for simulated messages
+  const generateMessageId = () => {
+    return `msg_simulated_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  };
+
   const handleSimulateMessage = async ({
     connectionId,
     message,
@@ -333,6 +344,7 @@ const WebSocketPanel = () => {
           timestamp: Date.now(),
           status: connectionInfo?.status || "open",
           simulated: true, // Mark as simulated message
+          messageId: generateMessageId(), // Add messageId for new message highlight
         };
 
         // Add directly to the event list
@@ -442,6 +454,21 @@ const WebSocketPanel = () => {
     }));
   };
 
+  // Set connection status to closing
+  const handleSetConnectionClosing = (connectionId) => {
+    setConnectionsMap((prevConnections) => {
+      const newConnections = new Map(prevConnections);
+      const existing = newConnections.get(connectionId);
+      if (existing) {
+        newConnections.set(connectionId, {
+          ...existing,
+          status: "closing",
+        });
+      }
+      return newConnections;
+    });
+  };
+
   const selectedConnection = getSelectedConnectionData();
 
   // Show loading while i18n initializes
@@ -523,6 +550,7 @@ const WebSocketPanel = () => {
                     onSelectConnection={handleSelectConnection}
                     onClearConnections={handleClearConnections}
                     onManualConnect={handleManualConnect}
+                    onSetConnectionClosing={handleSetConnectionClosing}
                   />
                 </div>
               </div>

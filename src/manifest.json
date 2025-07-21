@@ -26,11 +26,12 @@
     "service_worker": "src/background/background.js"
   },
 
-  "content_scripts": [
+      "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": ["src/content/content.js"],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "all_frames": true
     }
   ],
 

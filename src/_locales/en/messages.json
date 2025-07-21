@@ -164,12 +164,16 @@
     "description": "Translation for panel.connectionList.status.connected"
   },
   "panel_connectionList_status_disconnected": {
-    "message": "Disconnected",
+    "message": "Closed",
     "description": "Translation for panel.connectionList.status.disconnected"
   },
   "panel_connectionList_status_connecting": {
     "message": "Connecting",
     "description": "Translation for panel.connectionList.status.connecting"
+  },
+  "panel_connectionList_status_closing": {
+    "message": "Closing",
+    "description": "Translation for panel.connectionList.status.closing"
   },
   "panel_connectionList_status_error": {
     "message": "Error",
@@ -182,6 +186,14 @@
   "panel_connectionList_tooltips_clearAll": {
     "message": "Clear All Connections",
     "description": "Translation for panel.connectionList.tooltips.clearAll"
+  },
+  "panel_connectionList_tooltips_iframeConnection": {
+    "message": "This connection is from an iframe",
+    "description": "Translation for panel.connectionList.tooltips.iframeConnection"
+  },
+  "panel_connectionList_source_iframe": {
+    "message": "iframe",
+    "description": "Translation for panel.connectionList.source.iframe"
   },
   "panel_controlPanel_title": {
     "message": "Control Panel",

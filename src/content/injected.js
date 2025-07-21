@@ -27,9 +27,19 @@
   // Deep copy of initial state
   const proxyStateInitial = JSON.parse(JSON.stringify(proxyState));
 
-  // Generate unique connection ID
+  // Generate unique connection ID with frame context
   function generateConnectionId() {
-    return `ws_${Date.now()}_${++connectionIdCounter}`;
+    const frameContext = window !== window.top ? 'iframe' : 'main';
+    return `ws_${frameContext}_${Date.now()}_${++connectionIdCounter}`;
+  }
+
+  // Generate unique message ID (simple UUID v4)
+  function generateMessageId() {
+    return 'msg_' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0;
+      const v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   }
 
   // Generate unique message ID (simple UUID v4)
@@ -47,10 +57,20 @@
       return;
     }
     try {
+      // Add frame context to event data
+      const eventWithFrameContext = {
+        ...eventData,
+        frameContext: {
+          url: window.location.href,
+          isIframe: window !== window.top,
+          frameId: window !== window.top ? window.location.href : null
+        }
+      };
+      
       window.postMessage(
         {
           source: "websocket-proxy-injected",
-          payload: eventData,
+          payload: eventWithFrameContext,
         },
         "*"
       );
@@ -709,6 +729,12 @@
           break;
 
         case "create-manual-websocket":
+          // Only allow manual connections in main page, not in iframe
+          if (window !== window.top) {
+            // Silently ignore manual connection requests from iframe
+            return;
+          }
+          
           try {
             // Create WebSocket connection directly in page context
             // This will be intercepted by our proxy, just like a connection created by the user's page

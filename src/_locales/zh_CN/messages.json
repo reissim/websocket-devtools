@@ -171,6 +171,10 @@
     "message": "连接中",
     "description": "Translation for panel.connectionList.status.connecting"
   },
+  "panel_connectionList_status_closing": {
+    "message": "关闭中",
+    "description": "Translation for panel.connectionList.status.closing"
+  },
   "panel_connectionList_status_error": {
     "message": "错误",
     "description": "Translation for panel.connectionList.status.error"
@@ -182,6 +186,14 @@
   "panel_connectionList_tooltips_clearAll": {
     "message": "清空所有连接",
     "description": "Translation for panel.connectionList.tooltips.clearAll"
+  },
+  "panel_connectionList_tooltips_iframeConnection": {
+    "message": "此连接来自iframe",
+    "description": "Translation for panel.connectionList.tooltips.iframeConnection"
+  },
+  "panel_connectionList_source_iframe": {
+    "message": "iframe",
+    "description": "Translation for panel.connectionList.source.iframe"
   },
   "panel_controlPanel_title": {
     "message": "控制面板",
