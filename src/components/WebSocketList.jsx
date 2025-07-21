@@ -15,7 +15,7 @@ const WebSocketList = ({
   onManualConnect, // New: manual connection callback
 }) => {
   const [activeCollapsed, setActiveCollapsed] = useState(false); // Active connections collapsed state
-  const [inactiveCollapsed, setInactiveCollapsed] = useState(true); // Inactive connections collapsed state
+  const [inactiveCollapsed, setInactiveCollapsed] = useState(false); // Inactive connections collapsed state
   const [filterText, setFilterText] = useState(""); // Connection filter text
   const [filterInvert, setFilterInvert] = useState(false); // Invert filter
   
@@ -173,10 +173,12 @@ const WebSocketList = ({
         <div className="ws-connection-url">
           {connection.url}
         </div>
-        <div className="ws-connection-bottom-info">
-          <span>{t("panel.connectionList.messagesCount", { count: connection.messageCount })}</span>
-          <span>{t("panel.connectionList.created", { time: formatTimestamp(connection.timestamp, 0) })}</span>
-        </div>
+        { connection.status !== "connecting" && (
+          <div className="ws-connection-bottom-info">
+            <span>{t("panel.connectionList.messagesCount", { count: connection.messageCount })}</span>
+            <span>{t("panel.connectionList.created", { time: formatTimestamp(connection.timestamp, 0) })}</span>
+          </div>
+        )}
       </div>
     );
   };

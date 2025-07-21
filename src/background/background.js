@@ -187,8 +187,17 @@ async function notifyAllTabs(type, data = {}, targetTabId = null) {
 // Forward message to DevTools Panel
 function forwardToDevTools(message) {
   try {
-    // DevTools Panel also listens via chrome.runtime.onMessage
-    // We can directly broadcast messages, and the Panel will receive them
+    // Send to all connected DevTools panels through their ports
+    for (const [port, tabId] of devtoolsPorts.entries()) {
+      try {
+        port.postMessage(message);
+      } catch (error) {
+        // Port may be disconnected, remove it
+        devtoolsPorts.delete(port);
+      }
+    }
+    
+    // Also broadcast via runtime message as fallback
     chrome.runtime.sendMessage(message).catch(() => {
       // This is normal, as the Panel might not be open yet
     });
@@ -204,16 +213,16 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const originalCount = websocketData.connections.length;
     websocketData.connections = websocketData.connections.filter(conn => conn.tabId !== tabId);
     
-    // Notify DevTools panel to clear connections if any were removed
-    if (websocketData.connections.length < originalCount) {
-      forwardToDevTools({
-        type: "page-refresh",
-        data: {
-          tabId: tabId,
-          timestamp: Date.now(),
-        },
-      });
-    }
+    // Always notify DevTools panel about page refresh, even if no connections to clear
+    // This ensures the panel can reset its state properly
+    forwardToDevTools({
+      type: "page-refresh",
+      data: {
+        tabId: tabId,
+        timestamp: Date.now(),
+        removedConnections: originalCount - websocketData.connections.length,
+      },
+    });
   }
   
   if (changeInfo.status === "complete" && websocketData.isMonitoring) {
