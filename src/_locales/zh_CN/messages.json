@@ -188,7 +188,7 @@
     "description": "Translation for panel.connectionList.tooltips.iframeConnection"
   },
   "panel_connectionList_source_iframe": {
-    "message": "内嵌页面",
+    "message": "iframe",
     "description": "Translation for panel.connectionList.source.iframe"
   },
   "panel_controlPanel_title": {

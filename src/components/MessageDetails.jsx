@@ -286,7 +286,7 @@ const MessageDetails = ({
     <div className="message-details">
       <div className="details-header">
         <div className="connection-info">
-          <span className="connection-badge">{connection.url}</span>
+          <span className="connection-badge" title={connection.url}>{connection.url}</span>
         </div>
         <div className="controls">
           <div className="control-row">

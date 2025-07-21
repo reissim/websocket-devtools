@@ -179,7 +179,7 @@ const WebSocketList = ({
           )}
         </div>
 
-        <div className="ws-connection-url">
+        <div className="ws-connection-url" title={connection.url}>
           {connection.url}
         </div>
         { connection.status !== "connecting" && (
