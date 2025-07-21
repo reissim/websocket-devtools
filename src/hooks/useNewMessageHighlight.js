@@ -9,7 +9,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 export const useNewMessageHighlight = (connection, highlightDuration = 500) => {
   const [newMessageKeys, setNewMessageKeys] = useState(new Set());
   const previousMessageCountRef = useRef(0);
-  const messageTimestampsRef = useRef(new Set());
+  const lastCheckTimestampRef = useRef(Date.now());
   const previousConnectionIdRef = useRef(null);
 
   // Effect to detect new messages and trigger highlight animation
@@ -20,7 +20,7 @@ export const useNewMessageHighlight = (connection, highlightDuration = 500) => {
     if (previousConnectionIdRef.current !== connection.id) {
       setNewMessageKeys(new Set());
       previousMessageCountRef.current = 0;
-      messageTimestampsRef.current = new Set();
+      lastCheckTimestampRef.current = Date.now();
       previousConnectionIdRef.current = connection.id;
     }
     
@@ -29,38 +29,46 @@ export const useNewMessageHighlight = (connection, highlightDuration = 500) => {
     
     // Check if we have new messages (count increased)
     if (currentMessageCount > previousMessageCountRef.current) {
-      // Find new messages by comparing message count
-      const newMessages = currentMessages.slice(previousMessageCountRef.current);
+      // Find new messages by timestamp comparison instead of position
+      const newMessages = currentMessages.filter(msg => 
+        msg.timestamp > lastCheckTimestampRef.current
+      );
       
       // Add new message keys to highlight set
       const newKeys = new Set(newMessageKeys);
+      let hasNewKeys = false;
+      
       newMessages.forEach((msg) => {
         const messageKey = msg.messageId;
-        newKeys.add(messageKey);
-        messageTimestampsRef.current.add(msg.timestamp);
-        
-        // Remove highlight after specified duration
-        setTimeout(() => {
-          setNewMessageKeys(prev => {
-            const updated = new Set(prev);
-            updated.delete(messageKey);
-            return updated;
-          });
-        }, highlightDuration);
+        if (!newKeys.has(messageKey)) {
+          newKeys.add(messageKey);
+          hasNewKeys = true;
+          
+          // Remove highlight after specified duration
+          setTimeout(() => {
+            setNewMessageKeys(prev => {
+              const updated = new Set(prev);
+              updated.delete(messageKey);
+              return updated;
+            });
+          }, highlightDuration);
+        }
       });
       
-      if (newKeys.size > newMessageKeys.size) {
+      if (hasNewKeys) {
         setNewMessageKeys(newKeys);
+      }
+      
+      // Update last check timestamp to the latest message timestamp
+      if (newMessages.length > 0) {
+        const latestTimestamp = Math.max(...newMessages.map(msg => msg.timestamp));
+        lastCheckTimestampRef.current = latestTimestamp;
       }
     }
     
     // Update refs
     previousMessageCountRef.current = currentMessageCount;
     
-    // Update timestamp tracking set
-    currentMessages.forEach(msg => {
-      messageTimestampsRef.current.add(msg.timestamp);
-    });
   }, [connection?.messages, connection?.id, highlightDuration]);
 
   // Function to check if a message is new

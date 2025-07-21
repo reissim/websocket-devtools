@@ -309,6 +309,11 @@ const WebSocketPanel = () => {
     setSelectedConnectionId(connectionId);
   };
 
+  // Generate unique message ID for simulated messages
+  const generateMessageId = () => {
+    return `msg_simulated_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  };
+
   const handleSimulateMessage = async ({
     connectionId,
     message,
@@ -339,6 +344,7 @@ const WebSocketPanel = () => {
           timestamp: Date.now(),
           status: connectionInfo?.status || "open",
           simulated: true, // Mark as simulated message
+          messageId: generateMessageId(), // Add messageId for new message highlight
         };
 
         // Add directly to the event list
