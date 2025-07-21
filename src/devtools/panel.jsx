@@ -448,6 +448,21 @@ const WebSocketPanel = () => {
     }));
   };
 
+  // Set connection status to closing
+  const handleSetConnectionClosing = (connectionId) => {
+    setConnectionsMap((prevConnections) => {
+      const newConnections = new Map(prevConnections);
+      const existing = newConnections.get(connectionId);
+      if (existing) {
+        newConnections.set(connectionId, {
+          ...existing,
+          status: "closing",
+        });
+      }
+      return newConnections;
+    });
+  };
+
   const selectedConnection = getSelectedConnectionData();
 
   // Show loading while i18n initializes
@@ -529,6 +544,7 @@ const WebSocketPanel = () => {
                     onSelectConnection={handleSelectConnection}
                     onClearConnections={handleClearConnections}
                     onManualConnect={handleManualConnect}
+                    onSetConnectionClosing={handleSetConnectionClosing}
                   />
                 </div>
               </div>

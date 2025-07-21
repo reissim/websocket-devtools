@@ -171,6 +171,10 @@
     "message": "连接中",
     "description": "Translation for panel.connectionList.status.connecting"
   },
+  "panel_connectionList_status_closing": {
+    "message": "关闭中",
+    "description": "Translation for panel.connectionList.status.closing"
+  },
   "panel_connectionList_status_error": {
     "message": "错误",
     "description": "Translation for panel.connectionList.status.error"

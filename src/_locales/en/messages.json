@@ -171,6 +171,10 @@
     "message": "Connecting",
     "description": "Translation for panel.connectionList.status.connecting"
   },
+  "panel_connectionList_status_closing": {
+    "message": "Closing",
+    "description": "Translation for panel.connectionList.status.closing"
+  },
   "panel_connectionList_status_error": {
     "message": "Error",
     "description": "Translation for panel.connectionList.status.error"

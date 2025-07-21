@@ -42,6 +42,7 @@
   "panel.connectionList.status.connected": "Connected",
   "panel.connectionList.status.disconnected": "Disconnected",
   "panel.connectionList.status.connecting": "Connecting",
+  "panel.connectionList.status.closing": "Closing",
   "panel.connectionList.status.error": "Error",
   "panel.connectionList.tooltips.closeConnection": "Close Connection",
   "panel.connectionList.tooltips.clearAll": "Clear All Connections",

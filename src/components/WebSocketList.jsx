@@ -13,6 +13,7 @@ const WebSocketList = ({
   onSelectConnection,
   onClearConnections,
   onManualConnect, // New: manual connection callback
+  onSetConnectionClosing, // New: callback to set connection to closing status
 }) => {
   const [activeCollapsed, setActiveCollapsed] = useState(false); // Active connections collapsed state
   const [inactiveCollapsed, setInactiveCollapsed] = useState(false); // Inactive connections collapsed state
@@ -71,12 +72,18 @@ const WebSocketList = ({
               .map((event) => event.timestamp)
           );
 
+          // Map "close" to "closed" status
+          let displayStatus = connInfo.status;
+          if (connInfo.status === "close") {
+            displayStatus = "closed";
+          }
+
           return {
             id: connInfo.id,
             url: connInfo.url,
             type: "connection",
             timestamp: connInfo.timestamp,
-            status: connInfo.status === "close" ? "closed" : connInfo.status, // Map "close" to "closed"
+            status: displayStatus,
             messageCount,
             lastActivity,
             frameContext: connInfo.frameContext, // Preserve iframe context information
@@ -91,7 +98,7 @@ const WebSocketList = ({
   });
 
   const activeConnections = filteredConnections
-    .filter((conn) => conn.status === "open" || conn.status === "connecting")
+    .filter((conn) => conn.status === "open" || conn.status === "connecting" || conn.status === "closing")
     .sort((a, b) => b.timestamp - a.timestamp);
 
   const inactiveConnections = filteredConnections
@@ -103,9 +110,46 @@ const WebSocketList = ({
     const isSelected = connection.id === selectedConnectionId;
     const hasNewMsg = hasNewMessages(connection.id);
 
+    // Helper function to render status icon
+    const renderStatusIcon = () => {
+      if (connection.status === "connecting") {
+        return <Loader size={14} color="#f59e0b" className="connecting-spinner" />;
+      }
+      if (connection.status === "closing") {
+        return <Loader size={14} color="#ef4444" className="closing-spinner" />;
+      }
+      if (isActive) {
+        return <CheckCircle size={14} color="#10b981" />;
+      }
+      return <XCircle size={14} color="#ef4444" />;
+    };
+
+    // Helper function to get status text class
+    const getStatusTextClass = () => {
+      if (connection.status === "connecting") return 'connecting';
+      if (connection.status === "closing") return 'closing';
+      if (isActive) return 'active';
+      return 'inactive';
+    };
+
+    // Helper function to get status text
+    const getStatusText = () => {
+      if (connection.status === "connecting") {
+        return t("panel.connectionList.status.connecting");
+      }
+      if (connection.status === "closing") {
+        return t("panel.connectionList.status.closing");
+      }
+      if (isActive) {
+        return t("panel.connectionList.status.connected");
+      }
+      return t("panel.connectionList.status.disconnected");
+    };
+
     // Close connection
     const handleCloseConnection = (e) => {
       e.stopPropagation();
+      onSetConnectionClosing(connection.id);
       chrome.runtime.sendMessage({
         type: 'simulate-system-event',
         data: {
@@ -117,10 +161,44 @@ const WebSocketList = ({
       });
     };
 
+    // Helper function to get connection item class name
+    const getConnectionItemClassName = () => {
+      let className = 'ws-connection-item';
+      
+      if (isSelected) {
+        className += ' selected';
+      } else {
+        className += ' default';
+      }
+      
+      if (isActive) {
+        className += ' active';
+      }
+      
+      return className;
+    };
+
+    // Helper function to get indicator wrapper class name
+    const getIndicatorWrapperClassName = () => {
+      let className = 'ws-connection-indicator-wrapper';
+      if (hasNewMsg) {
+        className += ' new-message-indicator';
+      }
+      return className;
+    };
+
+    // Helper function to get indicator dot key
+    const getIndicatorDotKey = () => {
+      if (hasNewMsg) {
+        return getNewMessageTimestamp(connection.id);
+      }
+      return "static";
+    };
+
     return (
       <div
         key={connection.id}
-        className={`ws-connection-item ${isSelected ? 'selected' : 'default'}${isActive ? ' active' : ''}`}
+        className={getConnectionItemClassName()}
         onClick={() => {
           onSelectConnection(connection.id);
           if (hasNewMsg) {
@@ -131,23 +209,17 @@ const WebSocketList = ({
       >
         <div className="ws-connection-item-header">
           <div className="ws-connection-status-group">
-            {connection.status === "connecting" ? (
-              <Loader size={14} color="#f59e0b" className="connecting-spinner" />
-            ) : isActive ? (
-              <CheckCircle size={14} color="#10b981" />
-            ) : (
-              <XCircle size={14} color="#ef4444" />
-            )}
-            <span className={`ws-connection-status-text ${connection.status === "connecting" ? 'connecting' : isActive ? 'active' : 'inactive'}`}>
-              {connection.status === "connecting" ? "CONNECTING" : isActive ? "CONNECTED" : "CLOSED"}
+            {renderStatusIcon()}
+            <span className={`ws-connection-status-text ${getStatusTextClass()}`}>
+              {getStatusText()}
             </span>
-                    {/* Iframe source label */}
-        {connection.frameContext?.isIframe && (
-          <div className="ws-iframe-source-label">
-            <span className="ws-iframe-source-icon"><AppWindow size={10} /></span>
-            <span className="ws-iframe-source-text">{t('panel.connectionList.source.iframe')}</span>
-          </div>
-        )}
+            {/* Iframe source label */}
+            {connection.frameContext?.isIframe && (
+              <div className="ws-iframe-source-label">
+                <span className="ws-iframe-source-icon"><AppWindow size={10} /></span>
+                <span className="ws-iframe-source-text">{t('panel.connectionList.source.iframe')}</span>
+              </div>
+            )}
           </div>
           <button
             className="ws-connection-indicator-btn"
@@ -158,9 +230,9 @@ const WebSocketList = ({
               }
             }}
           >
-            <div className={`ws-connection-indicator-wrapper ${hasNewMsg ? 'new-message-indicator' : ''}`}>
+            <div className={getIndicatorWrapperClassName()}>
               <div
-                key={hasNewMsg ? getNewMessageTimestamp(connection.id) : "static"}
+                key={getIndicatorDotKey()}
                 className="ws-connection-indicator-dot"
               />
             </div>
