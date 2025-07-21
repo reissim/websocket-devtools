@@ -720,6 +720,12 @@
           break;
 
         case "create-manual-websocket":
+          // Only allow manual connections in main page, not in iframe
+          if (window !== window.top) {
+            // Silently ignore manual connection requests from iframe
+            return;
+          }
+          
           try {
             // Create WebSocket connection directly in page context
             // This will be intercepted by our proxy, just like a connection created by the user's page
