@@ -501,7 +501,7 @@ const FavoritesTab = ({ onSendMessage, onReceiveMessage, onAddFavorite }) => {
         {favorites.length > 0 && (
           <div className="favorites-usage-count">
             {t("favorites.limit.usage", { count: favorites.length })}
-            {showLimitTooltip && (
+            {(showLimitTooltip || favorites.length >= 5) && (
               <span className="limit-message"> - {t("favorites.limit.exceeded.message")}</span>
             )}
           </div>

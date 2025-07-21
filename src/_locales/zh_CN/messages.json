@@ -400,11 +400,11 @@
     "description": "Translation for favorites.tooltips.simulateSend"
   },
   "favorites_limit_usage": {
-    "message": "已使用 {{count}}/10 个收藏",
+    "message": "已使用 {{count}}/5 个收藏",
     "description": "Translation for favorites.limit.usage"
   },
   "favorites_limit_exceeded_message": {
-    "message": "最多只能保存 10 个收藏消息",
+    "message": "最多只能保存 5 个收藏消息",
     "description": "Translation for favorites.limit.exceeded.message"
   },
   "system_title": {

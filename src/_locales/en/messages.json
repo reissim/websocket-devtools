@@ -400,11 +400,11 @@
     "description": "Translation for favorites.tooltips.simulateSend"
   },
   "favorites_limit_usage": {
-    "message": "{{count}}/10 favorites used",
+    "message": "{{count}}/5 favorites used",
     "description": "Translation for favorites.limit.usage"
   },
   "favorites_limit_exceeded_message": {
-    "message": "You can save up to 10 favorite messages",
+    "message": "You can save up to 5 favorite messages",
     "description": "Translation for favorites.limit.exceeded.message"
   },
   "system_title": {
