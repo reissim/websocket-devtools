@@ -57,11 +57,6 @@ window.addEventListener("message", (event) => {
     // Add unique ID to message for deduplication
     const messageId = generateMessageId();
     
-    // Debug: Log the payload frameContext
-    if (event.data.payload.frameContext) {
-      console.log("🔍 Content Script - Payload frameContext:", JSON.stringify(event.data.payload.frameContext, null, 2));
-    }
-    
     const messageWithId = {
       type: "websocket-event",
       data: event.data.payload,
@@ -75,9 +70,6 @@ window.addEventListener("message", (event) => {
       }
     };
     
-    // Debug: Log the final message frameContext
-    console.log("🔍 Content Script - Final message frameContext:", JSON.stringify(messageWithId.frameContext, null, 2));
-    console.log("🔍 Content Script - Message data frameContext:", JSON.stringify(messageWithId.data.frameContext, null, 2));
 
 
     // Send directly to DevTools Panel, also send to Background Script for data storage
