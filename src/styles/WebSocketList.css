@@ -550,6 +550,24 @@
   color: #10b981;
 }
 
+.ws-connection-status-text.connecting {
+  color: #f59e0b;
+}
+
+/* Connecting spinner animation */
+.connecting-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .ws-connection-status-text.inactive {
   color: #ef4444;
 }
