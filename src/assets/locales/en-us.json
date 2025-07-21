@@ -40,7 +40,7 @@
   "panel.connectionList.modal.cancel": "Cancel",
   "panel.connectionList.modal.connect": "Connect",
   "panel.connectionList.status.connected": "Connected",
-  "panel.connectionList.status.disconnected": "Disconnected",
+  "panel.connectionList.status.disconnected": "Closed",
   "panel.connectionList.status.connecting": "Connecting",
   "panel.connectionList.status.closing": "Closing",
   "panel.connectionList.status.error": "Error",

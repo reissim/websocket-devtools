@@ -164,7 +164,7 @@
     "description": "Translation for panel.connectionList.status.connected"
   },
   "panel_connectionList_status_disconnected": {
-    "message": "Disconnected",
+    "message": "Closed",
     "description": "Translation for panel.connectionList.status.disconnected"
   },
   "panel_connectionList_status_connecting": {
