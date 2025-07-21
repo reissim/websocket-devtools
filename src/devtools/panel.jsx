@@ -215,6 +215,24 @@ const WebSocketPanel = () => {
           const newEvents = [...prevEvents, eventData];
           return newEvents;
         });
+      } else if (message.type === "page-refresh") {
+        const eventData = message.data;
+        
+        // Filter: only process events from current tab
+        if (eventData.tabId !== tabId) {
+          sendResponse({
+            received: true,
+            ignored: true,
+            reason: "different-tab",
+          });
+          return;
+        }
+
+        // Clear all connections and events for this tab
+        handleClearConnections();
+        
+        // Clear processed message IDs
+        processedMessageIds.current.clear();
       }
 
       sendResponse({ received: true, messageId: message.messageId });
