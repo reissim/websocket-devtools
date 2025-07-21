@@ -27,9 +27,10 @@
   // Deep copy of initial state
   const proxyStateInitial = JSON.parse(JSON.stringify(proxyState));
 
-  // Generate unique connection ID
+  // Generate unique connection ID with frame context
   function generateConnectionId() {
-    return `ws_${Date.now()}_${++connectionIdCounter}`;
+    const frameContext = window !== window.top ? 'iframe' : 'main';
+    return `ws_${frameContext}_${Date.now()}_${++connectionIdCounter}`;
   }
 
   // Generate unique message ID (simple UUID v4)
@@ -47,10 +48,20 @@
       return;
     }
     try {
+      // Add frame context to event data
+      const eventWithFrameContext = {
+        ...eventData,
+        frameContext: {
+          url: window.location.href,
+          isIframe: window !== window.top,
+          frameId: window !== window.top ? window.location.href : null
+        }
+      };
+      
       window.postMessage(
         {
           source: "websocket-proxy-injected",
-          payload: eventData,
+          payload: eventWithFrameContext,
         },
         "*"
       );

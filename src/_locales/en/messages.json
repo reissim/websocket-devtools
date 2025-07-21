@@ -183,6 +183,14 @@
     "message": "Clear All Connections",
     "description": "Translation for panel.connectionList.tooltips.clearAll"
   },
+  "panel_connectionList_tooltips_iframeConnection": {
+    "message": "This connection is from an iframe",
+    "description": "Translation for panel.connectionList.tooltips.iframeConnection"
+  },
+  "panel_connectionList_source_iframe": {
+    "message": "iframe",
+    "description": "Translation for panel.connectionList.source.iframe"
+  },
   "panel_controlPanel_title": {
     "message": "Control Panel",
     "description": "Translation for panel.controlPanel.title"

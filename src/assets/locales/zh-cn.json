@@ -45,6 +45,8 @@
   "panel.connectionList.status.error": "错误",
   "panel.connectionList.tooltips.closeConnection": "关闭连接",
   "panel.connectionList.tooltips.clearAll": "清空所有连接",
+  "panel.connectionList.tooltips.iframeConnection": "此连接来自iframe",
+  "panel.connectionList.source.iframe": "iframe",
   "panel.controlPanel.title": "控制面板",
   "panel.controlPanel.monitor": "监控",
   "panel.controlPanel.messageControl": "消息控制",

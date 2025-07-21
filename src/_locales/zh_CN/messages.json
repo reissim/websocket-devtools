@@ -183,6 +183,14 @@
     "message": "清空所有连接",
     "description": "Translation for panel.connectionList.tooltips.clearAll"
   },
+  "panel_connectionList_tooltips_iframeConnection": {
+    "message": "此连接来自iframe",
+    "description": "Translation for panel.connectionList.tooltips.iframeConnection"
+  },
+  "panel_connectionList_source_iframe": {
+    "message": "内嵌页面",
+    "description": "Translation for panel.connectionList.source.iframe"
+  },
   "panel_controlPanel_title": {
     "message": "控制面板",
     "description": "Translation for panel.controlPanel.title"

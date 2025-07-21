@@ -94,6 +94,7 @@ const WebSocketPanel = () => {
                     eventData.type === "connection" ? "connecting" : "open",
                   timestamp: eventData.timestamp,
                   lastActivity: eventData.timestamp,
+                  frameContext: eventData.frameContext, // Preserve iframe context information
                 });
               } else if (
                 eventData.type === "close" ||
@@ -106,6 +107,7 @@ const WebSocketPanel = () => {
                   status: eventData.type,
                   timestamp: existing?.timestamp || eventData.timestamp,
                   lastActivity: eventData.timestamp,
+                  frameContext: existing?.frameContext || eventData.frameContext, // Preserve iframe context information
                 });
               } else if (eventData.type === "message") {
                 const existing = newConnectionsMap.get(eventData.id);
@@ -113,6 +115,7 @@ const WebSocketPanel = () => {
                   newConnectionsMap.set(eventData.id, {
                     ...existing,
                     lastActivity: eventData.timestamp,
+                    frameContext: existing.frameContext || eventData.frameContext, // Preserve iframe context information
                   });
                 }
               }
@@ -179,6 +182,7 @@ const WebSocketPanel = () => {
               status: eventData.type === "connection" ? "connecting" : "open",
               timestamp: eventData.timestamp,
               lastActivity: eventData.timestamp,
+              frameContext: eventData.frameContext, // Preserve iframe context information
             });
 
             // Auto-select connection: automatically select when transitioning from 0 to 1 connection
@@ -196,6 +200,7 @@ const WebSocketPanel = () => {
               status: eventData.type, // "close" or "error"
               timestamp: existing?.timestamp || eventData.timestamp,
               lastActivity: eventData.timestamp,
+              frameContext: existing?.frameContext || eventData.frameContext, // Preserve iframe context information
             });
           } else if (eventData.type === "message") {
             // Update last activity time (for message events)
@@ -204,6 +209,7 @@ const WebSocketPanel = () => {
               newConnections.set(eventData.id, {
                 ...existing,
                 lastActivity: eventData.timestamp,
+                frameContext: existing.frameContext || eventData.frameContext, // Preserve iframe context information
               });
             }
           }

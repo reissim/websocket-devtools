@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CheckCircle, XCircle, Trash2, Plus, Activity, Loader } from "lucide-react";
+import { CheckCircle, XCircle, Trash2, Plus, Activity, Loader, AppWindow } from "lucide-react";
 import { filterConnections } from "../utils/filterUtils";
 import useConnectionNewMessage from "../hooks/useConnectionNewMessage";
 import ManualConnectModal from "./ManualConnectModal";
@@ -79,6 +79,7 @@ const WebSocketList = ({
             status: connInfo.status === "close" ? "closed" : connInfo.status, // Map "close" to "closed"
             messageCount,
             lastActivity,
+            frameContext: connInfo.frameContext, // Preserve iframe context information
           };
         })
       : [];
@@ -140,6 +141,13 @@ const WebSocketList = ({
             <span className={`ws-connection-status-text ${connection.status === "connecting" ? 'connecting' : isActive ? 'active' : 'inactive'}`}>
               {connection.status === "connecting" ? "CONNECTING" : isActive ? "CONNECTED" : "CLOSED"}
             </span>
+                    {/* Iframe source label */}
+        {connection.frameContext?.isIframe && (
+          <div className="ws-iframe-source-label">
+            <span className="ws-iframe-source-icon"><AppWindow size={10} /></span>
+            <span className="ws-iframe-source-text">{t('panel.connectionList.source.iframe')}</span>
+          </div>
+        )}
           </div>
           <button
             className="ws-connection-indicator-btn"
@@ -170,6 +178,7 @@ const WebSocketList = ({
             </button>
           )}
         </div>
+
         <div className="ws-connection-url">
           {connection.url}
         </div>

@@ -45,6 +45,8 @@
   "panel.connectionList.status.error": "Error",
   "panel.connectionList.tooltips.closeConnection": "Close Connection",
   "panel.connectionList.tooltips.clearAll": "Clear All Connections",
+  "panel.connectionList.tooltips.iframeConnection": "This connection is from an iframe",
+  "panel.connectionList.source.iframe": "iframe",
   "panel.controlPanel.title": "Control Panel",
   "panel.controlPanel.monitor": "Monitor",
   "panel.controlPanel.messageControl": "Message Control",
