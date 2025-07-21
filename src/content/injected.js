@@ -32,6 +32,15 @@
     return `ws_${Date.now()}_${++connectionIdCounter}`;
   }
 
+  // Generate unique message ID (simple UUID v4)
+  function generateMessageId() {
+    return 'msg_' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0;
+      const v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
   // Send event to content script
   function sendEvent(eventData) {
     if(!proxyState.isMonitoring){
@@ -184,6 +193,7 @@
               status: "closed",
               simulated: true,
               systemEventType: "client-close", // Keep original intention
+              messageId: generateMessageId(),
             });
 
             // Clean up connection
@@ -240,6 +250,7 @@
             status: "closed",
             simulated: true,
             systemEventType: eventType,
+            messageId: generateMessageId(),
           });
 
           break;
@@ -282,6 +293,7 @@
             status: "error",
             simulated: true,
             systemEventType: eventType,
+            messageId: generateMessageId(),
           });
 
           break;
@@ -334,6 +346,7 @@
       direction: "system",
       timestamp: Date.now(),
       status: "connecting",
+      messageId: generateMessageId(),
     });
     
     // 🔥 Critical fix: Immediately add our message listener, regardless of whether the user registers
@@ -383,6 +396,7 @@
             status: connectionInfo.status,
             blocked: true,
             reason: "Incoming messages blocked",
+            messageId: generateMessageId(),
           });
         }
 
@@ -403,6 +417,7 @@
           timestamp: Date.now(),
           status: connectionInfo.status,
           // Do not add blocked flag, as message passed normally
+          messageId: generateMessageId(),
         });
       }
 
@@ -438,6 +453,7 @@
         direction: "outgoing",
         timestamp: Date.now(),
         status: connectionInfo.status,
+        messageId: generateMessageId(),
       };
 
       // Check if sending should be blocked
@@ -536,6 +552,7 @@
           direction: "system",
           timestamp: Date.now(),
           status: connectionInfo.status,
+          messageId: generateMessageId(),
         };
 
         // For close event, determine if it's a simulated client-close
@@ -633,6 +650,7 @@
             type: "proxy-state-change",
             state: proxyState,
             timestamp: Date.now(),
+            messageId: generateMessageId(),
           });
           break;
 
@@ -661,6 +679,7 @@
             type: "proxy-state-change",
             state: proxyState,
             timestamp: Date.now(),
+            messageId: generateMessageId(),
           });
           break;
 
@@ -670,6 +689,7 @@
             state: proxyState,
             connectionCount: connections.size,
             timestamp: Date.now(),
+            messageId: generateMessageId(),
           });
           break;
 
@@ -703,6 +723,7 @@
               connectionId: newConnectionId,
               url: event.data.url,
               timestamp: Date.now(),
+              messageId: generateMessageId(),
             });
             
             // Optional: Add some basic event listeners for manual connections
@@ -722,6 +743,7 @@
               error: error.message,
               url: event.data.url,
               timestamp: Date.now(),
+              messageId: generateMessageId(),
             });
           }
           break;

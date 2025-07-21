@@ -61,6 +61,7 @@
     "react-dom": "19.1.0",
     "react-resizable-panels": "^3.0.3",
     "react-rnd": "^10.4.13",
+    "uuid": "^11.1.0",
     "vite-plugin-web-extension": "^4.4.4"
   },
   "devDependencies": {

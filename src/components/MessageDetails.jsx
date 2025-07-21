@@ -216,8 +216,7 @@ const MessageDetails = ({
   const getSelectedMessage = () => {
     if (!selectedMessageKey) return null;
     return sortedMessages.find((msg) => {
-      const messageKey = `${msg.timestamp}-${msg.direction}`;
-      return messageKey === selectedMessageKey;
+      return msg.messageId === selectedMessageKey;
     });
   };
 
@@ -354,7 +353,7 @@ const MessageDetails = ({
                   </thead>
                   <tbody>
                     {sortedMessages.map((message, index) => {
-                      const messageKey = `${message.timestamp}-${message.direction}`;
+                      const messageKey = message.messageId;
                       const isSelected = selectedMessageKey === messageKey;
                       const isNewMsg = isNewMessage(messageKey);
                       const isHovered = hoveredMessageKey === messageKey;
