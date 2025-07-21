@@ -531,7 +531,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 0px;
+  margin-bottom: 8px;
 }
 
 .ws-connection-status-group {
@@ -865,6 +865,7 @@
   width: fit-content;
   max-width: max-content;
   box-sizing: border-box;
+  margin-left: 2px;
 }
 
 .ws-iframe-source-icon {
