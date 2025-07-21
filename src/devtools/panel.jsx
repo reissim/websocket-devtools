@@ -240,8 +240,16 @@ const WebSocketPanel = () => {
 
     chrome.runtime.onMessage.addListener(messageListener);
 
+    // Add port message listener for the connection established earlier
+    if (window._wsInspectorPort) {
+      window._wsInspectorPort.onMessage.addListener(messageListener);
+    }
+
     return () => {
       chrome.runtime.onMessage.removeListener(messageListener);
+      if (window._wsInspectorPort) {
+        window._wsInspectorPort.onMessage.removeListener(messageListener);
+      }
     };
   }, []);
 
