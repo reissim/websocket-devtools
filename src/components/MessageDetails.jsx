@@ -339,7 +339,7 @@ const MessageDetails = ({
           </div>
         ) : (
           <PanelGroup direction="vertical">
-            <Panel defaultSize={selectedMessageKey ? 70 : 100} minSize={30}>
+            <Panel defaultSize={selectedMessageKey ? 70 : 100} minSize={5}>
               <div className="messages-table-container">
                 <table className="ws-messages-table">
                   <thead>
@@ -386,9 +386,9 @@ const MessageDetails = ({
               <>
                 <PanelResizeHandle className="panel-resize-handle horizontal message-detail-resize-handle" />
                 <Panel
-                  defaultSize={30}
-                  minSize={15}
-                  maxSize={70}
+                  defaultSize={50}
+                  minSize={10}
+                  maxSize={95}
                   style={{
                     boxShadow: "rgba(21, 21, 21, 0.81) 0px -5px 20px 20px",
                     borderTopLeftRadius: "20px",
