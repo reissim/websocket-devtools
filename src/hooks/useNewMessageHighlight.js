@@ -29,15 +29,13 @@ export const useNewMessageHighlight = (connection, highlightDuration = 500) => {
     
     // Check if we have new messages (count increased)
     if (currentMessageCount > previousMessageCountRef.current) {
-      // Find new messages by comparing timestamps
-      const newMessages = currentMessages.filter(msg => 
-        !messageTimestampsRef.current.has(msg.timestamp)
-      );
+      // Find new messages by comparing message count
+      const newMessages = currentMessages.slice(previousMessageCountRef.current);
       
       // Add new message keys to highlight set
       const newKeys = new Set(newMessageKeys);
-      newMessages.forEach(msg => {
-        const messageKey = `${msg.timestamp}-${msg.direction}`;
+      newMessages.forEach((msg) => {
+        const messageKey = msg.messageId;
         newKeys.add(messageKey);
         messageTimestampsRef.current.add(msg.timestamp);
         
