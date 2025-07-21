@@ -25,6 +25,7 @@
 - **💾 Favorites System** - Save and organize frequently used messages
 - **🌍 Multi-language** - Full English and Chinese support
 - **🎨 DevTools Integration** - Native Chrome DevTools panel experience
+- **🖼️ Iframe Support** - Full WebSocket proxy support for iframe embedded connections
 
 
 ## 📷 Screenshots
