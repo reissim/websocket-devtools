@@ -196,8 +196,26 @@ function forwardToDevTools(message) {
   }
 }
 
-// Listen for tab updates, may need to re-inject script
+// Listen for tab updates, detect page refresh/navigation
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  // When page starts loading (refresh or navigation), clear connection data for this tab
+  if (changeInfo.status === "loading") {
+    // Clear connection data for this tab
+    const originalCount = websocketData.connections.length;
+    websocketData.connections = websocketData.connections.filter(conn => conn.tabId !== tabId);
+    
+    // Notify DevTools panel to clear connections if any were removed
+    if (websocketData.connections.length < originalCount) {
+      forwardToDevTools({
+        type: "page-refresh",
+        data: {
+          tabId: tabId,
+          timestamp: Date.now(),
+        },
+      });
+    }
+  }
+  
   if (changeInfo.status === "complete" && websocketData.isMonitoring) {
     // Can re-inject script or send status update here
   }
