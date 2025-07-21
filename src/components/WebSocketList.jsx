@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CheckCircle, XCircle, Trash2, Plus, Activity } from "lucide-react";
+import { CheckCircle, XCircle, Trash2, Plus, Activity, Loader } from "lucide-react";
 import { filterConnections } from "../utils/filterUtils";
 import useConnectionNewMessage from "../hooks/useConnectionNewMessage";
 import ManualConnectModal from "./ManualConnectModal";
@@ -130,13 +130,15 @@ const WebSocketList = ({
       >
         <div className="ws-connection-item-header">
           <div className="ws-connection-status-group">
-            {isActive ? (
+            {connection.status === "connecting" ? (
+              <Loader size={14} color="#f59e0b" className="connecting-spinner" />
+            ) : isActive ? (
               <CheckCircle size={14} color="#10b981" />
             ) : (
               <XCircle size={14} color="#ef4444" />
             )}
-            <span className={`ws-connection-status-text ${isActive ? 'active' : 'inactive'}`}>
-              {isActive ? "CONNECTED" : "CLOSED"}
+            <span className={`ws-connection-status-text ${connection.status === "connecting" ? 'connecting' : isActive ? 'active' : 'inactive'}`}>
+              {connection.status === "connecting" ? "CONNECTING" : isActive ? "CONNECTED" : "CLOSED"}
             </span>
           </div>
           <button
