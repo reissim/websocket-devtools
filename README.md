@@ -1,11 +1,11 @@
 
 <div align="center">
 
-<img src="./ScreenShot/Promo_Tile-1.png" alt="WebSocket DevTools" width="70%">
+<img src="./ScreenShot/Promo_Tile-1.png" alt="WebSocket DevTools" width="60%">
 
 **Professional WebSocket debugging tool for Chrome DevTools**
 
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/law-chain-hot/websocket-devtools/releases)
+[![Version](https://img.shields.io/badge/version-1.0.1-green.svg)](https://github.com/law-chain-hot/websocket-devtools/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Privacy](https://img.shields.io/badge/privacy-local%20only-brightgreen.svg)](./PRIVACY.md)
 
