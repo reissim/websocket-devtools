@@ -245,13 +245,7 @@ const SimulateMessagePanel = forwardRef(
 
     const handleMessageChange = useCallback(
       (value) => {
-        // console.log("📨 SimulateMessagePanel handleMessageChange:", {
-        //   valueLength: value.length,
-        //   currentMessageLength: simulateMessage.length,
-        //   valuePreview:
-        //     value.substring(0, 100) + (value.length > 100 ? "..." : ""),
-        //   changed: value !== simulateMessage,
-        // }); Removed for clean up.
+
         setSimulateMessage(value);
       },
       [simulateMessage]
@@ -272,11 +266,6 @@ const SimulateMessagePanel = forwardRef(
         const messageData = data || simulateMessage;
         if (!messageData.trim()) return;
 
-        const newFavorite = addFromEditor(messageData.trim());
-
-        if (newFavorite) {
-          // console.log("Added to favorites:", newFavorite.name); Removed for clean up.
-        }
       },
       [simulateMessage]
     );
@@ -299,9 +288,7 @@ const SimulateMessagePanel = forwardRef(
             },
           });
 
-          // console.log("✅ System event simulated:", eventData.eventType); Removed for clean up.
         } catch (error) {
-          // console.error("❌ Failed to simulate system event:", error); Removed for clean up.
         } finally {
           setTimeout(() => setIsSending(false), 500);
         }
@@ -318,9 +305,6 @@ const SimulateMessagePanel = forwardRef(
     // Expose openPanel function to external use
     useImperativeHandle(ref, () => ({
       openPanel: (options = {}) => {
-        // console.log(
-        //   "🎭 SimulateMessagePanel openPanel called with options:",
-        //   options
         // ); Removed for clean up.
         openPanel();
 
@@ -336,17 +320,12 @@ const SimulateMessagePanel = forwardRef(
           // If data is specified and switching to favorites tab, add to favorites with a delay
           if (options.tab === "favorites" && options.data) {
             setTimeout(() => {
-              // console.log(
-              //   "🎭 Adding data to favorites:",
-              //   options.data.substring(0, 100) + "..."
-              // ); Removed for clean up.
               const newFavorite = addFromEditor(options.data, {
                 switchToFavoritesTab: false, // Do not switch tab again, as we have already switched
                 generateName: false, // Generate an empty name for user editing
                 autoEdit: true, // Automatically enter edit mode
                 showNotification: false, // Do not show notification
               });
-              // console.log("🎭 New favorite created:", newFavorite); Removed for clean up.
             }, 100);
           }
         }

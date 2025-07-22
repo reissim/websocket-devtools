@@ -74,10 +74,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         break;
       }
 
-      // Debug: Log frameContext information
-      console.log("🔍 Background - Message frameContext:", JSON.stringify(message.frameContext, null, 2));
-      console.log("🔍 Background - Message data frameContext:", JSON.stringify(message.data.frameContext, null, 2));
-
       // Add tabId to event data
       message.data.tabId = sender.tab.id;
       message.tabId = sender.tab.id;
