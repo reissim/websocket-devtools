@@ -179,11 +179,6 @@ const MessageDetails = ({
 
   // Add to favorites from JsonViewer (open Simulate panel's favorites tab)
   const handleAddToFavoritesFromViewer = (data) => {
-    console.log(
-      "📋 MessageDetails: Add to favorites clicked with data:",
-      data?.substring(0, 100) + "..."
-    );
-
     if (!data || !data.trim()) {
       console.warn("Cannot add to favorites: data is empty");
       return;
@@ -191,7 +186,6 @@ const MessageDetails = ({
 
     // Open SimulateMessagePanel's favorites tab and create new favorite
     if (onOpenSimulatePanel) {
-      console.log("📋 MessageDetails: Calling onOpenSimulatePanel");
       onOpenSimulatePanel({
         tab: "favorites",
         data: data,
