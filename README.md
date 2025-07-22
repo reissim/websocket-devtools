@@ -1,4 +1,3 @@
-# WebSocket DevTools
 
 <div align="center">
 
