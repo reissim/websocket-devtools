@@ -60,7 +60,7 @@
   "simulate.direction.incoming": "接收 (服务器 → 客户端)",
   "simulate.direction.outgoing": "发送 (客户端 → 服务器)",
   "simulate.content.placeholder": "在此输入消息内容...",
-  "simulate.content.jsonPlaceholder": "{\n  \"message\": \"你好世界\",\n  \"timestamp\": \"{{timestamp}}\"\n}",
+  "simulate.content.jsonPlaceholder": "{\n  \"message\": \"Hello World\",\n  \"timestamp\": \"{{timestamp}}\"\n}",
   "simulate.actions.send": "发送消息",
   "simulate.actions.clear": "清空",
   "simulate.actions.addToFavorites": "添加到收藏",

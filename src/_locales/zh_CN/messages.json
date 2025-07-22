@@ -244,7 +244,7 @@
     "description": "Translation for simulate.content.placeholder"
   },
   "simulate_content_jsonPlaceholder": {
-    "message": "{\n  \"message\": \"你好世界\",\n  \"timestamp\": \"{{timestamp}}\"\n}",
+    "message": "{\n  \"message\": \"Hello World\",\n  \"timestamp\": \"{{timestamp}}\"\n}",
     "description": "Translation for simulate.content.jsonPlaceholder"
   },
   "simulate_actions_send": {
