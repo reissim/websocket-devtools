@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./ScreenShot/ScreenShot-1-quick.png" alt="Main Interface" width="75%" style="border-radius: 8px;">
+<img src="./ScreenShot/ScreenShot-1-quick-radius.png" alt="Main Interface" width="75%" style="border-radius: 8px;">
 </div>
 
 <div align="center">
@@ -12,13 +12,11 @@ Professional debugging tool with real-time monitoring, message simulation,
 and traffic interception for developers with advanced UI
 
 
-
-[![Version](https://img.shields.io/badge/version-1.0.1-green.svg)](https://github.com/law-chain-hot/websocket-devtools/releases)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![Privacy](https://img.shields.io/badge/privacy-local%20only-brightgreen.svg)](./PRIVACY.md)
-[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Install-blue.svg)](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod)
-[![DeepWiki](https://img.shields.io/badge/DeepWiki-Documentation-orange.svg)](https://deepwiki.com/law-chain-hot/websocket-devtools)
-
+[![][version-shield]][version-link]
+[![][license-shield]][license-link]
+[![][privacy-shield]][privacy-link]
+[![][chrome-shield]][chrome-link]
+[![][deepwiki-shield]][deepwiki-link]
 
 <!-- **English** | [简体中文](./README_zh-CN.md) -->
 
@@ -98,3 +96,18 @@ and traffic interception for developers with advanced UI
 **MIT License** • [⭐ GitHub](https://github.com/law-chain-hot/websocket-devtools) • [📖 Wiki](https://github.com/law-chain-hot/websocket-devtools/wiki) • [📚 DeepWiki](https://deepwiki.com/law-chain-hot/websocket-devtools) • [🛒 Chrome Store](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod)
 
 </div> 
+
+[version-shield]: https://img.shields.io/badge/version-1.0.1-55b467?labelColor=black&logo=github&style=flat-square
+[license-shield]: https://img.shields.io/badge/license-MIT-369eff?labelColor=black&logo=opensourceinitiative&style=flat-square
+[chrome-shield]: https://img.shields.io/badge/Chrome%20Web%20Store-Install-ffcb47?labelColor=black&logo=googlechrome&logoColor=white&style=flat-square
+[privacy-shield]: https://img.shields.io/badge/privacy-local%20only-c4f042?labelColor=black&logo=shield-check&style=flat-square
+[websocket-shield]: https://img.shields.io/badge/WebSocket-DevTools-ff80eb?labelColor=black&logo=websocket&style=flat-square
+[devtools-shield]: https://img.shields.io/badge/DevTools-Panel-8ae8ff?labelColor=black&logo=googlechrome&style=flat-square
+[deepwiki-shield]: https://img.shields.io/badge/DeepWiki-Docs-orange?labelColor=black&logo=book&style=flat-square 
+[version-link]: https://github.com/law-chain-hot/websocket-devtools/releases
+[license-link]: ./LICENSE
+[chrome-link]: https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod
+[privacy-link]: ./PRIVACY.md
+[websocket-link]: https://github.com/law-chain-hot/websocket-devtools
+[devtools-link]: https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod
+[deepwiki-link]: https://deepwiki.com/law-chain-hot/websocket-devtools
