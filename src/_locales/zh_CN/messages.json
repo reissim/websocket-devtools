@@ -48,15 +48,15 @@
     "description": "Translation for panel.header.status_inactive"
   },
   "panel_header_block_send": {
-    "message": "阻止发送",
+    "message": "拦截发送",
     "description": "Translation for panel.header.block_send"
   },
   "panel_header_block_receive": {
-    "message": "阻止接收",
+    "message": "拦截接收",
     "description": "Translation for panel.header.block_receive"
   },
   "panel_header_block_all": {
-    "message": "全部阻止",
+    "message": "全部拦截",
     "description": "Translation for panel.header.block_all"
   },
   "panel_messageDetails_title": {
@@ -204,15 +204,19 @@
     "description": "Translation for panel.controlPanel.monitor"
   },
   "panel_controlPanel_messageControl": {
-    "message": "消息控制",
+    "message": "流量控制",
     "description": "Translation for panel.controlPanel.messageControl"
   },
+  "panel_controlPanel_messageControlTooltip": {
+    "message": "流量控制不会拦截模拟消息。如果拦截不生效，请重启浏览器再次尝试~",
+    "description": "Translation for panel.controlPanel.messageControlTooltip"
+  },
   "panel_controlPanel_blockOutgoing": {
-    "message": "阻止发送",
+    "message": "拦截发送",
     "description": "Translation for panel.controlPanel.blockOutgoing"
   },
   "panel_controlPanel_blockIncoming": {
-    "message": "阻止接收",
+    "message": "拦截接收",
     "description": "Translation for panel.controlPanel.blockIncoming"
   },
   "panel_controlPanel_status_active": {
@@ -266,6 +270,10 @@
   "simulate_actions_simulateReceive": {
     "message": "模拟接收",
     "description": "Translation for simulate.actions.simulateReceive"
+  },
+  "simulate_actions_simulateReceiveTooltip": {
+    "message": "模拟消息不受拦截控制。如果模拟不生效，请重启浏览器再次尝试~",
+    "description": "Translation for simulate.actions.simulateReceiveTooltip"
   },
   "simulate_actions_simulateSend": {
     "message": "模拟发送",
@@ -752,7 +760,7 @@
     "description": "Translation for messageDetails.tags.simulate"
   },
   "messageDetails_tags_block": {
-    "message": "阻止",
+    "message": "拦截",
     "description": "Translation for messageDetails.tags.block"
   },
   "messageDetails_controls_all": {
@@ -800,7 +808,7 @@
     "description": "Translation for messageDetails.actions.allow"
   },
   "messageDetails_actions_block": {
-    "message": "阻止",
+    "message": "拦截",
     "description": "Translation for messageDetails.actions.block"
   },
   "messageDetails_tooltips_simulatedMessage": {
@@ -808,7 +816,7 @@
     "description": "Translation for messageDetails.tooltips.simulatedMessage"
   },
   "messageDetails_tooltips_messageBlocked": {
-    "message": "消息已被阻止",
+    "message": "消息已被拦截",
     "description": "Translation for messageDetails.tooltips.messageBlocked"
   },
   "common_ok": {
@@ -980,7 +988,7 @@
     "description": "Translation for popup.features.simulate.desc"
   },
   "popup_features_block_title": {
-    "message": "阻止",
+    "message": "拦截",
     "description": "Translation for popup.features.block.title"
   },
   "popup_features_block_desc": {

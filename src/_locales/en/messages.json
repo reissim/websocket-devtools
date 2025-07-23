@@ -204,8 +204,12 @@
     "description": "Translation for panel.controlPanel.monitor"
   },
   "panel_controlPanel_messageControl": {
-    "message": "Message Control",
+    "message": "Traffic Control",
     "description": "Translation for panel.controlPanel.messageControl"
+  },
+  "panel_controlPanel_messageControlTooltip": {
+    "message": "Traffic Control will not intercept simulation messages. If Traffic Control doesn't work, please restart the browser and try again.",
+    "description": "Translation for panel.controlPanel.messageControlTooltip"
   },
   "panel_controlPanel_blockOutgoing": {
     "message": "Block Send",
@@ -266,6 +270,10 @@
   "simulate_actions_simulateReceive": {
     "message": "Simulate Receive",
     "description": "Translation for simulate.actions.simulateReceive"
+  },
+  "simulate_actions_simulateReceiveTooltip": {
+    "message": "Simulation messages are not affected by Traffic Control. If simulation doesn't work, please restart the browser.",
+    "description": "Translation for simulate.actions.simulateReceiveTooltip"
   },
   "simulate_actions_simulateSend": {
     "message": "Simulate Send",
