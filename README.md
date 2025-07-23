@@ -16,6 +16,7 @@ and traffic interception for developers with advanced UI
 [![][license-shield]][license-link]
 [![][privacy-shield]][privacy-link]
 [![][chrome-shield]][chrome-link]
+[![][stars-shield]][stars-link]
 [![][deepwiki-shield]][deepwiki-link]
 
 <!-- **English** | [简体中文](./README_zh-CN.md) -->
@@ -103,7 +104,8 @@ and traffic interception for developers with advanced UI
 [privacy-shield]: https://img.shields.io/badge/privacy-local%20only-c4f042?labelColor=black&logo=shield-check&style=flat-square
 [websocket-shield]: https://img.shields.io/badge/WebSocket-DevTools-ff80eb?labelColor=black&logo=websocket&style=flat-square
 [devtools-shield]: https://img.shields.io/badge/DevTools-Panel-8ae8ff?labelColor=black&logo=googlechrome&style=flat-square
-[deepwiki-shield]: https://img.shields.io/badge/DeepWiki-Docs-orange?labelColor=black&logo=book&style=flat-square 
+[deepwiki-shield]: https://img.shields.io/badge/DeepWiki-Docs-orange?labelColor=black&logo=book&style=flat-square
+[stars-shield]: https://img.shields.io/github/stars/law-chain-hot/websocket-devtools?color=ffcb47&labelColor=black&style=flat-square 
 [version-link]: https://github.com/law-chain-hot/websocket-devtools/releases
 [license-link]: ./LICENSE
 [chrome-link]: https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod
@@ -111,3 +113,4 @@ and traffic interception for developers with advanced UI
 [websocket-link]: https://github.com/law-chain-hot/websocket-devtools
 [devtools-link]: https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod
 [deepwiki-link]: https://deepwiki.com/law-chain-hot/websocket-devtools
+[stars-link]: https://github.com/law-chain-hot/websocket-devtools/stargazers
