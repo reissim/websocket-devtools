@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./ScreenShot/ScreenShot-long-quick-radius.png" alt="Main Interface" width="99%" style="border-radius: 8px;">
+<img src="./ScreenShot/ScreenShot-long-quick-radius.png" alt="Main Interface" width="88%" style="border-radius: 8px;">
 </div>
 
 <div align="center">
