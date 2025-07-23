@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node scripts/generate-chrome-locales.js && vite build --watch --mode development",
-    "build": "node scripts/generate-chrome-locales.js && vite build",
+    "build": "npm run clean && node scripts/generate-chrome-locales.js && vite build",
     "build:dev": "node scripts/generate-chrome-locales.js && vite build --mode development",
     "preview": "vite preview",
     "clean": "rm -rf dist",
