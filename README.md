@@ -83,6 +83,10 @@
 
 ---
 
+<img src="./ScreenShot/ScreenShot-long.png" alt="Main Interface" width="100%" style="border-radius: 8px;">
+
+---
+
 <div align="center">
 
 **MIT License** • [⭐ GitHub](https://github.com/law-chain-hot/websocket-devtools) • [📖 Wiki](https://github.com/law-chain-hot/websocket-devtools/wiki)
