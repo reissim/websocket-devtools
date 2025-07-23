@@ -10,11 +10,14 @@
 
 Professional debugging tool with real-time monitoring, message simulation, and traffic interception for developers with advanced UI
 
+
+
 [![Version](https://img.shields.io/badge/version-1.0.1-green.svg)](https://github.com/law-chain-hot/websocket-devtools/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Privacy](https://img.shields.io/badge/privacy-local%20only-brightgreen.svg)](./PRIVACY.md)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Install-blue.svg)](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod)
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Documentation-orange.svg)](https://deepwiki.com/law-chain-hot/websocket-devtools)
+
 
 <!-- **English** | [简体中文](./README_zh-CN.md) -->
 
