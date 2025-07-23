@@ -257,20 +257,20 @@ const FavoritesItem = React.memo(
                 <ActionIcon
                   variant="subtle"
                   size="md"
-                  className="action-btn receive-btn"
-                  onClick={handleReceive}
-                  title={t("favorites.tooltips.simulateReceive")}
-                >
-                  <CircleArrowDown size={18} />
-                </ActionIcon>
-                <ActionIcon
-                  variant="subtle"
-                  size="md"
                   className="action-btn send-btn"
                   onClick={handleSend}
                   title={t("favorites.tooltips.simulateSend")}
                 >
                   <CircleArrowUp size={18} />
+                </ActionIcon>
+                <ActionIcon
+                  variant="subtle"
+                  size="md"
+                  className="action-btn receive-btn"
+                  onClick={handleReceive}
+                  title={t("favorites.tooltips.simulateReceive")}
+                >
+                  <CircleArrowDown size={18} />
                 </ActionIcon>
                 <ActionIcon
                   variant="subtle"
