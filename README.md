@@ -14,7 +14,7 @@
 </div>
 
 ---
-<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" width="100%" style="border-radius: 8px;">
+<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" width="90%" style="border-radius: 8px;">
 
 ## 🚀 Installation
 
@@ -22,10 +22,6 @@
 1. Visit [Chrome Web Store](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod)
 2. Click **"Add to Chrome"** and confirm installation
 3. Open DevTools (F12) → **"WebSocket DevTools"** tab
-   
-<div align="center">
-<img src="./ScreenShot/Chrome_Webstore.jpg" alt="Message Monitoring" width="65%" style="border-radius: 8px;">
-</div>
 
 ## ✨ Key Features
 
