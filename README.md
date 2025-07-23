@@ -1,7 +1,12 @@
+<div align="center">
+<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" width="75%" style="border-radius: 8px;">
+</div>
 
 <div align="center">
 
-<img src="./ScreenShot/Promo_Tile-1.png" alt="WebSocket DevTools" width="50%">
+<!-- <img src="./ScreenShot/Promo_Tile-1.png" alt="WebSocket DevTools" width="30%"> -->
+
+### WebSocket DevTools
 
 **Professional WebSocket debugging tool for Chrome DevTools**
 
@@ -13,10 +18,7 @@
 
 </div>
 
----
-<div align="center">
-<img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" width="90%" style="border-radius: 8px;">
-</div>
+
 
 ## 🚀 Installation
 
@@ -28,6 +30,7 @@
 ## ✨ Key Features
 
 - **🔍 Real-time Monitoring** - Track WebSocket connections and messages with live updates
+- **🔄 Background Monitoring** - Continuously monitor WebSocket connections even when DevTools panel is closed
 - **🎮 Message Simulation** - Send custom messages in both directions (Client ↔ Server)  
 - **🚧 Traffic Control** - Block messages and simulate network issues for testing
 - **💾 Favorites System** - Save and organize frequently used messages
@@ -56,11 +59,14 @@
 
 ## 📖 Quick Start
 
-1. **Open DevTools** (F12) → Find **"WebSocket DevTools"** tab
-2. **Start Monitoring** - Automatically detects WebSocket connections
-3. **Inspect Messages** - Click connections to view message history  
-4. **Simulate Messages** - Use Simulate tab with JSON editor
-5. **Save Favorites** - Star frequently used messages for quick access
+1. **Install Extension** - Add to Chrome and enable background monitoring
+2. **Open DevTools** (F12) → Find **"WebSocket DevTools"** tab
+3. **View Captured Data** - All WebSocket connections are automatically captured in background
+4. **Inspect Messages** - Click connections to view message history  
+5. **Simulate Messages** - Use Simulate tab with JSON editor
+6. **Save Favorites** - Star frequently used messages for quick access
+
+> **💡 Pro Tip**: The extension monitors WebSocket connections in the background, so you won't miss any connections even if you open DevTools after the WebSocket is established!
 
 ## 🔒 Privacy & Security
 
