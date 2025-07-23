@@ -13,7 +13,7 @@ and traffic interception for developers with advanced UI
 
 
 
-[![Version](https://img.shields.io/badge/version-1.0.2-green.svg)](https://github.com/law-chain-hot/websocket-devtools/releases)
+[![Version](https://img.shields.io/badge/version-1.0.1-green.svg)](https://github.com/law-chain-hot/websocket-devtools/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Privacy](https://img.shields.io/badge/privacy-local%20only-brightgreen.svg)](./PRIVACY.md)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Install-blue.svg)](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod)
