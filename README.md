@@ -8,7 +8,8 @@
 
 ## WebSocket DevTools
 
-Professional debugging tool with real-time monitoring, message simulation, and traffic interception for developers with advanced UI
+Professional debugging tool with real-time monitoring, message simulation,  
+and traffic interception for developers with advanced UI
 
 
 
