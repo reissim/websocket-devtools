@@ -14,7 +14,9 @@
 </div>
 
 ---
+<div align="center">
 <img src="./ScreenShot/ScreenShot1.png" alt="Main Interface" width="90%" style="border-radius: 8px;">
+</div>
 
 ## 🚀 Installation
 
