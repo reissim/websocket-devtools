@@ -1,31 +1,29 @@
 /* Floating simulate message component styles */
 .floating-simulate-button {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 45px;
-  height: 45px;
+  bottom: 30px;
+  right: 28px;
+  width: 55px;
+  height: 55px;
   background: linear-gradient(135deg, var(--accent-color), #0088cc);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9); */
+  box-shadow: 0 4px 12px 5px rgba(0, 70, 105, 0.439);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
   user-select: none;
   /* Add entrance animation sliding up 100px from bottom */
-  animation: slideUpFromBottom 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: slideUpFromBottomFloatingBottom 0.45s cubic-bezier(0.4, 0, 0.2, 1)
+    forwards;
 }
 
 .floating-simulate-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
-.floating-simulate-button:active {
-  transform: scale(0.95);
+  filter: brightness(1.1) !important;
+  box-shadow: 0 4px 12px 5px rgba(0, 70, 105, 0.683);
 }
 
 .floating-simulate-button.open {
@@ -37,13 +35,23 @@
 }
 
 .simulate-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 24px;
   color: white;
+  height: 100%;
+  width: 100%;
   transition: transform 0.2s ease;
 }
 
 .floating-simulate-button:hover .simulate-icon {
   transform: scale(1.1);
+}
+
+.simulate-icon svg {
+  display: block;
+  margin: auto;
 }
 
 .simulate-tooltip {
@@ -110,7 +118,7 @@
 }
 
 /* Floating button entrance animation sliding up 100px from bottom */
-@keyframes slideUpFromBottom {
+@keyframes slideUpFromBottomFloatingBottom {
   from {
     transform: translateY(150px);
     opacity: 0;

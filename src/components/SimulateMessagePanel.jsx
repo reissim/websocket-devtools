@@ -406,10 +406,10 @@ const SimulateMessagePanel = forwardRef(
             onClick={toggleWindow}
           >
             <div className="simulate-icon">
-              {isWindowOpen ? <Minus size={24} /> : <Send size={24} />}
+              <Send size={30} />
             </div>
             <div className="simulate-tooltip">
-              {isWindowOpen ? t("simulate.tooltips.minimize") : t("simulate.tooltips.open")}
+              {t("simulate.tooltips.open")}
             </div>
           </div>
         )}
