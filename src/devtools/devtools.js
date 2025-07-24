@@ -14,7 +14,7 @@ checkExtensionEnabled().then((enabled) => {
   if (enabled) {
     chrome.devtools.panels.create(
       "WebSocket DevTools",
-      "icon.png", // Optional icon
+      "icons/icon.svg", // Panel icon path - SVG for better Edge compatibility
       "src/devtools/panel.html",
       function (panel) {
         // When panel is shown
