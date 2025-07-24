@@ -266,6 +266,12 @@ const SimulateMessagePanel = forwardRef(
         const messageData = data || simulateMessage;
         if (!messageData.trim()) return;
 
+        addFromEditor(messageData, {
+          switchToFavoritesTab: true,
+          generateName: true,
+          autoEdit: true,
+          showNotification: true,
+        });
       },
       [simulateMessage]
     );
