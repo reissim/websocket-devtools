@@ -35,7 +35,7 @@ and traffic interception for developers
 ## ✨ Key Features
 
 - **🔍 Real-time Monitoring** - Track WebSocket connections and messages with live updates
-- **🔄 Background Monitoring** - Continuously monitor WebSocket connections even when DevTools panel is closed
+- **🔄 Background Monitoring** - Continuously monitor connections even when DevTools panel is closed
 - **🎮 Message Simulation** - Send custom messages in both directions (Client ↔ Server)  
 - **🚧 Traffic Control** - Block messages and simulate network issues for testing
 - **💾 Favorites System** - Save and organize frequently used messages
