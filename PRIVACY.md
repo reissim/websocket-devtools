@@ -39,7 +39,6 @@ All data processing occurs entirely within your browser using Chrome's local sto
 - **Purpose**: To save frequently used WebSocket messages for testing
 - **Storage**: Stored locally in your browser using chrome.storage.local
 - **Control**: You can view, edit, or delete favorites at any time through the extension interface
-- **Limit**: Maximum 5 favorites to prevent excessive storage usage
 
 ### Settings and Preferences
 - **Purpose**: To remember your extension preferences across sessions
