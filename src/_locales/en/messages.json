@@ -159,6 +159,14 @@
     "message": "Connect",
     "description": "Translation for panel.connectionList.modal.connect"
   },
+  "panel_connectionList_modal_history_title": {
+    "message": "Recent Connections",
+    "description": "Translation for panel.connectionList.modal.history.title"
+  },
+  "panel_connectionList_modal_history_empty": {
+    "message": "No recent connections",
+    "description": "Translation for panel.connectionList.modal.history.empty"
+  },
   "panel_connectionList_status_connected": {
     "message": "Connected",
     "description": "Translation for panel.connectionList.status.connected"

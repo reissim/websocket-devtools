@@ -160,7 +160,7 @@ const ManualConnectModal = ({
           <div className="ws-history-header">
             <div className="ws-history-title">
               <History size={16} />
-              Recent Connections
+{t("panel.connectionList.modal.history.title")}
               <span className="ws-history-count">{history.length}/3</span>
             </div>
           </div>
@@ -226,7 +226,7 @@ const ManualConnectModal = ({
               <div className="ws-history-empty-icon">
                 <History size={16} />
               </div>
-              No recent connections
+              <span>{t("panel.connectionList.modal.history.empty")}</span>
             </div>
           )}
         </div>

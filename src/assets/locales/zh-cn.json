@@ -39,6 +39,8 @@
   "panel.connectionList.modal.urlError": "请输入有效的 WebSocket URL",
   "panel.connectionList.modal.cancel": "取消",
   "panel.connectionList.modal.connect": "连接",
+  "panel.connectionList.modal.history.title": "最近连接",
+  "panel.connectionList.modal.history.empty": "暂无最近连接",
   "panel.connectionList.status.connected": "已连接",
   "panel.connectionList.status.disconnected": "已断开",
   "panel.connectionList.status.connecting": "连接中",

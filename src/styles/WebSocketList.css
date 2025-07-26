@@ -1035,6 +1035,8 @@
 .ws-history-empty-icon {
   color: #4b5563;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
 /* ===== Modal Divider ===== */

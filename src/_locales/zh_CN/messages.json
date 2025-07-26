@@ -159,6 +159,14 @@
     "message": "连接",
     "description": "Translation for panel.connectionList.modal.connect"
   },
+  "panel_connectionList_modal_history_title": {
+    "message": "最近连接",
+    "description": "Translation for panel.connectionList.modal.history.title"
+  },
+  "panel_connectionList_modal_history_empty": {
+    "message": "暂无最近连接",
+    "description": "Translation for panel.connectionList.modal.history.empty"
+  },
   "panel_connectionList_status_connected": {
     "message": "已连接",
     "description": "Translation for panel.connectionList.status.connected"

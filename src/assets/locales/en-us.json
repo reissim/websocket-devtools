@@ -39,6 +39,8 @@
   "panel.connectionList.modal.urlError": "Please enter a valid WebSocket URL",
   "panel.connectionList.modal.cancel": "Cancel",
   "panel.connectionList.modal.connect": "Connect",
+  "panel.connectionList.modal.history.title": "Recent Connections",
+  "panel.connectionList.modal.history.empty": "No recent connections",
   "panel.connectionList.status.connected": "Connected",
   "panel.connectionList.status.disconnected": "Closed",
   "panel.connectionList.status.connecting": "Connecting",

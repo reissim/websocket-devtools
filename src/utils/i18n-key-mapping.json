@@ -39,6 +39,8 @@
   "panel_connectionList_modal_urlError": "panel.connectionList.modal.urlError",
   "panel_connectionList_modal_cancel": "panel.connectionList.modal.cancel",
   "panel_connectionList_modal_connect": "panel.connectionList.modal.connect",
+  "panel_connectionList_modal_history_title": "panel.connectionList.modal.history.title",
+  "panel_connectionList_modal_history_empty": "panel.connectionList.modal.history.empty",
   "panel_connectionList_status_connected": "panel.connectionList.status.connected",
   "panel_connectionList_status_disconnected": "panel.connectionList.status.disconnected",
   "panel_connectionList_status_connecting": "panel.connectionList.status.connecting",
