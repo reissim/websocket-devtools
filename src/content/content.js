@@ -76,8 +76,10 @@ window.addEventListener("message", (event) => {
     chrome.runtime
       .sendMessage(messageWithId)
       .then((response) => {
+        // Response handled successfully
       })
       .catch((error) => {
+        // This is normal if no listener responds
       });
   }
 });

@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from "react";
 import { 
-  Settings, 
+  Wrench, 
   Monitor, 
   Server, 
   Play, 
@@ -144,7 +144,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
     <div className="system-events-tab">
       <div className="sys-evt-header">
         <div className="sys-evt-header-content">
-          <Settings className="sys-evt-header-icon" />
+          <Wrench className="sys-evt-header-icon" />
           <div className="sys-evt-header-text">
             <h2 style={{display: 'inline-flex', alignItems: 'center', gap: 6}}>
               {t("system.title")}
@@ -459,7 +459,7 @@ const SystemEventsTab = ({ connection, onSimulateSystemEvent }) => {
                           onClick={() => handleServerError("internal-server-error")}
                           disabled={isExecuting}
                         >
-                          <Settings size={16} />
+                          <Wrench size={16} />
                           {t("system.events.error.internalServerError")}
                         </button>
                         <button

@@ -26,7 +26,8 @@ import {
   Send,
   Move,
   Plus,
-  Activity
+  Activity,
+  Wrench
 } from "lucide-react";
 import JsonViewer from "./JsonViewer";
 import useWindowConstraints from "../hooks/useWindowConstraints";
@@ -529,7 +530,7 @@ const SimulateMessagePanel = forwardRef(
                       <Tabs.Tab
                         value="system"
                         leftSection={
-                          <Settings
+                          <Wrench
                             size={20}
                             color={activeTab === "system" ? "#cd7726" : "#b6b6b6"}
                             // color={"#e01210"}

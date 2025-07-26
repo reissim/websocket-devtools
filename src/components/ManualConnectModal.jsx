@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { Modal, TextInput } from "@mantine/core";
-import { ArrowRightLeft, Globe, Zap, Activity } from "lucide-react";
+import { Modal, TextInput, Tooltip } from "@mantine/core";
+import { ArrowRightLeft, Globe, Zap, Activity, History, Clock, Hash, Trash2 } from "lucide-react";
 import { t } from "../utils/i18n";
+import wsHistoryService from "../utils/wsHistoryService";
 
 const ManualConnectModal = ({ 
   opened, 
@@ -12,12 +13,21 @@ const ManualConnectModal = ({
 }) => {
   const [wsUrl, setWsUrl] = useState("");
   const [isConnecting, setIsConnecting] = useState(false);
+  const [history, setHistory] = useState([]);
   const inputRef = useRef(null);
 
-  // Auto-focus input when modal opens
+  // Load history when modal opens and set up listener
   useEffect(() => {
     if (opened) {
-      // Use setTimeout to ensure the Modal is fully open before focusing
+      // Load initial history
+      setHistory(wsHistoryService.getHistory());
+      
+      // Listen for history changes
+      const unsubscribe = wsHistoryService.addListener((newHistory) => {
+        setHistory(newHistory);
+      });
+      
+      // Auto-focus input when modal opens
       const timer = setTimeout(() => {
         // Try various ways to focus the input
         if (inputRef.current) {
@@ -34,7 +44,11 @@ const ManualConnectModal = ({
           }
         }
       }, 200); // Increase delay to ensure Modal animation completes
-      return () => clearTimeout(timer);
+      
+      return () => {
+        clearTimeout(timer);
+        unsubscribe();
+      };
     }
   }, [opened]);
 
@@ -55,6 +69,10 @@ const ManualConnectModal = ({
     setIsConnecting(true);
     try {
       const result = await onConnect(wsUrl.trim());
+      
+      // Add to history on successful connection
+      wsHistoryService.addConnection(wsUrl.trim());
+      
       setWsUrl("");
       onClose();
       return result;
@@ -71,6 +89,27 @@ const ManualConnectModal = ({
   const handleClose = () => {
     setWsUrl("");
     onClose();
+  };
+
+  // Handle history item click
+  const handleHistoryItemClick = (historyItem) => {
+    setWsUrl(historyItem.url);
+    // Auto-focus input after setting URL
+    setTimeout(() => {
+      if (inputRef.current) {
+        const inputElement = inputRef.current.querySelector('input') || inputRef.current;
+        if (inputElement && inputElement.focus) {
+          inputElement.focus();
+          inputElement.setSelectionRange(inputElement.value.length, inputElement.value.length);
+        }
+      }
+    }, 50);
+  };
+
+  // Handle history item delete
+  const handleHistoryItemDelete = (e, historyItem) => {
+    e.stopPropagation(); // Prevent triggering the item click
+    wsHistoryService.deleteConnection(historyItem.id);
   };
 
   const IconComponent = iconComponent;
@@ -115,6 +154,85 @@ const ManualConnectModal = ({
             </div>
           </div>
         </div>
+        
+        {/* WebSocket History Section */}
+        <div className="ws-history-section">
+          <div className="ws-history-header">
+            <div className="ws-history-title">
+              <History size={16} />
+{t("panel.connectionList.modal.history.title")}
+              <span className="ws-history-count">{history.length}/3</span>
+            </div>
+          </div>
+          {history.length > 0 ? (
+            <div className="ws-history-list">
+              {history.map((item) => (
+                <Tooltip
+                  key={item.id}
+                  label={item.url}
+                  arrowSize={6}
+                  arrowOffset={12}
+                  zIndex={1600}
+                  withinPortal={true}
+                  openDelay={100}
+                  styles={{
+                    tooltip: {
+                      background: "rgba(30, 30, 30, 0.95)",
+                      color: "#f3f4f6",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      borderRadius: "6px",
+                      padding: "8px 12px",
+                      fontSize: "12px",
+                      fontWeight: "400",
+                      backdropFilter: "blur(8px)",
+                      boxShadow: "0 10px 40px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3)",
+                    },
+                    arrow: {
+                      borderColor: "rgba(30, 30, 30, 0.95)",
+                    },
+                  }}
+                >
+                  <div
+                    className="ws-history-item"
+                    onClick={() => handleHistoryItemClick(item)}
+                  >
+                    <div className="ws-history-item-icon">
+                      <Activity size={12} />
+                    </div>
+                    <div className="ws-history-item-content">
+                      <div className="ws-history-item-url">
+                        {item.url}
+                      </div>
+                      <div className="ws-history-item-meta">
+                        <Clock size={10} />
+                        {wsHistoryService.formatLastUsed(item.lastUsed)}
+                        <Hash size={10} />
+                        {item.usageCount}
+                      </div>
+                    </div>
+                    <button
+                      className="ws-history-item-delete"
+                      onClick={(e) => handleHistoryItemDelete(e, item)}
+                      title="Delete from history"
+                    >
+                      <Trash2 size={12} />
+                    </button>
+                  </div>
+                </Tooltip>
+              ))}
+            </div>
+          ) : (
+            <div className="ws-history-empty">
+              <div className="ws-history-empty-icon">
+                <History size={16} />
+              </div>
+              <span>{t("panel.connectionList.modal.history.empty")}</span>
+            </div>
+          )}
+        </div>
+        
+        {/* Divider before TextInput */}
+        <div className="ws-modal-divider" style={{ margin: "0" }}></div>
         
         <TextInput
            ref={inputRef}

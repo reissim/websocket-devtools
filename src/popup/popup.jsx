@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import i18n, { t, initForPopup } from "../utils/i18n.js";
-import { Settings, Zap, Activity, Power, Wifi, MonitorSpeaker, Proxy, MessageCircle, Send, Ban, SquareActivity } from "lucide-react";
+import { Settings, Zap, Activity, Power, Wifi, MonitorSpeaker, Proxy, MessageCircle, Send, Ban, SquareActivity, Home, Heart, Github } from "lucide-react";
 
 const Popup = () => {
   const [isEnabled, setIsEnabled] = useState(true);
@@ -202,21 +202,55 @@ const Popup = () => {
 
       {/* Footer */}
       <div style={styles.footer}>
-        <span style={styles.versionText}>v1.0.2</span>
-        <a 
-          href="https://github.com/law-chain-hot/websocket-devtools" 
-          target="_blank" 
-          className="github-link"
-          style={styles.githubLink}
-          onClick={(e) => {
-            e.preventDefault();
-            chrome.tabs.create({ url: "https://github.com/law-chain-hot/websocket-devtools" });
-          }}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-        </a>
+        <span style={styles.versionText}>v1.0.3</span>
+        <div style={styles.footerIcons}>
+
+          <div className="tooltip-container">
+            <a 
+              href="https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod" 
+              target="_blank" 
+              className="footer-link"
+              style={styles.footerLink}
+              onClick={(e) => {
+                e.preventDefault();
+                chrome.tabs.create({ url: "https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod" });
+              }}
+            >
+              <Heart size={14} />
+            </a>
+            <div className="tooltip">{t("popup.footer.support")}</div>
+          </div>
+          <div className="tooltip-container">
+            <a 
+              href="https://websocket-devtools.com" 
+              target="_blank" 
+              className="footer-link"
+              style={styles.footerLink}
+              onClick={(e) => {
+                e.preventDefault();
+                chrome.tabs.create({ url: "https://websocket-devtools.com" });
+              }}
+            >
+              <Home size={14} />
+            </a>
+            <div className="tooltip">{t("popup.footer.homepage")}</div>
+          </div>
+          <div className="tooltip-container">
+            <a 
+              href="https://github.com/law-chain-hot/websocket-devtools" 
+              target="_blank" 
+              className="footer-link"
+              style={styles.footerLink}
+              onClick={(e) => {
+                e.preventDefault();
+                chrome.tabs.create({ url: "https://github.com/law-chain-hot/websocket-devtools" });
+              }}
+            >
+              <Github size={14} />
+            </a>
+            <div className="tooltip">{t("popup.footer.github")}</div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -525,7 +559,12 @@ const styles = {
     color: "rgba(203, 213, 225, 0.7)",
     fontWeight: "500",
   },
-  githubLink: {
+  footerIcons: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  },
+  footerLink: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -539,6 +578,9 @@ const styles = {
     textDecoration: "none",
     cursor: "pointer",
     transition: "all 0.3s ease",
+  },
+  tooltipContainer: {
+    position: "relative",
   },
   
   // Loading state
@@ -567,9 +609,88 @@ style.textContent = `
     background: rgba(71, 85, 105, 0.4) !important;
   }
   
-  .github-link:hover {
+  .footer-link:hover {
     background-color: rgba(16, 185, 129, 0.2) !important;
     transform: scale(1.1) !important;
+  }
+  
+  .tooltip-container {
+    position: relative;
+  }
+  
+  .tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 8px;
+    padding: 6px 10px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 1000;
+    pointer-events: none;
+    max-width: 180px;
+    min-width: 100px;
+    word-wrap: break-word;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+    box-sizing: border-box;
+  }
+  
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+  }
+  
+  .tooltip-container:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Ensure tooltip stays within popup bounds */
+  .tooltip-container:first-child .tooltip {
+    left: 0;
+    transform: translateX(0);
+  }
+  
+  .tooltip-container:last-child .tooltip {
+    left: auto;
+    right: 0;
+    transform: translateX(0);
+  }
+  
+  /* Center tooltip for middle icons with overflow protection */
+  .tooltip-container:nth-child(2) .tooltip {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 160px;
+  }
+  
+  /* Prevent right overflow for all tooltips */
+  .tooltip {
+    max-width: calc(100vw - 48px);
+    box-sizing: border-box;
+  }
+  
+  /* Specific positioning to prevent overflow */
+  .footerIcons .tooltip-container:nth-child(2) .tooltip {
+    right: 0;
+    left: auto;
+    transform: translateX(0);
+    max-width: 160px;
   }
 `;
 document.head.appendChild(style);

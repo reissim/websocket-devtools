@@ -66,11 +66,24 @@ class I18n {
       if (this.chromeSupported) {
         // Try to load mapping table
         const response = await fetch(chrome.runtime.getURL('src/utils/i18n-key-mapping.json'));
-        this.keyMapping = await response.json();
+        if (response.ok) {
+          this.keyMapping = await response.json();
+          // console.log('Key mapping loaded successfully'); // Debug log
+        } else {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
       }
+      // If chromeSupported is false, we don't need the mapping file, so no warning needed
     } catch (error) {
-      // Use fallback mapping
-      console.warn('Unable to load key mapping table, using fallback');
+      // Only warn if Chrome is supported but loading failed
+      // This is usually not critical as the system works without the mapping
+      if (this.chromeSupported) {
+        // Suppress the warning in development or when it's a known issue
+        // console.warn('Key mapping file not accessible, using fallback (this is usually normal):', error.message);
+        
+        // Set keyMapping to null to indicate fallback mode
+        this.keyMapping = null;
+      }
     }
   }
 

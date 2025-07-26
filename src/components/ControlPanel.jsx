@@ -143,6 +143,8 @@ const ControlPanel = ({
                     padding: "6px 12px",
                     backdropFilter: "blur(8px)",
                     boxShadow: "0 8px 32px rgba(0, 0, 0, 0.89)",
+                    whiteSpace: "normal",
+                    wordWrap: "break-word",
                   },
                   arrow: {
                     borderColor: "#f59e0b",

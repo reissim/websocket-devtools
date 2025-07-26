@@ -39,6 +39,8 @@
   "panel.connectionList.modal.urlError": "请输入有效的 WebSocket URL",
   "panel.connectionList.modal.cancel": "取消",
   "panel.connectionList.modal.connect": "连接",
+  "panel.connectionList.modal.history.title": "最近连接",
+  "panel.connectionList.modal.history.empty": "暂无最近连接",
   "panel.connectionList.status.connected": "已连接",
   "panel.connectionList.status.disconnected": "已断开",
   "panel.connectionList.status.connecting": "连接中",
@@ -248,5 +250,10 @@
   "popup.features.simulate.desc": "消息",
   "popup.features.block.title": "拦截",
   "popup.features.block.desc": "流量",
-  "system.closeEvent.notice": "仅\"客户端关闭\"事件（Close Code 为 1000 或 3000-4999）会真实调用 ws.close() 并断开连接，其余所有关闭事件（包括服务端关闭）仅模拟关闭，虽然会触发 ws.onclose.call() 事件，但底层连接未真正断开。"
+  "popup.footer.homepage": "主页",
+  "popup.footer.support": "如果喜欢的话请给我五星好评！",
+  "popup.footer.github": "GitHub",
+  "system.closeEvent.notice": "仅\"客户端关闭\"事件（Close Code 为 1000 或 3000-4999）会真实调用 ws.close() 并断开连接，其余所有关闭事件（包括服务端关闭）仅模拟关闭，虽然会触发 ws.onclose.call() 事件，但底层连接未真正断开。",
+  "simulate.animated.heartTooltip": "如果你喜欢这个插件，请给我们5星好评～",
+  "simulate.animated.githubTooltip": "如果你喜欢这个插件，可以探索这个仓库～"
 } 

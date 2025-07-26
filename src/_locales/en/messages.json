@@ -159,6 +159,14 @@
     "message": "Connect",
     "description": "Translation for panel.connectionList.modal.connect"
   },
+  "panel_connectionList_modal_history_title": {
+    "message": "Recent Connections",
+    "description": "Translation for panel.connectionList.modal.history.title"
+  },
+  "panel_connectionList_modal_history_empty": {
+    "message": "No recent connections",
+    "description": "Translation for panel.connectionList.modal.history.empty"
+  },
   "panel_connectionList_status_connected": {
     "message": "Connected",
     "description": "Translation for panel.connectionList.status.connected"
@@ -995,9 +1003,29 @@
     "message": "Traffic",
     "description": "Translation for popup.features.block.desc"
   },
+  "popup_footer_homepage": {
+    "message": "HomePage",
+    "description": "Translation for popup.footer.homepage"
+  },
+  "popup_footer_support": {
+    "message": "Support me with 5 stars if you like it!",
+    "description": "Translation for popup.footer.support"
+  },
+  "popup_footer_github": {
+    "message": "GitHub",
+    "description": "Translation for popup.footer.github"
+  },
   "system_closeEvent_notice": {
     "message": "Only 'Client Close' events (with Close Code 1000 or 3000-4999) will actually call ws.close() and close the connection. All other close events (including server-side) are simulated: ws.onclose.call() will be triggered, but the underlying connection is not truly closed.",
     "description": "Translation for system.closeEvent.notice"
+  },
+  "simulate_animated_heartTooltip": {
+    "message": "If you like it, please give us a 5-star rating!",
+    "description": "Translation for simulate.animated.heartTooltip"
+  },
+  "simulate_animated_githubTooltip": {
+    "message": "If you like it, try check out our Github repo!",
+    "description": "Translation for simulate.animated.githubTooltip"
   },
   "extensionName": {
     "message": "WebSocket DevTools",

@@ -159,6 +159,14 @@
     "message": "连接",
     "description": "Translation for panel.connectionList.modal.connect"
   },
+  "panel_connectionList_modal_history_title": {
+    "message": "最近连接",
+    "description": "Translation for panel.connectionList.modal.history.title"
+  },
+  "panel_connectionList_modal_history_empty": {
+    "message": "暂无最近连接",
+    "description": "Translation for panel.connectionList.modal.history.empty"
+  },
   "panel_connectionList_status_connected": {
     "message": "已连接",
     "description": "Translation for panel.connectionList.status.connected"
@@ -995,9 +1003,29 @@
     "message": "流量",
     "description": "Translation for popup.features.block.desc"
   },
+  "popup_footer_homepage": {
+    "message": "主页",
+    "description": "Translation for popup.footer.homepage"
+  },
+  "popup_footer_support": {
+    "message": "如果喜欢的话请给我五星好评！",
+    "description": "Translation for popup.footer.support"
+  },
+  "popup_footer_github": {
+    "message": "GitHub",
+    "description": "Translation for popup.footer.github"
+  },
   "system_closeEvent_notice": {
     "message": "仅\"客户端关闭\"事件（Close Code 为 1000 或 3000-4999）会真实调用 ws.close() 并断开连接，其余所有关闭事件（包括服务端关闭）仅模拟关闭，虽然会触发 ws.onclose.call() 事件，但底层连接未真正断开。",
     "description": "Translation for system.closeEvent.notice"
+  },
+  "simulate_animated_heartTooltip": {
+    "message": "如果你喜欢这个插件，请给我们5星好评～",
+    "description": "Translation for simulate.animated.heartTooltip"
+  },
+  "simulate_animated_githubTooltip": {
+    "message": "如果你喜欢这个插件，可以探索这个仓库～",
+    "description": "Translation for simulate.animated.githubTooltip"
   },
   "extensionName": {
     "message": "WebSocket DevTools",
