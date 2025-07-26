@@ -497,7 +497,7 @@ const WebSocketPanel = () => {
             <button 
               className="extension-icon-panel"
               onClick={() => {
-                chrome.tabs.create({ url: "https://github.com/law-chain-hot/websocket-devtools" });
+                chrome.tabs.create({ url: "https://websocket-devtools.com" });
               }}
               style={{
                 marginLeft: '8px',
