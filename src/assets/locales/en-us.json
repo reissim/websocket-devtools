@@ -248,5 +248,8 @@
   "popup.features.simulate.desc": "Message",
   "popup.features.block.title": "Block",
   "popup.features.block.desc": "Traffic",
+  "popup.footer.homepage": "HomePage",
+  "popup.footer.support": "Support me with 5 stars if you like it!",
+  "popup.footer.github": "GitHub",
   "system.closeEvent.notice": "Only 'Client Close' events (with Close Code 1000 or 3000-4999) will actually call ws.close() and close the connection. All other close events (including server-side) are simulated: ws.onclose.call() will be triggered, but the underlying connection is not truly closed."
 } 
