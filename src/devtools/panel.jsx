@@ -135,24 +135,31 @@ const WebSocketPanel = () => {
 
     // Listen to messages from background script
     const messageListener = (message, sender, sendResponse) => {
+      // Check if sendResponse is available (runtime message) or not (port message)
+      const hasSendResponse = typeof sendResponse === 'function';
+      
       if (message.type === "websocket-event") {
         const eventData = message.data;
         const messageId = message.messageId;
 
         // Filter: only process events from current tab
         if (eventData.tabId !== tabId) {
-          sendResponse({
-            received: true,
-            ignored: true,
-            messageId,
-            reason: "different-tab",
-          });
+          if (hasSendResponse) {
+            sendResponse({
+              received: true,
+              ignored: true,
+              messageId,
+              reason: "different-tab",
+            });
+          }
           return;
         }
 
         // MessageId-based deduplication mechanism
         if (messageId && processedMessageIds.current.has(messageId)) {
-          sendResponse({ received: true, duplicate: true, messageId });
+          if (hasSendResponse) {
+            sendResponse({ received: true, duplicate: true, messageId });
+          }
           return;
         }
 
@@ -226,11 +233,13 @@ const WebSocketPanel = () => {
         
         // Filter: only process events from current tab
         if (eventData.tabId !== tabId) {
-          sendResponse({
-            received: true,
-            ignored: true,
-            reason: "different-tab",
-          });
+          if (hasSendResponse) {
+            sendResponse({
+              received: true,
+              ignored: true,
+              reason: "different-tab",
+            });
+          }
           return;
         }
 
@@ -241,7 +250,10 @@ const WebSocketPanel = () => {
         processedMessageIds.current.clear();
       }
 
-      sendResponse({ received: true, messageId: message.messageId });
+      // Only call sendResponse if it's available
+      if (hasSendResponse) {
+        sendResponse({ received: true, messageId: message.messageId });
+      }
     };
 
     chrome.runtime.onMessage.addListener(messageListener);
@@ -397,7 +409,7 @@ const WebSocketPanel = () => {
           reject(new Error("Connection creation timeout"));
         }, 10000); // 10 second timeout
 
-        const listener = (message) => {
+        const listener = (message, sender, sendResponse) => {
           if (message.type === "websocket-event" && 
               message.data.type === "manual-connection-created" &&
               message.data.url === wsUrl) {
@@ -410,6 +422,11 @@ const WebSocketPanel = () => {
             clearTimeout(timeout);
             chrome.runtime.onMessage.removeListener(listener);
             reject(new Error(message.data.error || "Manual connection failed"));
+          }
+          
+          // Always respond to keep the message channel open
+          if (typeof sendResponse === 'function') {
+            sendResponse({ received: true });
           }
         };
 

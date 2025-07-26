@@ -197,10 +197,8 @@ function forwardToDevTools(message) {
       }
     }
     
-    // Also broadcast via runtime message as fallback
-    chrome.runtime.sendMessage(message).catch(() => {
-      // This is normal, as the Panel might not be open yet
-    });
+    // Note: Removed runtime message fallback to avoid sendResponse issues
+    // Port communication is more reliable for DevTools messages
   } catch (error) {
   }
 }

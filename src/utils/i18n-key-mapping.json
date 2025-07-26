@@ -248,5 +248,10 @@
   "popup_features_simulate_desc": "popup.features.simulate.desc",
   "popup_features_block_title": "popup.features.block.title",
   "popup_features_block_desc": "popup.features.block.desc",
-  "system_closeEvent_notice": "system.closeEvent.notice"
+  "popup_footer_homepage": "popup.footer.homepage",
+  "popup_footer_support": "popup.footer.support",
+  "popup_footer_github": "popup.footer.github",
+  "system_closeEvent_notice": "system.closeEvent.notice",
+  "simulate_animated_heartTooltip": "simulate.animated.heartTooltip",
+  "simulate_animated_githubTooltip": "simulate.animated.githubTooltip"
 }
