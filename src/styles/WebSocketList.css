@@ -675,7 +675,7 @@
   padding: 4px 0;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 18px;
 }
 
 /* Modal header section with icon and description */
@@ -901,3 +901,146 @@
   letter-spacing: 0.3px;
   line-height: 1;
 } 
+
+/* ===== WebSocket History styles ===== */
+
+.ws-history-section {
+  margin-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 16px;
+}
+
+.ws-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.ws-history-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #d1d5db;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ws-history-count {
+  font-size: 12px;
+  color: rgba(0, 122, 204, 0.8);
+  background: rgba(0, 122, 204, 0.1);
+  padding: 0 6px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.ws-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.ws-history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.ws-history-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 122, 204, 0.3);
+  filter: brightness(1.1);
+}
+
+.ws-history-item-icon {
+  flex-shrink: 0;
+  color: #10b981;
+}
+
+.ws-history-item-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ws-history-item-url {
+  font-size: 12px;
+  font-weight: 400;
+  color: #d1d5db;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.ws-history-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.ws-history-item-delete {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.ws-history-item:hover .ws-history-item-delete {
+  opacity: 1;
+}
+
+.ws-history-item-delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.ws-history-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 8px;
+  color: #6b7280;
+  font-size: 12px;
+  min-height: 36px;
+}
+
+.ws-history-empty-icon {
+  color: #4b5563;
+  flex-shrink: 0;
+}
+
+/* ===== Modal Divider ===== */
+
+.ws-modal-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 16px 0;
+}
