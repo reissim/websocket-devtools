@@ -593,7 +593,7 @@
   height: 24px;
   border: none;
   border-radius: 4px;
-  background: rgba(61, 61, 61, 0.727);
+  background: rgb(61, 61, 61);
   color: var(--text-secondary);
   cursor: pointer;
   display: flex;
