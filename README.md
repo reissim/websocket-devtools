@@ -21,7 +21,7 @@ and traffic interception for developers
 [![][deepwiki-shield]][deepwiki-link]
 
 
-<!-- **English** | [简体中文](./README_zh-CN.md) -->
+**English** | [简体中文](./README_zh-CN.md)
 
 </div>
 
