@@ -15,9 +15,11 @@ and traffic interception for developers
 [![][version-shield]][version-link]
 [![][license-shield]][license-link]
 [![][privacy-shield]][privacy-link]
+[![][homepage-shield]][homepage-link]
 [![][chrome-shield]][chrome-link]
 [![][stars-shield]][stars-link]
 [![][deepwiki-shield]][deepwiki-link]
+
 
 <!-- **English** | [简体中文](./README_zh-CN.md) -->
 
@@ -31,6 +33,10 @@ and traffic interception for developers
 1. Visit [Chrome Web Store](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod)
 2. Click **"Add to Chrome"** and confirm installation
 3. Open DevTools (F12) → **"WebSocket DevTools"** tab
+
+### Homepage
+
+- 🌐 [WebSocket DevTools](https://websocket-devtools.com) - Official website with documentation and demos 
 
 ## ✨ Key Features
 
@@ -102,6 +108,7 @@ and traffic interception for developers
 [license-shield]: https://img.shields.io/badge/license-MIT-369eff?labelColor=black&logo=opensourceinitiative&style=flat-square
 [chrome-shield]: https://img.shields.io/badge/Chrome%20Web%20Store-Install-ffcb47?labelColor=black&logo=googlechrome&logoColor=white&style=flat-square
 [privacy-shield]: https://img.shields.io/badge/privacy-local%20only-c4f042?labelColor=black&logo=shield-check&style=flat-square
+[homepage-shield]: https://img.shields.io/badge/Homepage-WebSocket%20DevTools-blue?labelColor=black&logo=globe&style=flat-square
 [websocket-shield]: https://img.shields.io/badge/WebSocket-DevTools-ff80eb?labelColor=black&logo=websocket&style=flat-square
 [devtools-shield]: https://img.shields.io/badge/DevTools-Panel-8ae8ff?labelColor=black&logo=googlechrome&style=flat-square
 [deepwiki-shield]: https://img.shields.io/badge/DeepWiki-Docs-orange?labelColor=black&logo=book&style=flat-square
@@ -110,6 +117,7 @@ and traffic interception for developers
 [license-link]: ./LICENSE
 [chrome-link]: https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod
 [privacy-link]: ./PRIVACY.md
+[homepage-link]: https://websocket-devtools.com
 [websocket-link]: https://github.com/law-chain-hot/websocket-devtools
 [devtools-link]: https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod
 [deepwiki-link]: https://deepwiki.com/law-chain-hot/websocket-devtools
