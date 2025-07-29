@@ -42,15 +42,6 @@
     });
   }
 
-  // Generate unique message ID (simple UUID v4)
-  function generateMessageId() {
-    return 'msg_' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0;
-      const v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
-
   // Send event to content script
   function sendEvent(eventData) {
     if(!proxyState.isMonitoring){
