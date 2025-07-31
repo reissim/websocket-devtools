@@ -19,6 +19,7 @@ and traffic interception for developers
 [![][chrome-shield]][chrome-link]
 [![][stars-shield]][stars-link]
 [![][deepwiki-shield]][deepwiki-link]
+[![][youtube-shield]][youtube-link]
 
 
 **English** | [简体中文](./README_zh-CN.md)
@@ -37,6 +38,7 @@ and traffic interception for developers
 ### Homepage
 
 - 🌐 [WebSocket DevTools](https://websocket-devtools.com) - Official website with documentation and demos 
+- 📺 [YouTube Video](https://www.youtube.com/watch?v=L64x__1xORQ) - Demo video
 
 ## ✨ Key Features
 
@@ -48,6 +50,26 @@ and traffic interception for developers
 - **🌍 Multi-language** - Full English and Chinese support
 - **🎨 DevTools Integration** - Native Chrome DevTools panel experience
 - **🖼️ Iframe Support** - Full WebSocket proxy support for iframe embedded connections
+
+## Quick Demo
+
+
+### Blocking & Simulation Features
+
+<div align="center" width="80%">
+
+![Blocking and Simulation Demo](./ScreenShot/Gif/2-block-x.gif)
+
+![Blocking and Simulation Demo](./ScreenShot/Gif/5-Best_Practice.gif)
+</div>
+
+**Key Features Demonstrated:**
+- **Message Blocking**: Intercept and block WebSocket messages in real-time
+- **Message Simulation**: Send custom messages to test different scenarios
+- **Traffic Control**: Manage WebSocket traffic flow for debugging
+- **JSON Support**: Full JSON parsing and formatting capabilities
+
+
 
 
 ## 📷 Screenshots
@@ -100,7 +122,7 @@ and traffic interception for developers
 
 <div align="center">
 
-**MIT License** • [⭐ GitHub](https://github.com/law-chain-hot/websocket-devtools) • [📖 Wiki](https://github.com/law-chain-hot/websocket-devtools/wiki) • [📚 DeepWiki](https://deepwiki.com/law-chain-hot/websocket-devtools) • [🛒 Chrome Store](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod)
+**MIT License** • [⭐ GitHub](https://github.com/law-chain-hot/websocket-devtools) • [📖 Wiki](https://github.com/law-chain-hot/websocket-devtools/wiki) • [📚 DeepWiki](https://deepwiki.com/law-chain-hot/websocket-devtools) • [🛒 Chrome Store](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod) • [📺 YouTube](https://www.youtube.com/watch?v=L64x__1xORQ)
 
 </div> 
 
@@ -122,3 +144,5 @@ and traffic interception for developers
 [devtools-link]: https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod
 [deepwiki-link]: https://deepwiki.com/law-chain-hot/websocket-devtools
 [stars-link]: https://github.com/law-chain-hot/websocket-devtools/stargazers
+[youtube-shield]: https://img.shields.io/badge/YouTube-Video-red?labelColor=black&logo=youtube&style=flat-square
+[youtube-link]: https://www.youtube.com/watch?v=L64x__1xORQ
