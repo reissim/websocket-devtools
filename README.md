@@ -54,14 +54,13 @@ and traffic interception for developers
 ## Quick Demo
 
 
-### Blocking & Simulation Features
+### Blocking
 
-<div align="center" width="80%">
+<img src="./ScreenShot/Gif/2-block-x.gif" alt="Message Monitoring" width="65%" style="border-radius: 8px;">
 
-![Blocking and Simulation Demo](./ScreenShot/Gif/2-block-x.gif)
 
-![Blocking and Simulation Demo](./ScreenShot/Gif/5-Best_Practice.gif)
-</div>
+### Simulation
+<img src="./ScreenShot/Gif/5-Best_Practice.gif" alt="Message Monitoring" width="65%" style="border-radius: 8px;">
 
 **Key Features Demonstrated:**
 - **Message Blocking**: Intercept and block WebSocket messages in real-time
