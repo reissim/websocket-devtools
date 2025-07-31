@@ -18,6 +18,7 @@
 [![][chrome-shield]][chrome-link]
 [![][stars-shield]][stars-link]
 [![][deepwiki-shield]][deepwiki-link]
+[![][youtube-shield]][youtube-link]
 
 
 [English](./README.md) | **简体中文**
@@ -36,6 +37,7 @@
 ### 官网
 
 - 🌐 [WebSocket DevTools](https://websocket-devtools.com) - 官方网站
+- 📺 [YouTube视频](https://www.youtube.com/watch?v=L64x__1xORQ) - 演示视频
 
 ## ✨ 核心功能
 
@@ -48,6 +50,20 @@
 - **🎨 DevTools集成** - 原生Chrome DevTools面板体验
 - **🖼️ Iframe支持** - 完整的iframe嵌入式连接WebSocket代理支持
 
+## 快速演示
+
+### 消息拦截
+
+<img src="./ScreenShot/Gif/2-block-x.gif" alt="消息监控" width="65%" style="border-radius: 8px;">
+
+### 消息模拟
+<img src="./ScreenShot/Gif/5-Best_Practice.gif" alt="消息监控" width="65%" style="border-radius: 8px;">
+
+**演示的核心功能:**
+- **消息拦截**: 实时拦截和阻止WebSocket消息
+- **消息模拟**: 发送自定义消息测试不同场景
+- **流量控制**: 管理WebSocket流量进行调试
+- **JSON支持**: 完整的JSON解析和格式化功能
 
 ## 📷 截图
 
@@ -99,7 +115,7 @@
 
 <div align="center">
 
-**MIT许可证** • [⭐ GitHub](https://github.com/law-chain-hot/websocket-devtools) • [📖 Wiki](https://github.com/law-chain-hot/websocket-devtools/wiki) • [📚 DeepWiki](https://deepwiki.com/law-chain-hot/websocket-devtools) • [🛒 Chrome商店](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod)
+**MIT许可证** • [⭐ GitHub](https://github.com/law-chain-hot/websocket-devtools) • [📖 Wiki](https://github.com/law-chain-hot/websocket-devtools/wiki) • [📚 DeepWiki](https://deepwiki.com/law-chain-hot/websocket-devtools) • [🛒 Chrome商店](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod) • [📺 YouTube](https://www.youtube.com/watch?v=L64x__1xORQ)
 
 </div> 
 
@@ -121,3 +137,5 @@
 [devtools-link]: https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod
 [deepwiki-link]: https://deepwiki.com/law-chain-hot/websocket-devtools
 [stars-link]: https://github.com/law-chain-hot/websocket-devtools/stargazers 
+[youtube-shield]: https://img.shields.io/badge/YouTube-Video-red?labelColor=black&logo=youtube&style=flat-square
+[youtube-link]: https://www.youtube.com/watch?v=L64x__1xORQ 
