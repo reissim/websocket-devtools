@@ -51,7 +51,7 @@ and traffic interception for developers
 - **🎨 DevTools Integration** - Native Chrome DevTools panel experience
 - **🖼️ Iframe Support** - Full WebSocket proxy support for iframe embedded connections
 
-## Quick Demo
+## 🎬 Quick Demo
 
 
 ### Blocking

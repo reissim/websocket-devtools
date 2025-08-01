@@ -50,7 +50,7 @@
 - **🎨 DevTools集成** - 原生Chrome DevTools面板体验
 - **🖼️ Iframe支持** - 完整的iframe嵌入式连接WebSocket代理支持
 
-## 快速演示
+## 🎬 快速演示
 
 ### 消息拦截
 
