@@ -39,7 +39,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["src/content/injected.js", "icons/**/*", "src/utils/i18n-key-mapping.json"],
+      "resources": ["src/content/injected.js", "icons/**/*", "utils/i18n-key-mapping.json"],
       "matches": ["http://*/*", "https://*/*"]
     }
   ],

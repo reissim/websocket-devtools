@@ -65,7 +65,7 @@ class I18n {
     try {
       if (this.chromeSupported) {
         // Try to load mapping table
-        const response = await fetch(chrome.runtime.getURL('src/utils/i18n-key-mapping.json'));
+        const response = await fetch(chrome.runtime.getURL('utils/i18n-key-mapping.json'));
         if (response.ok) {
           this.keyMapping = await response.json();
           // console.log('Key mapping loaded successfully'); // Debug log

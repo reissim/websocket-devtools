@@ -27,6 +27,12 @@ export default defineConfig(({ mode }) => ({
           src: 'src/_locales',
           dest: '',
           structured: true
+        },
+        // Copy utils directory for i18n mapping and other utilities
+        {
+          src: 'src/utils',
+          dest: '',
+          structured: true
         }
       ]
     })
