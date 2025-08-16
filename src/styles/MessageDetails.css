@@ -312,6 +312,10 @@
   height: 100%;
 }
 
+.messages-table-container:focus {
+  outline: none;
+}
+
 .ws-messages-table {
   margin-bottom: 10px;
   width: 100%;

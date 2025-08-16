@@ -923,6 +923,14 @@
     "message": "Paste",
     "description": "Translation for common.paste"
   },
+  "common_rawData": {
+    "message": "Raw Data",
+    "description": "Translation for common.rawData"
+  },
+  "common_binary": {
+    "message": "BINARY",
+    "description": "Translation for common.binary"
+  },
   "common_cut": {
     "message": "Cut",
     "description": "Translation for common.cut"

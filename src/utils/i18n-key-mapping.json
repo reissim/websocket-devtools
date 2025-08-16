@@ -230,6 +230,8 @@
   "common_sort": "common.sort",
   "common_copy": "common.copy",
   "common_paste": "common.paste",
+  "common_rawData": "common.rawData",
+  "common_binary": "common.binary",
   "common_cut": "common.cut",
   "common_selectAll": "common.selectAll",
   "popup_title": "popup.title",

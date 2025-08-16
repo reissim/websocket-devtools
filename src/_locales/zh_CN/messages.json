@@ -923,6 +923,14 @@
     "message": "粘贴",
     "description": "Translation for common.paste"
   },
+  "common_rawData": {
+    "message": "原始数据",
+    "description": "Translation for common.rawData"
+  },
+  "common_binary": {
+    "message": "二进制",
+    "description": "Translation for common.binary"
+  },
   "common_cut": {
     "message": "剪切",
     "description": "Translation for common.cut"

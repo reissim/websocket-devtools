@@ -90,6 +90,83 @@ const MessageDetails = ({
     clearHighlights();
   }, [selectedConnectionId, clearHighlights]);
 
+  // Keyboard navigation for message selection
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Only handle arrow keys when we have connection and messages
+      if (!connection || !connection.messages || connection.messages.length === 0) return;
+      
+      // Calculate filtered and sorted messages inside the effect
+      const filteredMessages = filterMessages(connection.messages, {
+        direction: filterDirection,
+        text: filterText,
+        invert: filterInvert,
+      });
+      
+      const sortedMessages = [...filteredMessages].sort((a, b) => {
+        return sortOrder === "desc"
+          ? b.timestamp - a.timestamp
+          : a.timestamp - b.timestamp;
+      });
+      
+      if (sortedMessages.length === 0) return;
+      
+      const tableContainer = document.querySelector('.messages-table-container');
+      const isTableFocused = tableContainer && document.activeElement === tableContainer;
+      const hasSelectedMessage = selectedMessageKey !== null;
+      
+      // Handle arrow keys if table is focused OR if we have a selected message
+      if ((isTableFocused || hasSelectedMessage) && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+        e.preventDefault();
+        
+        const currentIndex = selectedMessageKey 
+          ? sortedMessages.findIndex(msg => msg.messageId === selectedMessageKey)
+          : -1;
+        
+        let newIndex;
+        if (currentIndex === -1) {
+          // No message selected, select first message
+          newIndex = 0;
+        } else if (e.key === 'ArrowUp') {
+          newIndex = currentIndex > 0 ? currentIndex - 1 : currentIndex;
+        } else {
+          newIndex = currentIndex < sortedMessages.length - 1 ? currentIndex + 1 : currentIndex;
+        }
+        
+        if (newIndex >= 0 && newIndex < sortedMessages.length) {
+          const newMessageKey = sortedMessages[newIndex].messageId;
+          setSelectedMessageKey(newMessageKey);
+          
+          // Scroll the selected row into view
+          setTimeout(() => {
+            const rowElement = document.querySelector(`tr[data-message-id="${newMessageKey}"]`);
+            const tableContainer = document.querySelector('.messages-table-container');
+            
+            if (rowElement && tableContainer) {
+              const containerRect = tableContainer.getBoundingClientRect();
+              const rowRect = rowElement.getBoundingClientRect();
+              
+              // Check if row is visible in container
+              const isRowVisible = rowRect.top >= containerRect.top && 
+                                   rowRect.bottom <= containerRect.bottom;
+              
+              if (!isRowVisible) {
+                rowElement.scrollIntoView({ 
+                  behavior: 'smooth', 
+                  block: 'nearest',
+                  inline: 'nearest'
+                });
+              }
+            }
+          }, 0);
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [connection, filterDirection, filterText, filterInvert, sortOrder, selectedMessageKey]);
+
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
     const timeString = date.toLocaleTimeString(undefined, {
@@ -379,7 +456,11 @@ const MessageDetails = ({
         ) : (
           <PanelGroup direction="vertical">
             <Panel defaultSize={selectedMessageKey ? 70 : 100} minSize={5}>
-              <div className="messages-table-container">
+              <div 
+                className="messages-table-container" 
+                tabIndex={0}
+                style={{ outline: 'none' }}
+              >
                 <table className="ws-messages-table">
                   <thead>
                     <tr>
@@ -399,6 +480,7 @@ const MessageDetails = ({
                       return (
                         <tr
                           key={`${messageKey}-${index}`} // Keep React key unique
+                          data-message-id={messageKey}
                           className={`message-row ${message.direction} ${message.simulated ? "simulated" : ""} ${
                             message.blocked ? "blocked" : ""
                           } ${isSelected ? "selected" : ""} ${isNewMsg ? "new-message" : ""} ${
