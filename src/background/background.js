@@ -9,6 +9,67 @@ let websocketData = {
 // New: Maintain DevTools port <-> tabId mapping
 const devtoolsPorts = new Map(); // port -> tabId
 
+// Optimized keep-alive mechanism with lifecycle management
+let keepAliveTimer = null;
+
+const startKeepAlive = () => {
+  if (keepAliveTimer) return; // Prevent multiple timers
+  
+  keepAliveTimer = setInterval(() => {
+    // Skip execution if no active DevTools connections
+    if (devtoolsPorts.size === 0) return;
+    
+    console.log(`[WebSocket Proxy] Keep-alive tick: ${new Date().toISOString()}, Active DevTools connections: ${devtoolsPorts.size}`);
+    
+    // Send keep-alive to connected DevTools panels
+    for (const [port, tabId] of devtoolsPorts.entries()) {
+      try {
+        port.postMessage({ type: "keep-alive", timestamp: Date.now() });
+      } catch (error) {
+        devtoolsPorts.delete(port);
+      }
+    }
+    
+    // Only query tabs that have DevTools connections
+    const connectedTabIds = [...devtoolsPorts.values()];
+    if (connectedTabIds.length > 0) {
+      chrome.tabs.query({}, (tabs) => {
+        tabs.filter(tab => connectedTabIds.includes(tab.id))
+             .forEach(tab => {
+               chrome.tabs.sendMessage(tab.id, { type: "keep-alive", timestamp: Date.now() }).catch(() => {});
+             });
+      });
+    }
+  }, 20000);
+};
+
+const stopKeepAlive = () => {
+  if (keepAliveTimer) {
+    clearInterval(keepAliveTimer);
+    keepAliveTimer = null;
+  }
+};
+
+// Clean up timer when extension is unloaded
+chrome.runtime.onSuspend.addListener(() => {
+  stopKeepAlive();
+  
+  // Clean up all DevTools ports
+  for (const [port, tabId] of devtoolsPorts.entries()) {
+    try {
+      port.disconnect();
+    } catch (error) {
+      // Ignore errors
+    }
+  }
+  devtoolsPorts.clear();
+});
+
+// Also clean up when extension is updated
+chrome.runtime.onUpdateAvailable.addListener(() => {
+  stopKeepAlive();
+});
+
 // Check if extension is enabled
 async function isExtensionEnabled() {
   return new Promise((resolve) => {
@@ -144,6 +205,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break;
     }
 
+    case "connection-check": {
+      // Respond to connection check from DevTools panel
+      sendResponse({ status: "ok", timestamp: Date.now() });
+      break;
+    }
+
+    case "keep-alive-active": {
+      // Forward active keep-alive to DevTools panels
+      forwardToDevTools({
+        type: "keep-alive-active",
+        data: {
+          source: message.source || "unknown",
+          timestamp: message.timestamp || Date.now()
+        }
+      });
+      sendResponse({ received: true });
+      break;
+    }
+
     default: {
       sendResponse({ error: "Unknown message type" });
       break;
@@ -263,26 +343,35 @@ chrome.runtime.onConnect.addListener((port) => {
     port.onMessage.addListener((msg) => {
       if (msg.type === "init" && msg.tabId) {
         tabId = msg.tabId;
-        devtoolsPorts.set(port, tabId); // Store port -> tabId mapping
-        // Send existing data immediately to the newly connected DevTools panel
+        const wasEmpty = devtoolsPorts.size === 0;
+        devtoolsPorts.set(port, tabId);
+        
+        // Start keep-alive when first DevTools connects
+        if (wasEmpty) startKeepAlive();
+        
+        console.log(`[WebSocket Proxy] DevTools initialized for tab ${tabId}, total connections: ${devtoolsPorts.size}`);
+        
         port.postMessage({
           type: "existing-data",
           data: websocketData.connections.filter(conn => conn.tabId === tabId),
           isMonitoring: websocketData.isMonitoring,
         });
+      } else if (msg.type === "keep-alive-ack") {
+        console.log(`[WebSocket Proxy] Keep-alive acknowledged from tab ${tabId}`);
       }
     });
 
     port.onDisconnect.addListener(() => {
       if (tabId) {
-        // Send a reset message to the content script of the disconnected tab
-        // This will revert the WebSocket DevTools for that tab
         chrome.tabs.sendMessage(tabId, {
           type: "reset-proxy-state",
-        }).catch(() => {
-        });
+        }).catch(() => {});
       }
+      
       devtoolsPorts.delete(port);
+      
+      // Stop keep-alive when no DevTools connections remain
+      if (devtoolsPorts.size === 0) stopKeepAlive();
     });
   }
 });

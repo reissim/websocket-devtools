@@ -44,6 +44,8 @@ checkExtensionEnabled().then((enabled) => {
     } else {
       injectWebSocketProxy();
     }
+    
+
   } else {
   }
 });
@@ -51,8 +53,28 @@ checkExtensionEnabled().then((enabled) => {
 // Listen for messages from injected script
 window.addEventListener("message", (event) => {
   if (event.source !== window) return;
+  if (!event.data || !event.data.source) return;
 
-  if (event.data && event.data.source === "websocket-proxy-injected") {
+  if (event.data.source === "websocket-proxy-injected") {
+
+    // Handle keep-alive messages
+    if (event.data.type === "keep-alive") {
+      // Just acknowledge to keep connection alive
+      return;
+    }
+
+    // Handle active keep-alive from page context
+    if (event.data.type === "keep-alive-active") {
+      // Forward active keep-alive to background script
+      chrome.runtime.sendMessage({
+        type: "keep-alive-active",
+        timestamp: event.data.timestamp,
+        source: "page-context"
+      }).catch(() => {
+        // Ignore errors
+      });
+      return;
+    }
 
     // Add unique ID to message for deduplication
     const messageId = generateMessageId();
@@ -86,6 +108,20 @@ window.addEventListener("message", (event) => {
 
 // Listen for control messages from background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+
+  // Handle keep-alive messages
+  if (message.type === "keep-alive") {
+    // Forward keep-alive to injected script
+    window.postMessage({
+      source: "websocket-proxy-content",
+      type: "keep-alive",
+      timestamp: message.timestamp
+    }, "*");
+    
+    // Respond to background script
+    sendResponse({ received: true });
+    return;
+  }
 
   // Forward control commands to injected script
   switch (message.type) {

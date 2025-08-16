@@ -1067,6 +1067,11 @@
           Object.assign(proxyState, JSON.parse(JSON.stringify(proxyStateInitial)));
 
           break;
+          
+        case "keep-alive":
+          // Respond to keep-alive to maintain connection
+          // No action needed, just receiving the message keeps the connection alive
+          break;
       }
     }
   });
@@ -1086,4 +1091,32 @@
       proxyState.blockIncoming = enabled;
     },
   };
+
+  // New: Active keep-alive from page context
+  const keepAliveInterval = setInterval(() => {
+    try {
+      // Send keep-alive to content script
+      window.postMessage({
+        source: "websocket-proxy-injected",
+        type: "keep-alive-active",
+        timestamp: Date.now()
+      }, "*");
+    } catch (error) {
+      // Ignore errors
+    }
+  }, 15000); // Every 15 seconds
+
+  // Clean up interval when page is unloaded
+  window.addEventListener('beforeunload', () => {
+    if (keepAliveInterval) {
+      clearInterval(keepAliveInterval);
+    }
+  });
+
+  // Also clean up when the script context is destroyed
+  window.addEventListener('unload', () => {
+    if (keepAliveInterval) {
+      clearInterval(keepAliveInterval);
+    }
+  });
 })();

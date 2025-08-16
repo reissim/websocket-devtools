@@ -248,6 +248,34 @@ const WebSocketPanel = () => {
         
         // Clear processed message IDs
         processedMessageIds.current.clear();
+      } else if (message.type === "keep-alive-active") {
+        // Handle active keep-alive from page context
+        const source = message.data?.source || "unknown";
+        console.log(`[WebSocket Proxy] Active keep-alive received from ${source}`);
+        
+        // Update connection status to show active communication
+        // setConnectionStatus("connected"); // This line was removed as per the new_code, as setConnectionStatus is not defined.
+      }
+
+      // New: Handle ping/pong for connection health
+      if (message.type === "ping") {
+        try {
+          port.postMessage({ type: "pong", timestamp: Date.now() });
+        } catch (error) {
+          console.warn("Failed to respond to ping, connection may be broken");
+        }
+        return;
+      }
+      
+      // New: Handle keep-alive messages
+      if (message.type === "keep-alive") {
+        // Respond to keep-alive to maintain connection
+        try {
+          port.postMessage({ type: "keep-alive-ack", timestamp: Date.now() });
+        } catch (error) {
+          console.warn("Failed to respond to keep-alive, connection may be broken");
+        }
+        return;
       }
 
       // Only call sendResponse if it's available
@@ -267,6 +295,28 @@ const WebSocketPanel = () => {
       chrome.runtime.onMessage.removeListener(messageListener);
       if (window._wsInspectorPort) {
         window._wsInspectorPort.onMessage.removeListener(messageListener);
+        // Clean up port reference
+        window._wsInspectorPort = null;
+      }
+      
+      // Clean up health check
+      if (connectionHealthCheck) {
+        clearInterval(connectionHealthCheck);
+      }
+      
+      // Clean up connection check interval
+      if (connectionCheckInterval.current) {
+        clearInterval(connectionCheckInterval.current);
+        connectionCheckInterval.current = null;
+      }
+      
+      // Clean up port connection
+      if (port) {
+        try {
+          port.disconnect();
+        } catch (error) {
+          // Ignore errors
+        }
       }
     };
   }, []);
