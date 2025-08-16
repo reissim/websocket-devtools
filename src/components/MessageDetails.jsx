@@ -7,6 +7,7 @@ import { addFromMessageList } from "../utils/globalFavorites";
 import { Ban, Search, Settings, CircleX } from "lucide-react";
 import { t } from "../utils/i18n.js";
 import CheeseIcon from "../Icons/cheese.jsx";
+import ProtobufIcon from "../Icons/Protobuf.jsx";
 
 // SVG icon components
 const Icons = {
@@ -46,6 +47,9 @@ const Icons = {
       />
       <path d="M3 3L9 9" stroke="currentColor" strokeWidth="1.5" />
     </svg>
+  ),
+  Protobuf: () => (
+    <ProtobufIcon size={12} />
   ),
   Star: () => (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -135,12 +139,41 @@ const MessageDetails = ({
   };
 
   const truncateMessage = (message, maxLength = 120) => {
-    if (typeof message !== "string") {
-      message = String(message);
+    let displayText;
+    
+    // For protobuf messages, prefer decoded data for display in table
+    if (message && message.isProtobuf && message.protobufDecoded) {
+      displayText = message.protobufDecoded;
+    } else {
+      // For non-protobuf messages, use message.data
+      displayText = message && message.data ? message.data : message;
     }
-    message = message.replace(/\s+/g, " ").trim();
-    if (message.length <= maxLength) return message;
-    return message.substring(0, maxLength) + "...";
+    
+    // Handle different data types properly
+    if (typeof displayText !== "string") {
+      if (displayText instanceof ArrayBuffer) {
+        // Convert ArrayBuffer to hex string for display
+        const bytes = new Uint8Array(displayText);
+        displayText = `[Binary ${bytes.length} bytes]: ${Array.from(bytes.slice(0, 8)).map(b => b.toString(16).padStart(2, '0')).join(' ')}${bytes.length > 8 ? '...' : ''}`;
+      } else if (displayText instanceof Uint8Array) {
+        // Convert Uint8Array to hex string for display
+        displayText = `[Binary ${displayText.length} bytes]: ${Array.from(displayText.slice(0, 8)).map(b => b.toString(16).padStart(2, '0')).join(' ')}${displayText.length > 8 ? '...' : ''}`;
+      } else if (displayText instanceof Blob) {
+        displayText = `[Blob ${displayText.size} bytes]`;
+      } else if (typeof displayText === 'object' && displayText !== null) {
+        try {
+          displayText = JSON.stringify(displayText, null, 2);
+        } catch (e) {
+          displayText = String(displayText);
+        }
+      } else {
+        displayText = String(displayText);
+      }
+    }
+    
+    displayText = displayText.replace(/\s+/g, " ").trim();
+    if (displayText.length <= maxLength) return displayText;
+    return displayText.substring(0, maxLength) + "...";
   };
 
   const getMessageLength = (message) => {
@@ -242,6 +275,18 @@ const MessageDetails = ({
         </span>
       );
     }
+    if (message.isProtobuf) {
+      tags.push(
+        <span
+          key="protobuf"
+          className="message-tag protobuf"
+          title={message.protobufError ? `Protobuf detected but decoding failed: ${message.protobufError}` : "Protocol Buffers message detected and decoded"}
+        >
+          <Icons.Protobuf />
+          <span>{t("common.binary")}</span>
+        </span>
+      );
+    }
 
     if (isSystemMessage) {
       return (
@@ -271,7 +316,7 @@ const MessageDetails = ({
           )}
         </span>
         {tags.length > 0 && <span className="message-tags">{tags}</span>}
-        <span className="message-text">{truncateMessage(message.data)}</span>
+        <span className="message-text">{truncateMessage(message)}</span>
       </div>
     );
   };
@@ -409,6 +454,7 @@ const MessageDetails = ({
                             </div> */}
                             <JsonViewer
                               data={selectedMessage.data}
+                              message={selectedMessage}
                               className="compact"
                               showControls={true}
                               onCopy={(data) => handleCopyMessage(data, messageKey)}

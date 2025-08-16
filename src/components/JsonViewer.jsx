@@ -4,6 +4,7 @@ import { json } from "@codemirror/lang-json";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorView } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
+import Protobuf from "../Icons/Protobuf";
 
 const deepEqual = (a, b) => {
   if (a === b) return true;
@@ -34,7 +35,8 @@ import {
   Star,
   Send,
   Layers2,
-  Check
+  Check,
+  Info
 } from "lucide-react";
 import { t } from "../utils/i18n.js";
 import "../styles/JsonViewer.css";
@@ -42,6 +44,7 @@ import "../styles/JsonViewer.css";
 
 const JsonViewer = ({
   data,
+  message = null, // Complete message object for protobuf handling
   className = "",
   showControls = true,
   onCopy = null,
@@ -75,14 +78,109 @@ const JsonViewer = ({
     return true;
   });
 
+  const [collapsed, setCollapsed] = useState(false);
+  const [nestedParse, setNestedParse] = useState(false); // Default to no nested parsing
+  const [forceUpdate, setForceUpdate] = useState(0);
+  const [isCopied, setIsCopied] = useState(false);
+  
+  // Protobuf data toggle state
+  const [showProtobufRaw, setShowProtobufRaw] = useState(false);
+  
+  // Check if current message is protobuf
+  const isProtobufMessage = message && message.isProtobuf;
+  
+  // Get effective data based on protobuf toggle state
+  const getEffectiveData = useCallback(() => {
+    // Handle protobuf messages
+    if (isProtobufMessage) {
+      if (showProtobufRaw) {
+        // Show raw hex data
+        const rawData = message.protobufRaw || message.data;
+        if (rawData instanceof ArrayBuffer) {
+          const bytes = new Uint8Array(rawData);
+          return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join(' ');
+        } else if (rawData instanceof Uint8Array) {
+          return Array.from(rawData).map(b => b.toString(16).padStart(2, '0')).join(' ');
+        } else if (typeof rawData === 'string') {
+          // Try to convert string to bytes for hex display
+          try {
+            if (rawData.length > 0) {
+              const bytes = new Uint8Array(rawData.length);
+              for (let i = 0; i < rawData.length; i++) {
+                bytes[i] = rawData.charCodeAt(i);
+              }
+              return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join(' ');
+            }
+          } catch (e) {
+            // Fallback to original string
+          }
+          return rawData;
+        } else {
+          return String(rawData);
+        }
+      } else {
+        // Show decoded data if available, otherwise fallback to hex
+        if (message.protobufDecoded) {
+          return message.protobufDecoded;
+        } else {
+          // No decoded data available, show binary representation in hex format
+          const rawData = message.protobufRaw || message.data;
+          if (rawData instanceof ArrayBuffer) {
+            const bytes = new Uint8Array(rawData);
+            return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join(' ');
+          } else if (rawData instanceof Uint8Array) {
+            return Array.from(rawData).map(b => b.toString(16).padStart(2, '0')).join(' ');
+          } else if (typeof rawData === 'string') {
+            // Try to convert string to bytes for hex display
+            try {
+              if (rawData.length > 0) {
+                const bytes = new Uint8Array(rawData.length);
+                for (let i = 0; i < rawData.length; i++) {
+                  bytes[i] = rawData.charCodeAt(i);
+                }
+                return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join(' ');
+              }
+            } catch (e) {
+              // Fallback to original string
+            }
+            return rawData;
+          } else {
+            return String(rawData);
+          }
+        }
+      }
+    }
+    
+    // For non-protobuf messages, use original data
+    // Ensure data is always a string for consistent processing
+    if (data === null || data === undefined) {
+      return '';
+    }
+    if (typeof data === 'string') {
+      return data;
+    }
+    if (typeof data === 'object') {
+      try {
+        return JSON.stringify(data, null, 2);
+      } catch (e) {
+        return String(data);
+      }
+    }
+    return String(data);
+  }, [isProtobufMessage, showProtobufRaw, message, data]);
+  
+  // Use effective data for all processing
+  const effectiveData = getEffectiveData();
+
   // Listen for data changes, automatically switch textWrap initial value (only if user hasn't manually toggled, and in read-only mode)
   const [userToggledWrap, setUserToggledWrap] = useState(false);
   useEffect(() => {
     if (!readOnly) return; // Do not auto-toggle wrap in editable mode
     if (!userToggledWrap) {
-      if (typeof data === 'string') {
+      const dataToCheck = getEffectiveData();
+      if (typeof dataToCheck === 'string') {
         try {
-          JSON.parse(data);
+          JSON.parse(dataToCheck);
           setTextWrap(false);
         } catch {
           setTextWrap(true);
@@ -91,11 +189,7 @@ const JsonViewer = ({
         setTextWrap(true);
       }
     }
-  }, [data, userToggledWrap, readOnly]);
-  const [collapsed, setCollapsed] = useState(false);
-  const [nestedParse, setNestedParse] = useState(false); // Default to no nested parsing
-  const [forceUpdate, setForceUpdate] = useState(0);
-  const [isCopied, setIsCopied] = useState(false);
+  }, [getEffectiveData, userToggledWrap, readOnly]);
 
   // Recursively parse nested JSON strings
   const parseNestedJson = useCallback((obj) => {
@@ -134,18 +228,18 @@ const JsonViewer = ({
     hasNestedData,
   } = useMemo(() => {
 
-    if (!data || typeof data !== "string") {
+    if (!effectiveData || typeof effectiveData !== "string") {
       return {
         isValidJson: false,
         parsedData: null,
-        displayData: String(data || ""),
+        displayData: String(effectiveData || ""),
         nestedParsedData: null,
         hasNestedData: false,
       };
     }
 
     try {
-      const parsed = JSON.parse(data);
+      const parsed = JSON.parse(effectiveData);
       const nestedParsed = parseNestedJson(parsed);
 
       // Check if nested parsing actually found nested JSON using shallow comparison
@@ -154,7 +248,7 @@ const JsonViewer = ({
       return {
         isValidJson: true,
         parsedData: parsed,
-        displayData: data,
+        displayData: effectiveData,
         nestedParsedData: nestedParsed,
         hasNestedData,
       };
@@ -162,12 +256,12 @@ const JsonViewer = ({
       return {
         isValidJson: false,
         parsedData: null,
-        displayData: data,
+        displayData: effectiveData,
         nestedParsedData: null,
         hasNestedData: false,
       };
     }
-  }, [data, parseNestedJson, forceUpdate]);
+  }, [effectiveData, parseNestedJson, forceUpdate]);
 
   // Get display content
   const getDisplayContent = () => {
@@ -307,7 +401,7 @@ const JsonViewer = ({
     if (hasNestedData && isValidJson && onSimulateNestedParse && !simulateNestedParsed) {
       try {
         // Only do nested parse once
-        const parsed = JSON.parse(data);
+        const parsed = JSON.parse(effectiveData);
         const nestedParsed = parseNestedJson(parsed);
         const formattedContent = JSON.stringify(nestedParsed, null, collapsed ? 0 : 2);
         onSimulateNestedParse(formattedContent);
@@ -316,12 +410,12 @@ const JsonViewer = ({
         // ignore
       }
     }
-  }, [hasNestedData, isValidJson, onSimulateNestedParse, data, parseNestedJson, collapsed, simulateNestedParsed]);
+  }, [hasNestedData, isValidJson, onSimulateNestedParse, effectiveData, parseNestedJson, collapsed, simulateNestedParsed]);
 
   // Reset button state when Simulate Message panel switches content
   useEffect(() => {
     setSimulateNestedParsed(false);
-  }, [data]);
+  }, [effectiveData]);
 
   const content = getDisplayContent();
 
@@ -374,6 +468,20 @@ const JsonViewer = ({
       {showControls && (
         <div className="json-viewer-controls">
           <div className="json-viewer-controls-left">
+            {/* Protobuf data toggle controls */}
+            {isProtobufMessage && (
+              <div className="protobuf-controls">
+                <button
+                  className={`json-viewer-btn toggle-button ${showProtobufRaw ? 'json-viewer-btn-active-blue' : 'json-viewer-btn-inactive'}`}
+                  onClick={() => setShowProtobufRaw(!showProtobufRaw)}
+                  title="Toggle between decoded JSON and raw hex data"
+                >
+                  <Hash size={14} />
+                  <span>{t("common.rawData")}</span>
+                </button>
+              </div>
+            )}
+            
             {enableWrap && (
               <button
                 onClick={() => {
@@ -480,6 +588,13 @@ const JsonViewer = ({
               <div className="json-viewer-badge json-viewer-badge-purple">
                 <Layers2 size={12} />
                 <span>{t("jsonViewer.status.nested")}</span>
+              </div>
+            )}
+            {/* Protobuf type badge */}
+            {isProtobufMessage && (
+              <div className="json-viewer-badge json-viewer-badge-blue">
+                <Protobuf size={12} />
+                <span>{t("common.binary")}</span>
               </div>
             )}
             {/* Status badges */}

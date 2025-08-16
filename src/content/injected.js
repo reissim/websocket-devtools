@@ -18,6 +18,299 @@
   let connectionIdCounter = 0;
   const connections = new Map();
 
+  // Binary Detection and Decoding Utilities
+  function isBinaryData(data) {
+    try {
+      // Direct binary types - always consider as binary
+      if (data instanceof ArrayBuffer || data instanceof Uint8Array || data instanceof Blob) {
+        return true;
+      }
+      
+      // String types - check if they represent binary data
+      if (typeof data === 'string') {
+        // Base64 encoded data
+        if (isBase64String(data)) {
+          return true;
+        }
+        
+        // Hexadecimal data
+        if (isHexString(data)) {
+          return true;
+        }
+        
+        // String containing binary characters
+        if (containsBinaryData(data)) {
+          return true;
+        }
+      }
+      
+      return false;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  // Note: Complex protobuf signature checking removed
+  // Now using simple binary type detection instead
+  // The decoding logic below will still attempt to parse as protobuf for display purposes
+
+  function readVarint(bytes, position) {
+    let value = 0;
+    let shift = 0;
+    
+    while (position < bytes.length) {
+      const byte = bytes[position++];
+      value |= (byte & 0x7F) << shift;
+      
+      if ((byte & 0x80) === 0) {
+        return { value, nextPosition: position };
+      }
+      
+      shift += 7;
+      if (shift >= 64) {
+        return null;
+      }
+    }
+    
+    return null;
+  }
+
+  function skipFieldData(bytes, position, wireType) {
+    switch (wireType) {
+      case 0:
+        const varint = readVarint(bytes, position);
+        return varint ? { nextPosition: varint.nextPosition } : null;
+        
+      case 1:
+        return position + 8 <= bytes.length ? { nextPosition: position + 8 } : null;
+        
+      case 2:
+        const length = readVarint(bytes, position);
+        if (!length) return null;
+        const endPos = length.nextPosition + length.value;
+        return endPos <= bytes.length ? { nextPosition: endPos } : null;
+        
+      case 5:
+        return position + 4 <= bytes.length ? { nextPosition: position + 4 } : null;
+        
+      default:
+        return null;
+    }
+  }
+
+  function isBase64String(str) {
+    if (!str || str.length < 4) return false;
+    const base64Pattern = /^[A-Za-z0-9+/]*={0,2}$/;
+    return base64Pattern.test(str) && str.length % 4 === 0;
+  }
+
+  function isHexString(str) {
+    if (!str || str.length < 2) return false;
+    const cleanStr = str.replace(/^(0x|\\x)/i, '');
+    return cleanStr.length % 2 === 0 && /^[0-9a-fA-F]+$/.test(cleanStr);
+  }
+
+  function hexToBytes(hex) {
+    const cleanHex = hex.replace(/^(0x|\\x)/i, '');
+    const bytes = new Uint8Array(cleanHex.length / 2);
+    
+    for (let i = 0; i < cleanHex.length; i += 2) {
+      bytes[i / 2] = parseInt(cleanHex.substr(i, 2), 16);
+    }
+    
+    return bytes;
+  }
+
+  function containsBinaryData(str) {
+    let binaryCount = 0;
+    for (let i = 0; i < str.length; i++) {
+      const charCode = str.charCodeAt(i);
+      if ((charCode < 32 && charCode !== 9 && charCode !== 10 && charCode !== 13) || charCode > 126) {
+        binaryCount++;
+      }
+    }
+    
+    return binaryCount / str.length > 0.2;
+  }
+
+
+
+  function reflectiveDecodeProtobuf(bytes) {
+    const result = {};
+    let position = 0;
+    
+    while (position < bytes.length) {
+      const header = readVarint(bytes, position);
+      if (!header) break;
+      
+      const tag = header.value >>> 3;
+      const wireType = header.value & 0x07;
+      position = header.nextPosition;
+      
+      const fieldName = `field_${tag}`;
+      
+      try {
+        const fieldResult = decodeField(bytes, position, wireType);
+        if (fieldResult) {
+          result[fieldName] = fieldResult.value;
+          position = fieldResult.nextPosition;
+        } else {
+          break;
+        }
+      } catch (error) {
+        result[fieldName] = `<decode_error: ${error.message}>`;
+        break;
+      }
+    }
+    
+    return result;
+  }
+
+  function decodeField(bytes, position, wireType) {
+    switch (wireType) {
+      case 0:
+        const varint = readVarint(bytes, position);
+        return varint ? { value: varint.value, nextPosition: varint.nextPosition } : null;
+        
+      case 1:
+        if (position + 8 > bytes.length) return null;
+        const fixed64 = new DataView(bytes.buffer, bytes.byteOffset + position, 8);
+        return {
+          value: fixed64.getBigUint64(0, true),
+          nextPosition: position + 8
+        };
+        
+      case 2:
+        const length = readVarint(bytes, position);
+        if (!length) return null;
+        
+        const start = length.nextPosition;
+        const end = start + length.value;
+        if (end > bytes.length) return null;
+        
+        const data = bytes.slice(start, end);
+        
+        try {
+          const nested = reflectiveDecodeProtobuf(data);
+          if (Object.keys(nested).length > 0) {
+            return { value: nested, nextPosition: end };
+          }
+        } catch (e) {
+          // Not a nested message
+        }
+        
+        try {
+          const decoder = new TextDecoder('utf-8', { fatal: true });
+          const str = decoder.decode(data);
+          return { value: str, nextPosition: end };
+        } catch (e) {
+          const base64 = btoa(String.fromCharCode(...data));
+          return { value: `<bytes: ${base64}>`, nextPosition: end };
+        }
+        
+      case 5:
+        if (position + 4 > bytes.length) return null;
+        const fixed32 = new DataView(bytes.buffer, bytes.byteOffset + position, 4);
+        return {
+          value: fixed32.getUint32(0, true),
+          nextPosition: position + 4
+        };
+        
+      default:
+        return null;
+    }
+  }
+
+
+
+  function processMessageWithBinary(data) {
+    // Simple binary detection - if it's binary data, mark it as binary
+    const isBinary = isBinaryData(data);
+    
+    if (isBinary) {
+      // Always mark as binary, then try to decode for additional info
+      const decodeResult = tryDecodeAsProtobuf(data);
+      
+      return {
+        isProtobuf: true, // Keep the property name for compatibility with existing UI
+        protobufDecoded: decodeResult.decoded,
+        protobufRaw: decodeResult.raw,
+        protobufError: decodeResult.error
+      };
+    }
+    
+    return {
+      isProtobuf: false
+    };
+  }
+
+  // Simple decode function
+  function tryDecodeAsProtobuf(data) {
+    let bytes;
+    let raw;
+    
+    // Convert to bytes
+    if (data instanceof ArrayBuffer) {
+      bytes = new Uint8Array(data);
+    } else if (data instanceof Uint8Array) {
+      bytes = data;
+    } else if (data instanceof Blob) {
+      return {
+        decoded: `[Blob ${data.size} bytes]`,
+        raw: `[Blob ${data.size} bytes]`,
+        error: null
+      };
+    } else if (typeof data === 'string') {
+      if (isBase64String(data)) {
+        const decoded = atob(data);
+        bytes = new Uint8Array(decoded.length);
+        for (let i = 0; i < decoded.length; i++) {
+          bytes[i] = decoded.charCodeAt(i);
+        }
+      } else if (isHexString(data)) {
+        bytes = hexToBytes(data);
+      } else {
+        bytes = new Uint8Array(data.length);
+        for (let i = 0; i < data.length; i++) {
+          bytes[i] = data.charCodeAt(i);
+        }
+      }
+    } else {
+      return { decoded: String(data), raw: String(data), error: null };
+    }
+    
+    // Generate raw display
+    raw = bytesToHexString(bytes);
+    
+    // Try decode
+    const decoded = intelligentDecode(bytes);
+    
+    return { decoded, raw, error: null };
+  }
+
+  // Helper function to convert bytes to hex string
+  function bytesToHexString(bytes) {
+    return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join(' ');
+  }
+
+  // Simple decode: try protobuf, fallback to hex
+  function intelligentDecode(bytes) {
+    if (bytes.length === 0) return null;
+    
+    try {
+      const result = reflectiveDecodeProtobuf(bytes);
+      if (Object.keys(result).length > 0) {
+        return JSON.stringify(result, null, 2);
+      }
+    } catch (e) {
+      // Ignore errors
+    }
+    
+    return bytesToHexString(bytes);
+  }
+
+
+
   // Control state
   let proxyState = {
     isMonitoring: true, // Monitoring enabled by default, consistent with background.js
@@ -397,6 +690,7 @@
 
         // Send event only once, with blocked flag
         if (proxyState.isMonitoring) {
+          const binaryInfo = processMessageWithBinary(event.data);
           sendEvent({
             id: connectionId,
             url: url,
@@ -408,6 +702,7 @@
             blocked: true,
             reason: "Incoming messages blocked",
             messageId: generateMessageId(),
+            ...binaryInfo,
           });
         }
 
@@ -419,6 +714,7 @@
       
       // Log to extension (only when monitoring is enabled)
       if (proxyState.isMonitoring) {
+        const binaryInfo = processMessageWithBinary(event.data);
         sendEvent({
           id: connectionId,
           url: url,
@@ -429,6 +725,7 @@
           status: connectionInfo.status,
           // Do not add blocked flag, as message passed normally
           messageId: generateMessageId(),
+          ...binaryInfo,
         });
       }
 
@@ -456,6 +753,7 @@
     ws.send = function (data) {
 
       // Log send event
+      const binaryInfo = processMessageWithBinary(data);
       const eventData = {
         id: connectionId,
         url: url,
@@ -465,6 +763,7 @@
         timestamp: Date.now(),
         status: connectionInfo.status,
         messageId: generateMessageId(),
+        ...binaryInfo,
       };
 
       // Check if sending should be blocked

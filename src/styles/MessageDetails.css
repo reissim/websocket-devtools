@@ -612,6 +612,13 @@
   color: white;
 }
 
+.message-tag.protobuf {
+  background: #00408a;
+  color: white;
+  /* border: 1px solid #4f46e5; */
+  box-shadow: 0 1px 3px rgba(79, 70, 229, 0.2);
+}
+
 .message-text {
   overflow: hidden;
   text-overflow: ellipsis;

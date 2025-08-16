@@ -235,6 +235,8 @@
   "common.sort": "정렬",
   "common.copy": "복사",
   "common.paste": "붙여넣기",
+  "common.rawData": "원시 데이터",
+  "common.binary": "바이너리",
   "common.cut": "잘라내기",
   "common.selectAll": "전체 선택",
   "popup.title": "WebSocket DevTools",

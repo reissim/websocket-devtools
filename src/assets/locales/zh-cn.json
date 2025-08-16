@@ -230,6 +230,8 @@
   "common.sort": "排序",
   "common.copy": "复制",
   "common.paste": "粘贴",
+  "common.rawData": "原始数据",
+  "common.binary": "二进制",
   "common.cut": "剪切",
   "common.selectAll": "全选",
   "popup.title": "WebSocket DevTools",

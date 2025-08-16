@@ -234,6 +234,8 @@
   "common.sort": "Trier",
   "common.copy": "Copier",
   "common.paste": "Coller",
+  "common.rawData": "Données brutes",
+  "common.binary": "BINAIRE",
   "common.cut": "Couper",
   "common.selectAll": "Sélectionner tout",
   "popup.title": "WebSocket DevTools",

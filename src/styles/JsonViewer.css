@@ -30,6 +30,26 @@
   flex-shrink: 2; /* Allow left side to shrink more than right */
 }
 
+/* Protobuf controls */
+.protobuf-controls {
+  display: flex;
+  gap: 4px;
+  margin-right: 8px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding-right: 8px;
+}
+
+.protobuf-controls .toggle-button {
+  border-radius: 4px;
+  font-size: 11px;
+  padding: 2px 4px;
+  min-width: auto;
+}
+
+.protobuf-controls .toggle-button span {
+  margin-left: 4px;
+}
+
 .json-viewer-controls-right {
   display: flex;
   align-items: center;
@@ -311,9 +331,9 @@
 }
 
 .json-viewer-btn-active-blue {
-  background: rgba(37, 99, 235, 0.15);
-  border-color: rgba(37, 99, 235, 0.25);
-  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+  color: #60a5fa;
 }
 
 .json-viewer-btn-disabled {

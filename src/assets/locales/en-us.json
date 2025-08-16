@@ -230,6 +230,8 @@
   "common.sort": "Sort",
   "common.copy": "Copy",
   "common.paste": "Paste",
+  "common.rawData": "Raw Data",
+  "common.binary": "BINARY",
   "common.cut": "Cut",
   "common.selectAll": "Select All",
   "popup.title": "WebSocket DevTools",
