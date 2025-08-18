@@ -35,6 +35,11 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 2. Click **"Add to Chrome"** and confirm installation
 3. Open DevTools (F12) → **"WebSocket DevTools"** tab
 
+### Microsoft Edge
+1. Visit [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/websocket-devtools/idkoddoekbiekjkpfjeadehmknaoppol)
+2. Click **"Get"** and confirm installation
+3. Open DevTools (F12) → **"WebSocket DevTools"** tab
+
 ### Homepage
 
 - 🌐 [WebSocket DevTools](https://websocket-devtools.com) - Official website with documentation and demos 
