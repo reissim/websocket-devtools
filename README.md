@@ -8,8 +8,7 @@
 
 ## WebSocket DevTools
 
-Professional debugging tool with real-time monitoring, message simulation,  
-and traffic interception for developers
+Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking capabilities
 
 
 [![][version-shield]][version-link]
@@ -17,9 +16,10 @@ and traffic interception for developers
 [![][privacy-shield]][privacy-link]
 [![][homepage-shield]][homepage-link]
 [![][chrome-shield]][chrome-link]
-[![][stars-shield]][stars-link]
+[![][edge-shield]][edge-link]
 [![][deepwiki-shield]][deepwiki-link]
 [![][youtube-shield]][youtube-link]
+[![][stars-shield]][stars-link]
 
 
 **English** | [简体中文](./README_zh-CN.md)
@@ -145,3 +145,5 @@ and traffic interception for developers
 [stars-link]: https://github.com/law-chain-hot/websocket-devtools/stargazers
 [youtube-shield]: https://img.shields.io/badge/YouTube-Video-red?labelColor=black&logo=youtube&style=flat-square
 [youtube-link]: https://www.youtube.com/watch?v=L64x__1xORQ
+[edge-shield]: https://img.shields.io/badge/Microsoft%20Edge-Install-0078d4?labelColor=black&style=flat-square
+[edge-link]: https://microsoftedge.microsoft.com/addons/detail/websocket-devtools/idkoddoekbiekjkpfjeadehmknaoppol
