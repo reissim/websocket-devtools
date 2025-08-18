@@ -6,7 +6,7 @@
 
 <!-- <img src="./ScreenShot/Promo_Tile-1.png" alt="WebSocket DevTools" width="30%"> -->
 
-## WebSocket DevTools
+# WebSocket DevTools
 
 Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking capabilities
 
@@ -22,7 +22,7 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 [![][stars-shield]][stars-link]
 
 
-**English** | [简体中文](./README_zh-CN.md)
+**English** | [简体中文](./README_zh-CN.md) | [繁體中文](./README_zh-TW.md) | [日本語](./README_ja.md)
 
 </div>
 

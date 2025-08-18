@@ -16,12 +16,13 @@
 [![][privacy-shield]][privacy-link]
 [![][homepage-shield]][homepage-link]
 [![][chrome-shield]][chrome-link]
+[![][edge-shield]][edge-link]
 [![][stars-shield]][stars-link]
 [![][deepwiki-shield]][deepwiki-link]
 [![][youtube-shield]][youtube-link]
 
 
-[English](./README.md) | **简体中文**
+[English](./README.md) | **简体中文** | [繁體中文](./README_zh-TW.md) | [日本語](./README_ja.md)
 
 </div>
 
@@ -32,6 +33,11 @@
 ### Chrome 网上应用店
 1. 访问 [Chrome 网上应用店](https://chromewebstore.google.com/detail/websocket-devtools/fmnaobbfmjaaaebelkacpmmmpaaefbod)
 2. 点击 **"添加至 Chrome"** 并确认安装
+3. 打开开发者工具 (F12) → **"WebSocket DevTools"** 标签页
+
+### Microsoft Edge
+1. 访问 [Microsoft Edge 加载项](https://microsoftedge.microsoft.com/addons/detail/websocket-devtools/idkoddoekbiekjkpfjeadehmknaoppol)
+2. 点击 **"获取"** 并确认安装
 3. 打开开发者工具 (F12) → **"WebSocket DevTools"** 标签页
 
 ### 官网
@@ -138,4 +144,6 @@
 [deepwiki-link]: https://deepwiki.com/law-chain-hot/websocket-devtools
 [stars-link]: https://github.com/law-chain-hot/websocket-devtools/stargazers 
 [youtube-shield]: https://img.shields.io/badge/YouTube-Video-red?labelColor=black&logo=youtube&style=flat-square
-[youtube-link]: https://www.youtube.com/watch?v=L64x__1xORQ 
+[youtube-link]: https://www.youtube.com/watch?v=L64x__1xORQ
+[edge-shield]: https://img.shields.io/badge/Microsoft%20Edge-Install-0078d4?labelColor=black&style=flat-square
+[edge-link]: https://microsoftedge.microsoft.com/addons/detail/websocket-devtools/idkoddoekbiekjkpfjeadehmknaoppol
