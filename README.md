@@ -45,6 +45,10 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 - 🌐 [WebSocket DevTools](https://websocket-devtools.com) - Official website with documentation and demos 
 - 📺 [YouTube Video](https://www.youtube.com/watch?v=L64x__1xORQ) - Demo video
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=law-chain-hot/websocket-devtools&type=Date)](https://www.star-history.com/#law-chain-hot/websocket-devtools&Date)
+
 ## ✨ Key Features
 
 - **🔍 Real-time Monitoring** - Track WebSocket connections and messages with live updates
@@ -56,8 +60,9 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 - **🎨 DevTools Integration** - Native Chrome DevTools panel experience
 - **🖼️ Iframe Support** - Full WebSocket proxy support for iframe embedded connections
 
-## 🎬 Quick Demo
 
+
+## 🎬 Quick Demo
 
 ### Blocking
 
