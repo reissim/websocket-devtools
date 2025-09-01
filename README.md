@@ -51,12 +51,10 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 
 ## ✨ Key Features
 
-- **🔍 Real-time Monitoring** - Track WebSocket connections and messages with live updates
 - **🔄 Background Monitoring** - Continuously monitor connections even when DevTools panel is closed
 - **🎮 Message Simulation** - Send custom messages in both directions (Client ↔ Server)  
 - **🚧 Traffic Control** - Block messages and simulate network issues for testing
 - **💾 Favorites System** - Save and organize frequently used messages
-- **🌍 Multi-language** - Full English and Chinese support
 - **🎨 DevTools Integration** - Native Chrome DevTools panel experience
 - **🖼️ Iframe Support** - Full WebSocket proxy support for iframe embedded connections
 
@@ -116,12 +114,6 @@ Complete WebSocket Traffic Control with advanced proxy, simulation, and blocking
 - ✅ **Local storage only** - No external servers or tracking
 - ✅ **Open source** - Fully transparent and auditable code
 - ✅ **Minimal permissions** - Only what's needed for functionality
-
-## 🛠 Requirements
-
-- **Chrome 88+** or Chromium-based browsers (Edge, Brave, etc.)
-- **WebSocket API** - Compatible with all WebSocket implementations
-- Works with **Socket.IO**, **ws library**, and custom WebSocket solutions
 
 ---
 
